@@ -1,0 +1,42 @@
+version: "3.7"
+
+services:
+  proyecto_laravel_www:
+    image: felixgalindo/php74apache
+    container_name: 'proyecto_laravel_www'
+    volumes:
+      - ./proyecto_artist4all:/app
+    environment: 
+      TZ: Europe/Madrid
+      APACHE_DOCUMENT_ROOT: /app/public
+    ports:
+      - 80:80
+    links: 
+      - proyecto_laravel_db
+
+  proyecto_laravel_db:
+    image: mariadb:10.2
+    container_name: 'proyecto_laravel_db'
+    volumes:
+      - ./dbdata:/var/lib/mysql
+    # ports:
+    #   - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: laravel_db
+      MYSQL_USER: adminuser
+      MYSQL_PASSWORD: adminpassword
+
+  proyecto_laravel_pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: 'proyecto_laravel_pma'
+    ports:
+      - 8080:80
+    links:
+      - proyecto_laravel_db
+    environment:
+      PMA_HOST: proyecto_laravel_db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_USER: adminuser
+      MYSQL_PASSWORD: adminpassword
