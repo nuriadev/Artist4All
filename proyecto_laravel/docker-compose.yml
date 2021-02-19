@@ -6,12 +6,12 @@ services:
     container_name: 'proyecto_laravel_www'
     volumes:
       - ./proyecto_artist4all:/app
-    environment: 
+    environment:
       TZ: Europe/Madrid
       APACHE_DOCUMENT_ROOT: /app/public
     ports:
       - 80:80
-    links: 
+    links:
       - proyecto_laravel_db
 
   proyecto_laravel_db:
@@ -24,8 +24,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: password
       MYSQL_DATABASE: laravel_db
-      MYSQL_USER: adminuser
-      MYSQL_PASSWORD: adminpassword
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
 
   proyecto_laravel_pma:
     image: phpmyadmin/phpmyadmin
@@ -38,5 +38,6 @@ services:
       PMA_HOST: proyecto_laravel_db
       PMA_PORT: 3306
       MYSQL_ROOT_PASSWORD: password
-      MYSQL_USER: adminuser
-      MYSQL_PASSWORD: adminpassword
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+
