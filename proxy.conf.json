@@ -1,0 +1,7 @@
+{
+  "/daw2/*": {
+      "target": "http://localhost",
+      "secure": false,
+      "logLevel": "debug"
+  }
+}
