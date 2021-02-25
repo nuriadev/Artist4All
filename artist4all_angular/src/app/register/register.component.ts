@@ -17,6 +17,9 @@ export class RegisterComponent implements OnInit {
   email:string = "";
   password:string = "";
   passwordConfirm:string = "";
+  name:string = "";
+  lastname1:string = "";
+  lastname2:string = "";
 
   // todo hacerlo con modelo user
   // todo: comprobar que las contraseñas sean iguales
