@@ -7,7 +7,7 @@ export class UserService {
   constructor(private conexHttp:HttpClient) { }
 
   register(email:string,password:string):Observable<any> {
-    let url = "http://localhost/daw2/Artist4all/User/register.php";
+    let url = "http://localhost/daw2/Artist4all/artist4all_php/User/register.php";
 
     let registerFormData:FormData = new FormData();
     registerFormData.append('email',email);
@@ -17,7 +17,7 @@ export class UserService {
   }
 
   login(email:string,password:string):Observable<any> {
-    let url = "http://localhost/daw2/Artist4all/User/login.php";
+    let url = "http://localhost/daw2/Artist4all/artist4all_php/User/login.php";
 
     let loginFormData:FormData = new FormData();
     loginFormData.append('email',email);

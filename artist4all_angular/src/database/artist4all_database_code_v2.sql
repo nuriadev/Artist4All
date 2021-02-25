@@ -2,171 +2,171 @@ drop database artist4alldb;
 create database artist4alldb;
 use artist4alldb;
 
-create table usuarios (
-id_usuario int primary key auto_increment,
-tipo int not null,
-nombre varchar(50) not null,
-apellido1 varchar(50) not null,
-apellido2 varchar(50) not null,
+create table users (
+id_user int primary key auto_increment,
+name_user varchar(50) not null,
+surname1 varchar(50) not null,
+surname2 varchar(50) not null,
 email varchar(90) not null,
 username varchar(50) not null,
 passwd varchar(120) not null,
+type_user int not null,
 deleted int(1) not null
 );
 
-create table publicaciones (
-id_publicacion int primary key auto_increment,
-id_usuario int not null,
+create table publications (
+id_publication int primary key auto_increment,
+id_user int not null,
 url_post varchar(255) not null,
-descripcion varchar(255) not null,
-fecha_subida datetime not null,
-FOREIGN KEY (id_usuario)
-			REFERENCES usuarios (id_usuario)
+description_publication varchar(255) not null,
+upload_date datetime not null,
+FOREIGN KEY (id_user)
+			REFERENCES users (id_user)
             ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-create table usuarios_seguidos (
+create table users_followed (
 id_logfollow int primary key auto_increment,
-id_seguidor int not null,
-id_persona_seguida int not null,
-FOREIGN KEY (id_seguidor) 
-	        REFERENCES usuarios (id_usuario) 
+id_follower int not null,
+id_followed int not null,
+FOREIGN KEY (id_follower)
+	        REFERENCES users (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (id_persona_seguida) 
-	        REFERENCES usuarios (id_usuario) 
+FOREIGN KEY (id_followed)
+	        REFERENCES users (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-create table artistas (
-id_artista int primary key auto_increment,
-tipo varchar(50) not null,
-nombre_artistico varchar(50) not null,
-id_usuario int not null,
-FOREIGN KEY (id_usuario) 
-	        REFERENCES usuarios (id_usuario) 
+create table artists (
+id_artist int primary key auto_increment,
+type_artist varchar(50) not null,
+artistic_name varchar(50) not null,
+id_user int not null,
+FOREIGN KEY (id_user)
+	        REFERENCES user (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
-); 
+);
 
 create table logs (
 id_log int primary key auto_increment,
 ip varchar(11) not null,
-fecha datetime not null,
-tipo varchar(40) not null,
-id_usuario int not null,
-FOREIGN KEY (id_usuario) 
-	        REFERENCES usuarios (id_usuario) 
+date_log datetime not null,
+type_log varchar(40) not null,
+id_user int not null,
+FOREIGN KEY (id_user)
+	        REFERENCES user (id_user)
 	        ON UPDATE CASCADE
-); 
+);
 
-create table media_usuarios (
-id_media_usu int primary key auto_increment,
-url varchar(150) not null,
-id_usuario int not null,
-FOREIGN KEY (id_usuario) 
-	        REFERENCES usuarios (id_usuario) 
+create table media_users (
+id_media int primary key auto_increment,
+url_media varchar(150) not null,
+id_user int not null,
+FOREIGN KEY (id_user)
+	        REFERENCES user (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
-); 
+);
 
-create table valoraciones_usuarios (
-id_valoracion int primary key auto_increment,
-comentario varchar(255),
-valoracion int not null,
-id_usuario int not null,
-FOREIGN KEY (id_usuario) 
-	        REFERENCES usuarios (id_usuario) 
+create table valuations_of_users (
+id_valuation int primary key auto_increment,
+comment varchar(255),
+valuation int not null,
+id_user int not null,
+FOREIGN KEY (id_user)
+	        REFERENCES user (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
-); 
+);
 
-create table mensajes (
-id_mensaje int primary key auto_increment,
-contenido varchar(255) not null,
-fecha datetime not null,
-leido boolean not null,
+create table messages (
+id_message int primary key auto_increment,
+content varchar(255) not null,
+date_message datetime not null,
+read_message boolean not null,
 id_emisor int not null,
-id_receptor int not null,
-FOREIGN KEY (id_emisor) 
-	        REFERENCES usuarios (id_usuario) 
+id_receiver int not null,
+FOREIGN KEY (id_emisor)
+	        REFERENCES user (id_user)
 	        ON UPDATE CASCADE,
-FOREIGN KEY (id_receptor) 
-	        REFERENCES usuarios (id_usuario) 
+FOREIGN KEY (id_receiver)
+          REFERENCES user (id_user)
 	        ON UPDATE CASCADE
-); 
+);
 
-create table productos (
-id_producto int primary key auto_increment,
-nombre varchar(70) not null,
-precio double not null,
+create table products (
+id_product int primary key auto_increment,
+name_product varchar(70) not null,
+price double not null,
 stock int not null,
-descripcion varchar(255),
-fecha datetime not null,
-id_propietario int not null,
-FOREIGN KEY (id_propietario) 
-	        REFERENCES usuarios (id_usuario) 
+description_product varchar(255),
+date_upload datetime not null,
+id_owner int not null,
+FOREIGN KEY (id_owner)
+	        REFERENCES user (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-create table valoraciones_productos (
-id_valoracion int primary key auto_increment,
-comentario varchar(255),
-valoracion int not null,
-id_producto int not null,
-id_usuario int not null,
-FOREIGN KEY (id_producto) 
-	        REFERENCES productos (id_producto) 
+create table valuations_of_products (
+id_valuation int primary key auto_increment,
+comment varchar(255),
+valuation int not null,
+id_product int not null,
+id_user int not null,
+FOREIGN KEY (id_product)
+	        REFERENCES products (id_product)
 	        ON DELETE CASCADE ON UPDATE CASCADE,
-FOREIGN KEY (id_usuario) 
-	        REFERENCES usuarios (id_usuario) 
-	        ON UPDATE CASCADE
-); 
-
-create table pedidos_details (
-id_pedido_detail int primary key auto_increment,
-cantidad int not null,
-id_producto int not null,
-FOREIGN KEY (id_producto) 
-	        REFERENCES productos (id_producto) 
+FOREIGN KEY (id_user)
+	        REFERENCES users (id_user)
 	        ON UPDATE CASCADE
 );
 
-create table pedidos (
-id_pedido int primary key auto_increment,
-precio double not null,
-estado varchar(30) not null,
-fecha datetime not null,
-id_comprador int not null,
-id_detail int not null,
-FOREIGN KEY (id_comprador) 
-	        REFERENCES usuarios (id_usuario) 
-	        ON UPDATE CASCADE,
-FOREIGN KEY (id_detail) 
-	        REFERENCES pedidos_details (id_pedido_detail) 
-	        ON DELETE CASCADE ON UPDATE CASCADE
-); 
-
-create table historico (
-id_registro int primary key auto_increment,
-fecha datetime not null,
-precio double not null,
-metodo_pago varchar(60) not null,
-id_comprador int not null,
-id_vendedor int not null,
-id_producto int not null,
-FOREIGN KEY (id_comprador) 
-	        REFERENCES usuarios (id_usuario) 
-	        ON UPDATE CASCADE,
-FOREIGN KEY (id_vendedor) 
-	        REFERENCES usuarios (id_usuario) 
-	        ON UPDATE CASCADE,
-FOREIGN KEY (id_producto) 
-	        REFERENCES productos (id_producto) 
+create table order_details (
+id_order_detail int primary key auto_increment,
+quantity int not null,
+id_product int not null,
+FOREIGN KEY (id_product)
+	        REFERENCES products (id_product)
 	        ON UPDATE CASCADE
 );
 
-create table media_productos (
-id_media_usu int primary key auto_increment,
-url varchar(150) not null,
-id_producto int not null,
-FOREIGN KEY (id_producto) 
-	        REFERENCES productos (id_producto) 
+create table orders (
+id_order int primary key auto_increment,
+price double not null,
+state_order varchar(30) not null,
+date_upload datetime not null,
+id_purchaser int not null,
+id_order_detail int not null,
+FOREIGN KEY (id_purchaser)
+	        REFERENCES users (id_user)
+	        ON UPDATE CASCADE,
+FOREIGN KEY (id_order_detail)
+	        REFERENCES order_details (id_order_detail)
 	        ON DELETE CASCADE ON UPDATE CASCADE
-); 
+);
+
+create table historical (
+id_register int primary key auto_increment,
+date_register datetime not null,
+price double not null,
+payment_method varchar(60) not null,
+id_purchaser int not null,
+id_seller int not null,
+id_product int not null,
+FOREIGN KEY (id_purchaser)
+	       REFERENCES users (id_user)
+	        ON UPDATE CASCADE,
+FOREIGN KEY (id_seller)
+	      REFERENCES users (id_user)
+	        ON UPDATE CASCADE,
+FOREIGN KEY (id_product)
+	        REFERENCES products (id_product)
+	        ON UPDATE CASCADE
+);
+
+create table media_products (
+id_media int primary key auto_increment,
+url_media varchar(150) not null,
+id_product int not null,
+FOREIGN KEY (id_product)
+	        REFERENCES products (id_product)
+	        ON DELETE CASCADE ON UPDATE CASCADE
+);
