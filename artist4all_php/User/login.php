@@ -27,7 +27,7 @@ try {
     $password = $_POST["password"];
 
     // hacemos la petición sql y ejecutamos la sentencia
-    $sql = "SELECT * FROM usuarios WHERE email=:email";
+    $sql = "SELECT * FROM users WHERE email=:email";
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
         ':email'=> $email
@@ -47,6 +47,7 @@ try {
             $content = implode(".", $arrayAux);
             // creamos el token a partir de la variable $content
             $token = tokenGenerator($content);
+            // todo: borrar apartado usuario cuando todo este acabado
             $feedbackMessage = array(
                 'respuesta' => 'Logueado',
                 'usuario' => $user,

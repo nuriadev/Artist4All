@@ -14,23 +14,23 @@
               Nombre
             </label>
             <div class="mt-1">
-              <input #inputName="ngModel" [(ngModel)]="name" placeholder="Introduce tu nombre" id="name" name="name" type="text" autocomplete="name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+              <input #inputName="ngModel" [(ngModel)]="name" placeholder="Introduce tu nombre" id="name" name="name" type="text" autocomplete="name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
           </div>
           <div>
-            <label for="lastname1" class="block text-sm font-medium text-gray-700">
+            <label for="surname1" class="block text-sm font-medium text-gray-700">
               Primer apellido
             </label>
             <div class="mt-1">
-              <input #inputLastName1="ngModel" [(ngModel)]="lastname1" placeholder="Introduce tu primer apellido" id="lastname1" name="lastname1" type="text" autocomplete="family-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+              <input #inputSurname1="ngModel" [(ngModel)]="surname1" placeholder="Introduce tu primer apellido" id="surname1" name="surname1" type="text" autocomplete="family-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
           </div>
           <div>
-            <label for="lastname2" class="block text-sm font-medium text-gray-700">
+            <label for="surname2" class="block text-sm font-medium text-gray-700">
               Segundo apellido
             </label>
             <div class="mt-1">
-              <input #inputLastName2="ngModel" [(ngModel)]="lastname2" placeholder="Introduce tu segundo apellido" id="lastname2" name="lastname2" type="text" autocomplete="family-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+              <input #inputSurname22="ngModel" [(ngModel)]="surname2" placeholder="Introduce tu segundo apellido" id="surname2" name="surname2" type="text" autocomplete="family-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
           </div>
           <div>
@@ -38,25 +38,46 @@
               Correo electrónico
             </label>
             <div class="mt-1">
-              <input #inputEmail="ngModel" [(ngModel)]="email" placeholder="Introduce tu email" id="email" name="email" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+              <input #inputEmail="ngModel" [(ngModel)]="email" placeholder="Introduce tu email" id="email" name="email" type="email" autocomplete="family-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
           </div>
-
+          <div>
+            <label for="username" class="block text-sm font-medium text-gray-700">
+              Nombre de usuario
+            </label>
+            <div class="mt-1">
+              <input #inputUsername="ngModel" [(ngModel)]="username" placeholder="Introduce tu nombre de usuario" id="username" name="username" type="text" autocomplete="family-name" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+          </div>
           <div>
             <label for="password" class="block text-sm font-medium text-gray-700">
               Contraseña
             </label>
             <div class="mt-1">
-              <input #inputPassword="ngModel" [(ngModel)]="password" placeholder="Introduce tu contraseña" id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+              <input #inputPassword="ngModel" [(ngModel)]="password" placeholder="Introduce tu contraseña" id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
             </div>
           </div>
-
           <div>
             <label for="passwordConfirm" class="block text-sm font-medium text-gray-700">
               Confirma la contraseña
             </label>
             <div class="mt-1">
-              <input #inputPasswordConfirm="ngModel" [(ngModel)]="passwordConfirm" placeholder="Confirma tu contraseña" id="passwordConfirm" name="passwordConfirm" type="password" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+              <input #inputPasswordConfirm="ngModel" [(ngModel)]="passwordConfirm" placeholder="Confirma tu contraseña" id="passwordConfirm" name="passwordConfirm" type="password" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+            </div>
+          </div>
+          <div>
+            <label for="typeUser" class="text-sm font-medium text-gray-700">
+                Tipo de usuario:
+            </label>
+            <div class="mt-1">
+              <label for="typeFollower" class="text-sm font-medium text-gray-700">
+                Seguidor
+              </label>
+              <input #inputTypeUser="ngModel" [(ngModel)]="type_user" id="type_follower" name="type_user" type="radio" value="0" autocomplete="family-name" required>
+              <label for="typeArtist" class="text-sm font-medium text-gray-700">
+                Artista
+              </label>
+              <input #inputTypeUser="ngModel" [(ngModel)]="type_user" id="type_artist" name="type_user" type="radio" value="1" autocomplete="family-name" required>
             </div>
           </div>
 
@@ -67,7 +88,6 @@
                 Recuérdame
               </label>
             </div>
-
             <div class="text-sm">
               <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">
                 ¿Has olvidado tu contraseña?

@@ -43,7 +43,7 @@ type_artist varchar(50) not null,
 artistic_name varchar(50) not null,
 id_user int not null,
 FOREIGN KEY (id_user)
-	        REFERENCES user (id_user)
+	        REFERENCES users (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -54,7 +54,7 @@ date_log datetime not null,
 type_log varchar(40) not null,
 id_user int not null,
 FOREIGN KEY (id_user)
-	        REFERENCES user (id_user)
+	        REFERENCES users (id_user)
 	        ON UPDATE CASCADE
 );
 
@@ -63,7 +63,7 @@ id_media int primary key auto_increment,
 url_media varchar(150) not null,
 id_user int not null,
 FOREIGN KEY (id_user)
-	        REFERENCES user (id_user)
+	        REFERENCES users (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -73,7 +73,7 @@ comment varchar(255),
 valuation int not null,
 id_user int not null,
 FOREIGN KEY (id_user)
-	        REFERENCES user (id_user)
+	        REFERENCES users (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
 );
 
@@ -85,10 +85,10 @@ read_message boolean not null,
 id_emisor int not null,
 id_receiver int not null,
 FOREIGN KEY (id_emisor)
-	        REFERENCES user (id_user)
+	        REFERENCES users (id_user)
 	        ON UPDATE CASCADE,
 FOREIGN KEY (id_receiver)
-          REFERENCES user (id_user)
+          REFERENCES users (id_user)
 	        ON UPDATE CASCADE
 );
 
@@ -101,7 +101,7 @@ description_product varchar(255),
 date_upload datetime not null,
 id_owner int not null,
 FOREIGN KEY (id_owner)
-	        REFERENCES user (id_user)
+	        REFERENCES users (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE
 );
 

@@ -10,7 +10,7 @@ class User {
   private string $username;
   private string $password;
   private int $n_followers;
-  private string $type_artist;
+  private int $type_user;
 
   public function __construct(
     ?int $id,
@@ -21,7 +21,7 @@ class User {
     string $username,
     string $password,
     int $n_followers = 0,
-    string $type_artist) {
+    int $type_user) {
       $this->id = $id;
       $this->name = $name;
       $this->surname1 = $surname1;
@@ -30,7 +30,7 @@ class User {
       $this->username = $username;
       $this->password = $password;
       $this->n_followers = $n_followers;
-      $this->type_artist = $type_artist;
+      $this->type_user = $type_user;
     }
 
     public function getId() : ?int {
@@ -97,12 +97,12 @@ class User {
       $this->n_followers = $n_followers;
     }
 
-    public function getType_artist() {
-      return $this->type_artist;
+    public function getType_user() {
+      return $this->type_user;
     }
 
-    public function setType_artist(string $type_artist) {
-      $this->type_artist = $type_artist;
+    public function setType_artist(int $type_user) {
+      $this->type_user = $type_user;
     }
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { UserService } from '../service/user.service';
+import { User } from '../models/user';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-register',
@@ -14,17 +15,19 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  name:string = "";
+  surname1:string = "";
+  surname2:string = "";
   email:string = "";
+  username:string = "";
   password:string = "";
   passwordConfirm:string = "";
-  name:string = "";
-  lastname1:string = "";
-  lastname2:string = "";
+  type_user:number;
 
   // todo hacerlo con modelo user
   // todo: comprobar que las contraseñas sean iguales
   register() {
-    this._userService.register(this.email, this.password).subscribe(
+    this._userService.register(new User(this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.type_user)).subscribe(
       (result) => {
         console.log(result);
       }, (error) => {
