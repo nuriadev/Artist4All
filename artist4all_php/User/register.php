@@ -27,10 +27,20 @@ try {
     $type_user = $_POST["type_user"];
 
     // creamos un usuario con los datos recogidos
-    $user = new User(null, $name, $surname1, $surname2, $email, $username, $password, 0, $type_user);
+    $user = new \Artist4All\Model\User(null, $name, $surname1, $surname2, $email, $username, $password, 0, $type_user);
     // todo: comprobar que las contraseñas sean iguales
     // hacemos la petición sql y ejecutamos la sentencia
-    $sql = "INSERT INTO users VALUES (:id_user, :name_user, :surname1, :surname2, :email, :username, :passwd, :type_user, :deleted)";
+    $sql = "INSERT INTO users VALUES (
+      :id_user, 
+      :name_user, 
+      :surname1, 
+      :surname2, 
+      :email, 
+      :username, 
+      :passwd, 
+      :type_user, 
+      :deleted
+    )";
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':id_user' => $user->getId(),

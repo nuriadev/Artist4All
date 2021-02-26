@@ -27,10 +27,11 @@ try {
     $password = $_POST["password"];
 
     // hacemos la petición sql y ejecutamos la sentencia
-    $sql = "SELECT * FROM users WHERE email=:email";
+    $sql = "SELECT * FROM users WHERE email=:email AND deleted=:deleted";
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
-        ':email'=> $email
+        ':email'=> $email,
+        ':deleted' => 0
     ]);
 
     // nos traemos los datos del select

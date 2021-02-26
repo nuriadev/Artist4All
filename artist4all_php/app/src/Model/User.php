@@ -1,5 +1,6 @@
 <?php
 
+namespace Artist4All\Model;
 class User {
 
   private ?int $id;
