@@ -14,7 +14,7 @@
               Correo electrónico
             </label>
             <div class="mt-1">
-              <input #inputEmail="ngModel" [(ngModel)]="email" placeholder="Introduce tu email" id="email" name="email" type="email" autocomplete="email" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              <input #inputEmail="ngModel" [(ngModel)]="email" placeholder="Introduce tu email" id="email" name="email" type="email" autocomplete="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
           </div>
 
