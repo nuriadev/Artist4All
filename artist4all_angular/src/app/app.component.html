@@ -8,10 +8,13 @@
 
     <ul class="flex items-center">
         <li>
-            <a routerLink="/login" class="p-3 hover:text-purple-600">Iniciar sesión</a>
+            <a routerLink="/login" *ngIf="!isAuthenticated()" class="p-3 hover:text-purple-600">Iniciar sesión</a>
         </li>
         <li>
-            <a routerLink="/register" class="p-3 hover:text-purple-600">Registrarse</a>
+            <a routerLink="/register" *ngIf="!isAuthenticated()" class="p-3 hover:text-purple-600">Registrarse</a>
+        </li>
+        <li>
+          <button routerLink="" (click)="logout()" *ngIf="isAuthenticated()" class="p-3 hover:text-purple-600">Cerrar sesión</button>
         </li>
     </ul>
   </nav>

@@ -15,7 +15,8 @@ try {
     // conectamos mediante PDO con la bbdd
     $dsn = "mysql:host=localhost;dbname=artist4alldb";
     $dbusername = "root";
-    $dbpassword = "";
+    $dbpassword = "root";
+    //$dbpassword = "";
     $options = array(
         PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,
         PDO::ATTR_EMULATE_PREPARES => FALSE, 
@@ -50,8 +51,8 @@ try {
             $token = tokenGenerator($content);
             // todo: borrar apartado usuario cuando todo este acabado
             $feedbackMessage = array(
-                'respuesta' => 'Logueado',
-                'usuario' => $user,
+                'response' => 'Logueado',
+                'user' => $user,
                 'token' => $token
             );
             echo json_encode($feedbackMessage);
