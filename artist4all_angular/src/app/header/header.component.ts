@@ -26,4 +26,15 @@ export class HeaderComponent implements OnInit {
     localStorage.clear();
     this.logueado = false;
   }
+
+  isDisplayed = false;
+  isMenuDisplayed() {
+    if (!this.isDisplayed) {
+      document.getElementById("menu-toggle").style.display = "block";
+      this.isDisplayed = true;
+    } else {
+      document.getElementById("menu-toggle").style.display = "none";
+      this.isDisplayed = false;
+    }
+  }
 }
