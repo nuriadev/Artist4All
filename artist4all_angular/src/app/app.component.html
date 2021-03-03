@@ -1,22 +1,26 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" integrity="sha512-HK5fgLBL+xu6dm/Ii3z4xhlSUyZgTT9tuc/hSrtw6uzJOvgRr2a9jyxxT1ely+B+xFAmJKVSTbpM/CuL7qxO8w==" crossorigin="anonymous" />
 <!--<div>
-    <nav class="p-6 bg-white h-14 flex justify-between">
-        <ul class="flex items-center">
-            <li>
-                <a routerLink="" class="p-3"><img src="assets/img/logo.png" alt="logo" class="h-8"></a>
-            </li>
-        </ul>
+  <nav class="p-6 bg-gray-200 h-14 flex justify-between">
+    <ul class="flex items-center">
+        <li>
+            <a routerLink="" class="p-3"><img src="assets/img/logo.png" alt="logo" class="h-8"></a>
+        </li>
+    </ul>
 
-        <ul class="flex items-center">
-            <li>
-                <a routerLink="#" class="p-3 hover:text-purple-600"></a>
-            </li>
-            <li>
-                <a routerLink="#" class="p-3 hover:text-purple-600"></a>
-            </li>
-        </ul>
-    </nav>
+    <ul class="flex items-center">
+        <li>
+            <a routerLink="/login" *ngIf="!isAuthenticated()" class="p-3 hover:text-purple-600">Iniciar sesión</a>
+        </li>
+        <li>
+            <a routerLink="/register" *ngIf="!isAuthenticated()" class="p-3 hover:text-purple-600">Registrarse</a>
+        </li>
+        <li>
+          <button routerLink="" (click)="logout()" *ngIf="isAuthenticated()" class="p-3 hover:text-purple-600">Cerrar sesión</button>
+        </li>
+    </ul>
+  </nav>
 </div>-->
+
 <router-outlet></router-outlet>
 <footer class="bg-white">
     <div class="max-w-7xl mx-auto py-12 px-4 overflow-hidden sm:px-6 lg:px-8">

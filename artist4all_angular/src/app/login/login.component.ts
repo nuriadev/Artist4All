@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -9,7 +10,7 @@ import { UserService } from '../services/user.service';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private _userService: UserService) { }
+  constructor(private _userService: UserService, private _router: Router) { }
 
   ngOnInit(): void {
   }
@@ -20,8 +21,12 @@ export class LoginComponent implements OnInit {
   login() {
     this._userService.login(this.email, this.password).subscribe(
       (result) => {
-          localStorage.setItem("token", result['token']);
-          console.log(result);
+          if (result != "Usuario incorrecto") {
+            localStorage.setItem("token", result['token']);
+            localStorage.setItem("currentUser",JSON.stringify(result["user"]));
+            this._router.navigate(['home']);
+            console.log(result);
+          }
       }, (error) => {
         console.log(error);
       }

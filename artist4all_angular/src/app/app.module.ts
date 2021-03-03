@@ -8,6 +8,7 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { HomeComponent } from './home/home.component';
 import { LandingComponent } from './landing/landing.component';
 
 @NgModule({
@@ -15,6 +16,7 @@ import { LandingComponent } from './landing/landing.component';
     AppComponent,
     RegisterComponent,
     LoginComponent,
+    HomeComponent,
     LandingComponent
   ],
   imports: [

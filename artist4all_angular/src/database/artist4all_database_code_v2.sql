@@ -11,7 +11,7 @@ email varchar(90) not null,
 username varchar(50) not null,
 passwd varchar(120) not null,
 type_user int not null,
-deleted int(1) not null
+deleted tinyint(1) not null
 );
 
 create table publications (
