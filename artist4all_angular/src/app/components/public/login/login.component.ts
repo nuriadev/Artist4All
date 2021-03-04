@@ -23,7 +23,6 @@ export class LoginComponent implements OnInit {
       (result) => {
           if (result != "Usuario incorrecto") {
             localStorage.setItem("token", result['token']);
-            localStorage.setItem("currentUser",JSON.stringify(result["user"]));
             this._router.navigate(['home']);
             console.log(result);
           }

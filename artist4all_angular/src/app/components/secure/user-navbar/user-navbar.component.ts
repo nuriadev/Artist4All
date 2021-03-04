@@ -15,14 +15,13 @@ export class UserNavbarComponent implements OnInit {
   logueado = false;
 
   isAuthenticated() {
-    if(localStorage.getItem("token") && localStorage.getItem("currentUser")) this.logueado = true;
+    if(localStorage.getItem("token")) this.logueado = true;
     else this.logueado = false;
     return this.logueado;
   }
 
   logout() {
     localStorage.removeItem("token");
-    localStorage.removeItem("currentUser");
     localStorage.clear();
     this.logueado = false;
   }

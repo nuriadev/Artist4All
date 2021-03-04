@@ -41,6 +41,8 @@ try {
       :username, 
       :passwd, 
       :type_user, 
+      :img,
+      :token,
       :deleted
     )";
     $statement = $conn->prepare($sql);
@@ -53,13 +55,16 @@ try {
       ':username' => $user->getUsername(),
       ':passwd' => password_hash($user->getPassword(), PASSWORD_DEFAULT),
       ':type_user' => $user->getType_user(),
+      // todo: añadir img base,
+      ':img' => '',
+      ':token' => '',
       ':deleted' => 0
     ]);
 
     // recogemos el id del usuario registrado para comprobar 
     // si se ha registrado o no y devolvemos una resupesta
     // $insertId = $conn->lastInsertId();
-    // if ($insertId) echo "Usuario registrado";
+    // if ($insertId) {echo "Usuario registrado";
     // else echo "Error en el insert";
 
     // hacemos la petición sql y ejecutamos la sentencia
@@ -78,16 +83,20 @@ try {
     // en caso contrario, hacemos la comprobación de la contraseña 
     // e indicamos la respuesta correspondiente
     } else {
-        if (password_verify($password, $user["passwd"])) { 
-            // todo: cambiar las variables del array (por determinar)        
-            $arrayAux = array($user["email"], $user["passwd"]);
+        if (password_verify($password, $user["passwd"])) {        
+            $arrayAux = array($user["email"], $user["passwd"], randomTokenPartGenerator());
             $content = implode(".", $arrayAux);
             // creamos el token a partir de la variable $content
             $token = tokenGenerator($content);
-            // todo: borrar apartado usuario cuando todo este acabado
+            // insertamos el token en la db
+            $sql = "UPDATE users SET token=:token WHERE email=:email";
+            $statement = $conn->prepare($sql);
+            $result = $statement->execute([
+              ':token' => $token,
+              ':email' => $user["email"]
+            ]);
             $feedbackMessage = array(
                 'response' => 'Logueado',
-                'user' => $user,
                 'token' => $token
             );
             echo json_encode($feedbackMessage);

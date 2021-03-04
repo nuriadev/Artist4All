@@ -14,6 +14,19 @@ function tokenGenerator($content) {
     return $token;
 }
 
+function randomTokenPartGenerator(int $length = 10) {
+    $chars1 = "abcdefghijklmnopqrstuvwxyz";
+    $chars2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    $chars3 = "0123456789";
+    $chars4 = "!$%&/+-_.:*";
+    $password = substr(str_shuffle($chars1), 0, $length / 2 - 1);
+    $password.= substr(str_shuffle($chars2), 0, $length / 2 - 1);
+    $password.= substr(str_shuffle($chars3), 0, 1);
+    $password.= substr(str_shuffle($chars4), 0, 1);
+    $password = str_shuffle($password);
+    return $password;
+}
+
 function tokenChecker($token) {
     $secret_key = 'my secret key';
     $jwt_token_values = explode('.',$token);
