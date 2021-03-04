@@ -14,6 +14,7 @@ import { ProfileComponent } from './components/secure/profile/profile.component'
 import { StoreComponent } from './components/secure/store/store.component';
 import { UserSettingsComponent } from './components/secure/user-settings/user-settings.component';
 import { UserNavbarComponent } from './components/secure/user-navbar/user-navbar.component';
+import { MessagesComponent } from './components/secure/messages/messages.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { UserNavbarComponent } from './components/secure/user-navbar/user-navbar
     StoreComponent,
     UserSettingsComponent,
     UserNavbarComponent,
+    MessagesComponent,
   ],
   imports: [
     BrowserModule,
