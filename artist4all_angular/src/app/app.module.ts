@@ -3,13 +3,17 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { RegisterComponent } from './register/register.component';
-import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './components/public/register/register.component';
+import { LoginComponent } from './components/public/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { HomeComponent } from './home/home.component';
-import { LandingComponent } from './landing/landing.component';
+import { HomeComponent } from './components/secure/home/home.component';
+import { LandingComponent } from './components/public/landing/landing.component';
+import { ProfileComponent } from './components/secure/profile/profile.component';
+import { StoreComponent } from './components/secure/store/store.component';
+import { UserSettingsComponent } from './components/secure/user-settings/user-settings.component';
+import { UserNavbarComponent } from './components/secure/user-navbar/user-navbar.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +21,11 @@ import { LandingComponent } from './landing/landing.component';
     RegisterComponent,
     LoginComponent,
     HomeComponent,
-    LandingComponent
+    LandingComponent,
+    ProfileComponent,
+    StoreComponent,
+    UserSettingsComponent,
+    UserNavbarComponent,
   ],
   imports: [
     BrowserModule,

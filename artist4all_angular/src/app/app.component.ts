@@ -8,19 +8,4 @@ import { Component } from '@angular/core';
 export class AppComponent {
   title = 'Artist4All';
 
-  logueado = false;
-
-  isAuthenticated() {
-    if(localStorage.getItem("token") && localStorage.getItem("currentUser")) this.logueado = true;
-    else this.logueado = false;
-    return this.logueado;
-  }
-
-  logout() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("currentUser");
-    localStorage.clear();
-    this.logueado = false;
-  }
-
 }
