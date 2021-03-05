@@ -1,6 +1,6 @@
 <?php
-
 namespace Artist4All\Model;
+
 class User {
 
   private ?int $id;
@@ -12,6 +12,7 @@ class User {
   private string $password;
   private int $n_followers;
   private int $type_user;
+  private ?string $img;
 
   public function __construct(
     ?int $id,
@@ -21,8 +22,9 @@ class User {
     string $email,
     string $username,
     string $password,
-    int $n_followers = 0,
-    int $type_user) {
+    int $n_followers,
+    int $type_user,
+    ?string $img) {
       $this->id = $id;
       $this->name = $name;
       $this->surname1 = $surname1;
@@ -32,6 +34,7 @@ class User {
       $this->password = $password;
       $this->n_followers = $n_followers;
       $this->type_user = $type_user;
+      $this->img = $img;
     }
 
     public function getId() : ?int {
@@ -90,7 +93,7 @@ class User {
       $this->password = $password;
     }
 
-    public function getN_followers() {
+    public function getN_followers() : int {
       return $this->n_followers;
     }
 
@@ -104,6 +107,14 @@ class User {
 
     public function setType_artist(int $type_user) {
       $this->type_user = $type_user;
+    }
+
+    public function getImg() : ?string {
+      return $this->img;
+    }
+
+    public function setImg(?string $img) {
+      $this->img = $img;
     }
 
 }
