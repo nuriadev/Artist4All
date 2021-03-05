@@ -9,6 +9,7 @@ import { StoreComponent } from './components/secure/store/store.component';
 import { ProfileComponent } from './components/secure/profile/profile.component';
 import { UserSettingsComponent } from './components/secure/user-settings/user-settings.component';
 import { MessagesComponent } from './components/secure/messages/messages.component';
+import { ContactComponent } from './components/public/contact/contact.component';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
@@ -19,6 +20,7 @@ const routes: Routes = [
   {path:'profile',component:ProfileComponent},
   {path:'settings',component:UserSettingsComponent},
   {path:'messages',component:MessagesComponent},
+  {path:'contact', component:ContactComponent},
 ];
 
 @NgModule({
