@@ -95,7 +95,7 @@ try {
         echo json_encode($feedbackMessage);
       }
     } else {
-      echo "Error en el insert";
+      echo "Error en el registro";
     } 
     // en caso de error en el connect
 } catch (\PDOException $e) {
