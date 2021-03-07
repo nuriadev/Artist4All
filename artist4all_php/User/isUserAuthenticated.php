@@ -16,26 +16,33 @@ try {
     );
     $conn = new PDO($dsn, $dbusername, $dbpassword, $options);
     
-    // // recogemos los parámetro pasado por formData del UserService
-    // $token = $_POST["token"];
+    // recogemos los parámetro pasado por formData del UserService
+    $token = $_POST["token"];
 
-    // // hacemos la petición sql y ejecutamos la sentencia
-    // $sql = "SELECT id_user FROM users WHERE token=:token";
-    // $statement = $conn->prepare($sql);
-    // $result = $statement->execute([
-    //     ':token'=> $token
-    // ]);
+    // hacemos la petición sql y ejecutamos la sentencia
+    $sql = "SELECT token FROM users WHERE token=:token";
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+        ':token'=> $token
+    ]);
 
-    // // nos traemos los datos del select
-    // $idUser = $statement->fetch(\PDO::FETCH_ASSOC);
-    // // si el return es nulo, lo indicamos
-    // if (!$idUser) {
-    //     echo "Usuario no autorizado";   
-    // // en caso contrario, hacemos la comprobación de la contraseña 
-    // // e indicamos la respuesta correspondiente
-    // } else {            
-    //     return true;
-    // }
+    // nos traemos los datos del select
+    $user = $statement->fetch(\PDO::FETCH_ASSOC);
+    if ($user) {
+        if ($token == $user['token']) {
+            $feedbackMessage = array(
+                'response' => 'Autorizado'
+            );
+            echo json_encode($feedbackMessage);
+        } else {
+            $feedbackMessage = array(
+                'response' => 'No autorizado'
+            );
+            echo json_encode($feedbackMessage);
+        }
+    } else {            
+        echo json_encode("Usuario no autorizado");   
+    }
     
     // en caso de error en el connect
 } catch (PDOException $e) {

@@ -42,7 +42,13 @@ try {
     // e indicamos la respuesta correspondiente
     } else {            
         $feedbackMessage = array(
-            'currentUser' => $user
+            'id' => $user["id_user"],
+            'name' => $user["name_user"], 
+            'surname1' => $user["surname1"],
+            'surname2' => $user["surname2"], 
+            'email' => $user["email"], 
+            'username' => $user["username"], 
+            'img' => $user["img"]
         );
         echo json_encode($feedbackMessage);
     }

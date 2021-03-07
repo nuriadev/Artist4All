@@ -10,16 +10,17 @@ import { ProfileComponent } from './components/secure/profile/profile.component'
 import { UserSettingsComponent } from './components/secure/user-settings/user-settings.component';
 import { MessagesComponent } from './components/secure/messages/messages.component';
 import { ContactComponent } from './components/public/contact/contact.component';
+import { AuthGuard } from './components/auth/auth.guard';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
   {path:'register',component:RegisterComponent},
   {path:'login', component:LoginComponent},
-  {path:'home', component:HomeComponent},
-  {path:'store',component:StoreComponent},
-  {path:'profile',component:ProfileComponent},
-  {path:'settings',component:UserSettingsComponent},
-  {path:'messages',component:MessagesComponent},
+  {path:'home', component:HomeComponent, canActivate:[AuthGuard]},
+  {path:'store',component:StoreComponent, canActivate:[AuthGuard]},
+  {path:'profile',component:ProfileComponent, canActivate:[AuthGuard]},
+  {path:'settings',component:UserSettingsComponent, canActivate:[AuthGuard]},
+  {path:'messages',component:MessagesComponent, canActivate:[AuthGuard]},
   {path:'contact', component:ContactComponent},
 ];
 

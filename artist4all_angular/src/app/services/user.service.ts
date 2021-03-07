@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../model/user';
 
 @Injectable()
@@ -8,8 +8,8 @@ export class UserService {
   constructor(private conexHttp:HttpClient) { }
 
   register(newUser:User):Observable<any> {
-    //let url = "http://localhost/daw2/Artist4all/artist4all_php/User/register.php";
-    let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/register.php";
+    let url = "http://localhost/daw2/Artist4all/artist4all_php/User/register.php";
+    //let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/register.php";
 
     let registerFormData:FormData = new FormData();
     registerFormData.append('name', newUser.name);
@@ -26,8 +26,8 @@ export class UserService {
   }
 
   login(email:string,password:string):Observable<any> {
-    //let url = "http://localhost/daw2/Artist4all/artist4all_php/User/login.php";
-    let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/login.php";
+    let url = "http://localhost/daw2/Artist4all/artist4all_php/User/login.php";
+    /* let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/login.php"; */
 
     let loginFormData:FormData = new FormData();
     loginFormData.append('email',email);
@@ -37,7 +37,7 @@ export class UserService {
   }
 
   isAuthenticated(token:string):Observable<any> {
-    let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/isUserAuthenticated.php";
+    let url = "http://localhost/daw2/Artist4all/artist4all_php/User/isUserAuthenticated.php";
 
     let authenticatedFormData:FormData = new FormData();
     authenticatedFormData.append('token',token);
@@ -46,8 +46,8 @@ export class UserService {
   }
 
   logout(token:string):Observable<any> {
-    //let url = "http://localhost/daw2/Artist4all/artist4all_php/User/logout.php";
-    let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/logout.php";
+    let url = "http://localhost/daw2/Artist4all/artist4all_php/User/logout.php";
+    /* let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/logout.php"; */
 
     let logoutFormData:FormData = new FormData();
     logoutFormData.append('token',token);
@@ -56,7 +56,7 @@ export class UserService {
   }
 
   getUserData(token:string):Observable<any> {
-    let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/getUserData.php";
+    let url = "http://localhost/daw2/Artist4all/artist4all_php/User/getUserData.php";
 
     let currentUserFormData:FormData = new FormData();
     currentUserFormData.append('token',token);

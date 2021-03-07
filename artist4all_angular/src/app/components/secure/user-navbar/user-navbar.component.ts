@@ -25,24 +25,23 @@ export class UserNavbarComponent implements OnInit {
   ngOnInit(): void {
     this._userService.isAuthenticated(localStorage.getItem("token")).subscribe(
       (result) => {
-        if(result['respuesta'] == 'ok') {
+        if(result['response'] == 'Autorizado') {
           this._userService.getUserData(localStorage.getItem("token")).subscribe(
             (result) => {
-              this.id = result["id_user"];
-              this.name = result["name_user"];
+              this.id = result["id"];
+              this.name = result["name"];
               this.surname1 = result["surname1"];
               this.surname2 = result["surname2"];
               this.email = result["email"];
               this.username = result["username"];
               this.img = result["img"];
-              console.log(result);
             },
             (error) => {
               console.log(error);
             }
           )
         } else {
-          this._router.navigate(['']);
+          this._router.navigate(['/login']);
         }
       },
       (error) => {
@@ -60,9 +59,16 @@ export class UserNavbarComponent implements OnInit {
   }
 
   logout() {
-    localStorage.removeItem("token");
-    localStorage.clear();
-    this.logueado = false;
+    this._userService.logout(localStorage.getItem("token")).subscribe(
+      (response) => {
+        localStorage.removeItem("token");
+        localStorage.clear();
+        this.logueado = false;
+        console.log(response);
+      }, (error) => {
+        console.log(error);
+      }
+    )
   }
 
   isDisplayed = false;

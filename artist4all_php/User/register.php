@@ -28,7 +28,7 @@ try {
     $password = $_POST["password"];
     $type_user = $_POST["type_user"];
     $n_followers = $_POST["n_followers"];
-    $img = "daw2/artist4all/artist4all_php/User/assets/img/imgUnknown.png";
+    $img = "http://localhost/daw2/Artist4all/artist4all_php/User/assets/img/imgUnknown.png";
 
     // creamos un usuario con los datos recogidos
     $user = new \Artist4All\Model\User(null, $name, $surname1, $surname2, $email, $username, $password, $n_followers, $type_user, $img);
