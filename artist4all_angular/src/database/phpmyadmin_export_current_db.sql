@@ -1,14 +1,22 @@
 -- phpMyAdmin SQL Dump
--- version 4.9.7
+-- version 4.9.5
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:8889
--- Tiempo de generación: 05-03-2021 a las 17:30:05
--- Versión del servidor: 5.7.32
--- Versión de PHP: 7.4.12
+-- Servidor: localhost:3306
+-- Tiempo de generación: 07-03-2021 a las 17:49:24
+-- Versión del servidor: 5.7.24
+-- Versión de PHP: 7.4.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
+START TRANSACTION;
 SET time_zone = "+00:00";
+
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
 -- Base de datos: `artist4alldb`
@@ -30,7 +38,7 @@ CREATE TABLE `users` (
   `passwd` varchar(120) NOT NULL,
   `type_user` int(11) NOT NULL,
   `img` varchar(300) NOT NULL,
-  `token` varchar(300) NOT NULL,
+  `token` varchar(600) NOT NULL,
   `deleted` tinyint(1) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -39,12 +47,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `name_user`, `surname1`, `surname2`, `email`, `username`, `passwd`, `type_user`, `img`, `token`, `deleted`) VALUES
-(1, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$rWG3V45SUGB/u9pgc5dLj.ZjS2z1mstSv4L9DBE3vC7hFIW837JTS', 1, '', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dXN1MUBnbWFpbC5jb20uJDJ5JDEwJHJXRzNWNDVTVUdCL3U5cGdjNWRMai5aalMyejFtc3RTdjRMOURCRTN2QzdoRklXODM3SlRTLmlKOUl3VmUmQ3g=.MHUEF09AxhtvyWsNazlou2enJ6O/Ecjqko78ngWLg1k=', 0),
-(2, 'usu2', 'usu2', 'usu2', 'usu2@gmail.com', 'usu2', '$2y$10$ZgW45KwUvI1mY0WoeaaBROgRlAW6VgJcN0REZEwKnBbM2LuWPT/Qm', 0, '', '', 0),
-(3, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$dnvjTOigP.AhShO9FNC1tORcMzIVuspXLbn6OGslDCZHK97J3JC7y', 1, '', '', 0),
-(6, 'usu5', 'usu5', 'usu5', 'usu5@gmail.com', 'usu5', '$2y$10$nUitnzj89LqSl92nLg2jd.0wl2Q4tnJstsigpztvy5YUUPZkA/.52', 1, '', '', 0),
-(7, 'usu4', 'usu4', 'usu4', 'usu4@gmail.com', 'usu4', '$2y$10$FKvwQNohcciAbToypyg15OrCCEcDeMLVDXcDD1kN/sW95NwofcFwW', 1, '', '', 0),
-(16, 'usu10', 'usu10', 'usu10', 'usu10@gmail.com', 'usu10', '$2y$10$J/qK9c7gwX6tyYMY4bhUG./EwYLQh5wf05QKy7qBNms7Hl8N5GwCq', 1, 'daw2/artist4all/artist4all_php/User/assets/img/imgUnknown.png', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dXN1MTBAZ21haWwuY29tLiQyeSQxMCRKL3FLOWM3Z3dYNnR5WU1ZNGJoVUcuL0V3WUxRaDV3ZjA1UUt5N3FCTm1zN0hsOE41R3dDcS52Uk0zSyVyY1hi.bRjw5DAQ0tNPX5hKtzuGq1tP0Rawlm/KBoFSVgDTXRQ=', 0);
+(19, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$W9roMlNGzQRqPBTYw27LG.gW5cwNImpHTigLzS.u1Y85ML0DB/TQi', 1, 'http:\\\\localhost\\daw2\\Artist4all\\artist4all_php\\User\\assets\\img\\imgUnknown.png', '', 0),
+(20, 'usu2', 'usu2', 'usu2', 'usu2@gmail.com', 'usu2', '$2y$10$iSwd2abDuBdK061hx6lu6.r9uJpf6m2mnDAoOh35kFgXtG7gEN6Ba', 0, 'http:\\\\localhost\\daw2\\Artist4all\\artist4all_php\\User\\assets\\img\\imgUnknown.png', '', 0),
+(21, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$vMzRk6ZDlyOGN9yCoT7d0evpbUDgeLOCSv4134TNexdkd1RnHcee.', 1, 'http:\\\\localhost\\daw2\\Artist4all\\artist4all_php\\User\\assets\\img\\imgUnknown.png', '', 0);
 
 --
 -- Índices para tablas volcadas
@@ -64,4 +69,9 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+COMMIT;
+
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
