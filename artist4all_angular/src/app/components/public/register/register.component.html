@@ -38,7 +38,7 @@
           </label>
           <div class="mt-1">
             <input #inputName="ngModel" [(ngModel)]="name" placeholder="Introduce tu nombre" id="name" name="name"
-              type="text" autocomplete="name" required
+              type="text" autocomplete="name" pattern="[A-Za-z]{1,32}" required
               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
           </div>
         </div>
@@ -49,7 +49,7 @@
             </label>
             <div class="mt-1">
               <input #inputSurname1="ngModel" [(ngModel)]="surname1" placeholder="Introduce tu primer apellido"
-                id="surname1" name="surname1" type="text" autocomplete="family-name" required
+                id="surname1" name="surname1" type="text" autocomplete="family-name" pattern="[A-Za-z]{1,32}" required
                 class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
           </div>
@@ -59,7 +59,7 @@
             </label>
             <div class="mt-1">
               <input #inputSurname22="ngModel" [(ngModel)]="surname2" placeholder="Introduce tu segundo apellido"
-                id="surname2" name="surname2" type="text" autocomplete="family-name" required
+                id="surname2" name="surname2" type="text" autocomplete="family-name" pattern="[A-Za-z]{1,32}" required
                 class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
           </div>
@@ -70,7 +70,7 @@
           </label>
           <div class="mt-1">
             <input #inputEmail="ngModel" [(ngModel)]="email" placeholder="Introduce tu email" id="email" name="email"
-              type="email" autocomplete="email" required
+              type="email" autocomplete="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required
               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
           </div>
         </div>
@@ -80,7 +80,7 @@
           </label>
           <div class="mt-1">
             <input #inputUsername="ngModel" [(ngModel)]="username" placeholder="Introduce tu nombre de usuario"
-              id="username" name="username" type="text" autocomplete="family-name" required
+              id="username" name="username" type="text" autocomplete="family-name" pattern="[A-Za-z]{1,32}" required
               class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
           </div>
         </div>
@@ -90,8 +90,10 @@
               <label for="password" class="block text-sm font-medium text-gray-700">
                 Contraseña
               </label>
+              <!-- password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter -->
               <div class="mt-1">
-                <input #inputPassword="ngModel" [(ngModel)]="password" placeholder="Introduce tu contraseña"
+                <input #inputPassword="ngModel" [(ngModel)]="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
+                 placeholder="Introduce tu contraseña"
                   id="password" name="password" type="password" autocomplete="current-password" required
                   class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
               </div>
@@ -101,8 +103,10 @@
             <label for="passwordConfirm" class="block text-sm font-medium text-gray-700">
               Confirma la contraseña
             </label>
+            <!-- password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter -->
             <div class="mt-1">
               <input #inputPasswordConfirm="ngModel" [(ngModel)]="passwordConfirm" placeholder="Confirma tu contraseña"
+                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 id="passwordConfirm" name="passwordConfirm" type="password" autocomplete="current-password" required
                 class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
