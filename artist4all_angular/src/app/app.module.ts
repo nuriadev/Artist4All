@@ -18,6 +18,7 @@ import { MessagesComponent } from './components/secure/messages/messages.compone
 import { ContactComponent } from './components/public/contact/contact.component';
 import { AuthGuard } from './components/auth/auth.guard';
 import { UserService } from './services/user.service';
+import { EditUserComponent } from './components/secure/edit-user/edit-user.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { UserService } from './services/user.service';
     UserNavbarComponent,
     MessagesComponent,
     ContactComponent,
+    EditUserComponent,
   ],
   imports: [
     BrowserModule,
