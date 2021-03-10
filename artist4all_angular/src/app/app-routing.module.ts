@@ -11,6 +11,7 @@ import { UserSettingsComponent } from './components/secure/user-settings/user-se
 import { MessagesComponent } from './components/secure/messages/messages.component';
 import { ContactComponent } from './components/public/contact/contact.component';
 import { AuthGuard } from './components/auth/auth.guard';
+import { EditUserComponent } from './components/secure/edit-user/edit-user.component';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
@@ -22,6 +23,7 @@ const routes: Routes = [
   {path:'settings',component:UserSettingsComponent, canActivate:[AuthGuard]},
   {path:'messages',component:MessagesComponent, canActivate:[AuthGuard]},
   {path:'contact', component:ContactComponent},
+  {path:'profile/edit',component:EditUserComponent, canActivate:[AuthGuard]},
 ];
 
 @NgModule({
