@@ -2,10 +2,6 @@
 <div class="min-h-screen bg-gray-50 flex flex-col py-12 sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
     <a href="/"><img src="assets/img/logo.png" class="mx-auto h-12 w-auto" alt=""></a>
-    <!--<img class="mx-auto h-14 w-auto" src="../assets/img/logo.png" alt="Workflow">-->
-    <!--<h2 class="text-center text-3xl font-extrabold text-gray-900">
-      Regístrate
-    </h2>-->
   </div>
 
   <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
@@ -39,8 +35,9 @@
           <div class="mt-1">
             <input #inputName="ngModel" [(ngModel)]="name" placeholder="Introduce tu nombre" id="name" name="name"
               type="text" autocomplete="name" pattern="[A-Za-z]{1,32}" required
-              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              class="appearance-none block mb-4 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
           </div>
+          <span *ngIf="inputName.invalid && inputName.dirty" class="bg-red-100 text-red-900 p-2 rounded-md mt-5 font-normal text-sm"> El nombre no puede estar vacío.</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="sm:col-span-1">
@@ -50,18 +47,20 @@
             <div class="mt-1">
               <input #inputSurname1="ngModel" [(ngModel)]="surname1" placeholder="Introduce tu primer apellido"
                 id="surname1" name="surname1" type="text" autocomplete="family-name" pattern="[A-Za-z]{1,32}" required
-                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                class="appearance-none block w-full mb-4 px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
+            <span *ngIf="inputSurname1.invalid && inputSurname1.dirty" class="bg-red-100 text-red-900 p-2 rounded-md mt-5 font-normal text-sm"> El apellido no puede estar vacío.</span>
           </div>
           <div>
             <label for="surname2" class="block text-sm font-medium text-gray-700">
               Segundo apellido
             </label>
             <div class="mt-1">
-              <input #inputSurname22="ngModel" [(ngModel)]="surname2" placeholder="Introduce tu segundo apellido"
+              <input #inputSurname2="ngModel" [(ngModel)]="surname2" placeholder="Introduce tu segundo apellido"
                 id="surname2" name="surname2" type="text" autocomplete="family-name" pattern="[A-Za-z]{1,32}" required
-                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                class="appearance-none block mb-4 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
+            <span *ngIf="inputSurname2.invalid && inputSurname2.dirty" class="bg-red-100 text-red-900 p-2 rounded-md mt-5 font-normal text-sm"> El apellido no puede estar vacío.</span>
           </div>
         </div>
         <div>
@@ -71,8 +70,9 @@
           <div class="mt-1">
             <input #inputEmail="ngModel" [(ngModel)]="email" placeholder="Introduce tu email" id="email" name="email"
               type="email" autocomplete="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required
-              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              class="appearance-none block mb-4 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
           </div>
+          <span *ngIf="inputEmail.invalid && inputEmail.dirty" class="bg-red-100 text-red-900 p-2 rounded-md mt-5 font-normal text-sm"> El correo electrónico no es correcto</span>
         </div>
         <div>
           <label for="username" class="block text-sm font-medium text-gray-700">
@@ -81,8 +81,9 @@
           <div class="mt-1">
             <input #inputUsername="ngModel" [(ngModel)]="username" placeholder="Introduce tu nombre de usuario"
               id="username" name="username" type="text" autocomplete="family-name" pattern="[A-Za-z]{1,32}" required
-              class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              class="appearance-none block mb-4 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
           </div>
+          <span *ngIf="inputUsername.invalid && inputUsername.dirty" class="bg-red-100 text-red-900 p-2 rounded-md mt-5 font-normal text-sm"> Este campo no puede estar vacío.</span>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="sm:col-span-1">
@@ -95,8 +96,9 @@
                 <input #inputPassword="ngModel" [(ngModel)]="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                  placeholder="Introduce tu contraseña"
                   id="password" name="password" type="password" autocomplete="current-password" required
-                  class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                  class="appearance-none block mb-4 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
               </div>
+              <span *ngIf="inputPassword.invalid && inputPassword.dirty" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-5 text-sm">La contraseña tiene que tener mínimo 8 carácteres, un número, una mayúscula y una minúscula.</span>
             </div>
           </div>
           <div>
@@ -108,8 +110,9 @@
               <input #inputPasswordConfirm="ngModel" [(ngModel)]="passwordConfirm" placeholder="Confirma tu contraseña"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                 id="passwordConfirm" name="passwordConfirm" type="password" autocomplete="current-password" required
-                class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+                class="appearance-none block mb-4 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
+            <span *ngIf="inputPasswordConfirm.invalid && inputPasswordConfirm.dirty" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-5 text-sm">La contraseña tiene que tener mínimo 8 carácteres, un número, una mayúscula y una minúscula.</span>
           </div>
         </div>
         <div class="flex items-center justify-between">
