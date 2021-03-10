@@ -10,14 +10,15 @@
 
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
       <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-        <form #formLogin="ngForm" class="space-y-6" method="POST" (ngSubmit)="login(); formLogin.reset()">
+        <form #formLogin="ngForm" name="formLogin" class="space-y-6" method="POST" (ngSubmit)="login(); formLogin.reset()">
           <div>
             <label for="email" class="block text-sm font-medium text-gray-700">
               Correo electrónico
             </label>
             <div class="mt-1">
-              <input #inputEmail="ngModel" [(ngModel)]="email" placeholder="Introduce tu email" id="email" name="email" type="email" autocomplete="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              <input #inputEmail="ngModel" [(ngModel)]="email" placeholder="Introduce tu email" id="email" name="email" type="email" autocomplete="email" pattern="^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$" required class="appearance-none block mb-4 w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
             </div>
+            <span *ngIf="inputEmail.invalid && inputEmail.dirty" class="bg-red-100 text-red-900 p-2 rounded-md mt-5 font-normal text-sm"> El correo electrónico no es correcto</span>
           </div>
 
           <div>
@@ -26,8 +27,9 @@
             </label>
             <div class="mt-1">
               <!-- password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter -->
-              <input #inputPassword="ngModel" [(ngModel)]="password" placeholder="Introduce tu contraseña" id="password" name="password" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm">
+              <input #inputPassword="ngModel" [(ngModel)]="password" placeholder="Introduce tu contraseña" id="password" name="password" type="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" autocomplete="current-password" required class="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm mb-4">
             </div>
+            <span *ngIf="inputPassword.invalid && inputPassword.dirty" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-5 text-sm">La contraseña tiene que tener mínimo 8 carácteres, un número, una mayúscula y una minúscula.</span>
           </div>
 
           <div class="flex items-center justify-between">
