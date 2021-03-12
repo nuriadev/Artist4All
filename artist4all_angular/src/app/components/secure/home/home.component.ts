@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
+import { User } from 'src/app/core/models/user';
+import { SessionService } from 'src/app/core/services/session.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -10,21 +11,13 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  constructor(private _userService: UserService, private _router: Router) { }
+  public user: User;
+  constructor(
+    private _sessionService: SessionService
+  ) { }
 
   ngOnInit(): void {
-    // todo: conseguir que se ejecute la funcion antes de mostrar el html
-    this._userService.isAuthenticated(localStorage.getItem('token')).subscribe(
-      (result) => {
-        if (result["response"] != 'Autorizado') this._router.navigate(['/login']);
-        console.log(result);
-      },
-      (error) => {
-          console.log(error);
-      }
-    )
+    this.user = this._sessionService.getCurrentUser();
   }
-
-
 
 }

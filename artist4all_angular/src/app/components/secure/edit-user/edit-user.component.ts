@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
+import { SessionService } from 'src/app/core/services/session.service';
+import { UserService } from 'src/app/core/services/user.service';
 
 @Component({
   selector: 'app-edit-user',
@@ -11,50 +11,36 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class EditUserComponent implements OnInit {
 
-  constructor(private _userService: UserService, private _router: Router) { }
+  constructor(
+    private _sessionService: SessionService
+  ) { }
 
-  id:number;
-  name:string = "";
-  surname1:string = "";
-  surname2:string = "";
-  email:string = "";
-  username:string = "";
-  img:string = "";
+
+  name:string;
+  surname1:string;
+  surname2:string;
+  email:string;
+  username:string;
+  password:string;
+  img:string;
 
   ngOnInit(): void {
-    this._userService.isAuthenticated(localStorage.getItem('token')).subscribe(
-      (result) => {
-        if (result["response"] != 'Autorizado') this._router.navigate(['/login']);
-        this._userService.getUserData(localStorage.getItem("token")).subscribe(
-          (result) => {
-            this.id = result["id"];
-            this.name = result["name"];
-            this.surname1 = result["surname1"];
-            this.surname2 = result["surname2"];
-            this.email = result["email"];
-            this.username = result["username"];
-            this.img = result["img"];
-          },
-          (error) => {
-            console.log(error);
-          }
-        )
-      },
-      (error) => {
-          console.log(error);
-      }
-    )
+    let user = this._sessionService.getCurrentUser();
+    let token = this._sessionService.getCurrentToken();
+    this.name = user.name;
+    this.surname1 = user.surname1;
+    this.surname2 = user.surname2;
+    this.email = user.email;
+    this.username = user.username;
+    this.password = user.password;
+    this.img = user.img;
   }
 
-  nameForm:string = "";
-  surname1Form:string = "";
-  surname2Form:string = "";
-  emailForm:string = "";
   /*
   usernameForm:string = "";
   passwordForm:string = "";
   img:string = "";
-  */
+  *
 /* TODO para un about me  */
 
   editUser() {

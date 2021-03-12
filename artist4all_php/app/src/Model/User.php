@@ -101,11 +101,11 @@ class User {
       $this->n_followers = $n_followers;
     }
 
-    public function getType_user() {
+    public function getTypeUser() {
       return $this->type_user;
     }
 
-    public function setType_artist(int $type_user) {
+    public function setTypeUser(int $type_user) {
       $this->type_user = $type_user;
     }
 

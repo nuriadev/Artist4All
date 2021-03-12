@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-
+import { UserService } from 'src/app/core/services/user.service';
 @Component({
   selector: 'app-user-settings',
   templateUrl: './user-settings.component.html',
@@ -13,14 +12,6 @@ export class UserSettingsComponent implements OnInit {
   constructor(private _userService: UserService, private _router: Router) { }
 
   ngOnInit(): void {
-    this._userService.isAuthenticated(localStorage.getItem('token')).subscribe(
-      (result) => {
-        if (result["response"] != 'Autorizado') this._router.navigate(['/login']);
-      },
-      (error) => {
-          console.log(error);
-      }
-    )
   }
 
 }

@@ -10,7 +10,7 @@ import { ProfileComponent } from './components/secure/profile/profile.component'
 import { UserSettingsComponent } from './components/secure/user-settings/user-settings.component';
 import { MessagesComponent } from './components/secure/messages/messages.component';
 import { ContactComponent } from './components/public/contact/contact.component';
-import { AuthGuard } from './components/auth/auth.guard';
+import { AuthGuard } from './core/guards/auth.guard';
 import { EditUserComponent } from './components/secure/edit-user/edit-user.component';
 
 const routes: Routes = [

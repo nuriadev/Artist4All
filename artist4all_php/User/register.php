@@ -64,7 +64,7 @@ try {
       ':email'=> $user->getEmail(),
       ':username' => $user->getUsername(),
       ':passwd' => $password_hashed,
-      ':type_user' => $user->getType_user(),
+      ':type_user' => $user->getTypeUser(),
       ':img' => $user->getImg(),
       ':token' => $token,
       ':deleted' => 0
@@ -81,21 +81,30 @@ try {
       ]);  
       
       // nos traemos los datos del select
-      $user = $statement->fetch(\PDO::FETCH_ASSOC);
+      $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
       // si el return es nulo, lo indicamos
-      if (!$user) {
+      if (!$userAssoc) {
         echo "Usuario incorrecto";   
       // en caso contrario, hacemos la comprobación de la contraseña 
       // e indicamos la respuesta correspondiente
       } else {
-        $feedbackMessage = array(
-          'response' => 'Logueado',
-          'token' => $user['token']
+        $data = array(
+          'token' => $token,
+          'name' => $userAssoc['name_user'],
+          'surname1' => $userAssoc['surname1'],
+          'surname2' => $userAssoc['surname2'],
+          'email' => $userAssoc['email'],
+          'username' => $userAssoc['username'],
+          'password' => $userAssoc['passwd'],
+          'type_user' => $userAssoc['type_user'],
+          // todo: cambiar el 0 por el n followers 
+          'n_followers' => 0,
+          'img' => $userAssoc['img']
         );
-        echo json_encode($feedbackMessage);
+        echo json_encode($data);
       }
     } else {
-      echo "Error en el registro";
+      echo json_encode("Error en el registro");
     } 
     // en caso de error en el connect
 } catch (\PDOException $e) {

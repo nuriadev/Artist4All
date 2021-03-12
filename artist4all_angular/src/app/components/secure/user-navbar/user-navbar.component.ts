@@ -1,70 +1,44 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { User } from 'src/app/model/user';
-import { UserService } from 'src/app/services/user.service';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { SessionService } from 'src/app/core/services/session.service';
 
 @Component({
   selector: 'app-user-navbar',
   templateUrl: './user-navbar.component.html',
   styleUrls: ['./user-navbar.component.css'],
-  providers: [UserService]
+  providers: [AuthenticationService]
 })
 export class UserNavbarComponent implements OnInit {
 
-  constructor(private _userService: UserService, private _router: Router) { }
+  constructor(
+    private _authenticationService: AuthenticationService,
+    private _sessionService: SessionService
+  ) { }
 
-  id:number;
-  name:string = "";
-  surname1:string = "";
-  surname2:string = "";
-  email:string = "";
-  username:string = "";
-  img:string = "";
-
+  user = this._sessionService.getCurrentUser();
+  token = this._sessionService.getCurrentToken();
+  name:string;
+  surname1:string;
+  surname2:string;
+  email:string;
+  username:string;
+  password:string;
+  img:string;
 
   ngOnInit(): void {
-    this._userService.isAuthenticated(localStorage.getItem("token")).subscribe(
-      (result) => {
-        if(result['response'] == 'Autorizado') {
-          this._userService.getUserData(localStorage.getItem("token")).subscribe(
-            (result) => {
-              this.id = result["id"];
-              this.name = result["name"];
-              this.surname1 = result["surname1"];
-              this.surname2 = result["surname2"];
-              this.email = result["email"];
-              this.username = result["username"];
-              this.img = result["img"];
-            },
-            (error) => {
-              console.log(error);
-            }
-          )
-        } else {
-          this._router.navigate(['/login']);
-        }
-      },
-      (error) => {
-        console.log(error);
-      }
-    )
-  }
-
-  logueado = false;
-
-  isAuthenticated() {
-    if(localStorage.getItem("token")) this.logueado = true;
-    else this.logueado = false;
-    return this.logueado;
+    this.name = this.user.name;
+    this.surname1 = this.user.surname1;
+    this.surname2 = this.user.surname2;
+    this.email = this.user.email;
+    this.username = this.user.username;
+    this.password = this.user.password;
+    this.img = this.user.img;
   }
 
   logout() {
-    this._userService.logout(localStorage.getItem("token")).subscribe(
+    this._authenticationService.logout(this.token).subscribe(
       (response) => {
-        localStorage.removeItem("token");
-        localStorage.clear();
-        this.logueado = false;
-        console.log(response);
+        this._sessionService.logout();
       }, (error) => {
         console.log(error);
       }
