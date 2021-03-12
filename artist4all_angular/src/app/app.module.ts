@@ -19,6 +19,7 @@ import { ContactComponent } from './components/public/contact/contact.component'
 import { AuthGuard } from './components/auth/auth.guard';
 import { UserService } from './services/user.service';
 import { EditUserComponent } from './components/secure/edit-user/edit-user.component';
+import { UserSidebarComponent } from './components/secure/user-sidebar/user-sidebar.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { EditUserComponent } from './components/secure/edit-user/edit-user.compo
     MessagesComponent,
     ContactComponent,
     EditUserComponent,
+    UserSidebarComponent,
   ],
   imports: [
     BrowserModule,
