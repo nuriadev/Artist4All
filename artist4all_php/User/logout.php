@@ -35,7 +35,7 @@ try {
         );
         echo json_encode($feedbackMessage);       
     } else {            
-        echo json_encode("Error en el logout");   
+        echo "Error en el logout";   
     }
     
     // en caso de error en el connect

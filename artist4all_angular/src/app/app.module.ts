@@ -16,9 +16,11 @@ import { UserSettingsComponent } from './components/secure/user-settings/user-se
 import { UserNavbarComponent } from './components/secure/user-navbar/user-navbar.component';
 import { MessagesComponent } from './components/secure/messages/messages.component';
 import { ContactComponent } from './components/public/contact/contact.component';
-import { AuthGuard } from './components/auth/auth.guard';
-import { UserService } from './services/user.service';
+import { AuthGuard } from './core/guards/auth.guard';
+import { UserService } from './core/services/user.service';
 import { EditUserComponent } from './components/secure/edit-user/edit-user.component';
+import { SessionService } from './core/services/session.service';
+import { AuthenticationService } from './core/services/authentication.service';
 
 @NgModule({
   declarations: [
@@ -42,7 +44,7 @@ import { EditUserComponent } from './components/secure/edit-user/edit-user.compo
     HttpClientModule,
     CommonModule
   ],
-  providers: [UserService, AuthGuard],
+  providers: [UserService, AuthenticationService, SessionService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

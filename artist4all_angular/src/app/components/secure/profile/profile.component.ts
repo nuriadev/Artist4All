@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { UserService } from 'src/app/services/user.service';
-
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { SessionService } from 'src/app/core/services/session.service';
+import { UserService } from 'src/app/core/services/user.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -10,39 +10,28 @@ import { UserService } from 'src/app/services/user.service';
 })
 export class ProfileComponent implements OnInit {
 
-  constructor(private _userService: UserService, private _router: Router) { }
+  constructor(
+    private _sessionService: SessionService
+  ) { }
 
-  id:number;
-  name:string = "";
-  surname1:string = "";
-  surname2:string = "";
-  email:string = "";
-  username:string = "";
-  img:string = "";
+  user = this._sessionService.getCurrentUser();
+  token = this._sessionService.getCurrentToken();
+  name:string;
+  surname1:string;
+  surname2:string;
+  email:string;
+  username:string;
+  password:string;
+  img:string;
 
   ngOnInit(): void {
-    this._userService.isAuthenticated(localStorage.getItem('token')).subscribe(
-      (result) => {
-        if (result["response"] != 'Autorizado') this._router.navigate(['/login']);
-        this._userService.getUserData(localStorage.getItem("token")).subscribe(
-          (result) => {
-            this.id = result["id"];
-            this.name = result["name"];
-            this.surname1 = result["surname1"];
-            this.surname2 = result["surname2"];
-            this.email = result["email"];
-            this.username = result["username"];
-            this.img = result["img"];
-          },
-          (error) => {
-            console.log(error);
-          }
-        )
-      },
-      (error) => {
-          console.log(error);
-      }
-    )
+    this.name = this.user.name;
+    this.surname1 = this.user.surname1;
+    this.surname2 = this.user.surname2;
+    this.email = this.user.email;
+    this.username = this.user.username;
+    this.password = this.user.password;
+    this.img = this.user.img;
   }
 
 }

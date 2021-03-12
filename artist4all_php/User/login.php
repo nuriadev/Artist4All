@@ -4,6 +4,7 @@ header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Conte
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 header("Allow: GET, POST, OPTIONS, PUT, DELETE");
 require_once 'TokenSection/TokenController.php';
+require_once '../app/src/Model/User.php';
 
 try {
     // todo
@@ -36,15 +37,15 @@ try {
     ]);
 
     // nos traemos los datos del select
-    $user = $statement->fetch(\PDO::FETCH_ASSOC);
+    $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
     // si el return es nulo, lo indicamos
-    if (!$user) {
+    if (!$userAssoc) {
         echo "Usuario incorrecto";   
     // en caso contrario, hacemos la comprobación de la contraseña 
     // e indicamos la respuesta correspondiente
     } else {
-        if (password_verify($password, $user["passwd"])) {       
-            $arrayAux = array($user["email"], $user["passwd"], randomTokenPartGenerator());
+        if (password_verify($password, $userAssoc["passwd"])) {       
+            $arrayAux = array($userAssoc["email"], $userAssoc["passwd"], randomTokenPartGenerator());
             $content = implode(".", $arrayAux);
             // creamos el token a partir de la variable $content
             $token = tokenGenerator($content);
@@ -53,15 +54,25 @@ try {
             $statement = $conn->prepare($sql);
             $result = $statement->execute([
               ':token' => $token,
-              ':email' => $user["email"]
+              ':email' => $userAssoc["email"]
             ]);
-            $feedbackMessage = array(
-                'response' => 'Logueado',
-                'token' => $token
+
+            $data = array(
+                'token' => $token,
+                'name' => $userAssoc['name_user'],
+                'surname1' => $userAssoc['surname1'],
+                'surname2' => $userAssoc['surname2'],
+                'email' => $userAssoc['email'],
+                'username' => $userAssoc['username'],
+                'password' => $userAssoc['passwd'],
+                'type_user' => $userAssoc['type_user'],
+                // todo: cambiar el 0 por el n followers 
+                'n_followers' => 0,
+                'img' => $userAssoc['img']
             );
-            echo json_encode($feedbackMessage);
+            echo json_encode($data);
         } else { 
-            echo json_encode("Usuario incorrecto");   
+            echo "Usuario incorrecto";   
         }
     }
     
