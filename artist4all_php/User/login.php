@@ -72,7 +72,7 @@ try {
             );
             echo json_encode($data);
         } else { 
-            echo "Usuario incorrecto";   
+            echo json_encode("Usuario incorrecto");   
         }
     }
     

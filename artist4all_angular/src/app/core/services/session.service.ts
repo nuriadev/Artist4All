@@ -6,7 +6,6 @@ import { Session } from '../models/session';
 @Injectable()
 export class SessionService {
 
-
   constructor(private _router: Router) { }
 
   setCurrentSession(session: Session) {

@@ -104,7 +104,7 @@ try {
         echo json_encode($data);
       }
     } else {
-      echo "Error en el registro";
+      echo json_encode("Error en el registro");
     } 
     // en caso de error en el connect
 } catch (\PDOException $e) {
