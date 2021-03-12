@@ -19,6 +19,7 @@ import { ContactComponent } from './components/public/contact/contact.component'
 import { AuthGuard } from './core/guards/auth.guard';
 import { UserService } from './core/services/user.service';
 import { EditUserComponent } from './components/secure/edit-user/edit-user.component';
+import { UserSidebarComponent } from './components/secure/user-sidebar/user-sidebar.component';
 import { SessionService } from './core/services/session.service';
 import { AuthenticationService } from './core/services/authentication.service';
 
@@ -36,6 +37,7 @@ import { AuthenticationService } from './core/services/authentication.service';
     MessagesComponent,
     ContactComponent,
     EditUserComponent,
+    UserSidebarComponent,
   ],
   imports: [
     BrowserModule,
