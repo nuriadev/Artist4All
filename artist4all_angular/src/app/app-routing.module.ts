@@ -17,13 +17,13 @@ const routes: Routes = [
   {path:'', component:LandingComponent},
   {path:'register',component:RegisterComponent},
   {path:'login', component:LoginComponent},
-  {path:'home', component:HomeComponent, canActivate:[AuthGuard]},
-  {path:'store',component:StoreComponent, canActivate:[AuthGuard]},
-  {path:'profile',component:ProfileComponent, canActivate:[AuthGuard]},
-  {path:'settings',component:UserSettingsComponent, canActivate:[AuthGuard]},
-  {path:'messages',component:MessagesComponent, canActivate:[AuthGuard]},
+  {path:'home', component:HomeComponent, /*canActivate:[AuthGuard]*/},
+  {path:'store',component:StoreComponent, /*canActivate:[AuthGuard]*/},
+  {path:'profile',component:ProfileComponent/*, canActivate:[AuthGuard]*/},
+  {path:'settings',component:UserSettingsComponent, /*canActivate:[AuthGuard]*/},
+  {path:'messages',component:MessagesComponent, /*canActivate:[AuthGuard]*/},
   {path:'contact', component:ContactComponent},
-  {path:'profile/edit',component:EditUserComponent, canActivate:[AuthGuard]},
+  {path:'profile/edit',component:EditUserComponent, /*canActivate:[AuthGuard]*/},
 ];
 
 @NgModule({
