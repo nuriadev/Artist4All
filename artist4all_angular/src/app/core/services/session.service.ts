@@ -35,5 +35,4 @@ export class SessionService {
     localStorage.clear();
     this._router.navigate(['']);
   }
-
 }

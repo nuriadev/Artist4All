@@ -1,5 +1,5 @@
 <app-user-navbar></app-user-navbar>
-<p>edit-user works!</p><div class="h-screen flex overflow-hidden bg-white">
+<div class="h-screen flex overflow-hidden bg-white">
   <!-- Static sidebar for desktop -->
   <div class="flex flex-col min-w-0 flex-1 overflow-hidden">
     <div class="flex-1 relative z-0 flex overflow-hidden">
@@ -25,7 +25,7 @@
               </div>
               <div class="hidden sm:block 2xl:hidden mt-6 min-w-0 flex-1">
                 <h1 class="text-2xl font-bold text-gray-900 truncate">
-                  {{ name }} {{ surname1 }}
+                  {{ name_2 }} {{ surname1_2 }}
                 </h1>
               </div>
             </div>
@@ -46,8 +46,8 @@
           </div>
 
           <!-- Description list -->
-          <div class="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-            <form #formEdit="ngForm" method="POST" (ngSubmit)="editUser(); formEdit.reset()">
+        <div class="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          <form #formEdit="ngForm" method="POST" (ngSubmit)="editSimple(); formEdit.reset()">
             <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
               <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">
@@ -79,16 +79,6 @@
                 </dd>
               </div>
 
- <!--              <div class="sm:col-span-1">
-                <dt class="text-sm font-medium text-gray-500">
-                  Team
-                </dt>
-                <dd class="mt-1 text-sm text-gray-900">
-                  <input type="text" id="nombre" value="{{ email }}">
-                  <i class="fas fa-pen ml-5"></i>Product Development
-                </dd>
-              </div> -->
-
               <div class="sm:col-span-1">
                 <dt class="text-sm font-medium text-gray-500">
                   2º Apellido:
@@ -99,54 +89,22 @@
                 </dd>
               </div>
 
-        <!--       <div class="sm:col-span-1">
-                <dt class="text-sm font-medium text-gray-500">
-                  Sits
-                </dt>
-                <dd class="mt-1 text-sm text-gray-900">
-                  <input type="text" id="nombre" value="{{ email }}">
-                  <i class="fas fa-pen ml-5"></i>Oasis, 4th floor
-                </dd>
-              </div>
-
-              <div class="sm:col-span-1">
-                <dt class="text-sm font-medium text-gray-500">
-                  Salary
-                </dt>
-                <dd class="mt-1 text-sm text-gray-900">
-                  $145,000
-                </dd>
-              </div>
-
-              <div class="sm:col-span-1">
-                <dt class="text-sm font-medium text-gray-500">
-                  Birthday
-                </dt>
-                <dd class="mt-1 text-sm text-gray-900">
-                  June 8, 1990
-                </dd>
-              </div> -->
-
               <div class="sm:col-span-2">
                 <dt class="text-sm font-medium text-gray-500">
-                  About me <i class="fas fa-pen ml-5 text-gray-900"></i>
+                  Sobre mi <i class="fas fa-pen ml-5 text-gray-900"></i>
                 </dt>
                 <dd class="mt-1 max-w-prose text-sm text-gray-900">
-                  <!-- TODO probar que vaya con textarea -->
-                  <textarea type="text" id="aboutMeForm" name="aboutMeForm"  cols="110" rows="7">Tincidunt quam neque in cursus viverra orci, dapibus nec tristique. Nullam ut sit dolor consectetur urna, dui cras nec sed. Cursus risus congue arcu aenean posuere aliquam.
-
-Et vivamus lorem pulvinar nascetur non. Pulvinar a sed platea rhoncus ac mauris amet. Urna, sem pretium sit pretium urna, senectus vitae. Scelerisque fermentum, cursus felis dui suspendisse velit pharetra. Augue et duis cursus maecenas eget quam lectus. Accumsan vitae nascetur pharetra rhoncus praesent dictum risus suspendisse.
-                  </textarea>
+                  <textarea #inputAboutMe="ngModel" [(ngModel)]="aboutMe" type="text" id="aboutMe" name="aboutMe"  cols="110" rows="7">{{ aboutMe }}</textarea>
                 </dd>
               </div>
             </dl>
             <div class="mt-5">
-              <a routerLink="/profile" >
+              <a routerLink="/profile">
                 <button type="button" id="backToProfile" routerLink="profile" class="mr-20 inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                   <span>Volver</span>
                 </button>
               </a>
-              <input type="button" class="ml-96 inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500" value="Guardar cambios">
+              <input type="submit" class="ml-96 inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500" value="Guardar cambios">
             </div>
           </form>
         </div>

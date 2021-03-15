@@ -28,7 +28,18 @@ export class LoginComponent implements OnInit {
     this._authenticationService.login(new LoginUser(this.email, this.password)).subscribe(
       (result) => {
         if (result["token"] != null) {
-          let user = new User(result['name'], result['surname1'], result['surname2'], result['email'], result['username'], result['password'], result['type_user'], result['n_followers'], result['img']);
+          let user = new User(
+            result['name'],
+            result['surname1'],
+            result['surname2'],
+            result['email'],
+            result['username'],
+            result['password'],
+            result['type_user'],
+            result['n_followers'],
+            result['img'],
+            result['aboutMe']
+          );
           let userSession = new Session(result['token'], user);
           this._sessionService.setCurrentSession(userSession);
           this._router.navigate(['/home']);

@@ -34,10 +34,21 @@ export class RegisterComponent implements OnInit {
 
   // todo: comprobar que las contraseñas sean iguales
   register() {
-    this._userService.register(new User(this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.type_user, 0, '')).subscribe(
+    this._userService.register(new User(this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.type_user, 0, '', '')).subscribe(
       (result) => {
         if (result['token'] != null) {
-          let user = new User(result['name'], result['surname1'], result['surname2'], result['email'], result['username'], result['password'], result['type_user'], result['n_followers'], result['img']);
+          let user = new User(
+            result['name'],
+            result['surname1'],
+            result['surname2'],
+            result['email'],
+            result['username'],
+            result['password'],
+            result['type_user'],
+            result['n_followers'],
+            result['img'],
+            result['aboutMe']
+          );
           let userSession = new Session(result['token'], user);
           this._sessionService.setCurrentSession(userSession);
           this._router.navigate(['/home']);

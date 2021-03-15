@@ -9,6 +9,7 @@ export class User {
   type_user:number;
   n_followers:number;
   img:string = "";
+  aboutMe:string = "";
 
   constructor(
     name:string,
@@ -19,7 +20,8 @@ export class User {
     password:string,
     type_user:number,
     n_followers:number,
-    img:string) {
+    img:string,
+    aboutMe:string) {
       this.name = name;
       this.surname1 = surname1;
       this.surname2 = surname2;
@@ -29,6 +31,7 @@ export class User {
       this.type_user = type_user;
       this.n_followers = n_followers;
       this.img = img;
+      this.aboutMe = aboutMe;
   }
 
 }

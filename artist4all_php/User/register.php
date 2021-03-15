@@ -28,10 +28,12 @@ try {
     $password = $_POST["password"];
     $type_user = $_POST["type_user"];
     $n_followers = $_POST["n_followers"];
-    $img = "http://localhost/daw2/Artist4all/artist4all_php/User/assets/img/imgUnknown.png";
+    //$img = "http://localhost/daw2/Artist4all/artist4all_php/User/assets/img/imgUnknown.png";
+    $img = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/assets/img/imgUnknown.png";
+    $aboutMe = "Bienvendio a mi perfil";
 
     // creamos un usuario con los datos recogidos
-    $user = new \Artist4All\Model\User(null, $name, $surname1, $surname2, $email, $username, $password, $n_followers, $type_user, $img);
+    $user = new \Artist4All\Model\User(null, $name, $surname1, $surname2, $email, $username, $password, $n_followers, $type_user, $img, $aboutMe);
     
     // todo: comprobar que las contraseñas sean iguales
     
@@ -46,6 +48,7 @@ try {
       :passwd, 
       :type_user, 
       :img,
+      :aboutMe,
       :token,
       :deleted
     )";
@@ -66,6 +69,7 @@ try {
       ':passwd' => $password_hashed,
       ':type_user' => $user->getTypeUser(),
       ':img' => $user->getImg(),
+      ':aboutMe' => $user->getAboutMe(),
       ':token' => $token,
       ':deleted' => 0
     ]);
@@ -99,7 +103,8 @@ try {
           'type_user' => $userAssoc['type_user'],
           // todo: cambiar el 0 por el n followers 
           'n_followers' => 0,
-          'img' => $userAssoc['img']
+          'img' => $userAssoc['img'],
+          'aboutMe' => $userAssoc['aboutMe']
         );
         echo json_encode($data);
       }

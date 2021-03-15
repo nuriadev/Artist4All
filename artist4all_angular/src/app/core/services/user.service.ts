@@ -7,23 +7,39 @@ import { User } from '../models/user';
 export class UserService {
   constructor(private conexHttp:HttpClient) { }
 
-  register(newUser:User):Observable<any> {
-    let url = "http://localhost/daw2/Artist4all/artist4all_php/User/register.php";
-    //let url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User/register.php";
+    //let url = "http://localhost/daw2/Artist4all/artist4all_php/User/register.php";
+    private url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User";
 
+  register(newUser:User):Observable<any> {
     let registerFormData:FormData = new FormData();
     registerFormData.append('name', newUser.name);
     registerFormData.append('surname1', newUser.surname1);
     registerFormData.append('surname2', newUser.surname2);
-    registerFormData.append('email',newUser.email);
+    registerFormData.append('email', newUser.email);
     registerFormData.append('username', newUser.username);
-    registerFormData.append('password',newUser.password);
+    registerFormData.append('password', newUser.password);
     registerFormData.append('type_user',""+newUser.type_user);
     registerFormData.append('n_followers',""+newUser.n_followers);
-    registerFormData.append('img',newUser.img);
 
-    return this.conexHttp.post(url, registerFormData);
+    return this.conexHttp.post(this.url + '/register.php', registerFormData);
   }
 
+  editSimple(
+    name:string,
+    surname1:string,
+    surname2:string,
+    email:string,
+    aboutMe:string,
+    token:string):Observable<any> {
 
+      let editSimpleFormData:FormData = new FormData();
+      editSimpleFormData.append('name', name);
+      editSimpleFormData.append('surname1', surname1);
+      editSimpleFormData.append('surname2', surname2);
+      editSimpleFormData.append('email', email);
+      editSimpleFormData.append('aboutMe', aboutMe);
+      editSimpleFormData.append('token', token);
+
+      return this.conexHttp.post(this.url + '/editSimple.php', editSimpleFormData);
+    }
 }

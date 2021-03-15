@@ -23,6 +23,7 @@ export class ProfileComponent implements OnInit {
   username:string;
   password:string;
   img:string;
+  aboutMe:string;
 
   ngOnInit(): void {
     this.name = this.user.name;
@@ -32,6 +33,7 @@ export class ProfileComponent implements OnInit {
     this.username = this.user.username;
     this.password = this.user.password;
     this.img = this.user.img;
+    this.aboutMe = this.user.aboutMe;
   }
 
 }

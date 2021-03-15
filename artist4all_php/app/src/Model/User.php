@@ -13,6 +13,7 @@ class User {
   private int $n_followers;
   private int $type_user;
   private ?string $img;
+  private ?string $aboutMe;
 
   public function __construct(
     ?int $id,
@@ -24,7 +25,8 @@ class User {
     string $password,
     int $n_followers,
     int $type_user,
-    ?string $img) {
+    ?string $img,
+    ?string $aboutMe) {
       $this->id = $id;
       $this->name = $name;
       $this->surname1 = $surname1;
@@ -35,6 +37,7 @@ class User {
       $this->n_followers = $n_followers;
       $this->type_user = $type_user;
       $this->img = $img;
+      $this->aboutMe = $aboutMe;
     }
 
     public function getId() : ?int {
@@ -115,6 +118,14 @@ class User {
 
     public function setImg(?string $img) {
       $this->img = $img;
+    }
+
+    public function getAboutMe() : ?string {
+      return $this->aboutMe;
+    }
+
+    public function setAboutMe(?string $aboutMe) {
+      $this->aboutMe = $aboutMe;
     }
 
 }

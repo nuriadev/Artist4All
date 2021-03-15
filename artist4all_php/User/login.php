@@ -68,7 +68,8 @@ try {
                 'type_user' => $userAssoc['type_user'],
                 // todo: cambiar el 0 por el n followers 
                 'n_followers' => 0,
-                'img' => $userAssoc['img']
+                'img' => $userAssoc['img'],
+                'aboutMe' => $userAssoc['aboutMe']
             );
             echo json_encode($data);
         } else { 
