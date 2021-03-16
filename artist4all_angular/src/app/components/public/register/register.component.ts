@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
 
   // todo: comprobar que las contraseñas sean iguales
   register() {
-    this._userService.register(new User(this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.type_user, 0, '', '')).subscribe(
+    this._userService.register(new User(this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.type_user, 0, null, '')).subscribe(
       (result) => {
         if (result['token'] != null) {
           let user = new User(

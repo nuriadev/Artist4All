@@ -31,7 +31,6 @@ export class UserService {
     email:string,
     aboutMe:string,
     token:string):Observable<any> {
-
       let editSimpleFormData:FormData = new FormData();
       editSimpleFormData.append('name', name);
       editSimpleFormData.append('surname1', surname1);
@@ -42,4 +41,36 @@ export class UserService {
 
       return this.conexHttp.post(this.url + '/editSimple.php', editSimpleFormData);
     }
+
+  edit(
+    username:string,
+    aboutMe:string,
+    files:FileList,
+    name:string,
+    email:string,
+    surname1:string,
+    surname2:string,
+    token:string):Observable<any> {
+      let editFormData:FormData = new FormData();
+      editFormData.append('username', username);
+      editFormData.append('aboutMe', aboutMe);
+      editFormData.append('img',files[0],files[0].name);
+      editFormData.append('name', name);
+      editFormData.append('email', email);
+      editFormData.append('surname1', surname1);
+      editFormData.append('surname2', surname2);
+      editFormData.append('token', token);
+
+    return this.conexHttp.post(this.url + '/edit.php', editFormData);
+  }
+
+  editPassword(
+    password:string,
+    token:string):Observable<any> {
+      let editPasswordFormData:FormData = new FormData();
+      editPasswordFormData.append('password', password);
+      editPasswordFormData.append('token', token);
+
+      return this.conexHttp.post(this.url + '/editPassword.php', editPasswordFormData);
+  }
 }

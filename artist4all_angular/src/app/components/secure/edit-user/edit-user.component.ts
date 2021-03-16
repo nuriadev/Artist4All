@@ -30,7 +30,7 @@ export class EditUserComponent implements OnInit {
   email:string;
   username:string;
   password:string;
-  img:string;
+  img:FileList;
   aboutMe:string;
 
   ngOnInit(): void {

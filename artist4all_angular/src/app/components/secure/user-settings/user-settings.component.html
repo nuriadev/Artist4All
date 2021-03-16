@@ -24,7 +24,7 @@
           <div class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
             <aside class="py-6 lg:col-span-3">
               <nav>
-                <a href="#" class="bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group border-l-4 px-3 py-2 flex items-center text-sm font-medium" aria-current="page">
+                <a (click)="changeSection('profile');" id="profile" class="bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group border-l-4 px-3 py-2 flex items-center text-sm font-medium" aria-current="page">
                   <svg class="text-teal-500 group-hover:text-teal-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
@@ -33,8 +33,7 @@
                   </span>
                 </a>
 
-                <a href="#" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
-                  <!-- Heroicon name: outline/cog -->
+                <a (click)="changeSection('account');" id="account" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
                   <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -44,7 +43,7 @@
                   </span>
                 </a>
 
-                <a href="#" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
+                <a (click)="changeSection('password');" id="password" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
                   <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z" />
                   </svg>
@@ -53,14 +52,14 @@
                   </span>
                 </a>
 
-                <a href="#" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
+                <!-- <button (click)="changeSection('notifications');" id="notificactions" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
                   <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                   </svg>
                   <span class="truncate">
                     Notificaciones
                   </span>
-                </a>
+                </button> -->
 
                <!--  <a href="#" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
                   <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -82,15 +81,11 @@
               </nav>
             </aside>
 
-            <form class="divide-y divide-gray-200 lg:col-span-9" action="#" method="POST">
+            <form #formProfile="ngForm" id="formProfile" class="divide-y divide-gray-200 lg:col-span-9" method="POST" (ngSubmit)="edit(); formProfile.reset()">
               <div class="py-6 px-4 sm:p-6 lg:pb-8">
                 <div>
                   <h2 class="text-lg leading-6 font-medium text-gray-900">Mi perfil</h2>
-                  <p class="mt-1 text-sm text-gray-500">
-                    This information will be displayed publicly so be careful what you share.
-                  </p>
                 </div>
-
                 <div class="mt-6 flex flex-col lg:flex-row">
                   <div class="flex-grow space-y-6">
                     <div>
@@ -98,7 +93,7 @@
                         Nombre de usuario
                       </label>
                       <div class="mt-1 rounded-md shadow-sm flex">
-                        <input type="text" name="username" id="username" autocomplete="username" class="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" value="{{ username }}">
+                        <input #inputUsername ="ngModel" [(ngModel)]="username" type="text" name="username" id="username" autocomplete="username" class="focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm border-gray-300" value="{{ username }}">
                       </div>
                     </div>
 
@@ -107,10 +102,10 @@
                         Sobre mi
                       </label>
                       <div class="mt-1">
-                        <textarea id="about" name="about" rows="3" class="shadow-sm focus:ring-light-blue-500 focus:border-light-blue-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md"></textarea>
+                        <textarea #inputAboutMe="ngModel" [(ngModel)]="aboutMe" id="aboutMe" name="aboutMe" rows="3" class="shadow-sm focus:ring-light-blue-500 focus:border-light-blue-500 mt-1 block w-full sm:text-sm border-gray-300 rounded-md">{{ aboutMe }}</textarea>
                       </div>
-                      <p class="mt-2 text-sm text-gray-500">
-                        Brief description for your profile. URLs are hyperlinked.
+                      <p class="mt-2 text-sm text-gray-500 hover:text-blue-600">
+                        <i class="fas fa-exclamation-circle "></i> Esta información se mostrará en tu zona de perfil.
                       </p>
                     </div>
                   </div>
@@ -122,26 +117,17 @@
                     <div class="mt-1 lg:hidden">
                       <div class="flex items-center">
                         <div class="flex-shrink-0 inline-block rounded-full overflow-hidden h-12 w-12" aria-hidden="true">
-                          <img class="rounded-full h-full w-full" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixqx=NyaX3ZCB6U&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80h" alt="">
-                        </div>
-                        <div class="ml-5 rounded-md shadow-sm">
-                          <div class="group relative border border-gray-300 rounded-md py-2 px-3 flex items-center justify-center hover:bg-gray-50 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-light-blue-500">
-                            <label for="user_photo" class="relative text-sm leading-4 font-medium text-gray-700 pointer-events-none">
-                              <span>Change</span>
-                              <span class="sr-only"> user photo</span>
-                            </label>
-                            <input id="user_photo" name="user_photo" type="file" class="absolute w-full h-full opacity-0 cursor-pointer border-gray-300 rounded-md">
-                          </div>
+                          <img class="rounded-full h-full w-full" src="{{ img }}" alt="">
                         </div>
                       </div>
                     </div>
 
                     <div class="hidden relative rounded-full overflow-hidden lg:block">
-                      <img class="relative rounded-full w-40 h-40" src="{{ img }}" alt="profilePhoto">
+                      <img class="relative rounded-full w-40 h-40" src="{{ img }}" alt="">
                       <label for="user-photo" class="absolute inset-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center text-sm font-medium text-white opacity-0 hover:opacity-100 focus-within:opacity-100">
                         <span>Change</span>
                         <span class="sr-only"> user photo</span>
-                        <input type="file" id="user-photo" name="user-photo" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer border-gray-300 rounded-md">
+                        <input type="file" (change)="handleFileInput($event.target.files)" id="img" name="img" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer border-gray-300 rounded-md">
                       </label>
                     </div>
                   </div>
@@ -150,12 +136,22 @@
                 <div class="mt-6 grid grid-cols-12 gap-6">
                   <div class="col-span-12 sm:col-span-6">
                     <label for="first_name" class="block text-sm font-medium text-gray-700">Nombre</label>
-                    <input type="text" name="first_name" id="first_name" autocomplete="given-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
+                    <input #inputName="ngModel" [(ngModel)]="name" type="text" name="first_name" value="{{ name }}" id="first_name" autocomplete="given-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
                   </div>
 
                   <div class="col-span-12 sm:col-span-6">
-                    <label for="last_name" class="block text-sm font-medium text-gray-700">Apellidos</label>
-                    <input type="text" name="last_name" id="last_name" autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
+                    <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                    <input #inputEmail="ngModel" [(ngModel)]="email" type="text" name="email" value="{{ email }}" id="email" autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
+                  </div>
+
+                  <div class="col-span-12 sm:col-span-6">
+                    <label for="surname1" class="block text-sm font-medium text-gray-700">1r Apellido</label>
+                    <input #inputSurname1="ngModel" [(ngModel)]="surname1" type="text" name="surname1" value="{{ surname1 }}" id="surname1" autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
+                  </div>
+
+                  <div class="col-span-12 sm:col-span-6">
+                    <label for="surname2" class="block text-sm font-medium text-gray-700">2º Apellido</label>
+                    <input #inputSurname2="ngModel" [(ngModel)]="surname2" type="text" name="surname2" value="{{ surname2 }}" id="surname2" autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
                   </div>
 
                   <div class="col-span-12">
@@ -170,11 +166,26 @@
                 </div>
               </div>
 
+              <div class="pt-6 divide-y divide-gray-200">
+                <div class="mt-4 py-4 px-4 flex justify-end sm:px-6">
+                  <button routerLink="/home" class="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
+                    Volver a la home
+                  </button>
+                  <button type="submit" class="ml-5 bg-blue-500 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
+                    Guardar los cambios
+                  </button>
+                </div>
+              </div>
+            </form>
+
+          <div id="formAccount" class="divide-y divide-gray-200 lg:col-span-9 hidden">
+            <form #formAccount="ngForm" method="POST" (ngSubmit)=" formAccount.reset()">
+             <!-- !darte de baja y estas cosas, cambiar email tal vez, perfil visible publicamente, notificaciones, fondo oscuro... -->
               <!-- Privacy section -->
               <div class="pt-6 divide-y divide-gray-200">
                 <div class="px-4 sm:px-6">
                   <div>
-                    <h2 class="text-lg leading-6 font-medium text-gray-900">Privacy</h2>
+                    <h2 class="text-lg leading-6 font-medium text-gray-900">Privacidad</h2>
                     <p class="mt-1 text-sm text-gray-500">
                       Ornare eu a volutpat eget vulputate. Fringilla commodo amet.
                     </p>
@@ -247,11 +258,43 @@
                   </ul>
                 </div>
                 <div class="mt-4 py-4 px-4 flex justify-end sm:px-6">
-                  <button type="button" class="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
-                    Cancel
+                  <button routerLink="/home" class="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
+                    Volver a la home
                   </button>
-                  <button type="submit" class="ml-5 bg-light-blue-700 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
-                    Save
+                  <button type="submit" class="ml-5 bg-blue-500 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
+                    Guardar los cambios
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+            <form #formPassword="ngForm" id="formPassword" class="divide-y divide-gray-200 lg:col-span-9 hidden" method="POST" (ngSubmit)="editPassword(); formPassword.reset()">
+              <div class="py-6 px-4 sm:p-6 lg:pb-8">
+                <div>
+                  <h2 class="text-lg leading-6 font-medium text-gray-900">Cambiar mi contraseña</h2>
+                </div>
+
+                <div class="mt-6 grid grid-cols-12 gap-6">
+                  <div class="col-span-12">
+                    <label for="newPassowrd" class="block text-sm font-medium text-gray-700">Nueva contraseña:</label>
+                    <input #inputNewPassword="ngModel" [(ngModel)]="newPassword" type="password" name="newPassword" id="newPassword" placeholder="Mi nueva contraseña" required autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
+                  </div>
+
+                  <div class="col-span-12">
+                    <label for="confirmPassowrd" class="block text-sm font-medium text-gray-700">Confirma tu nueva contraseña:</label>
+                    <input #inputConfirmPassword="ngModel" [(ngModel)]="confirmPassword" type="password" name="confirmPassword" id="confirmPassword" placeholder="Confirma tu contraseña" required autocomplete="family-name" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
+                  </div>
+                </div>
+              </div>
+
+              <div class="pt-6 divide-y divide-gray-200">
+                <div class="mt-4 py-4 px-4 flex justify-end sm:px-6">
+                  <button routerLink="/home" class="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
+                    Volver a la home
+                  </button>
+                  <button type="submit" class="ml-5 bg-blue-500 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
+                    Guardar los cambios
                   </button>
                 </div>
               </div>

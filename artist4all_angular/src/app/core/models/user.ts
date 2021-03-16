@@ -8,7 +8,7 @@ export class User {
   password:string = "";
   type_user:number;
   n_followers:number;
-  img:string = "";
+  img:FileList;
   aboutMe:string = "";
 
   constructor(
@@ -20,7 +20,7 @@ export class User {
     password:string,
     type_user:number,
     n_followers:number,
-    img:string,
+    img:FileList,
     aboutMe:string) {
       this.name = name;
       this.surname1 = surname1;
