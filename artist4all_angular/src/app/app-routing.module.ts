@@ -12,6 +12,7 @@ import { MessagesComponent } from './components/secure/messages/messages.compone
 import { ContactComponent } from './components/public/contact/contact.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { EditUserComponent } from './components/secure/edit-user/edit-user.component';
+import { PageNotFoundComponent } from './components/public/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
@@ -24,6 +25,8 @@ const routes: Routes = [
   {path:'messages',component:MessagesComponent, /*canActivate:[AuthGuard]*/},
   {path:'contact', component:ContactComponent},
   {path:'profile/edit',component:EditUserComponent, /*canActivate:[AuthGuard]*/},
+  {path:'404', component:PageNotFoundComponent},
+  {path: '**', redirectTo: '/404'},
 ];
 
 @NgModule({
