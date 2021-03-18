@@ -24,6 +24,7 @@ export class ProfileComponent implements OnInit {
   password:string;
   img:FileList;
   aboutMe:string;
+  n_followers:number;
 
   ngOnInit(): void {
     this.name = this.user.name;
@@ -34,6 +35,26 @@ export class ProfileComponent implements OnInit {
     this.password = this.user.password;
     this.img = this.user.img;
     this.aboutMe = this.user.aboutMe;
+    this.n_followers = this.user.n_followers;
   }
 
+  isFollowed: boolean = false;
+  isUserFollowed() {
+    let followMessage = document.getElementById('followMessage');
+    let followIcon = document.getElementById('followIcon');
+    let unfollowIcon = document.getElementById('unfollowIcon');
+    if (!this.isFollowed) {
+      // todo falta que tenga constancia de si lo seguía de antes por db, tabla follower_followed
+      // ! No funcional
+      followIcon.style.display = "block";
+      unfollowIcon.style.display = "none";
+      followMessage.innerHTML = "Seguir";
+      this.isFollowed = true;
+    } else {
+      unfollowIcon.style.display = "block";
+      followIcon.style.display = "none";
+      followMessage.innerHTML = "Dejar de seguir";
+      this.isFollowed = false;
+    }
+  }
 }

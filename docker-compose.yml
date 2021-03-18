@@ -1,0 +1,45 @@
+version: "3.2"
+
+services:
+  api_artist4all_php:
+    image: felixgalindo/php74apache
+    container_name: 'api_artist4all_php'
+    volumes:
+      - ./artist4all_php/app:/var/www
+    ports:
+      - 81:80
+    links: 
+      - api_artist4all_db
+      
+  api_artist4all_angular:
+    image: nginx:latest
+    container_name: 'api_artist4all_angular'
+    volumes: 
+      - ./artist4all_angular/dist/Artist4All:/usr/share/nginx/html
+    ports: 
+      - 80:80
+
+  api_artist4all_db:
+    image: mariadb:10.2
+    container_name: 'api_artist4all_db'
+    volumes:
+      - ./artist4all_php/dbdata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: artist4alldb
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin
+
+  api_artist4all_pma:
+    image: phpmyadmin/phpmyadmin
+    container_name: 'api_artist4all_pma'
+    ports:
+      - 8080:80
+    links:
+      - api_artist4all_db
+    environment:
+      PMA_HOST: api_artist4all_db
+      PMA_PORT: 3306
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: admin
+      MYSQL_PASSWORD: admin

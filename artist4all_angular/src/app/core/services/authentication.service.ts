@@ -9,7 +9,7 @@ export class AuthenticationService {
   constructor(private conexHttp:HttpClient) { }
 
   //private url = 'http://localhost/daw2/Artist4all/artist4all_php/User';
-  private url = 'http://localhost:8888/daw2/Artist4all/artist4all_php/User';
+  private url = 'http://localhost:81/artist4all_php/User';
 
   login(user:LoginUser):Observable<any> {
     let loginFormData:FormData = new FormData();

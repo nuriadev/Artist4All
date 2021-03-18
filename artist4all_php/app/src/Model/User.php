@@ -128,4 +128,37 @@ class User {
       $this->aboutMe = $aboutMe;
     }
 
+  // Needed to deserialize an object from an associative array
+  public static function fromAssoc(array $data) : User {
+    return new \Artist4All\Model\User(
+      $data['id_user'], 
+      $data['name_user'],
+      $data['surname1'], 
+      $data['surname2'], 
+      $data['email'],
+      $data['username'],
+      $data['passwd'],
+      $data['type_user'],
+      $data['img'],
+      $data['aboutMe'],
+      $data['token']
+    );
+  }
+
+    // Needed for implicit JSON serialization with json_encode()
+    public function jsonSerialize() {
+      return [
+        'id_user' => $this->id,
+        'name_user' => $this->name,
+        'surname1' => $this->red,
+        'surname2' => $this->green,
+        'email' => $this->blue,
+        'username' => $this->name,
+        'passwd' => $this->red,
+        'type_user' => $this->green,
+        'img' => $this->blue,
+        'aboutMe' => $this->aboutMe,
+        'token' => $this->token
+      ];
+    }
 }

@@ -17,7 +17,7 @@ class UserDB {
     protected function __construct() {
         $dsn = "mysql:host=localhost;dbname=artist4alldb";
         $dbusername = "root";
-        $dbpassword = "";
+        $dbpassword = "root";
         $options = array(
             \PDO::ATTR_ERRMODE=>\PDO::ERRMODE_EXCEPTION,
             \PDO::ATTR_EMULATE_PREPARES => FALSE, 
@@ -27,109 +27,23 @@ class UserDB {
 
     // todo: comprobar si ya existe un usuario registrado en la db según el email y el username antes de registrar
 
-    // devuelve el nº de seguidores de un usuario según su id
-    public function getUserN_Followers(int $id) : int {
-        $sql = "SELECT count(id_logfollow) FROM users_followed WHERE id_followed=:id_user";
-        $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([
-          ':id_user' => $id
-        ]);
-        $nFollowers = $statement->fetch(\PDO::FETCH_ASSOC);
-        return $nFollowers;
-    }
-
-    // devuelve todos los usuarios registrados
-    public function getAllUsers() : array {
-        $sql = "SELECT * FROM users";
-        $result = $this->conn->query($sql);
-        $usersAssoc = $result->fetchAll(\PDO::FETCH_ASSOC);
-        if (!$usersAssoc) return [];
-        $users = [];
-        foreach ($usersAssoc as $userAssoc)
-        $users[] = new \Artist4All\Model\User(
-            $userAssoc['id_user'], 
-            $userAssoc['name_user'],
-            $userAssoc['surname1'], 
-            $userAssoc['surname2'],     
-            $userAssoc['email'],
-            $userAssoc['username'], 
-            $userAssoc['passwd'], 
-            $userAssoc['type_user'],
-            $this->getUserN_Followers($userAssoc['id_user']),
-            $userAssoc['deleted']
-        );
-        return $users;
-    }
-
-    // devuelve un usuario según su nombre de usuario
-    public function getUserByUsername(string $username) : ?\Artist4All\Model\UserDB {
-        $sql = "SELECT * FROM users WHERE username=:username";
-        $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([
-          ':username' => $username
-        ]);
-        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
-        if (!$userAssoc) return null;
-        $user = new \Artist4All\Model\User(
-            $userAssoc['id_user'], 
-            $userAssoc['name_user'],
-            $userAssoc['surname1'], 
-            $userAssoc['surname2'],     
-            $userAssoc['email'],
-            $userAssoc['username'], 
-            $userAssoc['passwd'], 
-            $userAssoc['type_user'],
-            $this->getUserN_Followers($userAssoc['id_user']),
-            $userAssoc['deleted']
-        );
-        return $user;
-    }
-
-    // devuelve un usuario según su email
-    public function getUserByEmail(string $email) : ?\Artist4All\Model\UserDB {
-        $sql = "SELECT * FROM users WHERE email=:email";
-        $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([
-          ':email' => $email
-        ]);
-        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
-        if (!$userAssoc) return null;
-        $user = new \Artist4All\Model\User(
-            $userAssoc['id_user'], 
-            $userAssoc['name_user'],
-            $userAssoc['surname1'], 
-            $userAssoc['surname2'],     
-            $userAssoc['email'],
-            $userAssoc['username'], 
-            $userAssoc['passwd'], 
-            $userAssoc['type_user'],
-            $this->getUserN_Followers($userAssoc['id_user']),
-            $userAssoc['deleted']
-        );
-        return $user;
-    }
-
-    // devuelve un usuario según su id
-    public function getUserById(int $id) : ?\Artist4All\Model\UserDB {
+    public function getUserById(int $id) : \Artist4All\Model\User {
         $sql = "SELECT * FROM users WHERE id_user=:id_user";
         $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([
-          ':id_user' => $id
-        ]);
+        $result = $statement->execute([ ':id_user' => $id ]);
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$userAssoc) return null;
-        $user = new \Artist4All\Model\User(
-            $userAssoc['id_user'], 
-            $userAssoc['name_user'],
-            $userAssoc['surname1'], 
-            $userAssoc['surname2'],     
-            $userAssoc['email'],
-            $userAssoc['username'], 
-            $userAssoc['passwd'], 
-            $userAssoc['type_user'],
-            $this->getUserN_Followers($userAssoc['id_user']),
-            $userAssoc['deleted']
-        );
+        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
+        return $user;
+    }
+
+    public function getUserByEmail(string $email) : \Artist4All\Model\User {
+        $sql = "SELECT * FROM users WHERE email=:email";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':email' => $email ]);
+        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
+        if (!$userAssoc) return null;
+        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
         return $user;
     }
 
@@ -147,6 +61,10 @@ class UserDB {
             :type_user, 
             :deleted)";
         $statement = $this->conn->prepare($sql);
+
+        $password = $user->getPassword();
+        $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+
         $result = $statement->execute([
           ':id_user' => $user->getId(),
           ':name_user' => $user->getName(),
@@ -154,45 +72,103 @@ class UserDB {
           ':surname2' => $user->getSurname2(),
           ':email'=> $user->getEmail(),
           ':username' => $user->getUsername(),
-          ':passwd' => password_hash($user->getPassword(), PASSWORD_DEFAULT),
-          ':type_user' => $user->getType_user(),
+          ':passwd' => $password_hashed,
+          ':type_user' => $user->getTypeUser(),
           ':deleted' => 0
         ]);
+
         $insertId = $this->conn->lastInsertId();
-        return $this->getUserById($insertId);
+        if ($insertId) {
+            $user = $this->getUserById($insertId);
+            $login = $this->login($user->getEmail(), $password);
+        } else {
+            $data = array("Error en el registro");
+            return $data; 
+        } 
     }
 
-    // permite modificar algunos campos del usuario
-    // ver si son todos los cambios de campos que necesitamos 
-    public function modifyUser($user) : ?\Artist4All\Model\User {
-        $id = $user->getId();
-        if (is_null($this->getUserById($id))) return null;
-        $sql = "UPDATE users SET 
-            username=:username, 
-            passwd=:passwd, 
-            email=:email 
-            WHERE id_user=:id_user";
+    public function login(string $email, string $password) : array {
+        $sql = "SELECT * FROM users WHERE email=:email AND deleted=:deleted";
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
-          ':id_user' => $id,
-          ':username' => $user->getUsername(),
-          ':passwd' => $user->getPassword(),
-          ':email' => $user->getEmail()
+            ':email'=> $email,
+            ':deleted' => 0
         ]);
-        return $this->getUserById($id);
+    
+        // nos traemos los datos del select
+        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);    
+        // si el return es nulo, lo indicamos
+        if (!$userAssoc) return null;
+        $user = $this->getUserById($userAssoc['id_user']);
+        if (password_verify($password, $user->getPassword())) {       
+            $arrayAux = array($user->getEmail(), $user->getPassword(), randomTokenPartGenerator());
+            $content = implode(".", $arrayAux);
+            // creamos el token a partir de la variable $content
+            $token = tokenGenerator($content);
+            // insertamos el token en la db
+            $sql = "UPDATE users SET token=:token WHERE email=:email";
+            $statement = $this->conn->prepare($sql);
+            $result = $statement->execute([
+                ':token' => $token,
+                ':email' => $userAssoc["email"]
+            ]);
+    
+            $data = array(
+                'token' => $token,
+                'name' => $userAssoc['name_user'],
+                'surname1' => $userAssoc['surname1'],
+                'surname2' => $userAssoc['surname2'],
+                'email' => $userAssoc['email'],
+                'username' => $userAssoc['username'],
+                'password' => $userAssoc['passwd'],
+                'type_user' => $userAssoc['type_user'],
+                // todo: cambiar el 0 por el n followers 
+                'n_followers' => 0,
+                'img' => $userAssoc['img'],
+                'aboutMe' => $userAssoc['aboutMe']
+            );
+            return $data;
+        } else { 
+            $data = array("Usuario incorrecto");
+            return $data; 
+        }
     }
 
-    // desactiva la cuenta de un usuario
-    // todo: falta que no pueda entrar en el login con los credenciales registrados
-    public function deactivateUserAccount($user) : ?\Artist4All\Model\User {
-        $id = $user->getId();
-        if (is_null($this->getUserById($id))) return null;
-        $sql = "UPDATE users SET deleted=:deleted WHERE id_user=:id_user";
-        $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([
-          ':id_user' => $id,
-          ':deleted' => 1
-        ]);
-        return $result;
-    }
+    // public function modifyUser(string $username, string $aboutMe, string $img) {
+
+    // }
+
+    // // permite modificar algunos campos del usuario
+    // // ver si son todos los cambios de campos que necesitamos 
+    // public function modifyUser($user) : ?\Artist4All\Model\User {
+    //     $id = $user->getId();
+    //     if (is_null($this->getUserById($id))) return null;
+    //     $sql = "UPDATE users SET 
+    //         username=:username, 
+    //         passwd=:passwd, 
+    //         email=:email 
+    //         WHERE id_user=:id_user";
+    //     $statement = $this->conn->prepare($sql);
+    //     $result = $statement->execute([
+    //       ':id_user' => $id,
+    //       ':username' => $user->getUsername(),
+    //       ':passwd' => $user->getPassword(),
+    //       ':email' => $user->getEmail()
+    //     ]);
+    //     return $this->getUserById($id);
+    // }
+
+    // // desactiva la cuenta de un usuario
+    // // todo: falta que no pueda entrar en el login con los credenciales registrados
+    // public function deactivateUserAccount($user) : ?\Artist4All\Model\User {
+    //     $id = $user->getId();
+    //     if (is_null($this->getUserById($id))) return null;
+    //     $sql = "UPDATE users SET deleted=:deleted WHERE id_user=:id_user";
+    //     $statement = $this->conn->prepare($sql);
+    //     $result = $statement->execute([
+    //       ':id_user' => $id,
+    //       ':deleted' => 1
+    //     ]);
+    //     return $result;
+    // }
 }

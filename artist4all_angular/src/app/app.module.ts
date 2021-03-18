@@ -22,6 +22,8 @@ import { EditUserComponent } from './components/secure/edit-user/edit-user.compo
 import { UserSidebarComponent } from './components/secure/user-sidebar/user-sidebar.component';
 import { SessionService } from './core/services/session.service';
 import { AuthenticationService } from './core/services/authentication.service';
+import { FooterComponent } from './components/public/footer/footer.component';
+import { PageNotFoundComponent } from './components/public/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -38,6 +40,8 @@ import { AuthenticationService } from './core/services/authentication.service';
     ContactComponent,
     EditUserComponent,
     UserSidebarComponent,
+    FooterComponent,
+    PageNotFoundComponent,
   ],
   imports: [
     BrowserModule,

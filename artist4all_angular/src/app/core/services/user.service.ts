@@ -8,7 +8,7 @@ export class UserService {
   constructor(private conexHttp:HttpClient) { }
 
     //let url = "http://localhost/daw2/Artist4all/artist4all_php/User/register.php";
-    private url = "http://localhost:8888/daw2/Artist4all/artist4all_php/User";
+    private url = "http://localhost:81/artist4all_php/User";
 
   register(newUser:User):Observable<any> {
     let registerFormData:FormData = new FormData();
