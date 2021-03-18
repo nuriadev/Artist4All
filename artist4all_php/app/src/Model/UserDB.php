@@ -49,7 +49,7 @@ class UserDB {
 
     // registra un usuario
     // todo: comprobar que el usuario no exista según el email o el username
-    public function registerUser(\Artist4All\Model\User $user) {  
+    public function registerUser(\Artist4All\Model\User $user) : bool {  
         $sql = "INSERT INTO users VALUES (
             :id_user, 
             :name_user, 
@@ -76,15 +76,7 @@ class UserDB {
           ':type_user' => $user->getTypeUser(),
           ':deleted' => 0
         ]);
-
-        $insertId = $this->conn->lastInsertId();
-        if ($insertId) {
-            $user = $this->getUserById($insertId);
-            $login = $this->login($user->getEmail(), $password);
-        } else {
-            $data = array("Error en el registro");
-            return $data; 
-        } 
+        return $result;
     }
 
     public function login(string $email, string $password) : array {

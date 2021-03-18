@@ -1,7 +1,7 @@
 <?php
 namespace Artist4All\Model;
 
-class User {
+class User implements \JsonSerializable {
 
   private ?int $id;
   private string $name;
