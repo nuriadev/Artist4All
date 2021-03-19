@@ -6,6 +6,7 @@ CREATE TABLE `users` (
   `email` varchar(90) NOT NULL,
   `username` varchar(50) NOT NULL,
   `passwd` varchar(120) NOT NULL,
+  `n_followers` int NOT NULL,
   `type_user` int(11) NOT NULL,
   `img` varchar(300) NOT NULL,
   `aboutMe` varchar(155) NOT NULL,

@@ -15,21 +15,8 @@ class UserController {
       //   return $response;
       // }
       // All ok
-      $img = "http://localhost:81/artist4all_php/User/assets/img/imgUnknown.png";
-      $aboutMe = "Bienvendio a mi perfil!!!";
-      $user = new \Artist4all\Model\User(
-        null, 
-        $data['name'], 
-        $data['surname1'], 
-        $data['surname2'], 
-        $data['email'], 
-        $data['username'], 
-        $data['password'], 
-        $data['type_user'], 
-        $data['n_followers'], 
-        $img, 
-        $aboutMe, 
-      );
+      $data['id'] = null;
+      $user = \Artist4all\Model\User::fromAssoc($data);
       $result = \Artist4all\Model\UserDB::getInstance()->registerUser($user);
       if (!$result) {
         $response = $response->withStatus(500); 

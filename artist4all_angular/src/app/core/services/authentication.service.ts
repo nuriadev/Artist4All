@@ -7,30 +7,21 @@ import { LoginUser } from '../models/loginUser';
 export class AuthenticationService {
   constructor(private http:HttpClient) { }
 
-  //private url = 'http://localhost/daw2/Artist4all/artist4all_php/User';
-  private url = 'http://localhost:81';
-
   login(user:LoginUser):Observable<any> {
-    let loginForm = new HttpParams();
-    loginForm.set('email', user.email);
-    loginForm.set('password', user.password);
+    let url = 'http://localhost:81/login';
+    let loginFormData:FormData = new FormData();
+    loginFormData.append('email', user.email);
+    loginFormData.append('password', user.password);
 
-    return this.http.post(
-      this.url + '/login',
-      loginForm.toString(),
-      { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }) }
-    );
+    return this.http.post(url, loginFormData);
   }
 
   logout(token:string):Observable<any> {
-    let logoutForm = new HttpParams();
-    logoutForm.set('token',token);
+    let url = 'http://localhost:81/logout';
+    let logoutFormData:FormData = new FormData();
+    logoutFormData.append('token',token);
 
-    return this.http.post(
-      this.url + '/logout',
-      logoutForm.toString(),
-      { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' }) }
-    );
+    return this.http.post(url, logoutFormData);
   }
 
 }

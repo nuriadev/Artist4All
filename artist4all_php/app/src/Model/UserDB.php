@@ -27,7 +27,7 @@ class UserDB {
 
     // todo: comprobar si ya existe un usuario registrado en la db según el email y el username antes de registrar
 
-/*     public function getUserById(int $id) : \Artist4All\Model\User {
+     public function getUserById(int $id) : \Artist4All\Model\User {
         $sql = "SELECT * FROM users WHERE id_user=:id_user";
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id_user' => $id ]);
@@ -46,9 +46,8 @@ class UserDB {
         $user = \Artist4All\Model\User::fromAssoc($userAssoc);
         return $user;
     }
- */
+
     // registra un usuario
-    // todo: comprobar que el usuario no exista según el email o el username
     public function registerUser(\Artist4All\Model\User $user) : bool {  
         $sql = "INSERT INTO users VALUES (
             :id_user, 
@@ -95,7 +94,7 @@ class UserDB {
         ]);
     
         // nos traemos los datos del select
-        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);    
+        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);  
         // si el return es nulo, lo indicamos
         if (!$userAssoc) return null;     
         if (password_verify($password, $userAssoc['passwd'])) {       
