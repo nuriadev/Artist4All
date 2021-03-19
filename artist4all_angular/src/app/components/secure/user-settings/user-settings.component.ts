@@ -29,7 +29,7 @@ export class UserSettingsComponent implements OnInit {
   email:string;
   username:string;
   password:string;
-  img:FileList;
+  imgAvatar:FileList;
   aboutMe:string;
 
   ngOnInit(): void {
@@ -41,7 +41,7 @@ export class UserSettingsComponent implements OnInit {
     this.email = this.user.email;
     this.username = this.user.username;
     this.password = this.user.password;
-    this.img = this.user.img;
+    this.imgAvatar = this.user.imgAvatar;
     this.aboutMe = this.user.aboutMe;
   }
 
@@ -71,9 +71,9 @@ export class UserSettingsComponent implements OnInit {
             result['email'],
             result['username'],
             result['password'],
-            result['type_user'],
+            result['isArtist'],
             result['n_followers'],
-            result['img'],
+            result['imgAvatar'],
             result['aboutMe']
           );
           let userSession = new Session(result['token'], user);

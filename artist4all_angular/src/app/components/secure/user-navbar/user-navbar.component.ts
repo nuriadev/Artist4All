@@ -23,7 +23,7 @@ export class UserNavbarComponent implements OnInit {
   email:string;
   username:string;
   password:string;
-  img:FileList;
+  imgAvatar:FileList;
 
   ngOnInit(): void {
     this.name = this.user.name;
@@ -32,7 +32,7 @@ export class UserNavbarComponent implements OnInit {
     this.email = this.user.email;
     this.username = this.user.username;
     this.password = this.user.password;
-    this.img = this.user.img;
+    this.imgAvatar = this.user.imgAvatar;
   }
 
   logout() {

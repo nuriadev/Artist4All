@@ -13,14 +13,14 @@
           </label>
           <div class="mt-1">
             <div class="flex items-center justify-center md:justify-start mt-5 mb-2">
-              <input #inputTypeUser="ngModel" [(ngModel)]="type_user"
+              <input #inputIsArtist="ngModel" [(ngModel)]="isArtist"
                 class="focus:ring-purple-500 h-4 w-4  text-purple-600 border-gray-300" id="type_follower"
-                name="type_user" type="radio" value="0" autocomplete="family-name" required>
+                name="isArtist" type="radio" value="0" autocomplete="family-name" required>
               <label for="typeFollower" class="ml-2 mr-2 text-base font-medium text-gray-700">
                 Seguidor
               </label>
-              <input #inputTypeUser="ngModel" [(ngModel)]="type_user" id="type_artist"
-                class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300" name="type_user" type="radio"
+              <input #inputIsArtist="ngModel" [(ngModel)]="isArtist" id="type_artist"
+                class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300" name="isArtist" type="radio"
                 value="1" autocomplete="family-name" required>
               <label for="typeArtist" class="ml-2 text-base font-medium text-gray-700">
                 Artista

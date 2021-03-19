@@ -35,9 +35,9 @@ export class LoginComponent implements OnInit {
             result['email'],
             result['username'],
             result['password'],
-            result['type_user'],
+            result['isArtist'],
             result['n_followers'],
-            result['img'],
+            result['imgAvatar'],
             result['aboutMe']
           );
           let userSession = new Session(result['token'], user);

@@ -30,11 +30,11 @@ export class RegisterComponent implements OnInit {
   username:string = "";
   password:string = "";
   passwordConfirm:string = "";
-  type_user:number;
+  isArtist:number;
 
   // todo: comprobar que las contraseñas sean iguales
   register() {
-    this._userService.register(new User(this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.type_user, 0, null, '')).subscribe(
+    this._userService.register(new User(this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.isArtist, 0, null, '')).subscribe(
       (result) => {
         if (result['token'] != null) {
           let user = new User(
@@ -44,9 +44,9 @@ export class RegisterComponent implements OnInit {
             result['email'],
             result['username'],
             result['password'],
-            result['type_user'],
+            result['isArtist'],
             result['n_followers'],
-            result['img'],
+            result['imgAvatar'],
             result['aboutMe']
           );
           let userSession = new Session(result['token'], user);

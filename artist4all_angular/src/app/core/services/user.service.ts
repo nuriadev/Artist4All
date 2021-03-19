@@ -20,8 +20,8 @@ export class UserService {
     registerFormData.append('username', newUser.username);
     registerFormData.append('password', newUser.password);
     registerFormData.append('n_followers',""+newUser.n_followers);
-    registerFormData.append('type_user',""+newUser.type_user);
-    registerFormData.append('img', "http://localhost:81/artist4all_php/app/html/assets/img/imgUnknown.png");
+    registerFormData.append('isArtist',""+newUser.isArtist);
+    registerFormData.append('imgAvatar', "http://localhost:81/artist4all_php/app/html/assets/img/imgUnknown.png");
     registerFormData.append('aboutMe', "Bienvendio a mi perfil!!!");
 
     return this.http.post(url,registerFormData);

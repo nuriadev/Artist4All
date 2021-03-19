@@ -10,8 +10,8 @@ class User implements \JsonSerializable {
   private string $username;
   private string $password;
   private int $n_followers;
-  private int $type_user;
-  private ?string $img;
+  private int $isArtist;
+  private ?string $imgAvatar;
   private ?string $aboutMe;
 
   public function __construct(
@@ -23,8 +23,8 @@ class User implements \JsonSerializable {
     string $username,
     string $password,
     int $n_followers,
-    int $type_user,
-    ?string $img,
+    int $isArtist,
+    ?string $imgAvatar,
     ?string $aboutMe) {
       $this->id = $id;
       $this->name = $name;
@@ -34,8 +34,8 @@ class User implements \JsonSerializable {
       $this->username = $username;
       $this->password = $password;
       $this->n_followers = $n_followers;
-      $this->type_user = $type_user;
-      $this->img = $img;
+      $this->isArtist = $isArtist;
+      $this->imgAvatar = $imgAvatar;
       $this->aboutMe = $aboutMe;
     }
 
@@ -103,20 +103,20 @@ class User implements \JsonSerializable {
       $this->n_followers = $n_followers;
     }
 
-    public function getTypeUser() {
-      return $this->type_user;
+    public function isArtist() {
+      return $this->isArtist;
     }
 
-    public function setTypeUser(int $type_user) {
-      $this->type_user = $type_user;
+    public function setIsArtist(int $isArtist) {
+      $this->isArtist = $isArtist;
     }
 
-    public function getImg() : ?string {
-      return $this->img;
+    public function getImgAvatar() : ?string {
+      return $this->imgAvatar;
     }
 
-    public function setImg(?string $img) {
-      $this->img = $img;
+    public function setImgAvatar(?string $imgAvatar) {
+      $this->imgAvatar = $imgAvatar;
     }
 
     public function getAboutMe() : ?string {
@@ -138,8 +138,8 @@ class User implements \JsonSerializable {
       $data['username'],
       $data['password'],
       $data["n_followers"],
-      $data['type_user'],
-      $data['img'],
+      $data['isArtist'],
+      $data['imgAvatar'],
       $data['aboutMe']
     );
   }
@@ -147,15 +147,15 @@ class User implements \JsonSerializable {
     // Needed for implicit JSON serialization with json_encode()
     public function jsonSerialize() {
       return [
-        'id_user' => $this->id,
-        'name_user' => $this->name,
-        'surname1' => $this->red,
-        'surname2' => $this->green,
-        'email' => $this->blue,
-        'username' => $this->name,
-        'passwd' => $this->red,
-        'type_user' => $this->green,
-        'img' => $this->blue,
+        'id' => $this->id,
+        'name' => $this->name,
+        'surname1' => $this->surname1,
+        'surname2' => $this->surname2,
+        'email' => $this->email,
+        'username' => $this->username,
+        'password' => $this->password,
+        'isArtist' => $this->isArtist,
+        'imgAvatar' => $this->imgAvatar,
         'aboutMe' => $this->aboutMe,
         'token' => $this->token
       ];

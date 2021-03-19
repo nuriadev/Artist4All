@@ -28,9 +28,9 @@ class UserDB {
     // todo: comprobar si ya existe un usuario registrado en la db según el email y el username antes de registrar
 
      public function getUserById(int $id) : \Artist4All\Model\User {
-        $sql = "SELECT * FROM users WHERE id_user=:id_user";
+        $sql = "SELECT * FROM users WHERE id=:id";
         $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([ ':id_user' => $id ]);
+        $result = $statement->execute([ ':id' => $id ]);
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$userAssoc) return null;
         $user = \Artist4All\Model\User::fromAssoc($userAssoc);
@@ -50,15 +50,15 @@ class UserDB {
     // registra un usuario
     public function registerUser(\Artist4All\Model\User $user) : bool {  
         $sql = "INSERT INTO users VALUES (
-            :id_user, 
-            :name_user, 
+            :id, 
+            :name, 
             :surname1, 
             :surname2, 
             :email, 
             :username, 
-            :passwd, 
-            :type_user, 
-            :img,
+            :password, 
+            :isArtist, 
+            :imgAvatar,
             :aboutMe,
             :token,
             :deleted
@@ -69,15 +69,15 @@ class UserDB {
         $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
         $result = $statement->execute([
-            ':id_user' => $user->getId(),
-            ':name_user' => $user->getName(),
+            ':id' => $user->getId(),
+            ':name' => $user->getName(),
             ':surname1' => $user->getSurname1(),
             ':surname2' => $user->getSurname2(),
             ':email'=> $user->getEmail(),
             ':username' => $user->getUsername(),
-            ':passwd' => $password_hashed,
-            ':type_user' => $user->getTypeUser(),
-            ':img' => $user->getImg(),
+            ':password' => $password_hashed,
+            ':isArtist' => $user->isArtist(),
+            ':imgAvatar' => $user->getImgAvatar(),
             ':aboutMe' => $user->getAboutMe(),
             ':token' => '',
             ':deleted' => 0
@@ -97,8 +97,8 @@ class UserDB {
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);  
         // si el return es nulo, lo indicamos
         if (!$userAssoc) return null;     
-        if (password_verify($password, $userAssoc['passwd'])) {       
-            $arrayAux = array($userAssoc['id_user'], $userAssoc['passwd'], \Artist4All\Model\TokenGenerator::randomTokenPartGenerator());
+        if (password_verify($password, $userAssoc['password'])) {       
+            $arrayAux = array($userAssoc['id'], $userAssoc['password'], \Artist4All\Model\TokenGenerator::randomTokenPartGenerator());
             $content = implode(".", $arrayAux);
             // creamos el token a partir de la variable $content
             $token = \Artist4All\Model\TokenGenerator::tokenGenerator($content);
@@ -112,16 +112,16 @@ class UserDB {
     
             $data = array(
                 'token' => $token,
-                'name' => $userAssoc['name_user'],
+                'name' => $userAssoc['name'],
                 'surname1' => $userAssoc['surname1'],
                 'surname2' => $userAssoc['surname2'],
                 'email' => $userAssoc['email'],
                 'username' => $userAssoc['username'],
-                'password' => $userAssoc['passwd'],
-                'type_user' => $userAssoc['type_user'],
+                'password' => $userAssoc['password'],
+                'isArtist' => $userAssoc['isArtist'],
                 // todo: cambiar el 0 por el n followers 
                 'n_followers' => 0,
-                'img' => $userAssoc['img'],
+                'imgAvatar' => $userAssoc['imgAvatar'],
                 'aboutMe' => $userAssoc['aboutMe']
             );
             return $data;

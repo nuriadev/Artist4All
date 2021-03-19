@@ -6,9 +6,9 @@ export class User {
   email:string = "";
   username:string = "";
   password:string = "";
-  type_user:number;
+  isArtist:number;
   n_followers:number;
-  img:FileList;
+  imgAvatar:FileList;
   aboutMe:string = "";
 
   constructor(
@@ -18,9 +18,9 @@ export class User {
     email:string,
     username:string,
     password:string,
-    type_user:number,
+    isArtist:number,
     n_followers:number,
-    img:FileList,
+    imgAvatar:FileList,
     aboutMe:string) {
       this.name = name;
       this.surname1 = surname1;
@@ -28,9 +28,9 @@ export class User {
       this.email = email;
       this.username = username;
       this.password = password;
-      this.type_user = type_user;
+      this.isArtist = isArtist;
       this.n_followers = n_followers;
-      this.img = img;
+      this.imgAvatar = imgAvatar;
       this.aboutMe = aboutMe;
   }
 
