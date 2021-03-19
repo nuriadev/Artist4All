@@ -9,7 +9,7 @@
   },
   "autoload": {
       "psr-4": { 
-        "ApiArtist4all\\": "src/"
+        "Artist4all\\": "src/"
       }
   }
 }

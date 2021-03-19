@@ -1,9 +1,8 @@
 <?php
 namespace Artist4All\Model;
-
 class TokenGenerator {
 
-    function tokenGenerator($content) {
+    public static function tokenGenerator($content) {
         // identifica el algoritmo para generar la firma
         $header = base64_encode(json_encode(array('alg' => 'HS256', 'typ' => 'JWT')));
         // tiene la informacion de los privilegios token
@@ -17,7 +16,7 @@ class TokenGenerator {
         return $token;
     }
 
-    function randomTokenPartGenerator(int $length = 10) {
+    public static function randomTokenPartGenerator(int $length = 10) {
         $chars1 = "abcdefghijklmnopqrstuvwxyz";
         $chars2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         $chars3 = "0123456789";

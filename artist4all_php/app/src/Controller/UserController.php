@@ -6,18 +6,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class UserController {
   public static function initRoutes($app) {
     
-  
-    $app->get('/login', function (Request $request, Response $response, array $args) {
-      $data = $request->getParsedBody();
-      $email = trim($data["email"]);
-      $password = trim($data["password"]);
-      $feedbackData = \Artist4all\Model\UserDB::getInstance()->login($email, $password);
-      //if (is_null($feedbackData)) $response = $response->withStatus(400, "Usuario incorrecto");
-      //else 
-      $response = $response->withJson($feedbackData);
-      return $response;
-    });
-
     $app->post('/register', function (Request $request, Response $response, array $args) {
       $data = $request->getParsedBody();
       // $email = trim($data["email"]);
@@ -27,8 +15,21 @@ class UserController {
       //   return $response;
       // }
       // All ok
-      $data['id'] = null;
-      $user = \Artist4all\Model\User::fromAssoc($data);
+      $img = "http://localhost:81/artist4all_php/User/assets/img/imgUnknown.png";
+      $aboutMe = "Bienvendio a mi perfil!!!";
+      $user = new \Artist4all\Model\User(
+        null, 
+        $data['name'], 
+        $data['surname1'], 
+        $data['surname2'], 
+        $data['email'], 
+        $data['username'], 
+        $data['password'], 
+        $data['type_user'], 
+        $data['n_followers'], 
+        $img, 
+        $aboutMe, 
+      );
       $result = \Artist4all\Model\UserDB::getInstance()->registerUser($user);
       if (!$result) {
         $response = $response->withStatus(500); 
@@ -36,9 +37,19 @@ class UserController {
         $email = trim($data["email"]);
         $password = trim($data["password"]);
         $feedbackData = \Artist4all\Model\UserDB::getInstance()->login($email, $password);
-        $response = $response->withJson($feedbackData);
+        $response = $response->withJson($feedbackData); 
       }
       return $response;
     });
+
+    $app->post('/login', function (Request $request, Response $response, array $args) {
+      $data = $request->getParsedBody();
+      $email = trim($data["email"]);
+      $password = trim($data["password"]);
+      $feedbackData = \Artist4all\Model\UserDB::getInstance()->login($email, $password);
+      $response = $response->withJson($feedbackData);  
+      return $response;
+    });
+
     }
 }

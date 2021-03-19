@@ -1,6 +1,6 @@
 <?php
-
 namespace Artist4All\Model;
+require_once 'TokenGenerator.php';
 
 class UserDB {
     protected static ?\Artist4All\Model\UserDB $instance = null;
@@ -15,9 +15,9 @@ class UserDB {
     private \PDO $conn;
 
     protected function __construct() {
-        $dsn = "mysql:host=localhost;dbname=artist4alldb";
+        $dsn = "mysql:host=artist4all_db;dbname=artist4alldb";
         $dbusername = "root";
-        $dbpassword = "root";
+        $dbpassword = "password";
         $options = array(
             \PDO::ATTR_ERRMODE=>\PDO::ERRMODE_EXCEPTION,
             \PDO::ATTR_EMULATE_PREPARES => FALSE, 
@@ -27,7 +27,7 @@ class UserDB {
 
     // todo: comprobar si ya existe un usuario registrado en la db según el email y el username antes de registrar
 
-    public function getUserById(int $id) : \Artist4All\Model\User {
+/*     public function getUserById(int $id) : \Artist4All\Model\User {
         $sql = "SELECT * FROM users WHERE id_user=:id_user";
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id_user' => $id ]);
@@ -46,7 +46,7 @@ class UserDB {
         $user = \Artist4All\Model\User::fromAssoc($userAssoc);
         return $user;
     }
-
+ */
     // registra un usuario
     // todo: comprobar que el usuario no exista según el email o el username
     public function registerUser(\Artist4All\Model\User $user) : bool {  
@@ -59,22 +59,29 @@ class UserDB {
             :username, 
             :passwd, 
             :type_user, 
-            :deleted)";
+            :img,
+            :aboutMe,
+            :token,
+            :deleted
+        )";
         $statement = $this->conn->prepare($sql);
 
         $password = $user->getPassword();
         $password_hashed = password_hash($password, PASSWORD_DEFAULT);
 
         $result = $statement->execute([
-          ':id_user' => $user->getId(),
-          ':name_user' => $user->getName(),
-          ':surname1' => $user->getSurname1(),
-          ':surname2' => $user->getSurname2(),
-          ':email'=> $user->getEmail(),
-          ':username' => $user->getUsername(),
-          ':passwd' => $password_hashed,
-          ':type_user' => $user->getTypeUser(),
-          ':deleted' => 0
+            ':id_user' => $user->getId(),
+            ':name_user' => $user->getName(),
+            ':surname1' => $user->getSurname1(),
+            ':surname2' => $user->getSurname2(),
+            ':email'=> $user->getEmail(),
+            ':username' => $user->getUsername(),
+            ':passwd' => $password_hashed,
+            ':type_user' => $user->getTypeUser(),
+            ':img' => $user->getImg(),
+            ':aboutMe' => $user->getAboutMe(),
+            ':token' => '',
+            ':deleted' => 0
         ]);
         return $result;
     }
@@ -90,13 +97,12 @@ class UserDB {
         // nos traemos los datos del select
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);    
         // si el return es nulo, lo indicamos
-        if (!$userAssoc) return null;
-        $user = $this->getUserById($userAssoc['id_user']);
-        if (password_verify($password, $user->getPassword())) {       
-            $arrayAux = array($user->getEmail(), $user->getPassword(), randomTokenPartGenerator());
+        if (!$userAssoc) return null;     
+        if (password_verify($password, $userAssoc['passwd'])) {       
+            $arrayAux = array($userAssoc['id_user'], $userAssoc['passwd'], \Artist4All\Model\TokenGenerator::randomTokenPartGenerator());
             $content = implode(".", $arrayAux);
             // creamos el token a partir de la variable $content
-            $token = tokenGenerator($content);
+            $token = \Artist4All\Model\TokenGenerator::tokenGenerator($content);
             // insertamos el token en la db
             $sql = "UPDATE users SET token=:token WHERE email=:email";
             $statement = $this->conn->prepare($sql);

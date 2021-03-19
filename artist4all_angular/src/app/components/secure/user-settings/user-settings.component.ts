@@ -79,7 +79,8 @@ export class UserSettingsComponent implements OnInit {
           let userSession = new Session(result['token'], user);
           this._sessionService.setCurrentSession(userSession);
           // todo recargar pagina actual
-          this._router.navigate(['/home']);
+          location.reload();
+          //this._router.navigate(['/home']);
         }, (error) => {
           console.log(error);
         }

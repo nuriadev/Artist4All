@@ -1,6 +1,5 @@
 <?php
 namespace Artist4all;
-
 use Slim\Factory\AppFactory;
 
 class Artist4all {
