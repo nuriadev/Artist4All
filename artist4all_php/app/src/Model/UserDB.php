@@ -24,8 +24,8 @@ class UserDB {
         );
         $this->conn = new \PDO($dsn, $dbusername, $dbpassword, $options);
     }
-
-    // todo: comprobar si ya existe un usuario registrado en la db según el email y el username antes de registrar
+    // todo: validación
+    // todo: comprobar si ya existe un usuario registrado en la db según el email y el username antes de registrar o si está dado de baja para volver a activar su acc,
 
      public function getUserById(int $id) : \Artist4All\Model\User {
         $sql = "SELECT * FROM users WHERE id=:id";
