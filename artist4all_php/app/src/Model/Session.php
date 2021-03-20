@@ -5,7 +5,6 @@ class Session implements \JsonSerializable {
   private string $token;
   private \Artist4All\Model\User $user; 
 
-
   public function __construct(
     string $token,
     \Artist4All\Model\User $user
@@ -31,18 +30,18 @@ class Session implements \JsonSerializable {
     }
 
     // Needed to deserialize an object from an associative array
-    // public static function fromAssoc(array $data) : Session {
-    //     return new \Artist4All\Model\Session(
-    //     $data['token'], 
-    //     $data['user']
-    //     );
-    // }
+    public static function fromAssoc(array $data) : Session {
+      return new \Artist4All\Model\Session(
+        $data['token'], 
+        $data['user']
+      );
+    }
 
-    // // Needed for implicit JSON serialization with json_encode()
-    // public function jsonSerialize() {
-    //   return [
-    //     'token' => $this->token,
-    //     'user' => $this->user
-    //   ];
-    // }
+    // Needed for implicit JSON serialization with json_encode()
+    public function jsonSerialize() {
+      return [
+        'token' => $this->token,
+        'user' => $this->user
+      ];
+    }
 }

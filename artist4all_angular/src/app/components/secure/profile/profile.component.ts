@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit {
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
+  id:number;
   name:string;
   surname1:string;
   surname2:string;
@@ -27,6 +28,7 @@ export class ProfileComponent implements OnInit {
   n_followers:number;
 
   ngOnInit(): void {
+    this.id = this.user.id;
     this.name = this.user.name;
     this.surname1 = this.user.surname1;
     this.surname2 = this.user.surname2;
@@ -35,7 +37,6 @@ export class ProfileComponent implements OnInit {
     this.password = this.user.password;
     this.imgAvatar = this.user.imgAvatar;
     this.aboutMe = this.user.aboutMe;
-    this.n_followers = this.user.n_followers;
   }
 
   isFollowed: boolean = false;

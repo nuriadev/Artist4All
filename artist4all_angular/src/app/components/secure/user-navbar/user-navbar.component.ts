@@ -37,7 +37,7 @@ export class UserNavbarComponent implements OnInit {
 
   logout() {
     this._authenticationService.logout(this.token).subscribe(
-      (response) => {
+      (result) => {
         this._sessionService.logout();
       }, (error) => {
         console.log(error);

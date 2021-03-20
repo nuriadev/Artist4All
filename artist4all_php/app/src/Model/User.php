@@ -9,7 +9,6 @@ class User implements \JsonSerializable {
   private string $email;
   private string $username;
   private string $password;
-  private int $n_followers;
   private int $isArtist;
   private ?string $imgAvatar;
   private ?string $aboutMe;
@@ -22,7 +21,6 @@ class User implements \JsonSerializable {
     string $email,
     string $username,
     string $password,
-    int $n_followers,
     int $isArtist,
     ?string $imgAvatar,
     ?string $aboutMe) {
@@ -33,7 +31,6 @@ class User implements \JsonSerializable {
       $this->email = $email;
       $this->username = $username;
       $this->password = $password;
-      $this->n_followers = $n_followers;
       $this->isArtist = $isArtist;
       $this->imgAvatar = $imgAvatar;
       $this->aboutMe = $aboutMe;
@@ -95,14 +92,6 @@ class User implements \JsonSerializable {
       $this->password = $password;
     }
 
-    public function getN_followers() : int {
-      return $this->n_followers;
-    }
-
-    public function setN_followers(int $n_followers) {
-      $this->n_followers = $n_followers;
-    }
-
     public function isArtist() {
       return $this->isArtist;
     }
@@ -128,7 +117,7 @@ class User implements \JsonSerializable {
     }
 
   // Needed to deserialize an object from an associative array
-  public static function fromAssoc(array $data) : User {
+  public static function fromAssoc(array $data) : \Artist4All\Model\User {
     return new \Artist4All\Model\User(
       $data['id'], 
       $data['name'],
@@ -137,7 +126,6 @@ class User implements \JsonSerializable {
       $data['email'],
       $data['username'],
       $data['password'],
-      $data["n_followers"],
       $data['isArtist'],
       $data['imgAvatar'],
       $data['aboutMe']
@@ -157,7 +145,6 @@ class User implements \JsonSerializable {
         'isArtist' => $this->isArtist,
         'imgAvatar' => $this->imgAvatar,
         'aboutMe' => $this->aboutMe,
-        'token' => $this->token
       ];
     }
 }

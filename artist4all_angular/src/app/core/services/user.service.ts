@@ -17,7 +17,6 @@ export class UserService {
     registerFormData.append('email', newUser.email);
     registerFormData.append('username', newUser.username);
     registerFormData.append('password', newUser.password);
-    registerFormData.append('n_followers',""+newUser.n_followers);
     registerFormData.append('isArtist',""+newUser.isArtist);
     registerFormData.append('imgAvatar', "http://localhost:81/artist4all_php/app/html/assets/img/imgUnknown.png");
     registerFormData.append('aboutMe', "Bienvendio a mi perfil!!!");

@@ -65,16 +65,16 @@ export class UserSettingsComponent implements OnInit {
       this.token).subscribe(
         (result) => {
           let user = new User(
-            result['name'],
-            result['surname1'],
-            result['surname2'],
-            result['email'],
-            result['username'],
-            result['password'],
-            result['isArtist'],
-            result['n_followers'],
-            result['imgAvatar'],
-            result['aboutMe']
+            result.user['id'],
+            result.user['name'],
+            result.user['surname1'],
+            result.user['surname2'],
+            result.user['email'],
+            result.user['username'],
+            result.user['password'],
+            result.user['isArtist'],
+            result.user['imgAvatar'],
+            result.user['aboutMe']
           );
           let userSession = new Session(result['token'], user);
           this._sessionService.setCurrentSession(userSession);

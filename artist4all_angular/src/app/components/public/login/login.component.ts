@@ -14,6 +14,7 @@ import { SessionService } from 'src/app/core/services/session.service';
 })
 export class LoginComponent implements OnInit {
 
+
   constructor(
     private _authenticationService: AuthenticationService,
     private _sessionService: SessionService,
@@ -27,20 +28,20 @@ export class LoginComponent implements OnInit {
   login() {
     this._authenticationService.login(new LoginUser(this.email, this.password)).subscribe(
       (result) => {
-        if (result["token"] != null) {
+        if (result.token != null) {
           let user = new User(
-            result['name'],
-            result['surname1'],
-            result['surname2'],
-            result['email'],
-            result['username'],
-            result['password'],
-            result['isArtist'],
-            result['n_followers'],
-            result['imgAvatar'],
-            result['aboutMe']
+            result.user['id'],
+            result.user['name'],
+            result.user['surname1'],
+            result.user['surname2'],
+            result.user['email'],
+            result.user['username'],
+            result.user['password'],
+            result.user['isArtist'],
+            result.user['imgAvatar'],
+            result.user['aboutMe']
           );
-          let userSession = new Session(result['token'], user);
+          let userSession = new Session(result.token, user);
           this._sessionService.setCurrentSession(userSession);
           this._router.navigate(['/home']);
         }
