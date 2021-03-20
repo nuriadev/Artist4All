@@ -7,11 +7,9 @@ import { User } from '../models/user';
 export class UserService {
   constructor(private http:HttpClient) { }
 
-  //let url = "http://localhost/daw2/Artist4all/artist4all_php/User/register.php";
   private url = "http://localhost:81";
 
   register(newUser:User):Observable<any> {
-    let url = 'http://localhost:81/register';
     let registerFormData:FormData = new FormData();
     registerFormData.append('name', newUser.name);
     registerFormData.append('surname1', newUser.surname1);
@@ -24,7 +22,7 @@ export class UserService {
     registerFormData.append('imgAvatar', "http://localhost:81/artist4all_php/app/html/assets/img/imgUnknown.png");
     registerFormData.append('aboutMe', "Bienvendio a mi perfil!!!");
 
-    return this.http.post(url,registerFormData);
+    return this.http.post(this.url + '/register', registerFormData);
   }
 
   editSimple(

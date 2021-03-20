@@ -19,12 +19,12 @@ class UserController {
       $user = \Artist4all\Model\User::fromAssoc($data);
       $result = \Artist4all\Model\UserDB::getInstance()->registerUser($user);
       if (!$result) {
-        $response = $response->withStatus(500); 
+        $response = $response->withStatus(500, 'Error en el registro'); 
       } else {
         $email = trim($data["email"]);
         $password = trim($data["password"]);
         $feedbackData = \Artist4all\Model\UserDB::getInstance()->login($email, $password);
-        $response = $response->withJson($feedbackData); 
+        $response = $response->withJson($feedbackData)->withStatus(200, 'Usuario registrado'); 
       }
       return $response;
     });
@@ -34,7 +34,20 @@ class UserController {
       $email = trim($data["email"]);
       $password = trim($data["password"]);
       $feedbackData = \Artist4all\Model\UserDB::getInstance()->login($email, $password);
-      $response = $response->withJson($feedbackData);  
+      // todo parte error
+      $response = $response->withJson($feedbackData)->withStatus(200, 'Sesión iniciada');  
+      return $response;
+    });
+
+    $app->post('/logout', function (Request $request, Response $response, array $args) {
+      $data = $request->getParsedBody();
+      $token = trim($data["token"]);
+      $result = \Artist4all\Model\UserDB::getInstance()->logout($token);
+      if(!$result) {
+        $response = $response->withStatus(500, 'Error al cerrar la sesión');  
+      } else {
+        $response = $response->withStatus(200, 'Sesión cerrada');  
+      }
       return $response;
     });
 

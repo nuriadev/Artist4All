@@ -98,7 +98,7 @@ class UserDB {
         // si el return es nulo, lo indicamos
         if (!$userAssoc) return null;     
         if (password_verify($password, $userAssoc['password'])) {       
-            $arrayAux = array($userAssoc['id'], $userAssoc['password'], \Artist4All\Model\TokenGenerator::randomTokenPartGenerator());
+            $arrayAux = array($userAssoc['email'], $userAssoc['password'], \Artist4All\Model\TokenGenerator::randomTokenPartGenerator());
             $content = implode(".", $arrayAux);
             // creamos el token a partir de la variable $content
             $token = \Artist4All\Model\TokenGenerator::tokenGenerator($content);
@@ -107,9 +107,10 @@ class UserDB {
             $statement = $this->conn->prepare($sql);
             $result = $statement->execute([
                 ':token' => $token,
-                ':email' => $userAssoc["email"]
+                ':email' => $userAssoc['email']
             ]);
-    
+            // todo trabajar con una clase sesión
+            //$session = new \Artist4All\Model\Session($token, $user);
             $data = array(
                 'token' => $token,
                 'name' => $userAssoc['name'],
@@ -129,6 +130,16 @@ class UserDB {
             $data = array("Usuario incorrecto");
             return $data; 
         }
+    }
+
+    public function logout(string $token) : bool {
+        $sql = "UPDATE users SET token=:token WHERE token=:tokenReceived";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([
+            ':token' => '',
+            ':tokenReceived' => $token
+        ]);
+        return $result;
     }
 
     // public function modifyUser(string $username, string $aboutMe, string $img) {
