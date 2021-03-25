@@ -7,25 +7,21 @@ import { User } from '../models/user';
 export class UserService {
   constructor(private http:HttpClient) { }
 
-  //let url = "http://localhost/daw2/Artist4all/artist4all_php/User/register.php";
   private url = "http://localhost:81";
 
   register(newUser:User):Observable<any> {
-    let registerForm = new HttpParams();
-    registerForm.set('name', newUser.name);
-    registerForm.set('surname1', newUser.surname1);
-    registerForm.set('surname2', newUser.surname2);
-    registerForm.set('email', newUser.email);
-    registerForm.set('username', newUser.username);
-    registerForm.set('password', newUser.password);
-    registerForm.set('type_user',""+newUser.type_user);
-    registerForm.set('n_followers',""+newUser.n_followers);
+    let registerFormData:FormData = new FormData();
+    registerFormData.append('name', newUser.name);
+    registerFormData.append('surname1', newUser.surname1);
+    registerFormData.append('surname2', newUser.surname2);
+    registerFormData.append('email', newUser.email);
+    registerFormData.append('username', newUser.username);
+    registerFormData.append('password', newUser.password);
+    registerFormData.append('isArtist',""+newUser.isArtist);
+    registerFormData.append('imgAvatar', "http://localhost:81/artist4all_php/app/html/assets/img/imgUnknown.png");
+    registerFormData.append('aboutMe', "Bienvendio a mi perfil!!!");
 
-    return this.http.post(
-      this.url + '/register',
-      registerForm.toString(),
-      { headers: new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' })}
-    );
+    return this.http.post(this.url + '/register', registerFormData);
   }
 
   editSimple(
