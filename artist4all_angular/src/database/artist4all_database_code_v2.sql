@@ -20,6 +20,9 @@ id_user int not null,
 url_post varchar(255) not null,
 description_publication varchar(255) not null,
 upload_date datetime not null,
+n_likes int not null,
+n_comments int not null,
+n_views int not null,
 FOREIGN KEY (id_user)
 			REFERENCES users (id_user)
             ON DELETE CASCADE ON UPDATE CASCADE
@@ -29,6 +32,7 @@ create table users_followed (
 id_logfollow int primary key auto_increment,
 id_follower int not null,
 id_followed int not null,
+status_request int not null,
 FOREIGN KEY (id_follower)
 	        REFERENCES users (id_user)
 	        ON DELETE CASCADE ON UPDATE CASCADE,

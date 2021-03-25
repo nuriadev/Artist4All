@@ -27,19 +27,31 @@ class UserDB {
         $this->conn = new \PDO($dsn, $dbusername, $dbpassword, $options);
     }
 
-     public function getUserById(int $id) : ?\Artist4All\Model\User {
-        $sql = "SELECT 
-            id, 
-            name, 
-            surname1, 
-            surname2,
-            email,
-            username,
-            password,
-            isArtist,
-            imgAvatar,
-            aboutMe 
-        FROM users WHERE id=:id";
+    public function getOtherUsers(string $username) : ?array {
+        $sql = "SELECT * FROM users WHERE username!=:username";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':username' => $username ]);
+        $usersAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if (!$usersAssoc) return null;
+        $users = [];
+        foreach($usersAssoc as $userAssoc) {
+          $users[] = \Artist4All\Model\User::fromAssoc($userAssoc);
+        }
+        return $users;
+    }
+
+    public function getUserByUsername(string $username) : ?\Artist4All\Model\User {
+        $sql = "SELECT * FROM users WHERE username=:username";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':username' => $username ]);
+        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
+        if (!$userAssoc) return null;
+        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
+        return $user;
+    }
+
+    public function getUserById(int $id) : ?\Artist4All\Model\User {
+        $sql = "SELECT * FROM users WHERE id=:id";
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id' => $id ]);
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
@@ -49,18 +61,7 @@ class UserDB {
     }
 
     public function getUserByEmail(string $email) : ?\Artist4All\Model\User {
-        $sql = "SELECT 
-            id, 
-            name, 
-            surname1, 
-            surname2,
-            email,
-            username,
-            password,
-            isArtist,
-            imgAvatar,
-            aboutMe
-        FROM users WHERE email=:email AND deleted=:deleted";
+        $sql = "SELECT * FROM users WHERE email=:email AND deleted=:deleted";
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
             ':email'=> $email,
@@ -108,7 +109,53 @@ class UserDB {
         return $result;
     }
 
-    public function updateToken(string $token, \Artist4All\Model\User $user) : bool {
+    public function editUser(
+        \Artist4All\Model\User $user,
+        string $token) : bool {
+        $sql = "UPDATE users SET
+            name=:name, 
+            surname1=:surname1, 
+            surname2=:surname2, 
+            email=:email, 
+            username=:username,  
+            imgAvatar=:imgAvatar,
+            aboutMe=:aboutMe,
+        WHERE token=:token";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([
+            ':name' => $user->getName(),
+            ':surname1' => $user->getSurname1(),
+            ':surname2' => $user->getSurname2(),
+            ':email' => $user->getEmail(),
+            ':username' => $user->getUsername(),
+            ':imgAvatar' => $user->getImgAvatar(),
+            ':aboutMe' => $user->getAboutMe(),
+            ':token' => $token
+        ]);
+/*         $result = $statement->execute([
+            ':name' => $user->getName(), 
+            ':surname1' => $user->getSurname1(), 
+            ':surname2' => $user->getSurname2(),
+            ':email' => $user->getEmail(), 
+            ':username' => $user->getUsername(), 
+            ':imgAvatar' => $user->getImgAvatar(),
+            ':aboutMe' => $user->getAboutMe(),
+            ':id' => $user->getId()
+        ]); */
+        return $result;
+    }
+
+    public function editPassword(string $password, string $token) : bool {
+        $sql = "UPDATE users SET password=:password WHERE token=:token";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([
+            ':password' => $password,
+            ':token' => $token
+        ]);
+        return $result;
+    }
+
+    public function createOrUpdateToken(string $token, \Artist4All\Model\User $user) : bool {
         $sql = "UPDATE users SET token=:token WHERE email=:email";
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([

@@ -18,12 +18,15 @@ import { MessagesComponent } from './components/secure/messages/messages.compone
 import { ContactComponent } from './components/public/contact/contact.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { UserService } from './core/services/user.service';
-import { EditUserComponent } from './components/secure/edit-user/edit-user.component';
 import { UserSidebarComponent } from './components/secure/user-sidebar/user-sidebar.component';
 import { SessionService } from './core/services/session.service';
 import { AuthenticationService } from './core/services/authentication.service';
 import { FooterComponent } from './components/public/footer/footer.component';
 import { PageNotFoundComponent } from './components/public/page-not-found/page-not-found.component';
+import { CreatePublicationComponent } from './components/secure/publications/create-publication/create-publication.component';
+import { ViewPublicationComponent } from './components/secure/publications/view-publication/view-publication.component';
+import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
+import { ProvisionalAddUserComponent } from './components/secure/provisional-add-user/provisional-add-user.component';
 
 @NgModule({
   declarations: [
@@ -38,10 +41,13 @@ import { PageNotFoundComponent } from './components/public/page-not-found/page-n
     UserNavbarComponent,
     MessagesComponent,
     ContactComponent,
-    EditUserComponent,
     UserSidebarComponent,
     FooterComponent,
     PageNotFoundComponent,
+    CreatePublicationComponent,
+    ViewPublicationComponent,
+    EditPublicationComponent,
+    ProvisionalAddUserComponent,
   ],
   imports: [
     BrowserModule,

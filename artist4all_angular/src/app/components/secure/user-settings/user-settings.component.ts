@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Session } from 'src/app/core/models/session';
 import { User } from 'src/app/core/models/user';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
 @Component({
@@ -21,6 +20,7 @@ export class UserSettingsComponent implements OnInit {
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
+  id:number;
   name:string;
   surname1:string;
   name_2:string;
@@ -29,10 +29,12 @@ export class UserSettingsComponent implements OnInit {
   email:string;
   username:string;
   password:string;
+  isArtist:number;
   imgAvatar:FileList;
   aboutMe:string;
 
   ngOnInit(): void {
+    this.id = this.user.id;
     this.name = this.user.name;
     this.surname1 = this.user.surname1;
     this.name_2 = this.user.name;
@@ -41,13 +43,14 @@ export class UserSettingsComponent implements OnInit {
     this.email = this.user.email;
     this.username = this.user.username;
     this.password = this.user.password;
+    this.isArtist = this.user.isArtist;
     this.imgAvatar = this.user.imgAvatar;
     this.aboutMe = this.user.aboutMe;
   }
 
   imgToUpload: FileList = null;
-  handleFileInput(files: FileList) {
-    this.imgToUpload = files;
+  changeImgAvatar(newImgAvatar: FileList) {
+    this.imgToUpload = newImgAvatar;
   }
 
   // todo: poder modificar sin modificar la foto
@@ -55,13 +58,14 @@ export class UserSettingsComponent implements OnInit {
   // no se envia si no se escoge una img
   edit() {
     this._userService.edit(
+      this.id,
+      this.name,
+      this.surname1,
+      this.surname2,
+      this.email,
       this.username,
       this.aboutMe,
       this.imgToUpload,
-      this.name,
-      this.email,
-      this.surname1,
-      this.surname2,
       this.token).subscribe(
         (result) => {
           let user = new User(
@@ -78,9 +82,7 @@ export class UserSettingsComponent implements OnInit {
           );
           let userSession = new Session(result['token'], user);
           this._sessionService.setCurrentSession(userSession);
-          // todo recargar pagina actual
-          location.reload();
-          //this._router.navigate(['/home']);
+          this._router.navigate(['/settings']);
         }, (error) => {
           console.log(error);
         }
@@ -123,25 +125,25 @@ export class UserSettingsComponent implements OnInit {
   // todo verificar contraseñas iguales
   // todo añadir notificacion de cambio correcto
   editPassword() {
-    this._userService.editPassword(this.newPassword, this.token).subscribe(
+    this._userService.editPassword(this.id, this.newPassword, this.token).subscribe(
       (result) => {
         let user = new User(
-          result['name'],
-          result['surname1'],
-          result['surname2'],
-          result['email'],
-          result['username'],
-          result['password'],
-          result['type_user'],
-          result['n_followers'],
-          result['img'],
-          result['aboutMe']
+          result.user['id'],
+          result.user['name'],
+          result.user['surname1'],
+          result.user['surname2'],
+          result.user['email'],
+          result.user['username'],
+          result.user['password'],
+          result.user['isArtist'],
+          result.user['imgAvatar'],
+          result.user['aboutMe']
         );
         let userSession = new Session(result['token'], user);
         this._sessionService.setCurrentSession(userSession);
           // todo recargar pagina actual
-
-        this._router.navigate(['/settings']);
+        location.reload();
+        //this._router.navigate(['/settings']);
       }, (error) => {
         console.log(error);
       }

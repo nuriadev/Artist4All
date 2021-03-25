@@ -1,7 +1,7 @@
 {
-  "*": {
+  "Artist4all/*": {
       "target": "http://localhost:81",
-      "secure": false,
+      "secure": true,
       "logLevel": "debug"
   }
 }

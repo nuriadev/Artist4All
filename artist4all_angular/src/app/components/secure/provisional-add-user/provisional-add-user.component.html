@@ -1,0 +1,16 @@
+<app-user-navbar></app-user-navbar>
+<p>provisional-add-user works!</p>
+
+<div *ngIf="userlist == null"> No hay usuarios registrados </div>
+<div *ngIf="userlist != null">
+  <section *ngFor="let user of userlist; index as i;">
+    <table routerLink="/profile/{{user.username}}">
+      <tr>
+        <td>
+          {{ user.username }}
+        </td>
+      </tr>
+    </table>
+  </section>
+</div>
+

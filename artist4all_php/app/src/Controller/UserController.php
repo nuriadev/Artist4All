@@ -8,6 +8,10 @@ class UserController {
     $app->post('/register', '\Artist4all\Controller\UserController:register');
     $app->post('/login', '\Artist4all\Controller\UserController:login');
     $app->post('/logout', '\Artist4all\Controller\UserController:logout');
+    $app->put('/edit', '\Artist4all\Controller\UserController:edit');
+    $app->patch('/editPassword', '\Artist4all\Controller\UserController:editPassword');
+    $app->get('/user/{username:[a-zA-Z0-9]+}', '\Artist4all\Controller\UserController:getOtherUsers');
+    $app->get('/profile/{username:[a-zA-Z0-9]+}', '\Artist4all\Controller\UserController:getUserByUsername');
   }
 
   public function register(Request $request, Response $response, array $args) {
@@ -29,6 +33,80 @@ class UserController {
   public function login(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     return $this->loginProcess($data, $response);
+  }
+
+  //!NO VA
+  public function edit(Request $request, Response $response, array $args) {  
+    $data = $request->getParsedBody();
+    $id = trim($data["id"]);
+    $userEdited = \Artist4all\Model\UserDB::getInstance()->getUserById($id);
+    $name = trim($data["name"]); // validar
+    $surname1 = trim($data["surname1"]); // validar
+    $surname2 = trim($data["surname2"]); // validar 
+    $email = trim($data["email"]); // validar
+    $username = trim($data["username"]); // validar
+    $aboutMe = trim($data["aboutMe"]); 
+    $newImgUser = trim($data["newImgAvatar"]);
+    $token = trim($data["token"]);
+    if (!isset($data["password"])) $data["password"] = $userEdited->getPassword();
+    if (!isset($data["isArtist"])) $data["isArtist"] = $userEdited->isArtist();
+    if (!isset($data["imgAvatar"])) $data["imgAvatar"] = $userEdited->getImgAvatar();
+    
+    if (!is_null($newImgUser)) {
+      $newImgAvatar = 'http://localhost:81/assets/img/'. $newImgUser;
+      $userEdited = new \Artist4All\Model\User($id, $name, $surname1, $surname2, $email, $data["password"], $username, $data["isArtist"], $newImgAvatar, $aboutMe);
+    } else {
+      $userEdited = new \Artist4All\Model\User($id, $name, $surname1, $surname2, $email, $data["password"], $username, $data["isArtist"], $data["imgAvatar"], $aboutMe);
+    }
+    $result = \Artist4all\Model\UserDB::getInstance()->editUser($userEdited, $token);
+    if (!$result) {
+      $response = $response->withStatus(500, 'Error en la modificación');  
+    } else {
+      $user = \Artist4all\Model\UserDB::getInstance()->getUserById($id);
+      $response = $response->withJson($user)->withStatus(200, 'Usuario editado');
+    } 
+    return $response;
+  }
+
+  public function editPassword(Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    $id = trim($data["id"]);
+    $password = trim($data["password"]); //validar
+    $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+    $token = trim($data["token"]);
+    $result = \Artist4all\Model\UserDB::getInstance()->editPassword($password_hashed, $token);
+    if (!$result) {
+      $response = $response->withStatus(500, 'Error al modificar la contraseña'); 
+      return $response;
+    } else {
+      $user = \Artist4all\Model\UserDB::getInstance()->getUserById($id);
+      $response = $response->withJson($user)->withStatus(200, 'Contraseña modificada');
+    }
+    // $2y$10$XSD0WWjE4gUGmK7fPglziuQUpJSfofxGhQNhMCFFGBmjXbyoj0HiO
+    return $response; 
+  }
+  //!
+
+  public function getOtherUsers(Request $request, Response $response, array $args) {
+    $username = $args['username'];
+    $users = \Artist4all\Model\UserDB::getInstance()->getOtherUsers($username);
+    if (is_null($users)) {
+      $response = $response->withStatus(500, 'No se encontraron otros usuarios');
+    } else {
+      $response = $response->withJson($users);
+    }
+    return $response;
+  }
+
+  public function getUserByUsername(Request $request, Response $response, array $args) {
+    $username = $args['username'];
+    $user = \Artist4all\Model\UserDB::getInstance()->getUserByUsername($username);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'Usuario no encontrado');
+    } else {
+      $response = $response->withJson($user);
+    }
+    return $response;
   }
 
   public function logout(Request $request, Response $response, array $args) {
@@ -57,7 +135,7 @@ class UserController {
       $content = implode(".", $arrayAux);
       // creamos el token a partir de la variable $content
       $token = \Artist4All\Model\TokenGenerator::tokenGenerator($content);
-      $createOrUpdateToken = \Artist4All\Model\UserDB::getInstance()->updateToken($token, $user);
+      $userToken = \Artist4All\Model\UserDB::getInstance()->createOrUpdateToken($token, $user);
       $session = new \Artist4All\Model\Session($token, $user);
       $response = $response->withJson($session)->withStatus(200, 'Sesión iniciada');          
     } else {
