@@ -11,10 +11,10 @@
             <a routerLink="/store" class="p-3 hover:text-purple-600"><i class="fas fa-store-alt mr-3"></i>Tienda</a>
         </li>
         <li>
-          <a routerLink="/messages" class="p-3 hover:text-purple-600"><i class="fas fa-paper-plane mr-3"></i>Mensajería</a>
+          <a routerLink="/message" class="p-3 hover:text-purple-600"><i class="fas fa-paper-plane mr-3"></i>Mensajería</a>
         </li>
         <li>
-          <a routerLink="/users" class="p-3 hover:text-purple-600"><i class="fas fa-users mr-3"></i>Usuarios</a>
+          <a routerLink="/user" class="p-3 hover:text-purple-600"><i class="fas fa-users mr-3"></i>Usuarios</a>
         </li>
     </ul>
     <div class="flex-1 px-4 flex justify-between ml-3">
@@ -55,7 +55,7 @@
         </div>
         <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 hidden z-40" id="menu-toggle" role="menu" aria-orientation="vertical" aria-labelledby="user-menu">
           <a routerLink="/profile/my" (click)="isMenuDisplayed()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-user mr-3"></i>Mi perfil</a>
-          <a routerLink="/settings" (click)="isMenuDisplayed()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-cog mr-3"></i>Configuración</a>
+          <a routerLink="/settings/profile" (click)="isMenuDisplayed()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-cog mr-3"></i>Configuración</a>
           <a routerLink="" (click)="isMenuDisplayed()" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100" role="menuitem" (click)="logout()"><i class="fas fa-sign-out-alt mr-3"></i>Cerrar sesión</a>
         </div>
       </div>

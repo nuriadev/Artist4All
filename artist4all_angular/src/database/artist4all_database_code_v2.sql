@@ -29,15 +29,15 @@ FOREIGN KEY (id_user)
 );
 
 create table users_followed (
-id_logfollow int primary key auto_increment,
+id int primary key auto_increment,
 id_follower int not null,
 id_followed int not null,
-status_request int not null,
+status_follow int not null,
 FOREIGN KEY (id_follower)
-	        REFERENCES users (id_user)
+	        REFERENCES users (id)
 	        ON DELETE CASCADE ON UPDATE CASCADE,
 FOREIGN KEY (id_followed)
-	        REFERENCES users (id_user)
+	        REFERENCES users (id)
 	        ON DELETE CASCADE ON UPDATE CASCADE
 );
 

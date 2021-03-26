@@ -20,13 +20,18 @@
                       <h1 class="text-2xl font-bold text-gray-900 truncate">
                         {{ username }}
                         <a class="ml-5">
-                          <button type="button" *ngIf="!isMyProfile" (click)="isUserFollowed()" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                            <button type="button" id="followedContainer" *ngIf="!isMyProfile && !isFollowed;" (click)="followUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                             <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <i id="followIcon" class="fas fa-user-plus"></i>
-                              <i id="unfollowIcon" class="fas fa-user-minus hidden"></i>
+                              <i class="fas fa-user-plus"></i>
                             </span>
-                            <span id="followMessage">Seguir</span>
-                          </button>
+                            <span>Seguir</span>
+                            </button>
+                            <button type="button"  id="unfollowedContainer" *ngIf="!isMyProfile && isFollowed;" (click)="unfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                            <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                              <i class="fas fa-user-minus"></i>
+                            </span>
+                            <span>Dejar de seguir</span>
+                            </button>
                         </a>
                       </h1>
                     </div>

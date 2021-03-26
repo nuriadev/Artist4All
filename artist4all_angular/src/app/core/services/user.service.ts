@@ -17,9 +17,9 @@ export class UserService {
     registerFormData.append('email', newUser.email);
     registerFormData.append('username', newUser.username);
     registerFormData.append('password', newUser.password);
-    registerFormData.append('isArtist',""+newUser.isArtist);
-    registerFormData.append('imgAvatar', "http://localhost:81/assets/img/imgUnknown.png");
-    registerFormData.append('aboutMe', "Bienvenido a mi perfil!!!");
+    registerFormData.append('isArtist',''+newUser.isArtist);
+    registerFormData.append('imgAvatar', 'http://localhost:81/assets/img/defaultAvatarImg.png');
+    registerFormData.append('aboutMe', 'Bienvenido a mi perfil!!!');
 
     return this.http.post(this.url + '/register', registerFormData);
   }
@@ -35,7 +35,7 @@ export class UserService {
     files:FileList,
     token:string):Observable<any> {
       let editFormData:FormData = new FormData();
-      editFormData.append('id',""+id);
+      editFormData.append('id',''+id);
       editFormData.append('name', name);
       editFormData.append('surname1', surname1);
       editFormData.append('surname2', surname2);
@@ -44,8 +44,8 @@ export class UserService {
       editFormData.append('aboutMe', aboutMe);
       editFormData.append('newImgAvatar', files[0],files[0].name);
       editFormData.append('token', token);
-
-    return this.http.put(this.url + '/edit', editFormData);
+ //    TODO Cambiar a patch
+    return this.http.post(this.url + '/settings/profile', editFormData);
   }
 
   editPassword(
@@ -53,11 +53,11 @@ export class UserService {
     password:string,
     token:string):Observable<any> {
       let editPasswordFormData:FormData = new FormData();
-      editPasswordFormData.append('id',""+id);
+      editPasswordFormData.append('id',''+id);
       editPasswordFormData.append('password', password);
       editPasswordFormData.append('token', token);
-
-      return this.http.patch(this.url + '/editPassword', editPasswordFormData);
+   //    TODO Cambiar a patch
+      return this.http.post(this.url + '/settings/password', editPasswordFormData);
   }
 
   getOtherUsers(username:string):Observable<any> {
@@ -66,5 +66,23 @@ export class UserService {
 
   getUserByUsername(username:string):Observable<any> {
     return this.http.get(this.url + '/profile/' + username);
+  }
+
+  isFollowingThatUser(id_follower:number, id_followed:number):Observable<any> {
+    let isFollowingFormData:FormData = new FormData();
+    isFollowingFormData.append('id_follower',''+id_follower);
+    isFollowingFormData.append('id_followed',''+id_followed);
+    return this.http.post(this.url + '/profile/my', isFollowingFormData);
+  }
+
+  followUser(id_follower:number, id_followed:number):Observable<any> {
+    let followUserFormData:FormData = new FormData();
+    followUserFormData.append('id_follower',''+id_follower);
+    followUserFormData.append('id_followed',''+id_followed);
+    return this.http.post(this.url + '/profile', followUserFormData);
+  }
+
+  unfollowUser(id_logfollow:number):Observable<any> {
+    return this.http.delete(this.url + '/profile/' + id_logfollow);
   }
 }

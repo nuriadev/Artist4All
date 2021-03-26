@@ -11,13 +11,11 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class HomeComponent implements OnInit {
 
-  //public user: User;
   constructor(
     private _sessionService: SessionService
   ) { }
 
   ngOnInit(): void {
-    //this.user = this._sessionService.getCurrentUser();
   }
 
 }

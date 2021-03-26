@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { User } from 'src/app/core/models/user';
-import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
 @Component({
@@ -33,10 +31,11 @@ export class ProfileComponent implements OnInit {
 
   profileUsername:string = "";
   isMyProfile:boolean = false;
+
   ngOnInit(): void {
     this._activeRoute.paramMap.subscribe(
       (params) => {
-        this.profileUsername = params.get("username");
+        this.profileUsername = params.get('username');
         if (this.profileUsername == 'my') {
           this.id = this.user.id;
           this.name = this.user.name;
@@ -60,6 +59,18 @@ export class ProfileComponent implements OnInit {
                 this.imgAvatar = result['imgAvatar'],
                 this.aboutMe = result['aboutMe']
                 this.isMyProfile = false;
+                this._userService.isFollowingThatUser(this.user.id, this.id).subscribe(
+                  (result) => {
+                    if (result != null) {
+                      this.id_logfollow = result;
+                      this.isFollowed = true;
+                    } else {
+                      this.isFollowed = false;
+                    }
+                  }, (error) => {
+                    console.log(error);
+                  }
+                )
             }, (error) => {
               console.log(error);
             }
@@ -67,25 +78,36 @@ export class ProfileComponent implements OnInit {
         }
       }
     );
-
   }
 
-  isFollowed: boolean = false;
+  followUser() {
+    this.isFollowed = true;
+    this._userService.followUser(this.user.id, this.id).subscribe(
+      (result) => {
+        this.id_logfollow = result;
+      }, (error) => {
+        console.log(error);
+      }
+    )
+  }
+
+  id_logfollow:number;
+  unfollowUser() {
+    this.isFollowed = false;
+    this._userService.unfollowUser(this.id_logfollow).subscribe();
+  }
+
+  isFollowed: boolean;
   isUserFollowed() {
-    let followMessage = document.getElementById('followMessage');
-    let followIcon = document.getElementById('followIcon');
-    let unfollowIcon = document.getElementById('unfollowIcon');
+    let followContainer = document.getElementById('followContainer');
+    let unfollowContainer = document.getElementById('unfollowContainer');
     if (!this.isFollowed) {
-      // todo falta que tenga constancia de si lo seguía de antes por db, tabla follower_followed
-      // ! No funcional
-      followIcon.style.display = "block";
-      unfollowIcon.style.display = "none";
-      followMessage.innerHTML = "Seguir";
+      followContainer.style.display = 'block';
+      unfollowContainer.style.display = "none";
       this.isFollowed = true;
     } else {
-      unfollowIcon.style.display = "block";
-      followIcon.style.display = "none";
-      followMessage.innerHTML = "Dejar de seguir";
+      unfollowContainer.style.display = 'block';
+      followContainer.style.display = 'none';
       this.isFollowed = false;
     }
   }
