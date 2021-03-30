@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -30,6 +30,8 @@ import { UserSettingsProfileComponent } from './components/secure/settings/user-
 import { UserSettingsAccountComponent } from './components/secure/settings/user-settings-account/user-settings-account.component';
 import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
 
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
@@ -58,9 +60,12 @@ import { UserSettingsPasswordComponent } from './components/secure/settings/user
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule
   ],
   providers: [UserService, AuthenticationService, SessionService, AuthGuard],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

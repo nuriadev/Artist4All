@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
+import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -13,7 +14,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private _sessionService: SessionService,
     private _activeRoute: ActivatedRoute,
-    private _userService: UserService
+    private _userService: UserService,
+    private spinner: NgxSpinnerService
   ) { }
 
   user = this._sessionService.getCurrentUser();
@@ -31,8 +33,9 @@ export class ProfileComponent implements OnInit {
 
   profileUsername:string = "";
   isMyProfile:boolean = false;
-
+  loaded: boolean;
   ngOnInit(): void {
+    this.loaded = false;
     this._activeRoute.paramMap.subscribe(
       (params) => {
         this.profileUsername = params.get('username');
@@ -47,7 +50,12 @@ export class ProfileComponent implements OnInit {
           this.imgAvatar = this.user.imgAvatar;
           this.aboutMe = this.user.aboutMe;
           this.isMyProfile = true;
+          this.loaded = true;
         } else {
+          this.spinner.show();
+          setTimeout(() => {
+            this.spinner.hide();
+          }, 1200);
           this._userService.getUserByUsername(this.profileUsername).subscribe(
             (result) => {
                 this.id = result['id'],
@@ -71,6 +79,7 @@ export class ProfileComponent implements OnInit {
                     console.log(error);
                   }
                 )
+                this.loaded = true;
             }, (error) => {
               console.log(error);
             }

@@ -4,6 +4,8 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class UserController {
+
+  // TODO: hacer que se pueda modificar sin seleccionar una foto de usuario, avisar de que he cambiado de delete a deactivated, crear notificaciones y los logs, contact page on session/ footer removed from app component
   public static function initRoutes($app) {
     $app->post('/register', '\Artist4all\Controller\UserController:register');
     $app->post('/login', '\Artist4all\Controller\UserController:login');
@@ -12,7 +14,7 @@ class UserController {
     $app->post('/settings/profile', '\Artist4all\Controller\UserController:edit');
     $app->post('/settings/password', '\Artist4all\Controller\UserController:changePassword');
     $app->get('/user/{username:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:getOtherUsers');
-    $app->get('/profile/{username:[a-zA-Z0-9]+}', '\Artist4all\Controller\UserController:getUserByUsername');
+    $app->get('/profile/{username:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:getUserByUsername');
     $app->post('/profile', '\Artist4all\Controller\UserController:followUser');
     $app->delete('/profile/{id:[0-9]+}', '\Artist4all\Controller\UserController:unfollowUser'); 
     $app->post('/profile/my', '\Artist4all\Controller\UserController:isFollowingThatUser');  
