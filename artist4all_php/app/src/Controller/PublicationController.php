@@ -25,21 +25,21 @@ class PublicationController {
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
     $isAuthorizated = \Artist4all\Model\PublicationDB::getInstance()->isAuthorizated($publication, $token);
     if(!$isAuthorizated) {
-      $response = $response->withStatus(500, 'Error al publicar');  
+      $response = $response->withStatus(500, 'Error at publishing');  
       return $response;
     } else {
       $newPublication = \Artist4all\Model\PublicationDB::getInstance()->createPublication($publication);
-      if (!empty($newPublication->getImgsPublication)) {
+      if (!empty($newPublication->getImgsPublication())) {
         foreach ($newPublication->getImgsPublication() as $img) {
           $resultImg = \Artist4all\Model\PublicationDB::getInstance()->insertPublicationImgs($newPublication->getId(), $img);
           if (!$resultImg) {
-            $response = $response->withStatus(500, 'Error al publicar');  
+            $response = $response->withStatus(500, 'Error at publishing');  
             return $response;
           }
         } 
       }    
-      if (is_null($publication)) $response = $response->withStatus(500, 'Error al publicar');  
-      else $response = $response->withStatus(200, 'Publicación creada');
+      if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');  
+      else $response = $response->withStatus(200, 'Publication created');
       return $response;
     }
     
