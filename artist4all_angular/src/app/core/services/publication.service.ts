@@ -15,6 +15,15 @@ export class PublicationService {
   create(newPublication:Publication, token:string):Observable<any> {
     let createPublicationFormData:FormData = new FormData();
     createPublicationFormData.append('id_user',''+newPublication.id_user);
+    if (!newPublication.imgPublication) {
+      createPublicationFormData.append('imgsPublication', null);
+    } else {
+      let imgsPublication = [];
+      for (var i = 0; i < newPublication.imgPublication.length; i++) {
+        imgsPublication[i] = newPublication.imgPublication[i].name;
+      }
+      createPublicationFormData.append('imgsPublication', JSON.stringify(imgsPublication));
+    }
     createPublicationFormData.append('bodyPublication', newPublication.bodyPublication);
     createPublicationFormData.append('upload_date',''+newPublication.upload_date);
     createPublicationFormData.append('n_likes',''+newPublication.n_likes);

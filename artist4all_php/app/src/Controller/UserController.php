@@ -5,7 +5,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class UserController {
 
-  // TODO: hacer que se pueda modificar sin seleccionar una foto de usuario, avisar de que he cambiado de delete a deactivated, crear notificaciones y los logs, contact page on session/ footer removed from app component
+  // TODO: avisar de que he cambiado de delete a deactivated, crear notificaciones y los logs, contact page on session/ footer removed from app component
   public static function initRoutes($app) {
     $app->post('/register', '\Artist4all\Controller\UserController:register');
     $app->post('/login', '\Artist4all\Controller\UserController:login');
@@ -186,7 +186,6 @@ class UserController {
         $data['token'] = '';
     } else {
       $token = trim($data['token']);
-      $newImg = json_decode(file_get_contents("php://input"), true);
       $folderUrl = "assets/img".DIRECTORY_SEPARATOR;
       foreach ($_FILES as $file) {
           $nombreImg = $file["tmp_name"];
@@ -194,8 +193,8 @@ class UserController {
           move_uploaded_file($nombreImg, $urlImg);
       }
       $currentImgAvatar = $data['imgAvatar'];
-      if (!is_null($urlImg)) $data['imgAvatar'] = 'http://localhost:81/' . $urlImg;
-      else $data['imgAvatar'] = 'http://localhost:81/assets/img/' . $currentImgAvatar;  
+      if (isset($urlImg)) $data['imgAvatar'] = 'http://localhost:81/' . $urlImg;
+      else $data['imgAvatar'] = $currentImgAvatar;  
     }
     $data['id'] = $id;
     $user = \Artist4all\Model\User::fromAssoc($data);

@@ -44,7 +44,7 @@ class User implements \JsonSerializable {
     }
 
     public function setId(?int $id) {
-      $this->$id = $id;
+      $this->id = $id;
     }
 
     public function getName() : string {

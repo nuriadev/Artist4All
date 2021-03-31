@@ -10,22 +10,38 @@ class PublicationController {
 
   public function createPublication(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
-    $id_user = trim($data['id_user']);
-    $body = trim($data['bodyPublication']); 
-    /* $img = trim($data['imgPublication']); */
-    $upload_date = trim($data['upload_date']);
-    $n_likes = trim($data['n_likes']);
-    $n_comments = trim($data['n_comments']);
-    $n_views = trim($data['n_views']);
-    // todo implementar la /las imgs
-    $token = trim($data['token']);
-    $publication = new \Artist4all\Model\Publication(null, $id_user, $body, $upload_date, $n_likes, $n_comments, $n_views);
-    $result = \Artist4all\Model\PublicationDB::getInstance()->createPublication($publication, $token);
-    if (!$result) {
-      $response = $response->withStatus(500, 'Error al publicar');  
-    } else {
-      $response = $response->withStatus(200, 'Publicación creada');
+    $data['id'] = null;
+    $data['imgsPublication'] = json_decode($data['imgsPublication']);
+    $folderUrl = "assets/img".DIRECTORY_SEPARATOR;
+    foreach ($_FILES as $file) {
+        $nombreImg = $file["tmp_name"];
+        $urlImg = $folderUrl.$file["name"];
+        move_uploaded_file($nombreImg, $urlImg);   
     }
-    return $response;
+    if (empty($data["imgsPublication"])) $data['imgsPublication'] = null;
+    // todo implementar las imgs 
+    // todo validar que no sea empty
+    $token = trim($data['token']);
+    $publication = \Artist4all\Model\Publication::fromAssoc($data);
+    $isAuthorizated = \Artist4all\Model\PublicationDB::getInstance()->isAuthorizated($publication, $token);
+    if(!$isAuthorizated) {
+      $response = $response->withStatus(500, 'Error al publicar');  
+      return $response;
+    } else {
+      $newPublication = \Artist4all\Model\PublicationDB::getInstance()->createPublication($publication);
+      if (!empty($newPublication->getImgsPublication)) {
+        foreach ($newPublication->getImgsPublication() as $img) {
+          $resultImg = \Artist4all\Model\PublicationDB::getInstance()->insertPublicationImgs($newPublication->getId(), $img);
+          if (!$resultImg) {
+            $response = $response->withStatus(500, 'Error al publicar');  
+            return $response;
+          }
+        } 
+      }    
+      if (is_null($publication)) $response = $response->withStatus(500, 'Error al publicar');  
+      else $response = $response->withStatus(200, 'Publicación creada');
+      return $response;
+    }
+    
   }
 }

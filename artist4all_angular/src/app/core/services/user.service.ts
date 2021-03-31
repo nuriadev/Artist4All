@@ -42,7 +42,8 @@ export class UserService {
       editFormData.append('email', email);
       editFormData.append('username', username);
       editFormData.append('aboutMe', aboutMe);
-      editFormData.append('newImgAvatar', files[0],files[0].name);
+      if (!files) editFormData.append('newImgAvatar', null);
+      else editFormData.append('newImgAvatar', files[0],files[0].name);
       editFormData.append('token', token);
  //    TODO Cambiar a patch
     return this.http.post(this.url + '/settings/profile', editFormData);

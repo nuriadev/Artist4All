@@ -7,7 +7,7 @@
   <label for="body">Cuerpo:</label> <br>
   <textarea #textAreaBody="ngModel" [(ngModel)]="bodyPublication" id="bodyPublication" name="bodyPublication" cols="100" rows="8"></textarea> <br>
   <label for="imgOptional">Imagen(opcional): </label>
-<!--   <input type="file" (change)="addImgPublication($event.target.files)" id="imgPublication"/> <br> -->
+  <input type="file" (change)="addImgPublication($event.target.files)" id="imgPublication" multiple/> <br>
   <button routerLink="/home"> Cancelar </button>
   <input type="submit" value="Publicar"/>
 </form>

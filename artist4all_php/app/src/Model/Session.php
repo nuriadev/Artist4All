@@ -18,7 +18,7 @@ class Session implements \JsonSerializable {
     }
 
     public function setToken(string $token) {
-      $this->$token = $token;
+      $this->token = $token;
     }
 
     public function getUser() : \Artist4All\Model\User  {
