@@ -10,7 +10,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/secure/home/home.component';
 import { LandingComponent } from './components/public/landing/landing.component';
-import { ProfileComponent } from './components/secure/profile/profile.component';
+import { ProfileComponent } from './components/secure/profile/index-profile/index-profile.component';
 import { StoreComponent } from './components/secure/store/store.component';
 import { UserNavbarComponent } from './components/secure/user-navbar/user-navbar.component';
 import { MessagesComponent } from './components/secure/messages/messages.component';
@@ -32,6 +32,7 @@ import { UserSettingsPasswordComponent } from './components/secure/settings/user
 
 import { NgxSpinnerModule } from "ngx-spinner";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -54,6 +55,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     UserSettingsProfileComponent,
     UserSettingsAccountComponent,
     UserSettingsPasswordComponent,
+    ListOfFollowersOrFollowedComponent,
   ],
   imports: [
     BrowserModule,

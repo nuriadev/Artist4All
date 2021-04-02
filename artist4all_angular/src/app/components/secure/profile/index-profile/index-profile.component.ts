@@ -5,8 +5,8 @@ import { UserService } from 'src/app/core/services/user.service';
 import { NgxSpinnerService } from "ngx-spinner";
 @Component({
   selector: 'app-profile',
-  templateUrl: './profile.component.html',
-  styleUrls: ['./profile.component.css'],
+  templateUrl: './index-profile.component.html',
+  styleUrls: ['./index-profile.component.css'],
   providers: [UserService]
 })
 export class ProfileComponent implements OnInit {
@@ -30,6 +30,7 @@ export class ProfileComponent implements OnInit {
   imgAvatar:FileList;
   aboutMe:string;
   n_followers:number;
+  n_followed:number;
 
   profileUsername:string = "";
   isMyProfile:boolean = false;
@@ -38,6 +39,11 @@ export class ProfileComponent implements OnInit {
     this.loaded = false;
     this._activeRoute.paramMap.subscribe(
       (params) => {
+        this.spinner.show();
+        setTimeout(() => {
+          this.spinner.hide();
+          this.loaded = true;
+        }, 1200);
         this.profileUsername = params.get('username');
         if (this.profileUsername == 'my') {
           this.id = this.user.id;
@@ -50,12 +56,8 @@ export class ProfileComponent implements OnInit {
           this.imgAvatar = this.user.imgAvatar;
           this.aboutMe = this.user.aboutMe;
           this.isMyProfile = true;
-          this.loaded = true;
+          this.getFollowersAndFollowed(this.id);
         } else {
-          this.spinner.show();
-          setTimeout(() => {
-            this.spinner.hide();
-          }, 1200);
           this._userService.getUserByUsername(this.profileUsername).subscribe(
             (result) => {
                 this.id = result['id'],
@@ -70,7 +72,7 @@ export class ProfileComponent implements OnInit {
                 this._userService.isFollowingThatUser(this.user.id, this.id).subscribe(
                   (result) => {
                     if (result != null) {
-                      this.id_logfollow = result;
+                      this.id_follow = result;
                       this.isFollowed = true;
                     } else {
                       this.isFollowed = false;
@@ -79,7 +81,7 @@ export class ProfileComponent implements OnInit {
                     console.log(error);
                   }
                 )
-                this.loaded = true;
+                this.getFollowersAndFollowed(this.id);
             }, (error) => {
               console.log(error);
             }
@@ -91,19 +93,19 @@ export class ProfileComponent implements OnInit {
 
   followUser() {
     this.isFollowed = true;
-    this._userService.followUser(this.user.id, this.id).subscribe(
+    this._userService.followUser(this.user.id, this.id, this.token).subscribe(
       (result) => {
-        this.id_logfollow = result;
+        this.id_follow = result;
       }, (error) => {
         console.log(error);
       }
     )
   }
 
-  id_logfollow:number;
+  id_follow:number;
   unfollowUser() {
     this.isFollowed = false;
-    this._userService.unfollowUser(this.id_logfollow).subscribe();
+    this._userService.unfollowUser(this.id_follow, this.token).subscribe();
   }
 
   isFollowed: boolean;
@@ -119,5 +121,22 @@ export class ProfileComponent implements OnInit {
       followContainer.style.display = 'none';
       this.isFollowed = false;
     }
+  }
+
+  getFollowersAndFollowed(id:number) {
+    this._userService.countFollowers(this.id).subscribe(
+      (result) => {
+        this.n_followers = result;
+      }, (error) => {
+        console.log(error);
+      }
+    )
+    this._userService.countFollowed(this.id).subscribe(
+      (result) => {
+        this.n_followed = result;
+      }, (error) => {
+        console.log(error);
+      }
+    )
   }
 }

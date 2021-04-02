@@ -52,7 +52,12 @@ class PublicationDB {
         return $imgsPublication;
     }
 
-    public function createPublication(\Artist4All\Model\Publication $publication) : ?\Artist4All\Model\Publication {
+    public function persistPublication(Publication $publication) : ?\Artist4All\Model\Publication {
+        if (is_null($publication->getId())) return $this->insertPublication($publication);
+        else return $this->updatePublication($publication);
+    }
+
+    public function insertPublication(\Artist4All\Model\Publication $publication) : ?\Artist4All\Model\Publication {
         $sql = 'INSERT INTO publications VALUES(
             :id,
             :id_user,
@@ -75,6 +80,30 @@ class PublicationDB {
         if(!$result) return null;
         $id = $this->conn->lastInsertId();
         $publication->setId($id);
+        return $publication;
+    }
+
+    public function updatePublication(\Artist4All\Model\Publication $publication) : ?\Artist4All\Model\Publication {
+        $sql = 'UPDATE publications SET
+            id_user=:id_user,
+            bodyPublication=:bodyPublication,
+            upload_date=:upload_date,
+            n_likes=:n_likes,
+            n_comments=:n_comments,
+            n_views=:n_views
+        WHERE id=:id
+        )';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([
+            ':id' => $publication->getId(),
+            ':id_user' => $publication->getIdUser(),
+            ':bodyPublication' => $publication->getBodyPublication(),
+            ':upload_date' => date('Y-m-d H:i:s'),
+            ':n_likes' => $publication->getLikes(),
+            ':n_comments' => $publication->getComments(),
+            ':n_views' => $publication->getViews()
+        ]);
+        if(!$result) return null;
         return $publication;
     }
 
@@ -104,5 +133,12 @@ class PublicationDB {
         $user = \Artist4All\Model\User::fromAssoc($userAssoc);
         if ($user->getId() == $publication->getIdUser()) return true;
         return false;
+    }
+
+    public function deletePublicationById(int $id) : bool {
+        $sql = "DELETE FROM publications WHERE id=:id";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ 'id' => $id ]);
+        return $result; 
     }
 }

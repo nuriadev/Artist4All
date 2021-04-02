@@ -76,14 +76,45 @@ export class UserService {
     return this.http.post(this.url + '/profile/my', isFollowingFormData);
   }
 
-  followUser(id_follower:number, id_followed:number):Observable<any> {
+  followUser(id_follower:number, id_followed:number, token:string):Observable<any> {
     let followUserFormData:FormData = new FormData();
     followUserFormData.append('id_follower',''+id_follower);
     followUserFormData.append('id_followed',''+id_followed);
+    followUserFormData.append('token', token);
     return this.http.post(this.url + '/profile', followUserFormData);
   }
 
-  unfollowUser(id_logfollow:number):Observable<any> {
-    return this.http.delete(this.url + '/profile/' + id_logfollow);
+  unfollowUser(id_follow:number, token:string):Observable<any> {
+    let options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: {
+        id: id_follow,
+        token: token
+      },
+    };
+    return this.http.delete(this.url + '/profile', options);
+  }
+
+  countFollowers(id:number):Observable<any> {
+    let countFollowersFormData:FormData = new FormData();
+    countFollowersFormData.append('id',''+id);
+    return this.http.post(this.url + '/profile/followers', countFollowersFormData);
+  }
+
+  countFollowed(id:number):Observable<any> {
+    let countFollowedFormData:FormData = new FormData();
+    countFollowedFormData.append('id',''+id);
+    return this.http.post(this.url + '/profile/followed', countFollowedFormData);
+  }
+
+  //    TODO: falta implementarlo en un componente
+  getFollowers(username:string):Observable<any> {
+    return this.http.get(this.url + '/profile/' + username + '/followers');
+  }
+
+  getUsersFollowed(username:string):Observable<any> {
+    return this.http.get(this.url + '/profile/' + username + '/followed');
   }
 }

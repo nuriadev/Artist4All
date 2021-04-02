@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/secure/home/home.component';
 import { LandingComponent } from './components/public/landing/landing.component';
 import { StoreComponent } from './components/secure/store/store.component';
-import { ProfileComponent } from './components/secure/profile/profile.component';
+import { ProfileComponent } from './components/secure/profile/index-profile/index-profile.component';
 import { MessagesComponent } from './components/secure/messages/messages.component';
 import { ContactComponent } from './components/public/contact/contact.component';
 import { AuthGuard } from './core/guards/auth.guard';
@@ -16,6 +16,7 @@ import { ProvisionalAddUserComponent } from './components/secure/provisional-add
 import { UserSettingsAccountComponent } from './components/secure/settings/user-settings-account/user-settings-account.component';
 import { UserSettingsProfileComponent } from './components/secure/settings/user-settings-profile/user-settings-profile.component';
 import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
+import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
@@ -32,7 +33,8 @@ const routes: Routes = [
   {path:'publication',component:CreatePublicationComponent, canActivate:[AuthGuard]},
   {path:'user', component:ProvisionalAddUserComponent, canActivate:[AuthGuard]},
   {path:'404', component:PageNotFoundComponent},
-  {path: '**', redirectTo: '/404'},
+  //{path:'**', redirectTo: '/404'},
+  {path:'profile/:username/:typeList', component:ListOfFollowersOrFollowedComponent, canActivate:[AuthGuard]},
 ];
 
 @NgModule({

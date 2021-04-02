@@ -223,4 +223,74 @@ class UserDB {
         return $result;
     }
     
+    public function countOrGetFollowers(int $id, string $tipo) {
+        $sql = 'SELECT id_follower FROM users_followed WHERE id_followed=:my_id';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':my_id' => $id ]); 
+        if ($tipo == 'count') {
+            if (!$result) return null;
+            $n_followers = $statement->rowCount();
+            return $n_followers;
+        } else if ($tipo == 'get') {
+            $idsFollowersAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            if (!$idsFollowersAssoc) return null;
+            $idsFollower = [];
+            foreach($idsFollowersAssoc as $idsFollowerAssoc) {
+            $idsFollower[] = $idsFollowerAssoc['id_follower'];
+            }
+            return $idsFollower; 
+        }
+    }
+
+    public function countOrGetFollowed(int $id, string $tipo) {
+        $sql = 'SELECT id_followed FROM users_followed WHERE id_follower=:my_id';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':my_id' => $id ]);
+        if ($tipo == 'count') {
+            if (!$result) return null;
+            $n_followed = $statement->rowCount();
+            return $n_followed; 
+        } else if ($tipo == 'get') {
+            $idsFollowedsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+            if (!$idsFollowedsAssoc) return null;
+            $idsFollowed = [];
+            foreach($idsFollowedsAssoc as $idsFollowedAssoc) {
+              $idsFollowed[] = $idsFollowedAssoc['id_followed'];
+            }
+            return $idsFollowed;
+        }
+    }
+
+    public function isValidToken(string $token) : bool {
+        $sql = 'SELECT * FROM users WHERE token=:token';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':token' => $token ]);
+        return $result;
+    }
+
+ /*    public function getFollowersId(int $id) : ?array {
+        $sql = 'SELECT id_follower FROM `users_followed` WHERE id_followed=:my_id';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':my_id' => $id ]);
+        $idsFollowersAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if (!$idsFollowersAssoc) return null;
+        $idsFollower = [];
+        foreach($idsFollowersAssoc as $idsFollowerAssoc) {
+          $idsFollower[] = $idsFollowerAssoc;
+        }
+        return $idsFollower;
+    }
+
+    public function getUsersFollowedId(int $id) : ?array {
+        $sql = 'SELECT id_followed FROM users_followed WHERE id_follower=:my_id';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':my_id' => $id ]);
+        $idsFollowedsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if (!$idsFollowedsAssoc) return null;
+        $idsFollowed = [];
+        foreach($idsFollowedsAssoc as $idsFollowedAssoc) {
+          $idsFollowed[] = $idsFollowedAssoc;
+        }
+        return $idsFollowed;
+    } */
 }

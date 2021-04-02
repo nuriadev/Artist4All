@@ -16,8 +16,12 @@ class UserController {
     $app->get('/user/{username:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:getOtherUsers');
     $app->get('/profile/{username:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:getUserByUsername');
     $app->post('/profile', '\Artist4all\Controller\UserController:followUser');
-    $app->delete('/profile/{id:[0-9]+}', '\Artist4all\Controller\UserController:unfollowUser'); 
-    $app->post('/profile/my', '\Artist4all\Controller\UserController:isFollowingThatUser');  
+    $app->delete('/profile', '\Artist4all\Controller\UserController:unfollowUser'); 
+    $app->post('/profile/my', '\Artist4all\Controller\UserController:isFollowingThatUser');
+    $app->post('/profile/followers', '\Artist4all\Controller\UserController:countFollowers');  
+    $app->post('/profile/followed', '\Artist4all\Controller\UserController:countFollowed'); 
+    $app->get('/profile/{username:[a-zA-Z0-9 ]+}/followers', '\Artist4all\Controller\UserController:getFollowers');
+    $app->get('/profile/{username:[a-zA-Z0-9 ]+}/followed', '\Artist4all\Controller\UserController:getUsersFollowed');
   }
 
   public function register(Request $request, Response $response, array $args) {
@@ -110,29 +114,95 @@ class UserController {
     return $response;
   }
 
+  // TODO: poner autorización por token
   public function followUser(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
-    $id_follower = $data['id_follower'];
-    $id_followed = $data['id_followed']; 
-    $follower = \Artist4all\Model\UserDB::getInstance()->getUserById($id_follower);
-    $followed = \Artist4all\Model\UserDB::getInstance()->getUserById($id_followed);
-    if (is_null($follower) || is_null($followed)) {
-      $response = $response->withStatus(404, 'User not found');
+    $token = trim($data['token']);
+    $result = \Artist4all\Model\UserDB::getInstance()->isValidToken($token);
+    if (!$result) {
+      $response = $response->withStatus(500, 'Unauthenticated user');
+      return $response;
+    } else {
+      $id_follower = $data['id_follower'];
+      $id_followed = $data['id_followed']; 
+      $follower = \Artist4all\Model\UserDB::getInstance()->getUserById($id_follower);
+      $followed = \Artist4all\Model\UserDB::getInstance()->getUserById($id_followed);
+      if (is_null($follower) || is_null($followed)) {
+        $response = $response->withStatus(404, 'User not found');
+        return $response;
+      }
+      $result = \Artist4all\Model\UserDB::getInstance()->followUser($follower, $followed);
+      if(is_null($result)) $response = $response->withStatus(400, 'Error at following');
+      else $response = $response->withJson($result)->withStatus(200, 'Added to your followed list');
       return $response;
     }
-    $result = \Artist4all\Model\UserDB::getInstance()->followUser($follower, $followed);
-    if(is_null($result)) $response = $response->withStatus(400, 'Error at following');
-    else $response = $response->withJson($result)->withStatus(200, 'Added to your followed list');
-    return $response;
   }
 
   public function unfollowUser(Request $request, Response $response, array $args) {
-    $id = $args['id'];
-    $result = \Artist4all\Model\UserDB::getInstance()->unfollowUser($id);
-    if(!$result) $response = $response->withStatus(500, 'Error at unfollwing');
-    else $response = $response->withJson($result)->withStatus(200, 'Removed from your followed list');
+    $data = $request->getParsedBody();
+    $token = trim($data['token']);
+    $result = \Artist4all\Model\UserDB::getInstance()->isValidToken($token);
+    if (!$result) {
+      $response = $response->withStatus(500, 'Unauthenticated user');
+      return $response;
+    } else {
+      $id = (int) $data['id'];
+      $result = \Artist4all\Model\UserDB::getInstance()->unfollowUser($id);
+      if(!$result) $response = $response->withStatus(500, 'Error at unfollwing');
+      else $response = $response->withJson($result)->withStatus(200, 'Removed from your followed list');
+      return $response;
+    }
+  }
+
+  public function countFollowers(Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    $id = (int) $data['id'];
+    $n_followers = \Artist4all\Model\UserDB::getInstance()->countOrGetFollowers($id, 'count');
+    if (is_null($n_followers)) $response = $response->withStatus(500); 
+    else $response = $response->withJson($n_followers);
     return $response;
   }
+
+  public function countFollowed(Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    $id = (int) $data['id'];
+    $n_followed = \Artist4all\Model\UserDB::getInstance()->countOrGetFollowed($id, 'count');
+    if (is_null($n_followed)) $response = $response->withStatus(500);
+    else $response = $response->withJson($n_followed);
+    return $response;
+  }
+
+  public function getFollowers(Request $request, Response $response, array $args) {
+    $username = $args['username'];
+    $user = \Artist4all\Model\UserDB::getInstance()->getUserByUsername($username);
+    $idsFollowers = \Artist4all\Model\UserDB::getInstance()->countOrGetFollowers($user->getId(), 'get');
+    $followers = [];
+    if (!empty($idsFollowers)) {
+      foreach($idsFollowers as $idFollower) {
+        $follower = \Artist4all\Model\UserDB::getInstance()->getUserById($idFollower);
+        $followers[] = $follower;
+      } 
+    }
+    if (empty($followers)) $response = $response->withStatus(200, 'Not followed'); 
+    else  $response = $response->withJson($followers);
+    return $response;
+  }
+
+  public function getUsersFollowed(Request $request, Response $response, array $args) {
+    $username = $args['username'];
+    $user = \Artist4all\Model\UserDB::getInstance()->getUserByUsername($username);
+    $idsFollowed = \Artist4all\Model\UserDB::getInstance()->countOrGetFollowed($user->getId(), 'get');
+    $followedUsers = [];
+    if (!empty($idsFollowed)) {
+      foreach($idsFollowed as $idFollowed) {
+        $followed = \Artist4all\Model\UserDB::getInstance()->getUserById($idFollowed);
+        $followedUsers[] = $followed;
+      }
+    }
+    if (empty($followedUsers)) $response = $response->withStatus(200, 'Following no one');
+    else $response = $response->withJson($followedUsers);
+    return $response;
+  } 
 
   public function logout(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();

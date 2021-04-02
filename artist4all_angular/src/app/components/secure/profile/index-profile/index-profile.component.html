@@ -43,7 +43,8 @@
                     </div>
                     <div class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                        <div id="n_Followers" class="inline-flex justify-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
-                        <span>Seguidores: {{ n_followers }}</span>
+                        <a routerLink="followers"><span class="p-3 hover:text-purple-600 no-underline">Seguidores: {{ n_followers }}</span></a>
+                        <a routerLink="followed"><span class="p-3 hover:text-purple-600 no-underline">Seguidos: {{ n_followed }}</span></a>
                       </div>
                     </div>
                   </div>

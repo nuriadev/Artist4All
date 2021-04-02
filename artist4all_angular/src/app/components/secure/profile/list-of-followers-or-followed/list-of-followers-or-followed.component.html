@@ -1,0 +1,17 @@
+<app-user-navbar></app-user-navbar>
+<p>listuser works!</p>
+
+<div *ngIf="userlist == null && typeList  == 'followers'"> Todavía no tienes ningún seguidor </div>
+<div *ngIf="userlist == null && typeList == 'followed'"> Todavía no sigues a ningún usuario </div>
+<div *ngIf="userlist != null">
+  <section *ngFor="let user of userlist; index as i;">
+    <table routerLink="/profile/{{user.username}}">
+      <tr>
+        <td>
+          {{ user.username }}
+        </td>
+      </tr>
+    </table>
+  </section>
+</div>
+<!-- todo boton para volver -->
