@@ -33,8 +33,8 @@ const routes: Routes = [
   {path:'publication',component:CreatePublicationComponent, canActivate:[AuthGuard]},
   {path:'user', component:ProvisionalAddUserComponent, canActivate:[AuthGuard]},
   {path:'404', component:PageNotFoundComponent},
-  //{path:'**', redirectTo: '/404'},
-  {path:'profile/:username/:typeList', component:ListOfFollowersOrFollowedComponent, canActivate:[AuthGuard]},
+  {path:'profile/:username/list/:typeList', component:ListOfFollowersOrFollowedComponent, canActivate:[AuthGuard]},
+  {path:'**', redirectTo: '/404'},
 ];
 
 @NgModule({

@@ -56,7 +56,7 @@ export class ProfileComponent implements OnInit {
           this.imgAvatar = this.user.imgAvatar;
           this.aboutMe = this.user.aboutMe;
           this.isMyProfile = true;
-          this.getFollowersAndFollowed(this.id);
+          this.getFollowersAndFollowed(this.username, this.token);
         } else {
           this._userService.getUserByUsername(this.profileUsername).subscribe(
             (result) => {
@@ -69,7 +69,7 @@ export class ProfileComponent implements OnInit {
                 this.imgAvatar = result['imgAvatar'],
                 this.aboutMe = result['aboutMe']
                 this.isMyProfile = false;
-                this._userService.isFollowingThatUser(this.user.id, this.id).subscribe(
+                this._userService.isFollowingThatUser(this.user.username, this.username, this.token).subscribe(
                   (result) => {
                     if (result != null) {
                       this.id_follow = result;
@@ -81,7 +81,7 @@ export class ProfileComponent implements OnInit {
                     console.log(error);
                   }
                 )
-                this.getFollowersAndFollowed(this.id);
+                this.getFollowersAndFollowed(this.username, this.token);
             }, (error) => {
               console.log(error);
             }
@@ -93,7 +93,7 @@ export class ProfileComponent implements OnInit {
 
   followUser() {
     this.isFollowed = true;
-    this._userService.followUser(this.user.id, this.id, this.token).subscribe(
+    this._userService.followUser(this.user.username, this.username, this.user.id, this.id, this.token).subscribe(
       (result) => {
         this.id_follow = result;
       }, (error) => {
@@ -105,7 +105,7 @@ export class ProfileComponent implements OnInit {
   id_follow:number;
   unfollowUser() {
     this.isFollowed = false;
-    this._userService.unfollowUser(this.id_follow, this.token).subscribe();
+    this._userService.unfollowUser(this.user.username, this.username, this.id_follow, this.token).subscribe();
   }
 
   isFollowed: boolean;
@@ -123,15 +123,15 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  getFollowersAndFollowed(id:number) {
-    this._userService.countFollowers(this.id).subscribe(
+  getFollowersAndFollowed(username:string, token:string) {
+    this._userService.countFollowers(username, token).subscribe(
       (result) => {
         this.n_followers = result;
       }, (error) => {
         console.log(error);
       }
     )
-    this._userService.countFollowed(this.id).subscribe(
+    this._userService.countFollowed(username, token).subscribe(
       (result) => {
         this.n_followed = result;
       }, (error) => {

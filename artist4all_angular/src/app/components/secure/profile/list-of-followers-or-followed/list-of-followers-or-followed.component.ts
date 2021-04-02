@@ -18,6 +18,7 @@ export class ListOfFollowersOrFollowedComponent implements OnInit {
 
   userlist: Array<UserService> = [];
   user = this._sessionService.getCurrentUser();
+  token = this._sessionService.getCurrentToken();
   username:string;
 
   typeList:string = '';
@@ -30,7 +31,7 @@ export class ListOfFollowersOrFollowedComponent implements OnInit {
         if (this.profileUsername == 'my') this.username = this.user.username;
         else this.username = this.profileUsername;
         if (this.typeList == 'followers') {
-          this._userService.getFollowers(this.username).subscribe(
+          this._userService.getFollowers(this.username, this.token).subscribe(
             (result) => {
               this.userlist = result;
             }, (error) => {
@@ -38,7 +39,7 @@ export class ListOfFollowersOrFollowedComponent implements OnInit {
             }
           )
         } else if (this.typeList == 'followed') {
-          this._userService.getUsersFollowed(this.username).subscribe(
+          this._userService.getUsersFollowed(this.username, this.token).subscribe(
             (result) => {
               this.userlist = result;
             }, (error) => {

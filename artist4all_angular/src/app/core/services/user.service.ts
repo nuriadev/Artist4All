@@ -62,59 +62,67 @@ export class UserService {
   }
 
   getOtherUsers(username:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username);
+    return this.http.get(this.url + '/user/' + username + '/list');
   }
 
   getUserByUsername(username:string):Observable<any> {
-    return this.http.get(this.url + '/profile/' + username);
+    return this.http.get(this.url + '/user/' + username);
   }
 
-  isFollowingThatUser(id_follower:number, id_followed:number):Observable<any> {
-    let isFollowingFormData:FormData = new FormData();
-    isFollowingFormData.append('id_follower',''+id_follower);
-    isFollowingFormData.append('id_followed',''+id_followed);
-    return this.http.post(this.url + '/profile/my', isFollowingFormData);
+  isFollowingThatUser(
+    username_follower:string,
+    username_followed:string,
+    token:string):Observable<any> {
+    return this.http.get(
+      this.url + '/user/' + username_follower + '/follow/' + username_followed,
+      { headers: new HttpHeaders({ 'Authorization': token })}
+    );
   }
 
-  followUser(id_follower:number, id_followed:number, token:string):Observable<any> {
+  followUser(
+    username_follower:string,
+    username_followed:string,
+    id_follower:number,
+    id_followed:number,
+    token:string):Observable<any> {
     let followUserFormData:FormData = new FormData();
     followUserFormData.append('id_follower',''+id_follower);
     followUserFormData.append('id_followed',''+id_followed);
     followUserFormData.append('token', token);
-    return this.http.post(this.url + '/profile', followUserFormData);
+    return this.http.post(
+      this.url + '/user/' + username_follower + '/follow/' + username_followed,
+      followUserFormData
+    );
   }
 
-  unfollowUser(id_follow:number, token:string):Observable<any> {
+  unfollowUser(
+    username_follower:string,
+    username_followed:string,
+    id_follow:number,
+    token:string):Observable<any> {
     let options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-      body: {
-        id: id_follow,
-        token: token
-      },
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token }),
+      body: { id: id_follow }
     };
-    return this.http.delete(this.url + '/profile', options);
+    return this.http.delete(
+      this.url + '/user/' + username_follower + '/follow/' + username_followed,
+      options
+    );
   }
 
-  countFollowers(id:number):Observable<any> {
-    let countFollowersFormData:FormData = new FormData();
-    countFollowersFormData.append('id',''+id);
-    return this.http.post(this.url + '/profile/followers', countFollowersFormData);
+  countFollowers(username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/user/' + username + '/followers', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 
-  countFollowed(id:number):Observable<any> {
-    let countFollowedFormData:FormData = new FormData();
-    countFollowedFormData.append('id',''+id);
-    return this.http.post(this.url + '/profile/followed', countFollowedFormData);
+  countFollowed(username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/user/' + username +'/followed', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 
-  //    TODO: falta implementarlo en un componente
-  getFollowers(username:string):Observable<any> {
-    return this.http.get(this.url + '/profile/' + username + '/followers');
+  getFollowers(username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/user/' + username + '/list/followers', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 
-  getUsersFollowed(username:string):Observable<any> {
-    return this.http.get(this.url + '/profile/' + username + '/followed');
+  getUsersFollowed(username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/user/' + username + '/list/followed', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 }
