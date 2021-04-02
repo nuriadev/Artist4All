@@ -113,7 +113,7 @@ class UserController {
       return $response;
     }
     $result = \Artist4all\Model\UserDB::getInstance()->isFollowingThatUser($follower, $followed);
-    if(is_null($result)) $response = $response->withJson($result)->withStatus(200, 'User unfollowed');
+    if(is_null($result)) $response = $response->withJson($result)->withStatus(200, 'User not followed');
     else $response = $response->withJson($result)->withStatus(200, 'User followed');
     return $response;
   }
@@ -126,10 +126,10 @@ class UserController {
       $response = $response->withStatus(500, 'Unauthenticated user');
       return $response;
     } else {
-      $id_follower = $data['id_follower'];
-      $id_followed = $data['id_followed']; 
-      $follower = \Artist4all\Model\UserDB::getInstance()->getUserById($id_follower);
-      $followed = \Artist4all\Model\UserDB::getInstance()->getUserById($id_followed);
+      $username_follower = $args['username_follower'];
+      $username_followed = $args['username_followed']; 
+      $follower = \Artist4all\Model\UserDB::getInstance()->getUserByUsername($username_follower);
+      $followed = \Artist4all\Model\UserDB::getInstance()->getUserByUsername($username_followed);
       if (is_null($follower) || is_null($followed)) {
         $response = $response->withStatus(404, 'User not found');
         return $response;

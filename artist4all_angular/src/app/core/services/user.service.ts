@@ -82,12 +82,8 @@ export class UserService {
   followUser(
     username_follower:string,
     username_followed:string,
-    id_follower:number,
-    id_followed:number,
     token:string):Observable<any> {
     let followUserFormData:FormData = new FormData();
-    followUserFormData.append('id_follower',''+id_follower);
-    followUserFormData.append('id_followed',''+id_followed);
     followUserFormData.append('token', token);
     return this.http.post(
       this.url + '/user/' + username_follower + '/follow/' + username_followed,

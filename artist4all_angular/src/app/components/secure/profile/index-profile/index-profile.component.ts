@@ -93,7 +93,7 @@ export class ProfileComponent implements OnInit {
 
   followUser() {
     this.isFollowed = true;
-    this._userService.followUser(this.user.username, this.username, this.user.id, this.id, this.token).subscribe(
+    this._userService.followUser(this.user.username, this.username, this.token).subscribe(
       (result) => {
         this.id_follow = result;
       }, (error) => {

@@ -268,29 +268,4 @@ class UserDB {
         return $result;
     }
 
- /*    public function getFollowersId(int $id) : ?array {
-        $sql = 'SELECT id_follower FROM `users_followed` WHERE id_followed=:my_id';
-        $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([ ':my_id' => $id ]);
-        $idsFollowersAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        if (!$idsFollowersAssoc) return null;
-        $idsFollower = [];
-        foreach($idsFollowersAssoc as $idsFollowerAssoc) {
-          $idsFollower[] = $idsFollowerAssoc;
-        }
-        return $idsFollower;
-    }
-
-    public function getUsersFollowedId(int $id) : ?array {
-        $sql = 'SELECT id_followed FROM users_followed WHERE id_follower=:my_id';
-        $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([ ':my_id' => $id ]);
-        $idsFollowedsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
-        if (!$idsFollowedsAssoc) return null;
-        $idsFollowed = [];
-        foreach($idsFollowedsAssoc as $idsFollowedAssoc) {
-          $idsFollowed[] = $idsFollowedAssoc;
-        }
-        return $idsFollowed;
-    } */
 }
