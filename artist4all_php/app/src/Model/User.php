@@ -12,6 +12,7 @@ class User implements \JsonSerializable {
   private int $isArtist;
   private ?string $imgAvatar;
   private ?string $aboutMe;
+  private ?string $token;
 
   public function __construct(
     ?int $id,
@@ -23,7 +24,8 @@ class User implements \JsonSerializable {
     string $password,
     int $isArtist,
     ?string $imgAvatar,
-    ?string $aboutMe) {
+    ?string $aboutMe,
+    ?string $token) {
       $this->id = $id;
       $this->name = $name;
       $this->surname1 = $surname1;
@@ -34,6 +36,7 @@ class User implements \JsonSerializable {
       $this->isArtist = $isArtist;
       $this->imgAvatar = $imgAvatar;
       $this->aboutMe = $aboutMe;
+      $this->token = $token;
     }
 
     public function getId() : ?int {
@@ -41,7 +44,7 @@ class User implements \JsonSerializable {
     }
 
     public function setId(?int $id) {
-      $this->$id = $id;
+      $this->id = $id;
     }
 
     public function getName() : string {
@@ -116,6 +119,14 @@ class User implements \JsonSerializable {
       $this->aboutMe = $aboutMe;
     }
 
+    public function getToken() : ?string {
+      return $this->token;
+    }
+
+    public function setToken(?string $token) {
+      $this->token = $token;
+    }
+
   // Needed to deserialize an object from an associative array
   public static function fromAssoc(array $data) : \Artist4All\Model\User {
     return new \Artist4All\Model\User(
@@ -128,7 +139,8 @@ class User implements \JsonSerializable {
       $data['password'],
       $data['isArtist'],
       $data['imgAvatar'],
-      $data['aboutMe']
+      $data['aboutMe'],
+      $data['token']
     );
   }
 

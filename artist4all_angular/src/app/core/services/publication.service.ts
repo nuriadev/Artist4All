@@ -10,16 +10,25 @@ export class PublicationService {
 
   constructor(private http:HttpClient) { }
 
-  private url = "http://localhost:81/publication";
+  private url = 'http://localhost:81/publication';
 
   create(newPublication:Publication, token:string):Observable<any> {
     let createPublicationFormData:FormData = new FormData();
-    createPublicationFormData.append('id_user',""+newPublication.id_user);
+    createPublicationFormData.append('id_user',''+newPublication.id_user);
+    if (!newPublication.imgPublication) {
+      createPublicationFormData.append('imgsPublication', null);
+    } else {
+      let imgsPublication = [];
+      for (var i = 0; i < newPublication.imgPublication.length; i++) {
+        imgsPublication[i] = newPublication.imgPublication[i].name;
+      }
+      createPublicationFormData.append('imgsPublication', JSON.stringify(imgsPublication));
+    }
     createPublicationFormData.append('bodyPublication', newPublication.bodyPublication);
-    createPublicationFormData.append('upload_date',""+newPublication.upload_date);
-    createPublicationFormData.append('n_likes',""+newPublication.n_likes);
-    createPublicationFormData.append('n_comments',""+newPublication.n_comments);
-    createPublicationFormData.append('n_views',""+newPublication.n_views);
+    createPublicationFormData.append('upload_date',''+newPublication.upload_date);
+    createPublicationFormData.append('n_likes',''+newPublication.n_likes);
+    createPublicationFormData.append('n_comments',''+newPublication.n_comments);
+    createPublicationFormData.append('n_views',''+newPublication.n_views);
     createPublicationFormData.append('token', token);
 
     return this.http.post(this.url, createPublicationFormData);

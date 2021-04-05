@@ -4,7 +4,7 @@ class Publication implements \JsonSerializable {
 
   private ?int $id;
   private int $id_user;
-  private string $imgPublication;
+  private ?array $imgsPublication;
   private string $bodyPublication;
   private string $upload_date;
   private int $n_likes;
@@ -14,7 +14,7 @@ class Publication implements \JsonSerializable {
   public function __construct(
     ?int $id,
     int $id_user,
-/*     string $imgPublication, */
+    ?array $imgsPublication, 
     string $bodyPublication,
     string $upload_date,
     int $n_likes,
@@ -22,7 +22,7 @@ class Publication implements \JsonSerializable {
     int $n_views) {
       $this->id = $id;
       $this->id_user = $id_user;
-/*       $this->imgPublication = $imgPublication; */
+      $this->imgsPublication = $imgsPublication; 
       $this->bodyPublication = $bodyPublication;
       $this->upload_date = $upload_date;
       $this->n_likes = $n_likes;
@@ -35,7 +35,7 @@ class Publication implements \JsonSerializable {
     }
 
     public function setId(?int $id) {
-      $this->$id = $id;
+      $this->id = $id;
     }
 
     public function getIdUser() : int {
@@ -46,12 +46,12 @@ class Publication implements \JsonSerializable {
       $this->id_user = $id_user;
     }
 
-    public function getImgPublication() : string {
-      return $this->imgPublication;
+    public function getImgsPublication() : ?array {
+      return $this->imgsPublication;
     }
 
-    public function setImgPublication(string $imgPublication) {
-      $this->imgPublication = $imgPublication;
+    public function setImgsPublication(?array $imgsPublication) {
+      $this->imgsPublication = $imgsPublication;
     }
 
     public function getBodyPublication() : string {
@@ -99,7 +99,7 @@ class Publication implements \JsonSerializable {
     return new \Artist4All\Model\Publication(
       $data['id'], 
       $data['id_user'],
-/*       $data['imgPublication'],  */
+      $data['imgsPublication'], 
       $data['bodyPublication'], 
       $data['upload_date'],
       $data['n_likes'],
@@ -113,7 +113,7 @@ class Publication implements \JsonSerializable {
       return [
         'id' => $this->id,
         'id_user' => $this->id_user,
- /*        'imgPublication' => $this->imgPublication, */
+        'imgsPublication' => $this->imgsPublication, 
         'bodyPublication' => $this->bodyPublication,
         'upload_date' => $this->upload_date,
         'n_likes' => $this->n_likes,

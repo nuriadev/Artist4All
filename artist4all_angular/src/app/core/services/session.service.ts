@@ -31,7 +31,7 @@ export class SessionService {
   };
 
   logout(): void {
-    localStorage.removeItem("currentUser");
+    localStorage.removeItem('currentUser');
     localStorage.clear();
     this._router.navigate(['']);
   }

@@ -17,9 +17,9 @@ export class UserService {
     registerFormData.append('email', newUser.email);
     registerFormData.append('username', newUser.username);
     registerFormData.append('password', newUser.password);
-    registerFormData.append('isArtist',""+newUser.isArtist);
-    registerFormData.append('imgAvatar', "http://localhost:81/assets/img/imgUnknown.png");
-    registerFormData.append('aboutMe', "Bienvenido a mi perfil!!!");
+    registerFormData.append('isArtist',''+newUser.isArtist);
+    registerFormData.append('imgAvatar', 'http://localhost:81/assets/img/defaultAvatarImg.png');
+    registerFormData.append('aboutMe', 'Bienvenido a mi perfil!!!');
 
     return this.http.post(this.url + '/register', registerFormData);
   }
@@ -35,17 +35,18 @@ export class UserService {
     files:FileList,
     token:string):Observable<any> {
       let editFormData:FormData = new FormData();
-      editFormData.append('id',""+id);
+      editFormData.append('id',''+id);
       editFormData.append('name', name);
       editFormData.append('surname1', surname1);
       editFormData.append('surname2', surname2);
       editFormData.append('email', email);
       editFormData.append('username', username);
       editFormData.append('aboutMe', aboutMe);
-      editFormData.append('newImgAvatar', files[0],files[0].name);
+      if (!files) editFormData.append('newImgAvatar', null);
+      else editFormData.append('newImgAvatar', files[0],files[0].name);
       editFormData.append('token', token);
-
-    return this.http.put(this.url + '/edit', editFormData);
+ //    TODO Cambiar a patch
+    return this.http.post(this.url + '/settings/profile', editFormData);
   }
 
   editPassword(
@@ -53,18 +54,71 @@ export class UserService {
     password:string,
     token:string):Observable<any> {
       let editPasswordFormData:FormData = new FormData();
-      editPasswordFormData.append('id',""+id);
+      editPasswordFormData.append('id',''+id);
       editPasswordFormData.append('password', password);
       editPasswordFormData.append('token', token);
-
-      return this.http.patch(this.url + '/editPassword', editPasswordFormData);
+   //    TODO Cambiar a patch
+      return this.http.post(this.url + '/settings/password', editPasswordFormData);
   }
 
   getOtherUsers(username:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username);
+    return this.http.get(this.url + '/user/' + username + '/list');
   }
 
   getUserByUsername(username:string):Observable<any> {
-    return this.http.get(this.url + '/profile/' + username);
+    return this.http.get(this.url + '/user/' + username);
+  }
+
+  isFollowingThatUser(
+    username_follower:string,
+    username_followed:string,
+    token:string):Observable<any> {
+    return this.http.get(
+      this.url + '/user/' + username_follower + '/follow/' + username_followed,
+      { headers: new HttpHeaders({ 'Authorization': token })}
+    );
+  }
+
+  followUser(
+    username_follower:string,
+    username_followed:string,
+    token:string):Observable<any> {
+    let followUserFormData:FormData = new FormData();
+    followUserFormData.append('token', token);
+    return this.http.post(
+      this.url + '/user/' + username_follower + '/follow/' + username_followed,
+      followUserFormData
+    );
+  }
+
+  unfollowUser(
+    username_follower:string,
+    username_followed:string,
+    id_follow:number,
+    token:string):Observable<any> {
+    let options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token }),
+      body: { id: id_follow }
+    };
+    return this.http.delete(
+      this.url + '/user/' + username_follower + '/follow/' + username_followed,
+      options
+    );
+  }
+
+  countFollowers(username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/user/' + username + '/followers', { headers: new HttpHeaders({ 'Authorization': token })});
+  }
+
+  countFollowed(username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/user/' + username +'/followed', { headers: new HttpHeaders({ 'Authorization': token })});
+  }
+
+  getFollowers(username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/user/' + username + '/list/followers', { headers: new HttpHeaders({ 'Authorization': token })});
+  }
+
+  getUsersFollowed(username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/user/' + username + '/list/followed', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 }

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -10,9 +10,8 @@ import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/secure/home/home.component';
 import { LandingComponent } from './components/public/landing/landing.component';
-import { ProfileComponent } from './components/secure/profile/profile.component';
+import { ProfileComponent } from './components/secure/profile/index-profile/index-profile.component';
 import { StoreComponent } from './components/secure/store/store.component';
-import { UserSettingsComponent } from './components/secure/user-settings/user-settings.component';
 import { UserNavbarComponent } from './components/secure/user-navbar/user-navbar.component';
 import { MessagesComponent } from './components/secure/messages/messages.component';
 import { ContactComponent } from './components/public/contact/contact.component';
@@ -27,7 +26,13 @@ import { CreatePublicationComponent } from './components/secure/publications/cre
 import { ViewPublicationComponent } from './components/secure/publications/view-publication/view-publication.component';
 import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
 import { ProvisionalAddUserComponent } from './components/secure/provisional-add-user/provisional-add-user.component';
+import { UserSettingsProfileComponent } from './components/secure/settings/user-settings-profile/user-settings-profile.component';
+import { UserSettingsAccountComponent } from './components/secure/settings/user-settings-account/user-settings-account.component';
+import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
 
+import { NgxSpinnerModule } from "ngx-spinner";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -37,7 +42,6 @@ import { ProvisionalAddUserComponent } from './components/secure/provisional-add
     LandingComponent,
     ProfileComponent,
     StoreComponent,
-    UserSettingsComponent,
     UserNavbarComponent,
     MessagesComponent,
     ContactComponent,
@@ -48,15 +52,22 @@ import { ProvisionalAddUserComponent } from './components/secure/provisional-add
     ViewPublicationComponent,
     EditPublicationComponent,
     ProvisionalAddUserComponent,
+    UserSettingsProfileComponent,
+    UserSettingsAccountComponent,
+    UserSettingsPasswordComponent,
+    ListOfFollowersOrFollowedComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     HttpClientModule,
-    CommonModule
+    CommonModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule
   ],
   providers: [UserService, AuthenticationService, SessionService, AuthGuard],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

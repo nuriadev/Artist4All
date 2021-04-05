@@ -49,7 +49,7 @@ export class RegisterComponent implements OnInit {
             result.user['imgAvatar'],
             result.user['aboutMe']
           );
-          let userSession = new Session(result['token'], user);
+          let userSession = new Session(result.token, user);
           this._sessionService.setCurrentSession(userSession);
           this._router.navigate(['/home']);
         }

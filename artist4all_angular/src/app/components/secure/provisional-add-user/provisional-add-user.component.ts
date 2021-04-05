@@ -17,6 +17,7 @@ export class ProvisionalAddUserComponent implements OnInit {
 
   userlist: Array<UserService> = [];
   user = this._sessionService.getCurrentUser();
+  token = this._sessionService.getCurrentToken();
 
   ngOnInit(): void {
     this._userService.getOtherUsers(this.user.username).subscribe(

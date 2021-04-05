@@ -1,4 +1,10 @@
-<app-user-navbar></app-user-navbar>
+<ngx-spinner
+  bdColor="rgb(255, 255, 255)"
+  size="medium"
+  template="<img src='assets/img/loadingSpinner.gif'/>">
+  <p style="font-size: 20px;">Cargando...</p>
+</ngx-spinner>
+<app-user-navbar *ngIf="loaded"></app-user-navbar>
 
 <div class="h-screen flex overflow-hidden bg-white">
     <div class="flex flex-col min-w-0 flex-1 overflow-hidden">
@@ -19,19 +25,25 @@
                       <h1 class="text-2xl font-bold text-gray-900 truncate">
                         {{ username }}
                         <a class="ml-5">
-                          <button type="button" *ngIf="!isMyProfile" (click)="isUserFollowed()" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                            <button type="button" id="followedContainer" *ngIf="!isMyProfile && !isFollowed;" (click)="followUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                             <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <i id="followIcon" class="fas fa-user-plus"></i>
-                              <i id="unfollowIcon" class="fas fa-user-minus hidden"></i>
+                              <i class="fas fa-user-plus"></i>
                             </span>
-                            <span id="followMessage">Seguir</span>
-                          </button>
+                            <span>Seguir</span>
+                            </button>
+                            <button type="button"  id="unfollowedContainer" *ngIf="!isMyProfile && isFollowed;" (click)="unfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                            <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                              <i class="fas fa-user-minus"></i>
+                            </span>
+                            <span>Dejar de seguir</span>
+                            </button>
                         </a>
                       </h1>
                     </div>
                     <div class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
                        <div id="n_Followers" class="inline-flex justify-center px-4 py-2 text-sm font-medium rounded-md text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
-                        <span>Seguidores: {{ n_followers }}</span>
+                        <a routerLink="list/followers"><span class="p-3 hover:text-purple-600 no-underline">Seguidores: {{ n_followers }}</span></a>
+                        <a routerLink="list/followed"><span class="p-3 hover:text-purple-600 no-underline">Seguidos: {{ n_followed }}</span></a>
                       </div>
                     </div>
                   </div>
