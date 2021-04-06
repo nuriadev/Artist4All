@@ -45,6 +45,14 @@
                         <a routerLink="list/followers"><span class="p-3 hover:text-purple-600 no-underline">Seguidores: {{ n_followers }}</span></a>
                         <a routerLink="list/followed"><span class="p-3 hover:text-purple-600 no-underline">Seguidos: {{ n_followed }}</span></a>
                       </div>
+                      <button type="button" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                        <!-- Heroicon name: solid/mail -->
+                        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
+                          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
+                        </svg>
+                        <span>Enviar mensaje</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -66,104 +74,57 @@
                     <div class="border-pink-500 text-gray-900 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm" aria-current="page">
                       Mis publicaciones
                     </div>
-                    <!-- <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                      Calendar
-                    </a>
-                    <a href="#" class="border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 whitespace-nowrap py-4 px-1 border-b-2 font-medium text-sm">
-                      Recognition
-                    </a> -->
                   </nav>
                 </div>
               </div>
             </div>
 
-            <!-- Description list -->
-            <div class="mt-6 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
-                <div class="sm:col-span-1">
-                  <dt class="text-sm font-medium text-gray-500">
-                    Nombre:
-                  </dt>
-                  <dd class="mt-1 text-sm text-gray-900">
-                  {{ name }}
-                  </dd>
-                </div>
-
-                <div class="sm:col-span-1">
-                  <dt class="text-sm font-medium text-gray-500">
-                    Email:
-                  </dt>
-                  <dd class="mt-1 text-sm text-gray-900">
-                    {{ email }}
-                  </dd>
-                </div>
-
-                <div class="sm:col-span-1">
-                  <dt class="text-sm font-medium text-gray-500">
-                    1r Apellido:
-                  </dt>
-                  <dd class="mt-1 text-sm text-gray-900">
-                    {{ surname1 }}
-                  </dd>
-                </div>
-
-                <div class="sm:col-span-1">
-                  <dt class="text-sm font-medium text-gray-500">
-                    Team
-                  </dt>
-                  <dd class="mt-1 text-sm text-gray-900">
-                    Product Development
-                  </dd>
-                </div>
-
-                <div class="sm:col-span-1">
-                  <dt class="text-sm font-medium text-gray-500">
-                    2º Apellido:
-                  </dt>
-                  <dd class="mt-1 text-sm text-gray-900">
-                    {{ surname2 }}
-                  </dd>
-                </div>
-
-                <div class="sm:col-span-1">
-                  <dt class="text-sm font-medium text-gray-500">
-                    Sits
-                  </dt>
-                  <dd class="mt-1 text-sm text-gray-900">
-                    Oasis, 4th floor
-                  </dd>
-                </div>
-
-                <div class="sm:col-span-1">
-                  <dt class="text-sm font-medium text-gray-500">
-                    Salary
-                  </dt>
-                  <dd class="mt-1 text-sm text-gray-900">
-                    $145,000
-                  </dd>
-                </div>
-
-                <div class="sm:col-span-1">
-                  <dt class="text-sm font-medium text-gray-500">
-                    Birthday
-                  </dt>
-                  <dd class="mt-1 text-sm text-gray-900">
-                    June 8, 1990
-                  </dd>
-                </div>
-
-                <div class="sm:col-span-2">
-                  <dt class="text-sm font-medium text-gray-500">
-                    Sobre mi
-                  </dt>
-                  <dd class="mt-1 max-w-prose text-sm text-gray-900">
-                    <p>
-                      {{ aboutMe }}
+            <article aria-labelledby="question-title-81614" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div>
+                <div class="flex space-x-3">
+                  <div class="min-w-0 flex-1">
+                    <p class="text-sm text-gray-500 mt-4">
+                      <span class="hover:underline">December 9 at 11:43 AM</span>
                     </p>
-                  </dd>
+                  </div>
                 </div>
-              </dl>
-            </div>
+                <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
+                  What would you have done differently if you ran Jurassic Park?
+                </h2>
+              </div>
+              <div class="mt-2 text-sm text-gray-700 space-y-4">
+                <p>
+                  Jurassic Park was an incredible idea and a magnificent feat of engineering, but poor protocols and a disregard for human safety killed what could have otherwise been one of the best businesses of our generation.
+                </p>
+                <p>
+                  Ultimately, I think that if you wanted to run the park successfully and keep visitors safe, the most important thing to prioritize would be&hellip;
+                </p>
+              </div>
+              <div class="mt-6 flex justify-between space-x-8">
+                <div class="flex space-x-6">
+                  <span class="inline-flex items-center text-sm">
+                    <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                      <!-- Heroicon name: solid/thumb-up -->
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                      </svg>
+                      <span class="font-medium text-gray-900">29</span>
+                      <span class="sr-only">likes</span>
+                    </button>
+                  </span>
+                  <span class="inline-flex items-center text-sm">
+                    <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                      <!-- Heroicon name: solid/chat-alt -->
+                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
+                      </svg>
+                      <span class="font-medium text-gray-900">11</span>
+                      <span class="sr-only">replies</span>
+                    </button>
+                  </span>
+                </div>
+              </div>
+            </article>
           </article>
         </main>
       </div>
