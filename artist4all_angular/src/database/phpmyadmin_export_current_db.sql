@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: artist4all_db:3306
--- Tiempo de generación: 31-03-2021 a las 20:10:14
+-- Tiempo de generación: 06-04-2021 a las 12:29:11
 -- Versión del servidor: 10.2.36-MariaDB-1:10.2.36+maria~bionic
 -- Versión de PHP: 7.4.15
 
@@ -41,7 +41,10 @@ INSERT INTO `imgsPublications` (`id`, `imgPublication`, `id_publication`) VALUES
 (1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 64),
 (2, 'http://localhost:81/assets/img/lolLogo.png', 64),
 (3, 'http://localhost:81/assets/img/defaultAvatarImg.png', 65),
-(4, 'http://localhost:81/assets/img/lolLogo.png', 65);
+(4, 'http://localhost:81/assets/img/lolLogo.png', 65),
+(5, 'http://localhost:81/assets/img/defaultAvatarImg.png', 73),
+(6, 'http://localhost:81/assets/img/lolLogo.png', 73),
+(7, 'http://localhost:81/assets/img/defaultAvatarImg.png', 74);
 
 -- --------------------------------------------------------
 
@@ -70,7 +73,10 @@ INSERT INTO `publications` (`id`, `id_user`, `bodyPublication`, `upload_date`, `
 (9, 1, 'Mi primera publicacion', '2021-03-23 17:45:45', 0, 0, 0),
 (64, 1, 'WE', '2021-03-31 20:01:39', 0, 0, 0),
 (65, 1, 'ERTYEW', '2021-03-31 20:03:00', 0, 0, 0),
-(67, 1, 'qweqreqrewqrewqweqrewqreq', '2021-03-31 20:06:50', 0, 0, 0);
+(67, 1, 'qweqreqrewqrewqweqrewqreq', '2021-03-31 20:06:50', 0, 0, 0),
+(72, 1, 'mi nueva publi sin img', '2021-03-31 20:20:26', 0, 0, 0),
+(73, 1, 'mis img', '2021-03-31 20:20:40', 0, 0, 0),
+(74, 1, 'mis img 2', '2021-03-31 20:21:51', 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -98,7 +104,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$pe9VMnZ6.7XYH0edKx8l/.HSkmmOsixz/l9QtF87rnrx6EJB/yCwi', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJHBlOVZNblo2LjdYWUgwZWRLeDhsLy5IU2ttbU9zaXh6L2w5UXRGODdybnJ4NkVKQi95Q3dpLlJxTjNYLnh5QWQ=.zbm/Kd3hzT9k/FJoodIR4ZRJcVE1k6XROhfAYBuJ7J8=', 0),
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$pe9VMnZ6.7XYH0edKx8l/.HSkmmOsixz/l9QtF87rnrx6EJB/yCwi', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0),
 (24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 0),
 (27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0),
 (34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0),
@@ -122,9 +128,9 @@ CREATE TABLE `users_followed` (
 --
 
 INSERT INTO `users_followed` (`id`, `id_follower`, `id_followed`, `status_follow`) VALUES
-(11, 1, 24, 0),
 (16, 24, 1, 0),
-(19, 36, 1, 0);
+(19, 36, 1, 0),
+(37, 1, 24, 0);
 
 --
 -- Índices para tablas volcadas
@@ -166,13 +172,13 @@ ALTER TABLE `users_followed`
 -- AUTO_INCREMENT de la tabla `imgsPublications`
 --
 ALTER TABLE `imgsPublications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT de la tabla `publications`
 --
 ALTER TABLE `publications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
@@ -184,7 +190,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `users_followed`
 --
 ALTER TABLE `users_followed`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Restricciones para tablas volcadas
