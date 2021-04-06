@@ -46,6 +46,16 @@ export class UserNavbarComponent implements OnInit {
   }
 
   isDisplayed = false;
+  toggleNotifications() {
+    if (!this.isDisplayed) {
+      document.getElementById("menuNotifications").style.display = "block";
+      this.isDisplayed = true;
+    } else {
+      document.getElementById("menuNotifications").style.display = "none";
+      this.isDisplayed = false;
+    }
+}
+
   isMenuDisplayed() {
     if (!this.isDisplayed) {
       document.getElementById('menu-toggle').style.display = 'block';
