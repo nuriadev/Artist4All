@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { NgxSpinnerService } from "ngx-spinner";
+import { PublicationService } from 'src/app/core/services/publication.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -13,10 +14,13 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private _sessionService: SessionService,
-    private _activeRoute: ActivatedRoute,
     private _userService: UserService,
+    private _publicationService: PublicationService,
+    private _activeRoute: ActivatedRoute,
     private spinner: NgxSpinnerService
   ) { }
+
+  publications:Array<PublicationService> = [];
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
@@ -87,6 +91,13 @@ export class ProfileComponent implements OnInit {
             }
           )
         }
+        this._publicationService.getUserPublications(this.username, this.token).subscribe(
+          (result) => {
+            this.publications = result;
+          }, (error) => {
+            console.log(error);
+          }
+        )
       }
     );
   }

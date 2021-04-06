@@ -39,6 +39,21 @@ class PublicationDB {
         return $publication;
     }
 
+    public function getUserPublications(int $id_user) : ?array {
+        $sql = 'SELECT * FROM publications WHERE id_user=:id_user';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':id_user' => $id_user ]);
+        $publicationsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if (!$publicationsAssoc) return null;
+        $publications = [];
+        foreach($publicationsAssoc as $publicationAssoc) {
+            $imgsPublication = $this->getPublicationImgs($publicationAssoc['id']);
+            $data['imgsPublication'] = $imgsPublication;
+            $publications[] = \Artist4All\Model\Publication::fromAssoc($publicationAssoc);
+        }  
+        return $publications;
+    }
+
     public function getPublicationImgs(int $id) : ?array {
         $sql = 'SELECT imgPublication FROM imgsPublications WHERE id_publication=:id_publication';
         $statement = $this->conn->prepare($sql);
@@ -120,19 +135,6 @@ class PublicationDB {
             ':id_publication' => $id
         ]);
         return $result;
-    }
-
-    public function isAuthorizated(
-        \Artist4All\Model\Publication $publication, 
-        string $token) : bool {
-        $sql = 'SELECT * FROM users WHERE token=:token';
-        $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([ ':token' => $token ]);
-        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
-        if (!$userAssoc) return false;
-        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
-        if ($user->getId() == $publication->getIdUser()) return true;
-        return false;
     }
 
     public function deletePublicationById(int $id) : bool {

@@ -5,7 +5,8 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class PublicationController {
   public static function initRoutes($app) {
-    $app->post('/publication', '\Artist4all\Controller\PublicationController:createPublication');
+    $app->post('/publications', '\Artist4all\Controller\PublicationController:createPublication');
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publications', '\Artist4all\Controller\PublicationController:getUserPublications');
   }
 
   public function getPublicationById(Request $request, Response $response, array $args) {
@@ -15,6 +16,33 @@ class PublicationController {
     if (is_null($publication)) $response = $response->withStatus(404, 'Publication not found');
     else $response = $response->withJson($publication);
     return $response;
+  }
+
+  // ! falla en línea 30 not found \Artist4All\Model\PublicationDB
+  public function getUserPublications(Request $request, Response $response, array $args) {
+    $authorized = $this->isAuthorizated($request, $response);
+    $username = $args['username'];
+    $user = \Artist4all\Model\UserDB::getInstance()->getUserByUsername($username);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    } else {
+      $publications = \Artist4All\Model\PublicationDB::getInstance()->getUserPublications($user->getId());
+      if (empty($publications)) $response = $response->withStatus(500, 'Sin resultados');
+      else $response = $response->withJson($publications);
+      return $response;
+    }
+  }
+
+  private function isAuthorizated(Request $request, Response $response) {  
+    $token = trim($request->getHeader('Authorization')[0]);
+    $result = \Artist4all\Model\UserDB::getInstance()->isValidToken($token);
+    if (!$result) {
+      $response = $response->withStatus(403, 'Unauthorized user');
+      return $response;
+    } else {
+      return $result;
+    }
   }
   
   // todo: view, edit, delete, comentarios, likes
