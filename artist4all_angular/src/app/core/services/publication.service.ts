@@ -28,7 +28,6 @@ export class PublicationService {
     createPublicationFormData.append('upload_date',''+newPublication.upload_date);
     createPublicationFormData.append('n_likes',''+newPublication.n_likes);
     createPublicationFormData.append('n_comments',''+newPublication.n_comments);
-    createPublicationFormData.append('n_views',''+newPublication.n_views);
     createPublicationFormData.append('token', token);
 
     return this.http.post(this.url + '/publications', createPublicationFormData);

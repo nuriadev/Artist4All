@@ -79,8 +79,7 @@ class PublicationDB {
             :bodyPublication,
             :upload_date,
             :n_likes,
-            :n_comments,
-            :n_views
+            :n_comments
         )';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
@@ -89,8 +88,7 @@ class PublicationDB {
             ':bodyPublication' => $publication->getBodyPublication(),
             ':upload_date' => date('Y-m-d H:i:s'),
             ':n_likes' => $publication->getLikes(),
-            ':n_comments' => $publication->getComments(),
-            ':n_views' => $publication->getViews()
+            ':n_comments' => $publication->getComments()
         ]);
         if(!$result) return null;
         $id = $this->conn->lastInsertId();
@@ -104,8 +102,7 @@ class PublicationDB {
             bodyPublication=:bodyPublication,
             upload_date=:upload_date,
             n_likes=:n_likes,
-            n_comments=:n_comments,
-            n_views=:n_views
+            n_comments=:n_comments
         WHERE id=:id
         )';
         $statement = $this->conn->prepare($sql);
@@ -115,8 +112,7 @@ class PublicationDB {
             ':bodyPublication' => $publication->getBodyPublication(),
             ':upload_date' => date('Y-m-d H:i:s'),
             ':n_likes' => $publication->getLikes(),
-            ':n_comments' => $publication->getComments(),
-            ':n_views' => $publication->getViews()
+            ':n_comments' => $publication->getComments()
         ]);
         if(!$result) return null;
         return $publication;
@@ -134,6 +130,26 @@ class PublicationDB {
             ':imgPublication' => 'http://localhost:81/assets/img/' . $img,
             ':id_publication' => $id
         ]);
+        return $result;
+    }
+
+    public function canPublish(
+        \Artist4All\Model\Publication $publication, 
+        string $token) : bool {
+        $sql = 'SELECT * FROM users WHERE token=:token';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':token' => $token ]);
+        $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
+        if (!$userAssoc) return false;
+        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
+        if ($user->getId() == $publication->getIdUser()) return true;
+        return false;
+    }
+
+    public function isValidToken(string $token) : bool {
+        $sql = 'SELECT * FROM users WHERE token=:token';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':token' => $token ]);
         return $result;
     }
 

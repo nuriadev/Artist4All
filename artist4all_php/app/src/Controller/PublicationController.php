@@ -29,7 +29,7 @@ class PublicationController {
     } else {
       $publications = \Artist4All\Model\PublicationDB::getInstance()->getUserPublications($user->getId());
       if (empty($publications)) $response = $response->withStatus(500, 'Sin resultados');
-      else $response = $response->withJson($publications);
+      else $response = $response->withJson($user);
       return $response;
     }
   }
@@ -162,15 +162,15 @@ class PublicationController {
     $token = trim($data['token']);
     $data['id'] = $id;
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
-    $isAuthorizated = \Artist4all\Model\PublicationDB::getInstance()->isAuthorizated($publication, $token);
-    if(!$isAuthorizated) {
+    $canPublish = \Artist4all\Model\PublicationDB::getInstance()->canPublish($publication, $token);
+    if(!$canPublish) {
       $response = $response->withStatus(500, 'Error at publishing');  
       return $response;
     } else {
       $publication = \Artist4all\Model\PublicationDB::getInstance()->persistPublication($publication);
       if (!empty($publication->getImgsPublication())) {
         foreach ($publication->getImgsPublication() as $img) {
-          $resultImg = \Artist4all\Model\PublicationDB::getInstance()->insertPublicationImgs($newPublication->getId(), $img);
+          $resultImg = \Artist4all\Model\PublicationDB::getInstance()->insertPublicationImgs($publication->getId(), $img);
           if (!$resultImg) {
             $response = $response->withStatus(500, 'Error at publishing');  
             return $response;

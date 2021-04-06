@@ -9,7 +9,6 @@ class Publication implements \JsonSerializable {
   private string $upload_date;
   private int $n_likes;
   private int $n_comments;
-  private int $n_views;
 
   public function __construct(
     ?int $id,
@@ -18,8 +17,7 @@ class Publication implements \JsonSerializable {
     string $bodyPublication,
     string $upload_date,
     int $n_likes,
-    int $n_comments,
-    int $n_views) {
+    int $n_comments) {
       $this->id = $id;
       $this->id_user = $id_user;
       $this->imgsPublication = $imgsPublication; 
@@ -27,7 +25,6 @@ class Publication implements \JsonSerializable {
       $this->upload_date = $upload_date;
       $this->n_likes = $n_likes;
       $this->n_comments = $n_comments;
-      $this->n_views = $n_views;
     }
 
     public function getId() : ?int {
@@ -86,14 +83,6 @@ class Publication implements \JsonSerializable {
       $this->n_comments = $n_comments;
     }
 
-    public function getViews() : int {
-      return $this->n_views;
-    }
-
-    public function setViews(int $n_views) {
-      $this->n_views = $n_views;
-    }
-
   // Needed to deserialize an object from an associative array
   public static function fromAssoc(array $data) : \Artist4All\Model\Publication {
     return new \Artist4All\Model\Publication(
@@ -103,8 +92,7 @@ class Publication implements \JsonSerializable {
       $data['bodyPublication'], 
       $data['upload_date'],
       $data['n_likes'],
-      $data['n_comments'],
-      $data['n_views']
+      $data['n_comments']
     );
   }
 
@@ -117,8 +105,7 @@ class Publication implements \JsonSerializable {
         'bodyPublication' => $this->bodyPublication,
         'upload_date' => $this->upload_date,
         'n_likes' => $this->n_likes,
-        'n_comments' => $this->n_comments,
-        'n_views' => $this->n_views,
+        'n_comments' => $this->n_comments
       ];
     }
 }

@@ -32,7 +32,7 @@ export class CreatePublicationComponent implements OnInit {
 
   createPublication()   {
     this._publicationService.create(
-      new Publication(null, this.user.id, this.imgToUpload, this.bodyPublication, null, 0, 0, 0),
+      new Publication(null, this.user.id, this.imgToUpload, this.bodyPublication, null, 0, 0),
       this.token).subscribe(
         (result) => {
           this._router.navigate(['/home']);

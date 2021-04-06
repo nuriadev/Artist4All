@@ -61,6 +61,7 @@ export class ProfileComponent implements OnInit {
           this.aboutMe = this.user.aboutMe;
           this.isMyProfile = true;
           this.getFollowersAndFollowed(this.username, this.token);
+          this.getUserPublications(this.username, this.token);
         } else {
           this._userService.getUserByUsername(this.profileUsername).subscribe(
             (result) => {
@@ -86,18 +87,12 @@ export class ProfileComponent implements OnInit {
                   }
                 )
                 this.getFollowersAndFollowed(this.username, this.token);
+                this.getUserPublications(this.username, this.token);
             }, (error) => {
               console.log(error);
             }
           )
         }
-        this._publicationService.getUserPublications(this.username, this.token).subscribe(
-          (result) => {
-            this.publications = result;
-          }, (error) => {
-            console.log(error);
-          }
-        )
       }
     );
   }
@@ -148,6 +143,16 @@ export class ProfileComponent implements OnInit {
     this._userService.countFollowed(username, token).subscribe(
       (result) => {
         this.n_followed = result;
+      }, (error) => {
+        console.log(error);
+      }
+    )
+  }
+
+  getUserPublications(username:string, token:string) {
+    this._publicationService.getUserPublications(this.username, this.token).subscribe(
+      (result) => {
+        this.publications = result;
       }, (error) => {
         console.log(error);
       }
