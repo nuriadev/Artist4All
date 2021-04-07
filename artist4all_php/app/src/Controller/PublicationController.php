@@ -5,7 +5,7 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class PublicationController {
   public static function initRoutes($app) {
-    $app->post('/publications', '\Artist4all\Controller\PublicationController:createPublication');
+    $app->post('/user/my/publications', '\Artist4all\Controller\PublicationController:createPublication');
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/publications', '\Artist4all\Controller\PublicationController:getUserPublications');
   }
 
@@ -18,7 +18,6 @@ class PublicationController {
     return $response;
   }
 
-  // ! falla en línea 30 not found \Artist4All\Model\PublicationDB
   public function getUserPublications(Request $request, Response $response, array $args) {
     $authorized = $this->isAuthorizated($request, $response);
     $username = $args['username'];
@@ -27,9 +26,9 @@ class PublicationController {
       $response = $response->withStatus(404, 'User not found');
       return $response;
     } else {
-      $publications = \Artist4All\Model\PublicationDB::getInstance()->getUserPublications($user->getId());
+      $publications = \Artist4all\Model\PublicationDB::getInstance()->getUserPublications($user->getId());
       if (empty($publications)) $response = $response->withStatus(500, 'Sin resultados');
-      else $response = $response->withJson($user);
+      else $response = $response->withJson($publications);
       return $response;
     }
   }

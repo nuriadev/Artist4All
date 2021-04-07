@@ -47,8 +47,7 @@ class PublicationDB {
         if (!$publicationsAssoc) return null;
         $publications = [];
         foreach($publicationsAssoc as $publicationAssoc) {
-            $imgsPublication = $this->getPublicationImgs($publicationAssoc['id']);
-            $data['imgsPublication'] = $imgsPublication;
+            $publicationAssoc['imgsPublication'] = $this->getPublicationImgs($publicationAssoc['id']);
             $publications[] = \Artist4All\Model\Publication::fromAssoc($publicationAssoc);
         }  
         return $publications;

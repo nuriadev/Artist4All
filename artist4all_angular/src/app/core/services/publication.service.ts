@@ -10,7 +10,7 @@ export class PublicationService {
 
   constructor(private http:HttpClient) { }
 
-  private url = 'http://localhost:81';
+  private url = 'http://localhost:81/user';
 
   create(newPublication:Publication, token:string):Observable<any> {
     let createPublicationFormData:FormData = new FormData();
@@ -30,10 +30,10 @@ export class PublicationService {
     createPublicationFormData.append('n_comments',''+newPublication.n_comments);
     createPublicationFormData.append('token', token);
 
-    return this.http.post(this.url + '/publications', createPublicationFormData);
+    return this.http.post(this.url + '/my/publications', createPublicationFormData);
   }
 
   getUserPublications(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/publications', { headers: new HttpHeaders({ 'Authorization': token })});
+    return this.http.get(this.url + '/' + username + '/publications', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 }

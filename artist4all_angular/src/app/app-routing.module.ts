@@ -30,7 +30,7 @@ const routes: Routes = [
   {path:'settings/password',component:UserSettingsPasswordComponent, canActivate:[AuthGuard]},
   {path:'message',component:MessagesComponent, canActivate:[AuthGuard]},
   {path:'contact', component:ContactComponent},
-  {path:'publication',component:CreatePublicationComponent, canActivate:[AuthGuard]},
+  {path:'profile/my/publication',component:CreatePublicationComponent, canActivate:[AuthGuard]},
   {path:'user', component:ProvisionalAddUserComponent, canActivate:[AuthGuard]},
   {path:'404', component:PageNotFoundComponent},
   {path:'profile/:username/list/:typeList', component:ListOfFollowersOrFollowedComponent, canActivate:[AuthGuard]},

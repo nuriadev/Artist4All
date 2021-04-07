@@ -152,10 +152,52 @@ export class ProfileComponent implements OnInit {
   getUserPublications(username:string, token:string) {
     this._publicationService.getUserPublications(this.username, this.token).subscribe(
       (result) => {
+        result.forEach(element => {
+          element.upload_date = this.adaptDateOfPublication(element.upload_date);
+        });
         this.publications = result;
+        console.log(this.publications);
       }, (error) => {
         console.log(error);
       }
     )
+  }
+
+  adaptDateOfPublication(upload_date:string) {
+    const days = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+    ];
+    const months = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    ];
+    let numberDay = new Date(upload_date).getDay();
+    let nameDay = days[numberDay];
+    let nameMonth = months[new Date().getMonth()];
+    let datetime = upload_date.split(' ');
+    let date = datetime[0].split('-');
+    let time = datetime[1].split(':');
+    let year = date[0];
+    let month = date[1];
+    let day = date[2];
+    let hourAndMin = time[0] + ':' + time[1];
+    let adaptedDate = nameDay + ', ' + day + ' de ' + nameMonth + ' de ' + year + ', a las ' + hourAndMin;
+    return adaptedDate;
   }
 }
