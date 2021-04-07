@@ -1,15 +1,12 @@
 <?php
-namespace Artist4All\Model;
-// todo: que pille las rutas sin el require_once
-require_once 'Publication.php';
-require_once 'User.php';
+namespace Artist4all\Model\Publication;
 
 class PublicationDB {
-    protected static ?\Artist4All\Model\PublicationDB $instance = null;
+    protected static ?\Artist4all\Model\Publication\PublicationDB $instance = null;
 
-    public static function getInstance() : \Artist4All\Model\PublicationDB {
+    public static function getInstance() : \Artist4all\Model\Publication\PublicationDB {
         if(is_null(static::$instance)) {
-            static::$instance = new \Artist4All\Model\PublicationDB();
+            static::$instance = new \Artist4all\Model\Publication\PublicationDB();
         }
         return static::$instance;
     }
@@ -27,7 +24,7 @@ class PublicationDB {
         $this->conn = new \PDO($dsn, $dbusername, $dbpassword, $options);
     }
 
-    public function getPublicationById(int $id) : ?\Artist4All\Model\Publication {
+    public function getPublicationById(int $id) : ?\Artist4all\Model\Publication\Publication {
         $sql = 'SELECT * FROM publications WHERE id=:id';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id' => $id ]);
@@ -35,7 +32,7 @@ class PublicationDB {
         if (!$publicationAssoc) return null;
         $imgsPublication = $this->getPublicationImgs($id);
         $data['imgsPublication'] = $imgsPublication;
-        $publication = \Artist4All\Model\Publication::fromAssoc($publicationAssoc);
+        $publication = \Artist4all\Model\Publication\Publication::fromAssoc($publicationAssoc);
         return $publication;
     }
 
@@ -48,7 +45,7 @@ class PublicationDB {
         $publications = [];
         foreach($publicationsAssoc as $publicationAssoc) {
             $publicationAssoc['imgsPublication'] = $this->getPublicationImgs($publicationAssoc['id']);
-            $publications[] = \Artist4All\Model\Publication::fromAssoc($publicationAssoc);
+            $publications[] = \Artist4all\Model\Publication\Publication::fromAssoc($publicationAssoc);
         }  
         return $publications;
     }
@@ -66,12 +63,12 @@ class PublicationDB {
         return $imgsPublication;
     }
 
-    public function persistPublication(Publication $publication) : ?\Artist4All\Model\Publication {
+    public function persistPublication(Publication $publication) : ?\Artist4all\Model\Publication\Publication {
         if (is_null($publication->getId())) return $this->insertPublication($publication);
         else return $this->updatePublication($publication);
     }
 
-    public function insertPublication(\Artist4All\Model\Publication $publication) : ?\Artist4All\Model\Publication {
+    public function insertPublication(\Artist4all\Model\Publication\Publication $publication) : ?\Artist4all\Model\Publication\Publication {
         $sql = 'INSERT INTO publications VALUES(
             :id,
             :id_user,
@@ -95,7 +92,7 @@ class PublicationDB {
         return $publication;
     }
 
-    public function updatePublication(\Artist4All\Model\Publication $publication) : ?\Artist4All\Model\Publication {
+    public function updatePublication(\Artist4all\Model\Publication\Publication $publication) : ?\Artist4all\Model\Publication\Publication {
         $sql = 'UPDATE publications SET
             id_user=:id_user,
             bodyPublication=:bodyPublication,
@@ -133,14 +130,14 @@ class PublicationDB {
     }
 
     public function canPublish(
-        \Artist4All\Model\Publication $publication, 
+        \Artist4all\Model\Publication\Publication $publication, 
         string $token) : bool {
         $sql = 'SELECT * FROM users WHERE token=:token';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':token' => $token ]);
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$userAssoc) return false;
-        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
+        $user = \Artist4all\Model\User\User::fromAssoc($userAssoc);
         if ($user->getId() == $publication->getIdUser()) return true;
         return false;
     }

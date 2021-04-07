@@ -1,5 +1,5 @@
 <?php
-namespace Artist4All\Model;
+namespace Artist4all\Model\Publication;
 class Publication implements \JsonSerializable {
 
   private ?int $id;
@@ -84,8 +84,8 @@ class Publication implements \JsonSerializable {
     }
 
   // Needed to deserialize an object from an associative array
-  public static function fromAssoc(array $data) : \Artist4All\Model\Publication {
-    return new \Artist4All\Model\Publication(
+  public static function fromAssoc(array $data) : \Artist4all\Model\Publication\Publication {
+    return new \Artist4all\Model\Publication\Publication(
       $data['id'], 
       $data['id_user'],
       $data['imgsPublication'], 

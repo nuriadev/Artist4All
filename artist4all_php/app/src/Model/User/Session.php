@@ -1,13 +1,13 @@
 <?php
-namespace Artist4All\Model;
+namespace Artist4all\Model\User;
 class Session implements \JsonSerializable {
 
   private string $token;
-  private \Artist4All\Model\User $user; 
+  private \Artist4all\Model\User\User $user; 
 
   public function __construct(
     string $token,
-    \Artist4All\Model\User $user
+    \Artist4all\Model\User\User $user
     ) {
       $this->token = $token;
       $this->user = $user;
@@ -21,17 +21,17 @@ class Session implements \JsonSerializable {
       $this->token = $token;
     }
 
-    public function getUser() : \Artist4All\Model\User  {
+    public function getUser() : \Artist4all\Model\User\User  {
       return $this->user;
     }
 
-    public function setUser(\Artist4All\Model\User $user) {
+    public function setUser(\Artist4all\Model\User\User $user) {
       $this->user = $user;
     }
 
     // Needed to deserialize an object from an associative array
-    public static function fromAssoc(array $data) : Session {
-      return new \Artist4All\Model\Session(
+    public static function fromAssoc(array $data) : \Artist4all\Model\User\Session {
+      return new \Artist4all\Model\User\Session(
         $data['token'], 
         $data['user']
       );

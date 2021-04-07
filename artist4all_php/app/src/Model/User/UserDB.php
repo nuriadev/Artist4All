@@ -1,15 +1,12 @@
 <?php
-namespace Artist4All\Model;
-// todo: que pille las rutas sin el require_once
-require_once 'TokenGenerator.php';
-require_once 'User.php';
-require_once 'Session.php';
-class UserDB {
-    protected static ?\Artist4All\Model\UserDB $instance = null;
+namespace Artist4all\Model\User;
 
-    public static function getInstance() : \Artist4All\Model\UserDB {
+class UserDB {
+    protected static ?\Artist4all\Model\User\UserDB $instance = null;
+
+    public static function getInstance() : \Artist4all\Model\User\UserDB {
         if(is_null(static::$instance)) {
-            static::$instance = new \Artist4All\Model\UserDB();
+            static::$instance = new \Artist4all\Model\User\UserDB();
         }
         return static::$instance;
     }
@@ -35,32 +32,32 @@ class UserDB {
         if (!$usersAssoc) return null;
         $users = [];
         foreach($usersAssoc as $userAssoc) {
-          $users[] = \Artist4All\Model\User::fromAssoc($userAssoc);
+          $users[] = \Artist4all\Model\User\User::fromAssoc($userAssoc);
         }
         return $users;
     }
 
-    public function getUserByUsername(string $username) : ?\Artist4All\Model\User {
+    public function getUserByUsername(string $username) : ?\Artist4all\Model\User\User {
         $sql = 'SELECT * FROM users WHERE username=:username';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':username' => $username ]);
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$userAssoc) return null;
-        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
+        $user = \Artist4all\Model\User\User::fromAssoc($userAssoc);
         return $user;
     }
 
-    public function getUserById(int $id) : ?\Artist4All\Model\User {
+    public function getUserById(int $id) : ?\Artist4all\Model\User\User {
         $sql = 'SELECT * FROM users WHERE id=:id';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id' => $id ]);
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$userAssoc) return null;
-        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
+        $user = \Artist4all\Model\User\User::fromAssoc($userAssoc);
         return $user;
     }
 
-    public function getUserByEmail(string $email) : ?\Artist4All\Model\User {
+    public function getUserByEmail(string $email) : ?\Artist4all\Model\User\User {
         $sql = 'SELECT * FROM users WHERE email=:email AND deactivated=:deactivated';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
@@ -69,17 +66,17 @@ class UserDB {
         ]);
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$userAssoc) return null;
-        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
+        $user = \Artist4all\Model\User\User::fromAssoc($userAssoc);
         return $user;
     }
 
-    public function persistUser(User $user) : ?\Artist4All\Model\User {
+    public function persistUser(User $user) : ?\Artist4all\Model\User\User {
         if (is_null($user->getId())) return $this->insertUser($user);
         else return $this->updateUser($user);        
     }
 
     // registra un usuario
-    public function insertUser(\Artist4All\Model\User $user) : ?\Artist4All\Model\User {  
+    public function insertUser(\Artist4all\Model\User\User $user) : ?\Artist4all\Model\User\User {  
         $sql = 'INSERT INTO users VALUES (
             :id, 
             :name, 
@@ -118,7 +115,7 @@ class UserDB {
     }
 
     public function updateUser(
-        \Artist4All\Model\User $user) : ?\Artist4All\Model\User {
+        \Artist4all\Model\User\User $user) : ?\Artist4all\Model\User\User {
         $sql = 'UPDATE users SET
             id=:id,
             name=:name, 
@@ -149,7 +146,7 @@ class UserDB {
         return $user;
     }
     
-    public function createOrUpdateToken(string $token, \Artist4All\Model\User $user) : bool {
+    public function createOrUpdateToken(string $token, \Artist4all\Model\User\User $user) : bool {
         $sql = 'UPDATE users SET token=:token WHERE email=:email';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
@@ -180,8 +177,8 @@ class UserDB {
     }
 
     public function isFollowingThatUser(
-        \Artist4All\Model\User $user_follower,
-        \Artist4All\Model\User $user_followed) : ?int {
+        \Artist4all\Model\User\User $user_follower,
+        \Artist4all\Model\User\User $user_followed) : ?array {
         $sql = 'SELECT id FROM users_followed WHERE 
         id_follower=:id_follower AND 
         id_followed=:id_followed';
@@ -192,13 +189,16 @@ class UserDB {
         ]);
         $followed = $statement->fetch(\PDO::FETCH_ASSOC);
         if(!$followed) return null;
-        $id = $followed['id'];
-        return $id;
+        $response = [
+            'id_follow' => $followed['id'],
+            'isFollowing' => 'yes'     
+        ];
+        return $response;
     }
 
     public function followUser(
-        \Artist4All\Model\User $user_follower,
-        \Artist4All\Model\User $user_followed) : int {
+        \Artist4all\Model\User\User $user_follower,
+        \Artist4all\Model\User\User $user_followed) : ?array {
         $sql = 'INSERT INTO users_followed VALUES (
             :id,
             :id_follower,
@@ -212,24 +212,32 @@ class UserDB {
             ':id_followed' => $user_followed->getId(),
             ':status_follow' => 0
         ]);
-        $id = $this->conn->lastInsertId();
-        return $id;
+        if (!$result) return null;
+        $response = [
+            'id_follow' => $this->conn->lastInsertId(),
+            'message' => 'User followed'
+        ];
+        return $response;
     }
 
-    public function unfollowUser(int $id) : bool {
+    public function unfollowUser(int $id) : ?array {
         $sql = 'DELETE FROM users_followed WHERE id=:id';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id' => $id ]);
-        return $result;
+        if (!$result) return null;
+        $response = [
+            'message' => 'User unfollowed'
+        ];
+        return $response;
     }
     
-    public function countOrGetFollowers(int $id, string $tipo) {
+    public function countOrGetFollowers(int $id, string $tipo) : ?array {
         $sql = 'SELECT id_follower FROM users_followed WHERE id_followed=:my_id';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':my_id' => $id ]); 
         if ($tipo == 'count') {
             if (!$result) return null;
-            $n_followers = $statement->rowCount();
+            $n_followers = ['n_followers' => $statement->rowCount()];
             return $n_followers;
         } else if ($tipo == 'get') {
             $idsFollowersAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -242,13 +250,13 @@ class UserDB {
         }
     }
 
-    public function countOrGetFollowed(int $id, string $tipo) {
+    public function countOrGetFollowed(int $id, string $tipo) : ?array {
         $sql = 'SELECT id_followed FROM users_followed WHERE id_follower=:my_id';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':my_id' => $id ]);
         if ($tipo == 'count') {
             if (!$result) return null;
-            $n_followed = $statement->rowCount();
+            $n_followed = ['n_followed' => $statement->rowCount()];
             return $n_followed; 
         } else if ($tipo == 'get') {
             $idsFollowedsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);

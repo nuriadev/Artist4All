@@ -15,12 +15,12 @@ export class PublicationService {
   create(newPublication:Publication, token:string):Observable<any> {
     let createPublicationFormData:FormData = new FormData();
     createPublicationFormData.append('id_user',''+newPublication.id_user);
-    if (!newPublication.imgPublication) {
+    if (!newPublication.imgsPublication) {
       createPublicationFormData.append('imgsPublication', null);
     } else {
       let imgsPublication = [];
-      for (var i = 0; i < newPublication.imgPublication.length; i++) {
-        imgsPublication[i] = newPublication.imgPublication[i].name;
+      for (var i = 0; i < newPublication.imgsPublication.length; i++) {
+        imgsPublication[i] = newPublication.imgsPublication[i].name;
       }
       createPublicationFormData.append('imgsPublication', JSON.stringify(imgsPublication));
     }

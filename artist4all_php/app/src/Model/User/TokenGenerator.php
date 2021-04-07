@@ -1,5 +1,5 @@
 <?php
-namespace Artist4All\Model;
+namespace Artist4all\Model\User;
 class TokenGenerator {
 
     public static function tokenGenerator($content) {

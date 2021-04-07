@@ -20,6 +20,7 @@ export class ProfileComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) { }
 
+  // TODO: ordenar por fecha
   publications:Array<PublicationService> = [];
 
   user = this._sessionService.getCurrentUser();
@@ -77,7 +78,7 @@ export class ProfileComponent implements OnInit {
                 this._userService.isFollowingThatUser(this.user.username, this.username, this.token).subscribe(
                   (result) => {
                     if (result != null) {
-                      this.id_follow = result;
+                      this.id_follow = result['id_follow'];
                       this.isFollowed = true;
                     } else {
                       this.isFollowed = false;
@@ -102,7 +103,7 @@ export class ProfileComponent implements OnInit {
     this.n_followers++;
     this._userService.followUser(this.user.username, this.username, this.token).subscribe(
       (result) => {
-        this.id_follow = result;
+        this.id_follow = result['id_follow'];
       }, (error) => {
         console.log(error);
       }
@@ -135,14 +136,14 @@ export class ProfileComponent implements OnInit {
   getFollowersAndFollowed(username:string, token:string) {
     this._userService.countFollowers(username, token).subscribe(
       (result) => {
-        this.n_followers = result;
+        this.n_followers = result['n_followers'];
       }, (error) => {
         console.log(error);
       }
     )
     this._userService.countFollowed(username, token).subscribe(
       (result) => {
-        this.n_followed = result;
+        this.n_followed = result['n_followed'];
       }, (error) => {
         console.log(error);
       }
@@ -150,13 +151,14 @@ export class ProfileComponent implements OnInit {
   }
 
   getUserPublications(username:string, token:string) {
-    this._publicationService.getUserPublications(this.username, this.token).subscribe(
+    this._publicationService.getUserPublications(username, token).subscribe(
       (result) => {
-        result.forEach(element => {
-          element.upload_date = this.adaptDateOfPublication(element.upload_date);
-        });
+        if (result != null) {
+          result.forEach(element => {
+            element.upload_date = this.adaptDateOfPublication(element.upload_date);
+          });
+        }
         this.publications = result;
-        console.log(this.publications);
       }, (error) => {
         console.log(error);
       }
