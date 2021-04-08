@@ -37,7 +37,7 @@ class PublicationController {
     $token = trim($request->getHeader('Authorization')[0]);
     $result = \Artist4all\Model\User\UserDB::getInstance()->isValidToken($token);
     if (!$result) {
-      $response = $response->withStatus(403, 'Unauthorized user');
+      $response = $response->withStatus(401, 'Unauthorized user');
       return $response;
     } else {
       return $result;
