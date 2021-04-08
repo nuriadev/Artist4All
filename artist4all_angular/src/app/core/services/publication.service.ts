@@ -40,4 +40,22 @@ export class PublicationService {
   getPublicationById(id:number, username:string, token:string):Observable<any> {
     return this.http.get(this.url + '/' + username + '/publication/' + id, { headers: new HttpHeaders({ 'Authorization': token })});
   }
+
+  edit(publication:Publication, token:string):Observable<any> {
+    let editPublicationFormData:FormData = new FormData();
+    if (!publication.imgsPublication) {
+      editPublicationFormData.append('imgsPublication', null);
+    } else {
+      let imgsPublication = [];
+      for (var i = 0; i < publication.imgsPublication.length; i++) {
+        imgsPublication[i] = publication.imgsPublication[i].name;
+      }
+      editPublicationFormData.append('imgsPublication', JSON.stringify(imgsPublication));
+    }
+    editPublicationFormData.append('bodyPublication', publication.bodyPublication);
+    editPublicationFormData.append('token', token);
+
+    // TODO: pasar a patch
+    return this.http.post(this.url + '/my/publication/' + publication.id, editPublicationFormData);
+  }
 }

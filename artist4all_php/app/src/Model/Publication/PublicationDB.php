@@ -63,6 +63,13 @@ class PublicationDB {
         return $imgsPublication;
     }
 
+    public function deletePublicationImgs(int $id) : bool {
+        $sql = "DELETE FROM imgsPublications WHERE id_publication=:id_publication";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ 'id_publication' => $id ]);
+        return $result; 
+    }
+
     public function persistPublication(Publication $publication) : ?\Artist4all\Model\Publication\Publication {
         if (is_null($publication->getId())) return $this->insertPublication($publication);
         else return $this->updatePublication($publication);
@@ -99,8 +106,7 @@ class PublicationDB {
             upload_date=:upload_date,
             n_likes=:n_likes,
             n_comments=:n_comments
-        WHERE id=:id
-        )';
+        WHERE id=:id';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
             ':id' => $publication->getId(),

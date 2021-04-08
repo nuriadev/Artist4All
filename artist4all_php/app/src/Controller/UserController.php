@@ -269,6 +269,7 @@ class UserController {
     } else {
       $token = trim($data['token']);
       $folderUrl = "assets/img".DIRECTORY_SEPARATOR;
+      //TODO:Mover la img pasada a una carpeta interna 'assets', limitar el tamaño y el formato de la img
       foreach ($_FILES as $file) {
           $nombreImg = $file["tmp_name"];
           $urlImg = $folderUrl.$file["name"];
