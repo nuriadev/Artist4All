@@ -1,15 +1,12 @@
 <?php
-namespace Artist4All\Model;
-// todo: que pille las rutas sin el require_once
-require_once 'Publication.php';
-require_once 'User.php';
+namespace Artist4all\Model\Publication;
 
 class PublicationDB {
-    protected static ?\Artist4All\Model\PublicationDB $instance = null;
+    protected static ?\Artist4all\Model\Publication\PublicationDB $instance = null;
 
-    public static function getInstance() : \Artist4All\Model\PublicationDB {
+    public static function getInstance() : \Artist4all\Model\Publication\PublicationDB {
         if(is_null(static::$instance)) {
-            static::$instance = new \Artist4All\Model\PublicationDB();
+            static::$instance = new \Artist4all\Model\Publication\PublicationDB();
         }
         return static::$instance;
     }
@@ -27,7 +24,7 @@ class PublicationDB {
         $this->conn = new \PDO($dsn, $dbusername, $dbpassword, $options);
     }
 
-    public function getPublicationById(int $id) : ?\Artist4All\Model\Publication {
+    public function getPublicationById(int $id) : ?\Artist4all\Model\Publication\Publication {
         $sql = 'SELECT * FROM publications WHERE id=:id';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id' => $id ]);
@@ -35,8 +32,22 @@ class PublicationDB {
         if (!$publicationAssoc) return null;
         $imgsPublication = $this->getPublicationImgs($id);
         $data['imgsPublication'] = $imgsPublication;
-        $publication = \Artist4All\Model\Publication::fromAssoc($publicationAssoc);
+        $publication = \Artist4all\Model\Publication\Publication::fromAssoc($publicationAssoc);
         return $publication;
+    }
+
+    public function getUserPublications(int $id_user) : ?array {
+        $sql = 'SELECT * FROM publications WHERE id_user=:id_user ORDER BY id DESC';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':id_user' => $id_user ]);
+        $publicationsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+        if (!$publicationsAssoc) return null;
+        $publications = [];
+        foreach($publicationsAssoc as $publicationAssoc) {
+            $publicationAssoc['imgsPublication'] = $this->getPublicationImgs($publicationAssoc['id']);
+            $publications[] = \Artist4all\Model\Publication\Publication::fromAssoc($publicationAssoc);
+        }  
+        return $publications;
     }
 
     public function getPublicationImgs(int $id) : ?array {
@@ -52,20 +63,19 @@ class PublicationDB {
         return $imgsPublication;
     }
 
-    public function persistPublication(Publication $publication) : ?\Artist4All\Model\Publication {
+    public function persistPublication(Publication $publication) : ?\Artist4all\Model\Publication\Publication {
         if (is_null($publication->getId())) return $this->insertPublication($publication);
         else return $this->updatePublication($publication);
     }
 
-    public function insertPublication(\Artist4All\Model\Publication $publication) : ?\Artist4All\Model\Publication {
+    public function insertPublication(\Artist4all\Model\Publication\Publication $publication) : ?\Artist4all\Model\Publication\Publication {
         $sql = 'INSERT INTO publications VALUES(
             :id,
             :id_user,
             :bodyPublication,
             :upload_date,
             :n_likes,
-            :n_comments,
-            :n_views
+            :n_comments
         )';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
@@ -74,8 +84,7 @@ class PublicationDB {
             ':bodyPublication' => $publication->getBodyPublication(),
             ':upload_date' => date('Y-m-d H:i:s'),
             ':n_likes' => $publication->getLikes(),
-            ':n_comments' => $publication->getComments(),
-            ':n_views' => $publication->getViews()
+            ':n_comments' => $publication->getComments()
         ]);
         if(!$result) return null;
         $id = $this->conn->lastInsertId();
@@ -83,14 +92,13 @@ class PublicationDB {
         return $publication;
     }
 
-    public function updatePublication(\Artist4All\Model\Publication $publication) : ?\Artist4All\Model\Publication {
+    public function updatePublication(\Artist4all\Model\Publication\Publication $publication) : ?\Artist4all\Model\Publication\Publication {
         $sql = 'UPDATE publications SET
             id_user=:id_user,
             bodyPublication=:bodyPublication,
             upload_date=:upload_date,
             n_likes=:n_likes,
-            n_comments=:n_comments,
-            n_views=:n_views
+            n_comments=:n_comments
         WHERE id=:id
         )';
         $statement = $this->conn->prepare($sql);
@@ -100,8 +108,7 @@ class PublicationDB {
             ':bodyPublication' => $publication->getBodyPublication(),
             ':upload_date' => date('Y-m-d H:i:s'),
             ':n_likes' => $publication->getLikes(),
-            ':n_comments' => $publication->getComments(),
-            ':n_views' => $publication->getViews()
+            ':n_comments' => $publication->getComments()
         ]);
         if(!$result) return null;
         return $publication;
@@ -122,17 +129,24 @@ class PublicationDB {
         return $result;
     }
 
-    public function isAuthorizated(
-        \Artist4All\Model\Publication $publication, 
+    public function canPublish(
+        \Artist4all\Model\Publication\Publication $publication, 
         string $token) : bool {
         $sql = 'SELECT * FROM users WHERE token=:token';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':token' => $token ]);
         $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$userAssoc) return false;
-        $user = \Artist4All\Model\User::fromAssoc($userAssoc);
+        $user = \Artist4all\Model\User\User::fromAssoc($userAssoc);
         if ($user->getId() == $publication->getIdUser()) return true;
         return false;
+    }
+
+    public function isValidToken(string $token) : bool {
+        $sql = 'SELECT * FROM users WHERE token=:token';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ ':token' => $token ]);
+        return $result;
     }
 
     public function deletePublicationById(int $id) : bool {

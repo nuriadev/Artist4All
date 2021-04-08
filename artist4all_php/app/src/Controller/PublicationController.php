@@ -5,52 +5,48 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class PublicationController {
   public static function initRoutes($app) {
-    $app->post('/publication', '\Artist4all\Controller\PublicationController:createPublication');
+    $app->post('/user/my/publications', '\Artist4all\Controller\PublicationController:createPublication');
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publications', '\Artist4all\Controller\PublicationController:getUserPublications');
   }
 
   public function getPublicationById(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     $id = trim($data['id']);
-    $publication = \Artist4all\Model\PublicationDB::getInstance()->getPublicationById($id);
+    $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationById($id);
     if (is_null($publication)) $response = $response->withStatus(404, 'Publication not found');
     else $response = $response->withJson($publication);
     return $response;
+  }
+
+  public function getUserPublications(Request $request, Response $response, array $args) {
+    $authorized = $this->isAuthorizated($request, $response);
+    $username = $args['username'];
+    $user = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    } else {
+      $publications = \Artist4all\Model\Publication\PublicationDB::getInstance()->getUserPublications($user->getId());
+      if (empty($publications)) $response = $response->withStatus(200, 'Without results');
+      else $response = $response->withJson($publications);
+      return $response;
+    }
+  }
+
+  private function isAuthorizated(Request $request, Response $response) {  
+    $token = trim($request->getHeader('Authorization')[0]);
+    $result = \Artist4all\Model\User\UserDB::getInstance()->isValidToken($token);
+    if (!$result) {
+      $response = $response->withStatus(403, 'Unauthorized user');
+      return $response;
+    } else {
+      return $result;
+    }
   }
   
   // todo: view, edit, delete, comentarios, likes
   public function createPublication(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
-/*     $data['id'] = null;
-    $data['imgsPublication'] = json_decode($data['imgsPublication']);
-    $folderUrl = "assets/img".DIRECTORY_SEPARATOR;
-    foreach ($_FILES as $file) {
-        $nombreImg = $file["tmp_name"];
-        $urlImg = $folderUrl.$file["name"];
-        move_uploaded_file($nombreImg, $urlImg);   
-    }
-    if (empty($data["imgsPublication"])) $data['imgsPublication'] = null;
-    // todo validar que no sea empty
-    $token = trim($data['token']);
-    $publication = \Artist4all\Model\Publication::fromAssoc($data);
-    $isAuthorizated = \Artist4all\Model\PublicationDB::getInstance()->isAuthorizated($publication, $token);
-    if(!$isAuthorizated) {
-      $response = $response->withStatus(500, 'Error at publishing');  
-      return $response;
-    } else {
-      $newPublication = \Artist4all\Model\PublicationDB::getInstance()->createPublication($publication);
-      if (!empty($newPublication->getImgsPublication())) {
-        foreach ($newPublication->getImgsPublication() as $img) {
-          $resultImg = \Artist4all\Model\PublicationDB::getInstance()->insertPublicationImgs($newPublication->getId(), $img);
-          if (!$resultImg) {
-            $response = $response->withStatus(500, 'Error at publishing');  
-            return $response;
-          }
-        } 
-      }    
-      if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');  
-      else $response = $response->withStatus(200, 'Publication created');
-      return $response;
-    } */
     $publication = $this->validatePersist($data, null, $response);
     if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');  
     else $response = $response->withStatus(200, 'Publication created');
@@ -69,11 +65,11 @@ class PublicationController {
   public function removePublication(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     $id = trim($data['id']);
-    $publication = \Artist4all\Model\PublicationDB::getInstance()->getPublicationById($id);
+    $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationById($id);
     if (is_null($publication)) {
       $response = $response->withStatus(404, 'Publication not found');
     } else {
-      $result = \Artist4all\Model\PublicationDB::getInstance()->deletePublicationById($id);
+      $result = \Artist4all\Model\Publication\PublicationDB::getInstance()->deletePublicationById($id);
       if (!$result) $response = $response->withStatus(500, 'Error at removing publication');
       else $response = $response->withStatus(200, 'Publication deleted');
     }
@@ -133,16 +129,16 @@ class PublicationController {
     // todo validar que no sea empty
     $token = trim($data['token']);
     $data['id'] = $id;
-    $publication = \Artist4all\Model\Publication::fromAssoc($data);
-    $isAuthorizated = \Artist4all\Model\PublicationDB::getInstance()->isAuthorizated($publication, $token);
-    if(!$isAuthorizated) {
+    $publication = \Artist4all\Model\Publication\Publication::fromAssoc($data);
+    $canPublish = \Artist4all\Model\Publication\PublicationDB::getInstance()->canPublish($publication, $token);
+    if(!$canPublish) {
       $response = $response->withStatus(500, 'Error at publishing');  
       return $response;
     } else {
-      $publication = \Artist4all\Model\PublicationDB::getInstance()->persistPublication($publication);
+      $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->persistPublication($publication);
       if (!empty($publication->getImgsPublication())) {
         foreach ($publication->getImgsPublication() as $img) {
-          $resultImg = \Artist4all\Model\PublicationDB::getInstance()->insertPublicationImgs($newPublication->getId(), $img);
+          $resultImg = \Artist4all\Model\Publication\PublicationDB::getInstance()->insertPublicationImgs($publication->getId(), $img);
           if (!$resultImg) {
             $response = $response->withStatus(500, 'Error at publishing');  
             return $response;

@@ -17,6 +17,7 @@ import { UserSettingsAccountComponent } from './components/secure/settings/user-
 import { UserSettingsProfileComponent } from './components/secure/settings/user-settings-profile/user-settings-profile.component';
 import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
 import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
+import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
@@ -30,7 +31,8 @@ const routes: Routes = [
   {path:'settings/password',component:UserSettingsPasswordComponent, canActivate:[AuthGuard]},
   {path:'message',component:MessagesComponent, canActivate:[AuthGuard]},
   {path:'contact', component:ContactComponent},
-  {path:'publication',component:CreatePublicationComponent, canActivate:[AuthGuard]},
+  {path:'profile/my/publication',component:CreatePublicationComponent, canActivate:[AuthGuard]},
+  {path:'profile/my/publication/:id',component:EditPublicationComponent, canActivate:[AuthGuard]},
   {path:'user', component:ProvisionalAddUserComponent, canActivate:[AuthGuard]},
   {path:'404', component:PageNotFoundComponent},
   {path:'profile/:username/list/:typeList', component:ListOfFollowersOrFollowedComponent, canActivate:[AuthGuard]},

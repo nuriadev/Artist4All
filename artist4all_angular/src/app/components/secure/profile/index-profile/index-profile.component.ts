@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { NgxSpinnerService } from "ngx-spinner";
+import { PublicationService } from 'src/app/core/services/publication.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -13,10 +14,14 @@ export class ProfileComponent implements OnInit {
 
   constructor(
     private _sessionService: SessionService,
-    private _activeRoute: ActivatedRoute,
     private _userService: UserService,
+    private _publicationService: PublicationService,
+    private _activeRoute: ActivatedRoute,
     private spinner: NgxSpinnerService
   ) { }
+
+  // TODO: ordenar por fecha
+  publications:Array<PublicationService> = [];
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
@@ -46,17 +51,20 @@ export class ProfileComponent implements OnInit {
         }, 1200);
         this.profileUsername = params.get('username');
         if (this.profileUsername == 'my') {
-          this.id = this.user.id;
-          this.name = this.user.name;
-          this.surname1 = this.user.surname1;
-          this.surname2 = this.user.surname2;
-          this.email = this.user.email;
-          this.username = this.user.username;
-          this.password = this.user.password;
-          this.imgAvatar = this.user.imgAvatar;
-          this.aboutMe = this.user.aboutMe;
-          this.isMyProfile = true;
-          this.getFollowersAndFollowed(this.username, this.token);
+          setTimeout(() => {
+            this.id = this.user.id;
+            this.name = this.user.name;
+            this.surname1 = this.user.surname1;
+            this.surname2 = this.user.surname2;
+            this.email = this.user.email;
+            this.username = this.user.username;
+            this.password = this.user.password;
+            this.imgAvatar = this.user.imgAvatar;
+            this.aboutMe = this.user.aboutMe;
+            this.isMyProfile = true;
+            this.getFollowersAndFollowed(this.username, this.token);
+            this.getUserPublications(this.username, this.token);
+          }, 1200);
         } else {
           this._userService.getUserByUsername(this.profileUsername).subscribe(
             (result) => {
@@ -72,7 +80,7 @@ export class ProfileComponent implements OnInit {
                 this._userService.isFollowingThatUser(this.user.username, this.username, this.token).subscribe(
                   (result) => {
                     if (result != null) {
-                      this.id_follow = result;
+                      this.id_follow = result['id_follow'];
                       this.isFollowed = true;
                     } else {
                       this.isFollowed = false;
@@ -82,6 +90,7 @@ export class ProfileComponent implements OnInit {
                   }
                 )
                 this.getFollowersAndFollowed(this.username, this.token);
+                this.getUserPublications(this.username, this.token);
             }, (error) => {
               console.log(error);
             }
@@ -96,7 +105,7 @@ export class ProfileComponent implements OnInit {
     this.n_followers++;
     this._userService.followUser(this.user.username, this.username, this.token).subscribe(
       (result) => {
-        this.id_follow = result;
+        this.id_follow = result['id_follow'];
       }, (error) => {
         console.log(error);
       }
@@ -129,17 +138,70 @@ export class ProfileComponent implements OnInit {
   getFollowersAndFollowed(username:string, token:string) {
     this._userService.countFollowers(username, token).subscribe(
       (result) => {
-        this.n_followers = result;
+        this.n_followers = result['n_followers'];
       }, (error) => {
         console.log(error);
       }
     )
     this._userService.countFollowed(username, token).subscribe(
       (result) => {
-        this.n_followed = result;
+        this.n_followed = result['n_followed'];
       }, (error) => {
         console.log(error);
       }
     )
+  }
+
+  getUserPublications(username:string, token:string) {
+    this._publicationService.getUserPublications(username, token).subscribe(
+      (result) => {
+        if (result != null) {
+          result.forEach(element => {
+            element.upload_date = this.adaptDateOfPublication(element.upload_date);
+          });
+        }
+        this.publications = result;
+      }, (error) => {
+        console.log(error);
+      }
+    )
+  }
+
+  adaptDateOfPublication(upload_date:string) {
+    const days = [
+      'Domingo',
+      'Lunes',
+      'Martes',
+      'Miércoles',
+      'Jueves',
+      'Viernes',
+      'Sábado',
+    ];
+    const months = [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    ];
+    let numberDay = new Date(upload_date).getDay();
+    let nameDay = days[numberDay];
+    let nameMonth = months[new Date().getMonth()];
+    let datetime = upload_date.split(' ');
+    let date = datetime[0].split('-');
+    let time = datetime[1].split(':');
+    let year = date[0];
+    let month = date[1];
+    let day = date[2];
+    let hourAndMin = time[0] + ':' + time[1];
+    let adaptedDate = nameDay + ', ' + day + ' de ' + nameMonth + ' de ' + year + ', a las ' + hourAndMin;
+    return adaptedDate;
   }
 }

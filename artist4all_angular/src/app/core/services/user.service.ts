@@ -46,7 +46,7 @@ export class UserService {
       else editFormData.append('newImgAvatar', files[0],files[0].name);
       editFormData.append('token', token);
  //    TODO Cambiar a patch
-    return this.http.post(this.url + '/settings/profile', editFormData);
+    return this.http.post(this.url + '/user/my/settings/profile', editFormData);
   }
 
   editPassword(
@@ -58,7 +58,7 @@ export class UserService {
       editPasswordFormData.append('password', password);
       editPasswordFormData.append('token', token);
    //    TODO Cambiar a patch
-      return this.http.post(this.url + '/settings/password', editPasswordFormData);
+      return this.http.post(this.url + '/user/my/settings/password', editPasswordFormData);
   }
 
   getOtherUsers(username:string):Observable<any> {
@@ -98,7 +98,7 @@ export class UserService {
     token:string):Observable<any> {
     let options = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token }),
-      body: { id: id_follow }
+      body: { id_follow: id_follow }
     };
     return this.http.delete(
       this.url + '/user/' + username_follower + '/follow/' + username_followed,

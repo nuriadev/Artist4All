@@ -6,7 +6,7 @@
 </ngx-spinner>
 <app-user-navbar *ngIf="loaded"></app-user-navbar>
 
-<div class="h-screen flex overflow-hidden bg-white">
+<div class="h-screen flex overflow-hidden bg-white" *ngIf="loaded">
     <div class="flex flex-col min-w-0 flex-1 overflow-hidden">
       <div class="flex-1 relative z-0 flex overflow-hidden">
         <main class="flex-1 relative z-0 overflow-y-auto focus:outline-none xl:order-last" tabindex="0">
@@ -38,6 +38,15 @@
                             <span>Dejar de seguir</span>
                             </button>
                         </a>
+                        <a class="ml-2 mt-8">
+                           <!--  ! hacer que te lleve a un apartado de message/{username} y poner routerLink -->
+                           <button type="button" *ngIf="!isMyProfile" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                            <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                              <i class="fas fa-envelope fa-lg"></i>
+                            </span>
+                            <span>Enviar mensaje</span>
+                          </button>
+                        </a>
                       </h1>
                     </div>
                     <div class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -45,14 +54,6 @@
                         <a routerLink="list/followers"><span class="p-3 hover:text-purple-600 no-underline">Seguidores: {{ n_followers }}</span></a>
                         <a routerLink="list/followed"><span class="p-3 hover:text-purple-600 no-underline">Seguidos: {{ n_followed }}</span></a>
                       </div>
-                      <button type="button" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
-                        <!-- Heroicon name: solid/mail -->
-                        <svg class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z" />
-                          <path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z" />
-                        </svg>
-                        <span>Enviar mensaje</span>
-                      </button>
                     </div>
                   </div>
                 </div>
@@ -78,53 +79,73 @@
                 </div>
               </div>
             </div>
+           <!--  TODO: Añadir estilos -->
+            <div *ngIf="publications == null">
+              Todavía no ha realizado ninguna publicación
+            </div>
 
-            <article aria-labelledby="question-title-81614" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
-              <div>
-                <div class="flex space-x-3">
-                  <div class="min-w-0 flex-1">
-                    <p class="text-sm text-gray-500 mt-4">
-                      <span class="hover:underline">December 9 at 11:43 AM</span>
-                    </p>
+            <div *ngIf="publications != null">
+              <article aria-labelledby="question-title-81614" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" *ngFor="let publication of publications; index as i;">
+                <div>
+                  <div class="flex space-x-3">
+                    <div class="min-w-0 flex-1 mb-3">
+                      <p class="text-sm text-gray-500 mt-4 inline-block">
+                        <span class="hover:underline">{{ publication.upload_date }}</span>
+                      </p>
+                      <!--todo: redirigir a createEditPublication -->
+                      <div class="inline-block ml-20" *ngIf="isMyProfile">
+                        <a class="inline-block" routerLink="/profile/my/publication/{{ publication.id }}">
+                            <i class="fas fa-edit fa-lg hover:text-blue-700"></i>
+                        </a>
+                        <a class="inline-block">
+                          <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 ml-1"></i>
+                        </a>
+                      </div>
+                    </div>
+
+                  </div>
+             <!--      TODO: discutirlo falta poner titulo -->
+         <!--          <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
+                    What would you have done differently if you ran Jurassic Park?
+                  </h2> -->
+                </div>
+                <div *ngFor="let img of publication.imgsPublication; index as i;">
+                  <div *ngIf="publication.imgsPublication != null">
+                  <!--   TODO: permitir inline-block, limitar los border de las publicaciones -->
+                    <img src="{{ img.imgPublication }}">
                   </div>
                 </div>
-                <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
-                  What would you have done differently if you ran Jurassic Park?
-                </h2>
-              </div>
-              <div class="mt-2 text-sm text-gray-700 space-y-4">
-                <p>
-                  Jurassic Park was an incredible idea and a magnificent feat of engineering, but poor protocols and a disregard for human safety killed what could have otherwise been one of the best businesses of our generation.
-                </p>
-                <p>
-                  Ultimately, I think that if you wanted to run the park successfully and keep visitors safe, the most important thing to prioritize would be&hellip;
-                </p>
-              </div>
-              <div class="mt-6 flex justify-between space-x-8">
-                <div class="flex space-x-6">
-                  <span class="inline-flex items-center text-sm">
-                    <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                      <!-- Heroicon name: solid/thumb-up -->
-                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                      </svg>
-                      <span class="font-medium text-gray-900">29</span>
-                      <span class="sr-only">likes</span>
-                    </button>
-                  </span>
-                  <span class="inline-flex items-center text-sm">
-                    <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                      <!-- Heroicon name: solid/chat-alt -->
-                      <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                      </svg>
-                      <span class="font-medium text-gray-900">11</span>
-                      <span class="sr-only">replies</span>
-                    </button>
-                  </span>
+                <div class="mt-2 text-sm text-gray-700 space-y-4">
+                  <p>
+                    {{ publication.bodyPublication }}
+                  </p>
                 </div>
-              </div>
-            </article>
+                <div class="mt-6 flex justify-between space-x-8">
+                  <div class="flex space-x-6">
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/thumb-up -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span class="font-medium text-gray-900">29</span>
+                        <span class="sr-only">likes</span>
+                      </button>
+                    </span>
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/chat-alt -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
+                        </svg>
+                        <span class="font-medium text-gray-900">11</span>
+                        <span class="sr-only">replies</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </div>
           </article>
         </main>
       </div>
