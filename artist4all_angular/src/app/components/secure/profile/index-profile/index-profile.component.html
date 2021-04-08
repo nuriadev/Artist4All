@@ -42,7 +42,7 @@
                            <!--  ! hacer que te lleve a un apartado de message/{username} y poner routerLink -->
                            <button type="button" *ngIf="!isMyProfile" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                             <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <i class="fas fa-envelope"></i>
+                              <i class="fas fa-envelope fa-lg"></i>
                             </span>
                             <span>Enviar mensaje</span>
                           </button>
@@ -88,16 +88,26 @@
               <article aria-labelledby="question-title-81614" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8" *ngFor="let publication of publications; index as i;">
                 <div>
                   <div class="flex space-x-3">
-                    <div class="min-w-0 flex-1">
-                      <p class="text-sm text-gray-500 mt-4">
+                    <div class="min-w-0 flex-1 mb-3">
+                      <p class="text-sm text-gray-500 mt-4 inline-block">
                         <span class="hover:underline">{{ publication.upload_date }}</span>
                       </p>
+                      <!--todo: redirigir a createEditPublication -->
+                      <div class="inline-block ml-20" *ngIf="isMyProfile">
+                        <a class="inline-block" routerLink="/profile/my/publication/{{ publication.id }}">
+                            <i class="fas fa-edit fa-lg hover:text-blue-700"></i>
+                        </a>
+                        <a class="inline-block">
+                          <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 ml-1"></i>
+                        </a>
+                      </div>
                     </div>
+
                   </div>
              <!--      TODO: discutirlo falta poner titulo -->
-                  <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
+         <!--          <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
                     What would you have done differently if you ran Jurassic Park?
-                  </h2>
+                  </h2> -->
                 </div>
                 <div *ngFor="let img of publication.imgsPublication; index as i;">
                   <div *ngIf="publication.imgsPublication != null">

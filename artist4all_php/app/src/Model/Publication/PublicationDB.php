@@ -37,7 +37,7 @@ class PublicationDB {
     }
 
     public function getUserPublications(int $id_user) : ?array {
-        $sql = 'SELECT * FROM publications WHERE id_user=:id_user';
+        $sql = 'SELECT * FROM publications WHERE id_user=:id_user ORDER BY id DESC';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id_user' => $id_user ]);
         $publicationsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);

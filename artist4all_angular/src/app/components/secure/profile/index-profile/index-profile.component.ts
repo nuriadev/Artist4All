@@ -51,18 +51,20 @@ export class ProfileComponent implements OnInit {
         }, 1200);
         this.profileUsername = params.get('username');
         if (this.profileUsername == 'my') {
-          this.id = this.user.id;
-          this.name = this.user.name;
-          this.surname1 = this.user.surname1;
-          this.surname2 = this.user.surname2;
-          this.email = this.user.email;
-          this.username = this.user.username;
-          this.password = this.user.password;
-          this.imgAvatar = this.user.imgAvatar;
-          this.aboutMe = this.user.aboutMe;
-          this.isMyProfile = true;
-          this.getFollowersAndFollowed(this.username, this.token);
-          this.getUserPublications(this.username, this.token);
+          setTimeout(() => {
+            this.id = this.user.id;
+            this.name = this.user.name;
+            this.surname1 = this.user.surname1;
+            this.surname2 = this.user.surname2;
+            this.email = this.user.email;
+            this.username = this.user.username;
+            this.password = this.user.password;
+            this.imgAvatar = this.user.imgAvatar;
+            this.aboutMe = this.user.aboutMe;
+            this.isMyProfile = true;
+            this.getFollowersAndFollowed(this.username, this.token);
+            this.getUserPublications(this.username, this.token);
+          }, 1200);
         } else {
           this._userService.getUserByUsername(this.profileUsername).subscribe(
             (result) => {
