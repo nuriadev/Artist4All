@@ -21,10 +21,10 @@ class UserController {
     $app->post('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:followUser');
     $app->delete('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:unfollowUser'); 
     
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/followers', '\Artist4all\Controller\UserController:countFollowers');  
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/follower', '\Artist4all\Controller\UserController:countFollowers');  
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/followed', '\Artist4all\Controller\UserController:countFollowed'); 
 
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/list/followers', '\Artist4all\Controller\UserController:getFollowers');
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/list/follower', '\Artist4all\Controller\UserController:getFollowers');
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/list/followed', '\Artist4all\Controller\UserController:getUsersFollowed');
   }
 

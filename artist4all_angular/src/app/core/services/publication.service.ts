@@ -30,10 +30,14 @@ export class PublicationService {
     createPublicationFormData.append('n_comments',''+newPublication.n_comments);
     createPublicationFormData.append('token', token);
 
-    return this.http.post(this.url + '/my/publications', createPublicationFormData);
+    return this.http.post(this.url + '/my/publication', createPublicationFormData);
   }
 
   getUserPublications(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/' + username + '/publications', { headers: new HttpHeaders({ 'Authorization': token })});
+    return this.http.get(this.url + '/' + username + '/publication', { headers: new HttpHeaders({ 'Authorization': token })});
+  }
+
+  getPublicationById(id:number, username:string, token:string):Observable<any> {
+    return this.http.get(this.url + '/' + username + '/publication/' + id, { headers: new HttpHeaders({ 'Authorization': token })});
   }
 }

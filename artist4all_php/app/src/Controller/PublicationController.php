@@ -5,13 +5,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class PublicationController {
   public static function initRoutes($app) {
-    $app->post('/user/my/publications', '\Artist4all\Controller\PublicationController:createPublication');
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publications', '\Artist4all\Controller\PublicationController:getUserPublications');
+    $app->post('/user/my/publication', '\Artist4all\Controller\PublicationController:createPublication');
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
   }
 
   public function getPublicationById(Request $request, Response $response, array $args) {
-    $data = $request->getParsedBody();
-    $id = trim($data['id']);
+    $authorized = $this->isAuthorizated($request, $response);
+    $id = $args['id'];
+    $username = $args['username'];
     $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationById($id);
     if (is_null($publication)) $response = $response->withStatus(404, 'Publication not found');
     else $response = $response->withJson($publication);

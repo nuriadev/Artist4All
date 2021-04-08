@@ -31,7 +31,7 @@ class PublicationDB {
         $publicationAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$publicationAssoc) return null;
         $imgsPublication = $this->getPublicationImgs($id);
-        $data['imgsPublication'] = $imgsPublication;
+        $publicationAssoc['imgsPublication'] = $imgsPublication;
         $publication = \Artist4all\Model\Publication\Publication::fromAssoc($publicationAssoc);
         return $publication;
     }

@@ -107,7 +107,7 @@ export class UserService {
   }
 
   countFollowers(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/followers', { headers: new HttpHeaders({ 'Authorization': token })});
+    return this.http.get(this.url + '/user/' + username + '/follower', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 
   countFollowed(username:string, token:string):Observable<any> {
@@ -115,7 +115,7 @@ export class UserService {
   }
 
   getFollowers(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/list/followers', { headers: new HttpHeaders({ 'Authorization': token })});
+    return this.http.get(this.url + '/user/' + username + '/list/follower', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 
   getUsersFollowed(username:string, token:string):Observable<any> {
