@@ -23,25 +23,15 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {}
 
+  user:User;
   email:string = "";
   password:string = "";
   login() {
     this._authenticationService.login(new LoginUser(this.email, this.password)).subscribe(
       (result) => {
         if (result.token != null) {
-          let user = new User(
-            result.user['id'],
-            result.user['name'],
-            result.user['surname1'],
-            result.user['surname2'],
-            result.user['email'],
-            result.user['username'],
-            result.user['password'],
-            result.user['isArtist'],
-            result.user['imgAvatar'],
-            result.user['aboutMe']
-          );
-          let userSession = new Session(result.token, user);
+          this.user = result.user;
+          let userSession = new Session(result.token, this.user);
           this._sessionService.setCurrentSession(userSession);
           this._router.navigate(['/home']);
         }

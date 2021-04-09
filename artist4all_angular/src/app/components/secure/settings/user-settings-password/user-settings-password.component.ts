@@ -28,24 +28,14 @@ export class UserSettingsPasswordComponent implements OnInit {
 
   newPassword:string = "";
   confirmPassword:string = "";
+  userEdited:User;
   // todo verificar contraseñas iguales
   // todo añadir notificacion de cambio correcto
   editPassword() {
     this._userService.editPassword(this.id, this.newPassword, this.token).subscribe(
       (result) => {
-        let user = new User(
-          result.user['id'],
-          result.user['name'],
-          result.user['surname1'],
-          result.user['surname2'],
-          result.user['email'],
-          result.user['username'],
-          result.user['password'],
-          result.user['isArtist'],
-          result.user['imgAvatar'],
-          result.user['aboutMe']
-        );
-        let userSession = new Session(result.token, user);
+        this.userEdited = result.user;
+        let userSession = new Session(result.token, this.userEdited);
         this._sessionService.setCurrentSession(userSession);
       }, (error) => {
         console.log(error);

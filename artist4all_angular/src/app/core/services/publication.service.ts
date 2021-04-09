@@ -62,4 +62,21 @@ export class PublicationService {
   delete(id:number, token:string):Observable<any> {
     return this.http.delete(this.url + '/my/publication/' + id, { headers: new HttpHeaders({ 'Authorization': token })});
   }
+
+  addLike(publication:Publication, my_id:number, publisher_username:string, token:string):Observable<any> {
+    let likeFormData:FormData = new FormData;
+    likeFormData.append('my_id',''+my_id);
+    return this.http.post(this.url + '/' + publisher_username + '/publication/' + publication.id + '/like', likeFormData, { headers: new HttpHeaders({ 'Authorization': token })});
+  }
+
+  removelike(id_publication:Publication, publisher_username:string, token:string):Observable<any> {
+    let options = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token }),
+      body: { id_publication: id_publication }
+    };
+    return this.http.delete(
+      this.url + '/' + publisher_username + '/publication/' + id_publication + '/like',
+      options
+    );
+  }
 }

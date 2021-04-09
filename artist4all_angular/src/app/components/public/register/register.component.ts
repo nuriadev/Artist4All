@@ -23,6 +23,8 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  user:User;
+
   name:string = "";
   surname1:string = "";
   surname2:string = "";
@@ -37,19 +39,8 @@ export class RegisterComponent implements OnInit {
     this._userService.register(new User(null, this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.isArtist, null, '')).subscribe(
       (result) => {
         if (result['token'] != null) {
-          let user = new User(
-            result.user['id'],
-            result.user['name'],
-            result.user['surname1'],
-            result.user['surname2'],
-            result.user['email'],
-            result.user['username'],
-            result.user['password'],
-            result.user['isArtist'],
-            result.user['imgAvatar'],
-            result.user['aboutMe']
-          );
-          let userSession = new Session(result.token, user);
+          this.user = result.user;
+          let userSession = new Session(result.token, this.user);
           this._sessionService.setCurrentSession(userSession);
           this._router.navigate(['/home']);
         }

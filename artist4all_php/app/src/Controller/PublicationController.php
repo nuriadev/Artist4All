@@ -8,12 +8,15 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 class PublicationController
 {
   public static function initRoutes($app) {
-    $app->post('/user/my/publication', '\Artist4all\Controller\PublicationController:createPublication');
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
+    $app->post('/user/my/publication', '\Artist4all\Controller\PublicationController:createPublication');    
     // TODO: pasar a patch
     $app->post('/user/my/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
     $app->delete('/user/my/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:deletePublication');
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
+
+    $app->post('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}/like', '\Artist4all\Controller\PublicationController:addLike');
+    $app->delete('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}/like', '\Artist4all\Controller\PublicationController:removeLike');
   }
 
   public function getPublicationById(Request $request, Response $response, array $args) {
@@ -110,30 +113,31 @@ class PublicationController
     else $response = $response->withJson($result)->withStatus(200, 'User followed');
     return $response;
   }
-
-  public function likePublication(Request $request, Response $response, array $args) {
+  */
+  public function addLike(Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $username = $args['username'];
     $data = $request->getParsedBody();
-    $id_follower = $data['id_follower'];
-    $id_followed = $data['id_followed']; 
-    $follower = \Artist4all\Model\UserDB::getInstance()->getUserById($id_follower);
-    $followed = \Artist4all\Model\UserDB::getInstance()->getUserById($id_followed);
-    if (is_null($follower) || is_null($followed)) {
+    $myId= $data['my_id'];
+    $publisherUser = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username);
+    $likeGiverUser = \Artist4all\Model\User\UserDB::getInstance()->getUserById($myId);
+    if (is_null($publisherUser) || is_null($likeGiverUser)) {
       $response = $response->withStatus(404, 'User not found');
       return $response;
     }
-    $result = \Artist4all\Model\UserDB::getInstance()->followUser($follower, $followed);
-    if(is_null($result)) $response = $response->withStatus(400, 'Error at following');
-    else $response = $response->withJson($result)->withStatus(200, 'Added to your followed list');
-    return $response;
+    // $result = \Artist4all\Model\User\UserDB::getInstance()->followUser($follower, $followed);
+    // if(is_null($result)) $response = $response->withStatus(400, 'Error at following');
+    // else $response = $response->withJson($result)->withStatus(200, 'Added to your followed list');
+    // return $response;
   }
 
-  public function removeLikePublication(Request $request, Response $response, array $args) {
-    $id = $args['id'];
-    $result = \Artist4all\Model\UserDB::getInstance()->unfollowUser($id);
-    if(!$result) $response = $response->withStatus(500, 'Error at unfollwing');
-    else $response = $response->withJson($result)->withStatus(200, 'Removed from your followed list');
-    return $response;
-  } */
+  public function removeLike(Request $request, Response $response, array $args) {
+    // $id = $args['id'];
+    // $result = \Artist4all\Model\User\UserDB::getInstance()->unfollowUser($id);
+    // if(!$result) $response = $response->withStatus(500, 'Error at unfollwing');
+    // else $response = $response->withJson($result)->withStatus(200, 'Removed from your followed list');
+    // return $response;
+  } 
 
   private function validatePersist($data, $id, $response) {
     //todo: mirar si hay que validar algo

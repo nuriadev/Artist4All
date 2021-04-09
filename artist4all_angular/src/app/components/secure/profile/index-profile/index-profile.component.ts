@@ -5,6 +5,7 @@ import { UserService } from 'src/app/core/services/user.service';
 import { NgxSpinnerService } from "ngx-spinner";
 import { PublicationService } from 'src/app/core/services/publication.service';
 import { Publication } from 'src/app/core/models/publication';
+import { User } from 'src/app/core/models/user';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -25,6 +26,7 @@ export class ProfileComponent implements OnInit {
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
+
   id:number;
   name:string;
   surname1:string;
@@ -68,29 +70,30 @@ export class ProfileComponent implements OnInit {
         } else {
           this._userService.getUserByUsername(this.profileUsername).subscribe(
             (result) => {
-                this.id = result['id'],
-                this.name = result['name'],
-                this.surname1 = result['surname1'],
-                this.surname2 = result['surname2'],
-                this.email = result['email'],
-                this.username = result['username'],
-                this.imgAvatar = result['imgAvatar'],
-                this.aboutMe = result['aboutMe']
-                this.isMyProfile = false;
-                this._userService.isFollowingThatUser(this.user.username, this.username, this.token).subscribe(
-                  (result) => {
-                    if (result != null) {
-                      this.id_follow = result['id_follow'];
-                      this.isFollowed = true;
-                    } else {
-                      this.isFollowed = false;
-                    }
-                  }, (error) => {
-                    console.log(error);
+              this.id = result.id,
+              this.name = result.name,
+              this.surname1 = result.surname1,
+              this.surname2 = result.surname2,
+              this.email = result.email,
+              this.username = result.username,
+              this.imgAvatar = result.imgAvatar,
+              this.aboutMe = result.aboutMe
+              this.isMyProfile = false;
+              this._userService.isFollowingThatUser(this.user.username, this.username, this.token).subscribe(
+                (result) => {
+                  if (result != null) {
+                    this.id_follow = result['id_follow'];
+                    this.isFollowed = true;
+                  } else {
+                    this.isFollowed = false;
                   }
-                )
-                this.getFollowersAndFollowed(this.username, this.token);
-                this.getUserPublications(this.username, this.token);
+                }, (error) => {
+                  console.log(error);
+                }
+              )
+              this.getFollowersAndFollowed(this.username, this.token);
+              this.getUserPublications(this.username, this.token);
+
             }, (error) => {
               console.log(error);
             }
@@ -110,27 +113,38 @@ export class ProfileComponent implements OnInit {
     )
   }
 
-  likePublication(evt) {
-    console.log(evt.target.id);
+  n_likes:number;
+  n_comments:number;
+  id_like:number;
+  likePublication(index:number) {
     this.isLiked = true;
+    this.n_likes++;
+    this._publicationService.addLike(this.publications[index], this.user.id, this.username, this.token).subscribe(
+      (result) => {
+        this.id_like = result;
+      }, (error) => {
+        console.log(error);
+      }
+    )
   }
 
-  removeLikePublication(evt) {
-    console.log(evt.target.id);
+  removeLikePublication(index:number) {
     this.isLiked = false;
+    this.n_likes--;
+    this._publicationService.removelike(this.publications[index], this.username, this.token).subscribe()
   }
 
   isLiked:boolean;
   isPublicationLiked(index:number) {
-    let notLikedIcon = document.getElementById('notLikedIcon ' + index);
-    let likedIcon = document.getElementById('likedIcon ' + index);
+    let likeIcon = document.getElementById('likeIcon' + index);
+    let notLikedIcon = document.getElementById('notLikedIcon' + index);
     if (!this.isLiked) {
-      notLikedIcon.style.display = 'block';
-      likedIcon.style.display = "none";
+      likeIcon.style.display = 'block';
+      notLikedIcon.style.display = 'none';
       this.isLiked = true;
     } else {
-      likedIcon.style.display = 'block';
-      notLikedIcon.style.display = "none";
+      notLikedIcon.style.display = 'block';
+      likeIcon.style.display = 'none';
       this.isLiked = false;
     }
   }

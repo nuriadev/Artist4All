@@ -120,7 +120,7 @@
                         <a class="inline-block" routerLink="/profile/my/publication/{{ publication.id }}">
                             <i class="fas fa-edit fa-lg hover:text-blue-700"></i>
                         </a>
-                        <a class="inline-block" (click)="deletePublication(i);">
+                        <a class="inline-block" *ngIf="isMyProfile" (click)="deletePublication(i);">
                           <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 ml-1"></i>
                         </a>
                       </div>
@@ -148,10 +148,10 @@
                     <span class="inline-flex items-center text-sm">
       <!--                 <button  class="inline-flex space-x-2 text-gray-400 hover:text-gray-500"> -->
                         <!-- Heroicon name: solid/thumb-up -->
-                        <i id="{{'notLikedIcon ' + i}}" (click)="likePublication($event)" *ngIf="!isLiked; " class="fa fa-heart fa-lg mt-1 text-gray-400 hover:text-gray-500"></i>
+                        <i id="{{ 'notLikedIcon' + i }}" (click)="likePublication(i)" *ngIf="!isLiked; " class="fa fa-heart fa-lg mt-1 text-gray-400 hover:text-gray-500"></i>
                        <!--  TODO: remove style hidden once we know if liked -->
                        <!-- TODO: revisar -->
-                        <i id="{{'likedIcon ' + i}}" (click)="removeLikePublication($event)" *ngIf="isLiked;" class="fa fa-heart fa-lg mt-1 text-red-600 hover:text-red-500"></i>
+                        <i id="{{'likedIcon' + i}}" (click)="removeLikePublication(i)" *ngIf="isLiked;" class="fa fa-heart fa-lg mt-1 text-red-600 hover:text-red-500"></i>
                         <span class="font-medium text-gray-900 ml-1">29</span>
                         <span class="sr-only">likes</span>
 <!--                       </button> -->
