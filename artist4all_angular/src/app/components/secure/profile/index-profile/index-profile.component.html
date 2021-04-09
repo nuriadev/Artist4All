@@ -59,7 +59,30 @@
                 </div>
                 <div class="hidden sm:block 2xl:hidden mt-6 min-w-0 flex-1">
                   <h1 class="text-2xl font-bold text-gray-900 truncate">
-                    {{ name }} {{ surname1 }}
+                    {{ username }}
+                    <a class="ml-5">
+                      <button type="button" id="followedContainer" *ngIf="!isMyProfile && !isFollowed;" (click)="followUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                      <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <i class="fas fa-user-plus"></i>
+                      </span>
+                      <span>Seguir</span>
+                      </button>
+                      <button type="button"  id="unfollowedContainer" *ngIf="!isMyProfile && isFollowed;" (click)="unfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                      <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <i class="fas fa-user-minus"></i>
+                      </span>
+                      <span>Dejar de seguir</span>
+                      </button>
+                    </a>
+                    <a class="ml-2 mt-8">
+                      <!--  ! hacer que te lleve a un apartado de message/{username} y poner routerLink -->
+                      <button type="button" *ngIf="!isMyProfile" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                        <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <i class="fas fa-envelope fa-lg"></i>
+                        </span>
+                        <span>Enviar mensaje</span>
+                      </button>
+                    </a>
                   </h1>
                 </div>
               </div>
@@ -97,7 +120,7 @@
                         <a class="inline-block" routerLink="/profile/my/publication/{{ publication.id }}">
                             <i class="fas fa-edit fa-lg hover:text-blue-700"></i>
                         </a>
-                        <a class="inline-block">
+                        <a class="inline-block" (click)="deletePublication(i);">
                           <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 ml-1"></i>
                         </a>
                       </div>
@@ -123,21 +146,20 @@
                 <div class="mt-6 flex justify-between space-x-8">
                   <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
-                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+      <!--                 <button  class="inline-flex space-x-2 text-gray-400 hover:text-gray-500"> -->
                         <!-- Heroicon name: solid/thumb-up -->
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                        </svg>
-                        <span class="font-medium text-gray-900">29</span>
+                        <i id="{{'notLikedIcon ' + i}}" (click)="likePublication($event)" *ngIf="!isLiked; " class="fa fa-heart fa-lg mt-1 text-gray-400 hover:text-gray-500"></i>
+                       <!--  TODO: remove style hidden once we know if liked -->
+                       <!-- TODO: revisar -->
+                        <i id="{{'likedIcon ' + i}}" (click)="removeLikePublication($event)" *ngIf="isLiked;" class="fa fa-heart fa-lg mt-1 text-red-600 hover:text-red-500"></i>
+                        <span class="font-medium text-gray-900 ml-1">29</span>
                         <span class="sr-only">likes</span>
-                      </button>
+<!--                       </button> -->
                     </span>
                     <span class="inline-flex items-center text-sm">
-                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                      <button id="commentIcon" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                         <!-- Heroicon name: solid/chat-alt -->
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                          <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                        </svg>
+                        <i class="fas fa-comment-dots fa-lg mt-1"></i>
                         <span class="font-medium text-gray-900">11</span>
                         <span class="sr-only">replies</span>
                       </button>

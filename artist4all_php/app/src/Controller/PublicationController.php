@@ -12,7 +12,8 @@ class PublicationController
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
     // TODO: pasar a patch
-    $app->post('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
+    $app->post('/user/my/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
+    $app->delete('/user/my/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:deletePublication');
   }
 
   public function getPublicationById(Request $request, Response $response, array $args) {
@@ -80,9 +81,9 @@ class PublicationController
     return $response;
   }
 
-  public function removePublication(Request $request, Response $response, array $args) {
+  public function deletePublication(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
-    $id = trim($data['id']);
+    $id = $args['id'];
     $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationById($id);
     if (is_null($publication)) {
       $response = $response->withStatus(404, 'Publication not found');
@@ -126,7 +127,7 @@ class PublicationController
     return $response;
   }
 
-  public function dislikePublication(Request $request, Response $response, array $args) {
+  public function removeLikePublication(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $result = \Artist4all\Model\UserDB::getInstance()->unfollowUser($id);
     if(!$result) $response = $response->withStatus(500, 'Error at unfollwing');

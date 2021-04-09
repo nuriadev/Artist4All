@@ -4,6 +4,7 @@ import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
 import { NgxSpinnerService } from "ngx-spinner";
 import { PublicationService } from 'src/app/core/services/publication.service';
+import { Publication } from 'src/app/core/models/publication';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -20,8 +21,7 @@ export class ProfileComponent implements OnInit {
     private spinner: NgxSpinnerService
   ) { }
 
-  // TODO: ordenar por fecha
-  publications:Array<PublicationService> = [];
+  publications:Array<Publication> = [];
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
@@ -100,6 +100,41 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  deletePublication(index:number) {
+    this._publicationService.delete(this.publications[index].id, this.token).subscribe(
+      (result) => {
+        location.reload();
+      }, (error) => {
+        console.log(error);
+      }
+    )
+  }
+
+  likePublication(evt) {
+    console.log(evt.target.id);
+    this.isLiked = true;
+  }
+
+  removeLikePublication(evt) {
+    console.log(evt.target.id);
+    this.isLiked = false;
+  }
+
+  isLiked:boolean;
+  isPublicationLiked(index:number) {
+    let notLikedIcon = document.getElementById('notLikedIcon ' + index);
+    let likedIcon = document.getElementById('likedIcon ' + index);
+    if (!this.isLiked) {
+      notLikedIcon.style.display = 'block';
+      likedIcon.style.display = "none";
+      this.isLiked = true;
+    } else {
+      likedIcon.style.display = 'block';
+      notLikedIcon.style.display = "none";
+      this.isLiked = false;
+    }
+  }
+
   followUser() {
     this.isFollowed = true;
     this.n_followers++;
@@ -120,7 +155,7 @@ export class ProfileComponent implements OnInit {
 
   }
 
-  isFollowed: boolean;
+  isFollowed:boolean;
   isUserFollowed() {
     let followContainer = document.getElementById('followContainer');
     let unfollowContainer = document.getElementById('unfollowContainer');

@@ -58,4 +58,8 @@ export class PublicationService {
     // TODO: pasar a patch
     return this.http.post(this.url + '/my/publication/' + publication.id, editPublicationFormData);
   }
+
+  delete(id:number, token:string):Observable<any> {
+    return this.http.delete(this.url + '/my/publication/' + id, { headers: new HttpHeaders({ 'Authorization': token })});
+  }
 }
