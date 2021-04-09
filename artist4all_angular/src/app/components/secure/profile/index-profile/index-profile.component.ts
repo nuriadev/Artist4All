@@ -93,7 +93,6 @@ export class ProfileComponent implements OnInit {
               )
               this.getFollowersAndFollowed(this.username, this.token);
               this.getUserPublications(this.username, this.token);
-
             }, (error) => {
               console.log(error);
             }
