@@ -1,12 +1,10 @@
 <?php
-
 namespace Artist4all\Controller;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class PublicationController
-{
+class PublicationController {
   public static function initRoutes($app) {
     $app->post('/user/my/publication', '\Artist4all\Controller\PublicationController:createPublication');    
     // TODO: pasar a patch

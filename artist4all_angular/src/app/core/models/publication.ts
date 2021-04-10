@@ -9,7 +9,6 @@ export class Publication {
   n_comments:number;
   // todo  comentarios arrayPara los comentarios de las publicaciones
 
-
   constructor(
     id:number,
     id_user:number,
@@ -26,5 +25,4 @@ export class Publication {
       this.n_likes = n_likes;
       this.n_comments = n_comments;
   }
-
 }

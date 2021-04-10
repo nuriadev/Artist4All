@@ -5,7 +5,9 @@ import { UserService } from 'src/app/core/services/user.service';
 import { NgxSpinnerService } from "ngx-spinner";
 import { PublicationService } from 'src/app/core/services/publication.service';
 import { Publication } from 'src/app/core/models/publication';
+import { Notification } from 'src/app/core/models/notification';
 import { User } from 'src/app/core/models/user';
+import { NotificationService } from 'src/app/core/services/notification.service';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -18,6 +20,7 @@ export class ProfileComponent implements OnInit {
     private _sessionService: SessionService,
     private _userService: UserService,
     private _publicationService: PublicationService,
+    private _notificationService: NotificationService,
     private _activeRoute: ActivatedRoute,
     private spinner: NgxSpinnerService
   ) { }
@@ -36,12 +39,15 @@ export class ProfileComponent implements OnInit {
   password:string;
   imgAvatar:FileList;
   aboutMe:string;
+  isPrivate:number;
   n_followers:number;
   n_followed:number;
 
   profileUsername:string = "";
   isMyProfile:boolean = false;
   loaded: boolean;
+  id_follow:number;
+  status_follow:number;
   ngOnInit(): void {
     this.loaded = false;
     this._activeRoute.paramMap.subscribe(
@@ -63,6 +69,7 @@ export class ProfileComponent implements OnInit {
             this.password = this.user.password;
             this.imgAvatar = this.user.imgAvatar;
             this.aboutMe = this.user.aboutMe;
+            this.isPrivate = this.user.isPrivate;
             this.isMyProfile = true;
             this.getFollowersAndFollowed(this.username, this.token);
             this.getUserPublications(this.username, this.token);
@@ -70,22 +77,24 @@ export class ProfileComponent implements OnInit {
         } else {
           this._userService.getUserByUsername(this.profileUsername).subscribe(
             (result) => {
-              this.id = result.id,
-              this.name = result.name,
-              this.surname1 = result.surname1,
-              this.surname2 = result.surname2,
-              this.email = result.email,
-              this.username = result.username,
-              this.imgAvatar = result.imgAvatar,
-              this.aboutMe = result.aboutMe
+              this.id = result.id;
+              this.name = result.name;
+              this.surname1 = result.surname1;
+              this.surname2 = result.surname2;
+              this.email = result.email;
+              this.username = result.username;
+              this.imgAvatar = result.imgAvatar;
+              this.aboutMe = result.aboutMe;
+              this.isPrivate = result.isPrivate;
               this.isMyProfile = false;
               this._userService.isFollowingThatUser(this.user.username, this.username, this.token).subscribe(
                 (result) => {
                   if (result != null) {
-                    this.id_follow = result['id_follow'];
-                    this.isFollowed = true;
+                    this.id_follow = result.id;
+                    this.status_follow = result.status_follow;
                   } else {
-                    this.isFollowed = false;
+                    this.id_follow = null;
+                    this.status_follow = 1;
                   }
                 }, (error) => {
                   console.log(error);
@@ -148,52 +157,64 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  followUser() {
-    this.isFollowed = true;
-    this.n_followers++;
-    this._userService.followUser(this.user.username, this.username, this.token).subscribe(
+  requestOrFollowUser() {
+    if (this.isPrivate == 0) {
+      this.status_follow = 3;
+      this.n_followers++;
+    } else {
+      this.status_follow = 2;
+    }
+    this._userService.requestOrFollowUser(this.id_follow, this.user.username, this.username, this.status_follow, this.token).subscribe(
       (result) => {
-        this.id_follow = result['id_follow'];
+        this.id_follow = result.id;
       }, (error) => {
         console.log(error);
       }
     )
   }
 
-  id_follow:number;
-  unfollowUser() {
-    this.isFollowed = false;
-    this.n_followers--;
-    this._userService.unfollowUser(this.user.username, this.username, this.id_follow, this.token).subscribe();
-
+  cancelRequestOrUnfollowUser() {
+    if (this.status_follow == 3) this.n_followers--;
+    this.status_follow = 1;
+    this._userService.cancelRequestOrUnfollowUser(this.id_follow, this.user.username, this.username, this.status_follow, this.token).subscribe(
+      (result) => {
+        this.id_follow = result.id;
+      }, (error) => {
+        console.log(error);
+      }
+    )
   }
 
-  isFollowed:boolean;
   isUserFollowed() {
     let followContainer = document.getElementById('followContainer');
+    let pendingContainer = document.getElementById('pendingContainer');
     let unfollowContainer = document.getElementById('unfollowContainer');
-    if (!this.isFollowed) {
+    if (this.status_follow == 1) {
       followContainer.style.display = 'block';
+      pendingContainer.style.display = 'none';
       unfollowContainer.style.display = "none";
-      this.isFollowed = true;
-    } else {
-      unfollowContainer.style.display = 'block';
+    } else if (this.status_follow == 2) {
       followContainer.style.display = 'none';
-      this.isFollowed = false;
+      pendingContainer.style.display = 'block';
+      unfollowContainer.style.display = "none";
+    } else {
+      followContainer.style.display = 'none';
+      pendingContainer.style.display = 'none';
+      unfollowContainer.style.display = "block";
     }
   }
 
   getFollowersAndFollowed(username:string, token:string) {
     this._userService.countFollowers(username, token).subscribe(
       (result) => {
-        this.n_followers = result['n_followers'];
+        this.n_followers = result.n_followers;
       }, (error) => {
         console.log(error);
       }
     )
     this._userService.countFollowed(username, token).subscribe(
       (result) => {
-        this.n_followed = result['n_followed'];
+        this.n_followed = result.n_followed;
       }, (error) => {
         console.log(error);
       }
@@ -216,32 +237,11 @@ export class ProfileComponent implements OnInit {
   }
 
   adaptDateOfPublication(upload_date:string) {
-    const days = [
-      'Domingo',
-      'Lunes',
-      'Martes',
-      'Miércoles',
-      'Jueves',
-      'Viernes',
-      'Sábado',
-    ];
-    const months = [
-      "Enero",
-      "Febrero",
-      "Marzo",
-      "Abril",
-      "Mayo",
-      "Junio",
-      "Julio",
-      "Agosto",
-      "Septiembre",
-      "Octubre",
-      "Noviembre",
-      "Diciembre"
-    ];
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['Enero', 'Febrero','Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     let numberDay = new Date(upload_date).getDay();
     let nameDay = days[numberDay];
-    let nameMonth = months[new Date().getMonth()];
+    let nameMonth = months[new Date(upload_date).getMonth()];
     let datetime = upload_date.split(' ');
     let date = datetime[0].split('-');
     let time = datetime[1].split(':');

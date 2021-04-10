@@ -41,6 +41,7 @@ export class EditPublicationComponent implements OnInit {
         this.idPublication = params.get('id');
         this._publicationService.getPublicationById(parseInt(this.idPublication), this.user.username, this.token).subscribe(
           (result) => {
+            //TODO: optimizar
             let miPublication = new Publication(
               result.id,
               result.id_user,

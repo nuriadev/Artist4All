@@ -20,32 +20,65 @@ export class UserSettingsAccountComponent implements OnInit {
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
-  id:number;
-  name:string;
-  surname1:string;
-  name_2:string;
-  surname1_2:string;
-  surname2:string;
-  email:string;
-  username:string;
-  password:string;
-  isArtist:number;
-  imgAvatar:FileList;
-  aboutMe:string;
+  userEdited:User;
 
+  sliderSwitchPrivate = document.getElementById('sliderSwitchPrivate');
+  toggleButtonPrivate = document.getElementById('toggleButtonPrivate');
+  staredPrivate:boolean;
   ngOnInit(): void {
-    this.id = this.user.id;
-    this.name = this.user.name;
-    this.surname1 = this.user.surname1;
-    this.name_2 = this.user.name;
-    this.surname1_2 = this.user.surname1;
-    this.surname2 = this.user.surname2;
-    this.email = this.user.email;
-    this.username = this.user.username;
-    this.password = this.user.password;
-    this.isArtist = this.user.isArtist;
-    this.imgAvatar = this.user.imgAvatar;
-    this.aboutMe = this.user.aboutMe;
+    let sliderSwitchPrivate = document.getElementById('sliderSwitchPrivate');
+    let toggleButtonPrivate = document.getElementById('toggleButtonPrivate');
+    if (this.user.isPrivate == 0) {
+      sliderSwitchPrivate.style.marginLeft = '0px';
+      toggleButtonPrivate.style.backgroundColor = 'rgba(229, 231, 235)';
+      this.isPrivate = false;
+      this.staredPrivate = false;
+    } else if (this.user.isPrivate == 1) {
+      sliderSwitchPrivate.style.marginLeft = '20px';
+      toggleButtonPrivate.style.backgroundColor = '#2196F3';
+      this.isPrivate = true;
+      this.staredPrivate = true;
+    }
+  }
+
+  isPrivate:boolean;
+  alternatePrivateAccount() {
+    let sliderSwitchPrivate = document.getElementById('sliderSwitchPrivate');
+    let toggleButtonPrivate = document.getElementById('toggleButtonPrivate');
+    if (!this.staredPrivate) {
+      if (!this.isPrivate) {
+        sliderSwitchPrivate.style.transform = 'translateX(20px)';
+        toggleButtonPrivate.style.backgroundColor = '#2196F3';
+        this.user.isPrivate = 1;
+        this.isPrivate = true;
+      } else {
+        sliderSwitchPrivate.style.transform = 'translateX(0px)';
+        toggleButtonPrivate.style.backgroundColor = 'rgba(229, 231, 235)';
+        this.user.isPrivate = 0;
+        this.isPrivate = false;
+      }
+    } else {
+      if (!this.isPrivate) {
+        sliderSwitchPrivate.style.transform = 'translateX(0.40px)';
+        toggleButtonPrivate.style.backgroundColor = '#2196F3';
+        this.user.isPrivate = 1;
+        this.isPrivate = true;
+      } else {
+        sliderSwitchPrivate.style.transform = 'translateX(-20px)';
+        toggleButtonPrivate.style.backgroundColor = 'rgba(229, 231, 235)';
+        this.user.isPrivate = 0;
+        this.isPrivate = false;
+      }
+    }
+    this._userService.switchPrivateAccount(this.user, this.token).subscribe(
+      (result) => {
+        this.userEdited = result.user;
+        let userSession = new Session(result.token, this.userEdited);
+        this._sessionService.setCurrentSession(userSession);
+      }, (error) => {
+        console.log(error);
+      }
+    )
   }
 
 }

@@ -51,7 +51,7 @@ class PublicationDB {
     }
 
     public function getPublicationImgs(int $id) : ?array {
-        $sql = 'SELECT imgPublication FROM imgsPublications WHERE id_publication=:id_publication';
+        $sql = 'SELECT imgPublication FROM imgs_publications WHERE id_publication=:id_publication';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id_publication' => $id ]);
         $imgsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -64,7 +64,7 @@ class PublicationDB {
     }
 
     public function deletePublicationImgs(int $id) : bool {
-        $sql = "DELETE FROM imgsPublications WHERE id_publication=:id_publication";
+        $sql = "DELETE FROM imgs_publications WHERE id_publication=:id_publication";
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ 'id_publication' => $id ]);
         return $result; 
@@ -121,7 +121,7 @@ class PublicationDB {
     }
 
     public function insertPublicationImgs(int $id, string $img) : bool {
-        $sql = 'INSERT INTO imgsPublications VALUES(
+        $sql = 'INSERT INTO imgs_publications VALUES(
             :id,
             :imgPublication,
             :id_publication

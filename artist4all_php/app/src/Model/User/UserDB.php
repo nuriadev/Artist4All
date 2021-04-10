@@ -89,6 +89,7 @@ class UserDB {
             :imgAvatar,
             :aboutMe,
             :token,
+            :isPrivate,
             :deactivated
         )';
         $statement = $this->conn->prepare($sql);
@@ -106,6 +107,7 @@ class UserDB {
             ':imgAvatar' => $user->getImgAvatar(),
             ':aboutMe' => $user->getAboutMe(),
             ':token' => $user->getToken(),
+            ':isPrivate' => $user->isPrivate(),
             ':deactivated' => 0
         ]);
         if (!$result) return null;
@@ -179,26 +181,25 @@ class UserDB {
     public function isFollowingThatUser(
         \Artist4all\Model\User\User $user_follower,
         \Artist4all\Model\User\User $user_followed) : ?array {
-        $sql = 'SELECT id FROM users_followed WHERE 
+        $sql = 'SELECT * FROM users_followed WHERE 
         id_follower=:id_follower AND 
         id_followed=:id_followed';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
             ':id_follower' => $user_follower->getId(),
-            ':id_followed' => $user_followed->getId()
+            ':id_followed' => $user_followed->getId(),
         ]);
         $followed = $statement->fetch(\PDO::FETCH_ASSOC);
         if(!$followed) return null;
-        $response = [
-            'id_follow' => $followed['id'],
-            'isFollowing' => 'yes'     
-        ];
-        return $response;
+        return $followed;
+    }
+    
+    public function persistFollow(array $logFollow) : ?array {
+        if (is_null($logFollow['id'])) return $this->insertRequestOrFollowUser($logFollow);
+        else return $this->updateFollowRequest($logFollow);  
     }
 
-    public function followUser(
-        \Artist4all\Model\User\User $user_follower,
-        \Artist4all\Model\User\User $user_followed) : ?array {
+    public function insertRequestOrFollowUser(array $logFollow) : ?array {
         $sql = 'INSERT INTO users_followed VALUES (
             :id,
             :id_follower,
@@ -207,34 +208,35 @@ class UserDB {
         )';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
-            ':id' => null,
-            ':id_follower' => $user_follower->getId(),
-            ':id_followed' => $user_followed->getId(),
-            ':status_follow' => 0
+            ':id' => $logFollow['id'],
+            ':id_follower' => $logFollow['id_follower'],
+            ':id_followed' => $logFollow['id_followed'],
+            ':status_follow' => $logFollow['status_follow']
         ]);
         if (!$result) return null;
-        $response = [
-            'id_follow' => $this->conn->lastInsertId(),
-            'message' => 'User followed'
-        ];
-        return $response;
+        $id = $this->conn->lastInsertId();
+        $logFollow['id']= (int) $id;
+        return $logFollow;
     }
 
-    public function unfollowUser(int $id) : ?array {
-        $sql = 'DELETE FROM users_followed WHERE id=:id';
+    public function updateFollowRequest(array $logFollow) : ?array {
+        $sql = 'UPDATE users_followed SET status_follow=:status_follow WHERE id=:id';
         $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([ ':id' => $id ]);
+        $result = $statement->execute([ 
+            ':id' => (int) $logFollow['id'],
+            ':status_follow' => $logFollow['status_follow']
+        ]);
         if (!$result) return null;
-        $response = [
-            'message' => 'User unfollowed'
-        ];
-        return $response;
+        return $logFollow;
     }
     
     public function countOrGetFollowers(int $id, string $tipo) : ?array {
-        $sql = 'SELECT id_follower FROM users_followed WHERE id_followed=:my_id';
+        $sql = 'SELECT id_follower FROM users_followed WHERE id_followed=:my_id AND status_follow=:status_follow';
         $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([ ':my_id' => $id ]); 
+        $result = $statement->execute([ 
+            ':my_id' => $id,
+            ':status_follow' => 3
+        ]); 
         if ($tipo == 'count') {
             if (!$result) return null;
             $n_followers = ['n_followers' => $statement->rowCount()];
@@ -251,9 +253,12 @@ class UserDB {
     }
 
     public function countOrGetFollowed(int $id, string $tipo) : ?array {
-        $sql = 'SELECT id_followed FROM users_followed WHERE id_follower=:my_id';
+        $sql = 'SELECT id_followed FROM users_followed WHERE id_follower=:my_id AND status_follow=:status_follow';
         $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([ ':my_id' => $id ]);
+        $result = $statement->execute([ 
+            ':my_id' => $id,
+            ':status_follow' => 3
+        ]); 
         if ($tipo == 'count') {
             if (!$result) return null;
             $n_followed = ['n_followed' => $statement->rowCount()];
@@ -275,5 +280,17 @@ class UserDB {
         $result = $statement->execute([ ':token' => $token ]);
         return $result;
     }
+
+    public function switchPrivateAccount(
+        \Artist4all\Model\User\User $user,
+        string $token) : bool {
+        $sql = 'UPDATE users SET isPrivate=:isPrivate WHERE token=:token';
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ 
+            ':isPrivate' => $user->isPrivate(),
+            ':token' => $token
+        ]);
+        return $result;
+    }   
 
 }

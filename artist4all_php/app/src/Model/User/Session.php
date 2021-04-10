@@ -1,7 +1,6 @@
 <?php
 namespace Artist4all\Model\User;
 class Session implements \JsonSerializable {
-
   private string $token;
   private \Artist4all\Model\User\User $user; 
 

@@ -25,22 +25,30 @@
                       <h1 class="text-2xl font-bold text-gray-900 truncate">
                         {{ username }}
                         <a class="ml-5">
-                            <button type="button" id="followedContainer" *ngIf="!isMyProfile && !isFollowed;" (click)="followUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                            <button type="button" id="followedContainer" *ngIf="!isMyProfile && status_follow == 1" (click)="requestOrFollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                             <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                               <i class="fas fa-user-plus"></i>
                             </span>
                             <span>Seguir</span>
                             </button>
-                            <button type="button"  id="unfollowedContainer" *ngIf="!isMyProfile && isFollowed;" (click)="unfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+
+                            <button type="button"  id="pendingContainer" *ngIf="!isMyProfile && status_follow == 2" (click)="cancelRequestOrUnfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                              <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <i class="fas fa-exclamation-circle fa-lg"></i>
+                              </span>
+                              <span>Pendiente de aceptación</span>
+                            </button>
+
+                            <button type="button"  id="unfollowedContainer" *ngIf="!isMyProfile && status_follow == 3" (click)="cancelRequestOrUnfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                             <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                               <i class="fas fa-user-minus"></i>
                             </span>
                             <span>Dejar de seguir</span>
                             </button>
                         </a>
+                        <!--  TODO hacer que te lleve a un apartado de message/{username} y poner routerLink -->
                         <a class="ml-2 mt-8">
-                           <!--  ! hacer que te lleve a un apartado de message/{username} y poner routerLink -->
-                           <button type="button" *ngIf="!isMyProfile" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                         <button type="button" *ngIf="!isMyProfile" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                             <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                               <i class="fas fa-envelope fa-lg"></i>
                             </span>
@@ -61,13 +69,21 @@
                   <h1 class="text-2xl font-bold text-gray-900 truncate">
                     {{ username }}
                     <a class="ml-5">
-                      <button type="button" id="followedContainer" *ngIf="!isMyProfile && !isFollowed;" (click)="followUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                      <button type="button" id="followedContainer" *ngIf="!isMyProfile && status_follow == 1" (click)="requestOrFollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                       <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <i class="fas fa-user-plus"></i>
                       </span>
                       <span>Seguir</span>
                       </button>
-                      <button type="button"  id="unfollowedContainer" *ngIf="!isMyProfile && isFollowed;" (click)="unfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+
+                      <button type="button"  id="pendingContainer" *ngIf="!isMyProfile && status_follow == 2" (click)="cancelRequestOrUnfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
+                        <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                          <i class="fas fa-exclamation-circle fa-lg"></i>
+                        </span>
+                        <span>Pendiente de aceptación</span>
+                      </button>
+
+                      <button type="button"  id="unfollowedContainer" *ngIf="!isMyProfile && status_follow == 3" (click)="cancelRequestOrUnfollowUser();" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                       <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <i class="fas fa-user-minus"></i>
                       </span>
@@ -75,7 +91,7 @@
                       </button>
                     </a>
                     <a class="ml-2 mt-8">
-                      <!--  ! hacer que te lleve a un apartado de message/{username} y poner routerLink -->
+                     <!-- hacer que te lleve a un apartado de message/{username} y poner routerLink -->
                       <button type="button" *ngIf="!isMyProfile" class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
                         <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                           <i class="fas fa-envelope fa-lg"></i>
@@ -115,7 +131,6 @@
                       <p class="text-sm text-gray-500 mt-4 inline-block">
                         <span class="hover:underline">{{ publication.upload_date }}</span>
                       </p>
-                      <!--todo: redirigir a createEditPublication -->
                       <div class="inline-block ml-20" *ngIf="isMyProfile">
                         <a class="inline-block" routerLink="/profile/my/publication/{{ publication.id }}">
                             <i class="fas fa-edit fa-lg hover:text-blue-700"></i>

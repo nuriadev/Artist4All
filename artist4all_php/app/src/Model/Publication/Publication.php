@@ -1,7 +1,6 @@
 <?php
 namespace Artist4all\Model\Publication;
 class Publication implements \JsonSerializable {
-
   private ?int $id;
   private int $id_user;
   private ?array $imgsPublication;

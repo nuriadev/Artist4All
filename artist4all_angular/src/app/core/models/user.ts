@@ -10,6 +10,7 @@ export class User {
   isArtist:number;
   imgAvatar:FileList;
   aboutMe:string = "";
+  isPrivate:number;
 
   constructor(
     id:number,
@@ -21,7 +22,8 @@ export class User {
     password:string,
     isArtist:number,
     imgAvatar:FileList,
-    aboutMe:string) {
+    aboutMe:string,
+    isPrivate:number) {
       this.id = id;
       this.name = name;
       this.surname1 = surname1;
@@ -32,6 +34,6 @@ export class User {
       this.isArtist = isArtist;
       this.imgAvatar = imgAvatar;
       this.aboutMe = aboutMe;
+      this.isPrivate = isPrivate;
   }
-
 }

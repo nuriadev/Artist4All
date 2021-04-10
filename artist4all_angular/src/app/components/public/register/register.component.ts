@@ -33,10 +33,11 @@ export class RegisterComponent implements OnInit {
   password:string = "";
   passwordConfirm:string = "";
   isArtist:number;
+  isPrivate = 0;
 
   // todo: comprobar que las contraseñas sean iguales
   register() {
-    this._userService.register(new User(null, this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.isArtist, null, '')).subscribe(
+    this._userService.register(new User(null, this.name, this.surname1, this.surname2, this.email, this.username, this.password, this.isArtist, null, '', this.isPrivate)).subscribe(
       (result) => {
         if (result['token'] != null) {
           this.user = result.user;
