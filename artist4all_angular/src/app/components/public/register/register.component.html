@@ -1,5 +1,4 @@
-<!--<app-user-navbar></app-user-navbar>-->
-<div class="min-h-screen bg-gray-50 flex flex-col py-12 sm:px-6 lg:px-8">
+<!-- <div class="min-h-screen bg-gray-50 flex flex-col py-12 sm:px-6 lg:px-8">
   <div class="sm:mx-auto sm:w-full sm:max-w-md">
     <a href="/"><img src="assets/img/logo.png" class="mx-auto h-12 w-auto" alt=""></a>
   </div>
@@ -90,9 +89,9 @@
             <div>
               <label for="password" class="block text-sm font-medium text-gray-700">
                 Contraseña
-              </label>
+              </label> -->
               <!-- password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter -->
-              <div class="mt-1">
+              <!-- <div class="mt-1">
                 <input #inputPassword="ngModel" [(ngModel)]="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
                  placeholder="Introduce tu contraseña"
                   id="password" name="password" type="password" autocomplete="current-password" required
@@ -105,7 +104,7 @@
             <label for="passwordConfirm" class="block text-sm font-medium text-gray-700">
               Confirma la contraseña
             </label>
-            <!-- password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter -->
+            password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter
             <div class="mt-1">
               <input #inputPasswordConfirm="ngModel" [(ngModel)]="passwordConfirm" placeholder="Confirma tu contraseña"
                 pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
@@ -142,7 +141,7 @@
         <p href="#" class="font-normal text-center text-black mt-6">
           ¿Ya tienes una cuenta? Entra <a routerLink="/login" class="font-medium text-purple-600 hover:text-purple-500">aquí</a>
         </p>
-      </div>
+      </div> -->
 
       <!--<div class="mt-6">
           <div class="relative">
@@ -185,6 +184,231 @@
             </div>
           </div>
         </div>-->
-    </div>
+  <!--   </div>
   </div>
 </div>
+ -->
+
+ <div class="min-h-screen bg-gray-50 flex flex-col py-12 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <a href="/"><img src="assets/img/logo.png" class="mx-auto h-12 w-auto" alt=""></a>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-2xl">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <form [formGroup]="registerForm" class="space-y-6" (ngSubmit)="register()">
+        <div class="text-center md:text-left">
+          <label for="typeUser" class="text-base font-medium text-gray-700">
+            ¿Cómo quieres registrarte?
+          </label>
+          <div class="mt-1">
+            <div class="flex items-center justify-center md:justify-start mt-5 mb-2">
+              <input formControlName="isArtist" type="radio" value="0" name="isArtist"
+              class="focus:ring-purple-500 h-4 w-4  text-purple-600 border-gray-300">
+              <label for="typeFollower" class="ml-2 mr-2 text-base font-medium text-gray-700">
+                Seguidor
+              </label>
+              <input formControlName="isArtist" type="radio" value="1" name="isArtist"
+              class="focus:ring-purple-500 h-4 w-4 text-purple-600 border-gray-300">
+              <label for="typeArtist" class="ml-2 text-base font-medium text-gray-700">
+                Artista
+              </label>
+            </div>
+            <div *ngIf="isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
+              <div *ngIf="registerForm.controls['isArtist'].invalid" class="font-normal text-left bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+                <i class="fas fa-times-circle"></i>
+                Se ha de seleccionar una opción
+              </div>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label for="name" class="block text-sm font-medium text-gray-700">
+            Nombre
+          </label>
+          <div class="mt-1">
+            <input formControlName="name" type="text" placeholder="Introduce tu nombre"
+            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+            focus:placeholder-gray-600
+            focus:bg-white
+            focus:border-purple-500
+            focus:outline-none">
+          </div>
+          <div *ngIf="name.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
+            <div *ngIf="name.errors.required" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+              <i class="fas fa-times-circle"></i>
+              Se requiere un nombre.
+            </div>
+          </div>
+          <div *ngIf="name.errors && name.errors.pattern" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+            <i class="fas fa-times-circle"></i>
+            Nombre no válido
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="sm:col-span-1">
+            <label for="surname1" class="block text-sm font-medium text-gray-700">
+              Primer apellido
+            </label>
+            <div class="mt-1">
+              <input formControlName="surname1" type="text" placeholder="Introduce tu primer apellido"
+              class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+              focus:placeholder-gray-600
+              focus:bg-white
+              focus:border-purple-500
+              focus:outline-none">
+            </div>
+            <div *ngIf="surname1.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
+              <div *ngIf="surname1.errors.required" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+                <i class="fas fa-times-circle"></i>
+                Se requiere el 1r apellido.
+              </div>
+            </div>
+            <div *ngIf="surname1.errors && surname1.errors.pattern" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+              <i class="fas fa-times-circle"></i>
+              El 1r Apellido no es válido.
+            </div>
+          </div>
+          <div>
+            <label for="surname2" class="block text-sm font-medium text-gray-700">
+              Segundo apellido.
+            </label>
+            <div class="mt-1">
+              <input formControlName="surname2" type="text" placeholder="Introduce tu segundo apellido"
+              class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+              focus:placeholder-gray-600
+              focus:bg-white
+              focus:border-purple-500
+              focus:outline-none">
+            </div>
+            <div *ngIf="surname2.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
+              <div *ngIf="surname2.errors.required" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+                <i class="fas fa-times-circle"></i>
+                Se requiere el 2º apellido.
+              </div>
+            </div>
+            <div *ngIf="surname2.errors && surname2.errors.pattern" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+              <i class="fas fa-times-circle"></i>
+              El 2º Apellido no es válido.
+            </div>
+          </div>
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700">
+            Correo electrónico
+          </label>
+          <div class="mt-1">
+            <input formControlName="email" type="email" placeholder="Introduce tu email"
+            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+            focus:placeholder-gray-600
+            focus:bg-white
+            focus:border-purple-500
+            focus:outline-none">
+          </div>
+          <div *ngIf="email.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
+            <div *ngIf="email.errors.required" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+              <i class="fas fa-times-circle"></i>
+              Se requiere un correo electrónico.
+            </div>
+          </div>
+          <div *ngIf="email.errors && email.errors.pattern" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+            <i class="fas fa-times-circle"></i>
+            Correo electrónico no válido.
+          </div>
+        </div>
+        <div>
+          <label for="username" class="block text-sm font-medium text-gray-700">
+            Nombre de usuario
+          </label>
+          <div class="mt-1">
+            <input formControlName="username" type="text" placeholder="Introduce tu nombre de usuario"
+            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+            focus:placeholder-gray-600
+            focus:bg-white
+            focus:border-purple-500
+            focus:outline-none">
+          </div>
+          <div *ngIf="username.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
+            <div *ngIf="username.errors.required" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+              <i class="fas fa-times-circle"></i>
+              Se requiere un nombre de usuario.
+            </div>
+          </div>
+          <div *ngIf="username.errors && username.errors.pattern" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+            <i class="fas fa-times-circle"></i>
+            Nombre de usuario no válido
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="sm:col-span-1">
+            <div class="py-2">
+              <label for="password" class="block text-sm font-medium text-gray-700">
+                Contraseña
+              </label>
+              <div class="relative">
+                <input formControlName="password" type="password" id="inputPassword" placeholder="Introduce tu contraseña"
+                class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+                focus:bg-white
+                focus:border-purple-500
+                focus:outline-none">
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" (click)="showOrHidePassword();">
+                  <i class="fas fa-eye fa-lg hover:text-gray-400" id="showIcon"></i>
+                  <i class="fas fa-eye-slash fa-lg hover:text-gray-400 hidden" id="hideIcon"></i>
+                </div>
+              </div>
+              <div *ngIf="password.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
+               <div *ngIf="password.errors.required" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+                  <i class="fas fa-times-circle"></i>
+                  Se requiere una contraseña.
+                </div>
+              </div>
+              <div *ngIf="password.errors && password.errors.pattern" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+                <i class="fas fa-times-circle"></i>
+                Contraseña no válida.
+              </div>
+            </div>
+          </div>
+          <div class="py-2">
+            <label for="passwordConfirm" class="block text-sm font-medium text-gray-700">
+              Confirma la contraseña
+            </label>
+            <div class="mt-1">
+              <input formControlName="passwordConfirm" type="password" placeholder="Confirma tu contraseña"
+                id="passwordConfirm"  class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+                focus:placeholder-gray-600
+                focus:bg-white
+                focus:border-purple-500
+                focus:outline-none">
+            </div>
+               <div *ngIf="checkMatchPasswords()" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+                 <i class="fas fa-times-circle"></i>
+                 Las contraseñas deben de coincidir.
+               </div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input id="remember_me" name="remember_me" type="checkbox"
+              class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+            <label for="remember_me" class="ml-2 block text-sm text-gray-900">
+              Recuérdame
+            </label>
+          </div>
+          <div class="text-sm">
+            <a href="#" class="font-medium text-purple-600 hover:text-purple-500">
+              ¿Has olvidado tu contraseña?
+            </a>
+          </div>
+        </div>
+        <div>
+          <button type="submit"
+            class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
+            Regístrate
+          </button>
+        </div>
+      </form>
+      <div class="text-sm">
+        <p href="#" class="font-normal text-center text-black mt-6">
+          ¿Ya tienes una cuenta? Entra <a routerLink="/login" class="font-medium text-purple-600 hover:text-purple-500">aquí</a>
+        </p>
+      </div>

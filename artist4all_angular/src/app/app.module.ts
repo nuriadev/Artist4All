@@ -10,7 +10,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/public/register/register.component';
 import { LoginComponent } from './components/public/login/login.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/secure/home/home.component';
@@ -66,7 +66,8 @@ import { UserSettingsPasswordComponent } from './components/secure/settings/user
     HttpClientModule,
     CommonModule,
     NgxSpinnerModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReactiveFormsModule
   ],
   providers: [UserService, AuthenticationService, SessionService, AuthGuard],
   bootstrap: [AppComponent],
