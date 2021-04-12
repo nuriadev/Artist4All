@@ -46,11 +46,11 @@
             </path>
           </svg>
           <span class="truncate">
-            <a routerLink="/message">Mensajería</a>
+            <a routerLink="/messages">Mensajería</a>
           </span>
         </a>
 
-        <a routerLink="/user"
+        <a routerLink="/user/list"
           class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
           <!-- Heroicon name: outline/trending-up -->
           <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
@@ -58,7 +58,7 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
           </svg>
           <span class="truncate">
-            <a routerLink="/user">Usuarios</a>
+            <a routerLink="/user/list">Usuarios</a>
           </span>
         </a>
       </div>
@@ -233,7 +233,7 @@
 
                     </div>
                     <div class="mt-2 text-sm text-gray-700 space-y-4">
-                      <p>{{ publitaction.bodyPublication }}</p>
+                      <p>{{ publication.bodyPublication }}</p>
                     </div>
                     <div class="mt-6 flex justify-between space-x-8">
                       <div class="flex space-x-6">

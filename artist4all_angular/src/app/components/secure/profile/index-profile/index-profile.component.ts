@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
       setTimeout(() => {
         this.spinner.hide();
         this.loaded = true;
-      }, 2000);
+      }, 1200);
       this.id_user = params.get('id_user');
       if (parseInt(this.id_user) == this.user.id) {
         setTimeout(() => {
