@@ -20,8 +20,7 @@ export class CreatePublicationComponent implements OnInit {
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
   imgToUpload: FileList = null;
   addImgPublication(imgPublication: FileList) {
@@ -29,7 +28,6 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   bodyPublication:string = "";
-
   createPublication()   {
     this._publicationService.create(
       new Publication(null, this.user.id, this.imgToUpload, this.bodyPublication, null, 0, 0),

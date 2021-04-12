@@ -5,7 +5,7 @@ import { SessionService } from 'src/app/core/services/session.service';
 import { User } from '../../../core/models/user';
 import { UserService } from '../../../core/services/user.service';
 import { FormControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
-import { matchingPasswords } from 'src/app/core/models/password.validator';
+import { matchingPasswords } from 'src/app/core/validators/password.validator';
 
 @Component({
   selector: 'app-register',

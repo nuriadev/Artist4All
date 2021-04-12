@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   loginForm = this._formBuilder.group({
     email: ['', [Validators.required,Validators.pattern(this.emailPattern)]],
-    password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
+    password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]]
   });
 
   get email() { return this.loginForm.get('email'); }

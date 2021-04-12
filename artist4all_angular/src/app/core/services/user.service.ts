@@ -50,13 +50,10 @@ export class UserService {
     return this.http.post(this.url + '/user/my/settings/profile', editFormData);
   }
 
-  editPassword(
-    id:number,
-    password:string,
-    token:string):Observable<any> {
+  editPassword(id, formValues, token):Observable<any> {
       let editPasswordFormData:FormData = new FormData();
       editPasswordFormData.append('id',''+id);
-      editPasswordFormData.append('password', password);
+      editPasswordFormData.append('password', formValues.password);
       editPasswordFormData.append('token', token);
    //    TODO Cambiar a patch
       return this.http.post(this.url + '/user/my/settings/password', editPasswordFormData);
