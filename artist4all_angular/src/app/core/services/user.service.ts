@@ -55,12 +55,14 @@ export class UserService {
     return this.http.post(this.url + '/user/' + id + '/profile', newForm);
   }
 
-  editPassword(id: number, password: string, token: string): Observable<any> {
-    let newForm: FormData = new FormData();
-    newForm.append('password', password);
+  editPassword(id, formValues, token):Observable<any> {
+    let newForm:FormData = new FormData();
+    newForm.append('id',''+id);
+    newForm.append('password', formValues.password);
     newForm.append('token', token);
     //    TODO Cambiar a patch
     return this.http.post(this.url + '/user/' + id + '/password', newForm);
+
   }
 
   getAllOtherUsers(id: number): Observable<any> {

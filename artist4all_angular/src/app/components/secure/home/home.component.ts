@@ -7,18 +7,13 @@ import { UserService } from 'src/app/core/services/user.service';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
-  providers: [UserService]
+  providers: [UserService],
 })
 export class HomeComponent implements OnInit {
+  constructor(private _sessionService: SessionService) {}
 
-  constructor(
-    private _sessionService: SessionService
-  ) { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   user = this._sessionService.getCurrentUser();
   id = this.user.id;
-
 }

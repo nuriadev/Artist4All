@@ -27,7 +27,6 @@ export class CreatePublicationComponent implements OnInit {
   }
 
   bodyPublication: string = '';
-
   createPublication() {
     this._publicationService
       .create(

@@ -30,8 +30,8 @@ export class LoginComponent implements OnInit {
   isValidFormSubmitted = null;
 
   loginForm = this._formBuilder.group({
-    email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
-    password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
+    email: ['', [Validators.required,Validators.pattern(this.emailPattern)]],
+    password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]]
   });
 
   get email() {

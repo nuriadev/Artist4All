@@ -3,7 +3,7 @@
 <p>Editar publicación:</p>
 
 
-<form #formPublication="ngForm" method="post" (ngSubmit)="editPublication(); formPublication.reset()">
+<form #formPublication="ngForm" (ngSubmit)="editPublication(); formPublication.reset()">
   <label for="body">Cuerpo:</label> <br>
   <textarea #textAreaBody="ngModel" [(ngModel)]="bodyPublication" id="bodyPublication" name="bodyPublication" cols="100"
     rows="8"></textarea> <br>
