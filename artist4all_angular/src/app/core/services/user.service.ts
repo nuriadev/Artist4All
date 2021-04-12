@@ -20,6 +20,7 @@ export class UserService {
     registerFormData.append('isArtist',''+newUser.isArtist);
     registerFormData.append('imgAvatar', 'http://localhost:81/assets/img/defaultAvatarImg.png');
     registerFormData.append('aboutMe', 'Bienvenido a mi perfil!!!');
+    registerFormData.append('isPrivate',''+newUser.isPrivate);
 
     return this.http.post(this.url + '/register', registerFormData);
   }
@@ -79,35 +80,49 @@ export class UserService {
     );
   }
 
-  followUser(
+  requestOrFollowUser(
+    id_follow:number,
     username_follower:string,
     username_followed:string,
+    status_follow:number,
     token:string):Observable<any> {
-    let followUserFormData:FormData = new FormData();
-    followUserFormData.append('token', token);
+    let requestOrFollowUserFormData:FormData = new FormData();
+    if (id_follow != null) requestOrFollowUserFormData.append('id_follow',''+id_follow);
+    requestOrFollowUserFormData.append('status_follow',''+status_follow);
     return this.http.post(
       this.url + '/user/' + username_follower + '/follow/' + username_followed,
-      followUserFormData
+      requestOrFollowUserFormData,
+      { headers: new HttpHeaders({ 'Authorization': token }) }
     );
   }
 
-  unfollowUser(
+  cancelRequestOrUnfollowUser(
+    id_follow:number,
     username_follower:string,
     username_followed:string,
-    id_follow:number,
+    status_follow:number,
     token:string):Observable<any> {
-    let options = {
+      let cancelRequestOrUnfollowFormData:FormData = new FormData();
+/*       cancelRequestOrUnfollowFormData.append('id_follow',''+id_follow); */
+      cancelRequestOrUnfollowFormData.append('status_follow',''+status_follow);
+      //TODO cambiar a patch y usar la ruta de requestOrFollowUser
+      return this.http.post(
+        this.url + '/user/' + username_follower + '/follow/' + username_followed + '/' + id_follow,
+        cancelRequestOrUnfollowFormData,
+        { headers: new HttpHeaders({ 'Authorization': token }) }
+      );
+/*     let options = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token }),
       body: { id_follow: id_follow }
     };
     return this.http.delete(
       this.url + '/user/' + username_follower + '/follow/' + username_followed,
       options
-    );
+    ); */
   }
 
   countFollowers(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/followers', { headers: new HttpHeaders({ 'Authorization': token })});
+    return this.http.get(this.url + '/user/' + username + '/follower', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 
   countFollowed(username:string, token:string):Observable<any> {
@@ -115,10 +130,21 @@ export class UserService {
   }
 
   getFollowers(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/list/followers', { headers: new HttpHeaders({ 'Authorization': token })});
+    return this.http.get(this.url + '/user/' + username + '/list/follower', { headers: new HttpHeaders({ 'Authorization': token })});
   }
 
   getUsersFollowed(username:string, token:string):Observable<any> {
     return this.http.get(this.url + '/user/' + username + '/list/followed', { headers: new HttpHeaders({ 'Authorization': token })});
   }
+
+  switchPrivateAccount(user:User, token:string):Observable<any> {
+    let switchPrivateAccountFormData:FormData = new FormData();
+    switchPrivateAccountFormData.append('username', user.username);
+    switchPrivateAccountFormData.append('isPrivate',''+user.isPrivate);
+    switchPrivateAccountFormData.append('token', token);
+    // TODO: pasar a patch
+    return this.http.post(this.url + '/user/my/settings/account/privacy', switchPrivateAccountFormData);
+  }
+
+
 }

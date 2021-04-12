@@ -5,9 +5,10 @@
 
 <form #formPublication="ngForm" method="post" (ngSubmit)="createPublication(); formPublication.reset()">
   <label for="body">Cuerpo:</label> <br>
-  <textarea #textAreaBody="ngModel" [(ngModel)]="bodyPublication" id="bodyPublication" name="bodyPublication" cols="100" rows="8"></textarea> <br>
+  <textarea #textAreaBody="ngModel" [(ngModel)]="bodyPublication" id="bodyPublication" name="bodyPublication" cols="100"
+    rows="8"></textarea> <br>
   <label for="imgOptional">Imagen(opcional): </label>
-  <input type="file" (change)="addImgPublication($event.target.files)" id="imgPublication" multiple/> <br>
+  <input type="file" (change)="addImgPublication($event.target.files)" id="imgPublication" multiple /> <br>
   <button type="button" routerLink="/home"> Cancelar </button>
-  <button type="button"> Publicar </button>
+  <button type="submit"> Publicar </button>
 </form>

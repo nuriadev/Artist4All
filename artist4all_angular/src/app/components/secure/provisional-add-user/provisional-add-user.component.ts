@@ -15,7 +15,7 @@ export class ProvisionalAddUserComponent implements OnInit {
     private _sessionService: SessionService
   ) { }
 
-  userlist: Array<UserService> = [];
+  userlist: Array<User> = [];
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
 

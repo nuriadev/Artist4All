@@ -1,570 +1,695 @@
 <div class="min-h-screen bg-gray-100">
 
-    <!-- When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars -->
-    <!-- Menu open: "fixed inset-0 z-40 overflow-y-auto", Menu closed: "undefined" -->
-    <app-user-navbar></app-user-navbar>
-    <div class="py-10">
-      <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-full lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8">
-        <div class="hidden lg:block lg:col-span-3 xl:col-span-2">
-          <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300">
-            <div class="pb-8 space-y-1">
-              <!-- Current: "bg-gray-200 text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
-              <a routerLink="/home" class="bg-gray-200 text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md" aria-current="page">
-                <!-- Heroicon name: outline/home -->
-                <svg class="text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-                </svg>
-                <span class="truncate">
-                  <a routerLink="/home">Home</a>
-                </span>
-              </a>
+  <!-- When the mobile menu is open, add `overflow-hidden` to the `body` element to prevent double scrollbars -->
+  <!-- Menu open: "fixed inset-0 z-40 overflow-y-auto", Menu closed: "undefined" -->
+  <app-user-navbar></app-user-navbar>
+  <div class="py-10">
+    <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-full lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8">
+      <div class="hidden lg:block lg:col-span-3 xl:col-span-2">
+        <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300">
+          <div class="pb-8 space-y-1">
+            <!-- Current: "bg-gray-200 text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
+            <a routerLink="/home"
+              class="bg-gray-200 text-gray-900 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
+              aria-current="page">
+              <!-- Heroicon name: outline/home -->
+              <svg class="text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span class="truncate">
+                <a routerLink="/home">Home</a>
+              </span>
+            </a>
 
-              <a routerLink="/store" class="text-gray-600 bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <!-- Heroicon name: outline/fire -->
-                <svg class="text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
-                <span class="truncate">
-                  <a routerLink="/store">Tienda</a>
-                </span>
-              </a>
+            <a routerLink="/store"
+              class="text-gray-600 bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+              <!-- Heroicon name: outline/fire -->
+              <svg class="text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                </path>
+              </svg>
+              <span class="truncate">
+                <a routerLink="/store">Tienda</a>
+              </span>
+            </a>
 
-              <a routerLink="/messages" class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <!-- Heroicon name: outline/user-group -->
-                <svg class="text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path></svg>
-                <span class="truncate">
-                  <a routerLink="/message">Mensajería</a>
-                </span>
-              </a>
+            <a routerLink="/messages"
+              class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+              <!-- Heroicon name: outline/user-group -->
+              <svg class="text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                </path>
+              </svg>
+              <span class="truncate">
+                <a routerLink="/message">Mensajería</a>
+              </span>
+            </a>
 
-              <a routerLink="/user" class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-                <!-- Heroicon name: outline/trending-up -->
-                <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-                </svg>
-                <span class="truncate">
-                  <a routerLink="/user">Usuarios</a>
-                </span>
-              </a>
-            </div>
-          </nav>
-        </div>
-        <main class="lg:col-span-8 xl:col-span-7">
-          <button routerLink="/profile/my/publication"> Crear publicación </button> <!-- todo faltan estilos -->
-          <form action="/posts/new" method="POST" class="flex mb-4 flex-col">
-            <textarea class="w-full resize-y rounded-md shadow border-0 text-sm flex-3 mb-2 sm:mb-0 mr-0 sm:mr-3 p-4"
-                rows="5" name="content" placeholder="Escribe algo..."></textarea>
-            <div class="w-full flex justify-end" style="margin-bottom: -35px">
-                <button style="top: -45px; right: 10px; max-width: 100px;"
-                    class="flex-1 justify-center h-full max-h-14 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black focus:outline-none w-full relative">
-                    Publicar
-                </button>
-            </div>
-        </form>
-          <div class="px-4 sm:px-0"></div>
-          <div class="">
-            <h1 class="sr-only">Recent questions</h1>
-            <ul class="space-y-4">
-              <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
-                <article aria-labelledby="question-title-81614">
-                  <div>
-                    <div class="flex space-x-3">
-                      <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900">
-                          <a href="#" class="hover:underline">Dries Vincent</a>
-                        </p>
-                        <p class="text-sm text-gray-500">
-                          <a href="#" class="hover:underline">December 9 at 11:43 AM</a>
-                        </p>
-                      </div>
-                    </div>
-                    <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
-                      What would you have done differently if you ran Jurassic Park?
-                    </h2>
-                  </div>
-                  <div class="mt-2 text-sm text-gray-700 space-y-4">
-                    <p>
-                      Jurassic Park was an incredible idea and a magnificent feat of engineering, but poor protocols and a disregard for human safety killed what could have otherwise been one of the best businesses of our generation.
-                    </p>
-                    <p>
-                      Ultimately, I think that if you wanted to run the park successfully and keep visitors safe, the most important thing to prioritize would be&hellip;
-                    </p>
-                  </div>
-                  <div class="mt-6 flex justify-between space-x-8">
-                    <div class="flex space-x-6">
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/thumb-up -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                          </svg>
-                          <span class="font-medium text-gray-900">29</span>
-                          <span class="sr-only">likes</span>
-                        </button>
-                      </span>
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/chat-alt -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="font-medium text-gray-900">11</span>
-                          <span class="sr-only">replies</span>
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </li>
-
-              <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
-                <article aria-labelledby="question-title-89019">
-                  <div>
-                    <div class="flex space-x-3">
-                      <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900">
-                          <a href="#" class="hover:underline">Lindsay Walton</a>
-                        </p>
-                        <p class="text-sm text-gray-500">
-                          <a href="#" class="hover:underline">December 8 at 10:45 PM</a>
-                        </p>
-                      </div>
-                    </div>
-                    <h2 id="question-title-89019" class="mt-4 text-base font-medium text-gray-900">
-                      What&#039;s it like to be a golden retriever?
-                    </h2>
-                  </div>
-                  <div class="mt-2 text-sm text-gray-700 space-y-4">
-                    <p>
-                      Man I am glad you asked this question. I'm a 6 year old golden retriever and while I still have a few years left to experience, I think I've been around long enough to tell you what it's really like.
-                    </p>
-                    <p>Most people think being a dog is awesome. You sleep as much as you want, all of your meals are prepared for you, and someone literally picks up your poop you. And yeah, you know what, those parts <em>are</em> pretty awesome. But there's a dark side to being a golden retriever that they don't tell you about&hellip;</p>
-                  </div>
-                  <div class="mt-6 flex justify-between space-x-8">
-                    <div class="flex space-x-6">
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/thumb-up -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                          </svg>
-                          <span class="font-medium text-gray-900">316</span>
-                          <span class="sr-only">likes</span>
-                        </button>
-                      </span>
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/chat-alt -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="font-medium text-gray-900">41</span>
-                          <span class="sr-only">replies</span>
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </li>
-
-              <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
-                <article aria-labelledby="question-title-92742">
-                  <div>
-                    <div class="flex space-x-3">
-                      <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900">
-                          <a href="#" class="hover:underline">Blake Reid</a>
-                        </p>
-                        <p class="text-sm text-gray-500">
-                          <a href="#" class="hover:underline">December 8 at 10:11 PM</a>
-                        </p>
-                      </div>
-
-                    </div>
-                    <h2 id="question-title-92742" class="mt-4 text-base font-medium text-gray-900">
-                      Am I actually dead like the guy from the Sixth Sense?
-                    </h2>
-                  </div>
-                  <div class="mt-2 text-sm text-gray-700 space-y-4">
-                    <p>
-                      This is something most people wonder about themselves at least 4 or 5 times throughout their life. Everyone ignores you for weeks on end (including your immediate family) and the only person who will talk to you is a little boy you are treating because he thinks he sees dead people.
-                    </p>
-                    <p>The fact is, you can't <em>really</em> know if you're just a weird dead ghost thing until the rest of the world finally decides to acknowledge you again. But there are a few things you can test that are generally <em>correlated</em> with not being a weird dead ghost thing, namely&hellip;</p>
-                  </div>
-                  <div class="mt-6 flex justify-between space-x-8">
-                    <div class="flex space-x-6">
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/thumb-up -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                          </svg>
-                          <span class="font-medium text-gray-900">114</span>
-                          <span class="sr-only">likes</span>
-                        </button>
-                      </span>
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/chat-alt -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="font-medium text-gray-900">19</span>
-                          <span class="sr-only">replies</span>
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </li>
-
-              <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
-                <article aria-labelledby="question-title-41150">
-                  <div>
-                    <div class="flex space-x-3">
-                      <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900">
-                          <a href="#" class="hover:underline">Kristin Watson</a>
-                        </p>
-                        <p class="text-sm text-gray-500">
-                          <a href="#" class="hover:underline">December 8 at 7:11 PM</a>
-                        </p>
-                      </div>
-                    </div>
-                    <h2 id="question-title-41150" class="mt-4 text-base font-medium text-gray-900">
-                      What&#039;s the most unforgettable meal you&#039;ve ever had?
-                    </h2>
-                  </div>
-                  <div class="mt-2 text-sm text-gray-700 space-y-4">
-                    <p>
-                      One time we ordered a pizza from this local place downtown we'd always wanted to try. Everyone told us it was the best pizza they'd ever had in their entire lives and we couldn't wait to see what it was all about.
-                    </p>
-                    <p>
-                      We placed the order at 5:45pm and it showed up at around 6:30pm. We opened the box excited to take in the aroma of this incredible pie, but we were not prepared for what we saw. Instead of the pepperoni pizza we ordered, they had delivered us a&hellip;
-                    </p>
-                  </div>
-                  <div class="mt-6 flex justify-between space-x-8">
-                    <div class="flex space-x-6">
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/thumb-up -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                          </svg>
-                          <span class="font-medium text-gray-900">121</span>
-                          <span class="sr-only">likes</span>
-                        </button>
-                      </span>
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/chat-alt -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="font-medium text-gray-900">8</span>
-                          <span class="sr-only">replies</span>
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </li>
-
-              <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
-                <article aria-labelledby="question-title-62760">
-                  <div>
-                    <div class="flex space-x-3">
-                      <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900">
-                          <a href="#" class="hover:underline">Hector Gibbons</a>
-                        </p>
-                        <p class="text-sm text-gray-500">
-                          <a href="#" class="hover:underline">December 8 at 6:02 PM</a>
-                        </p>
-                      </div>
-                    </div>
-                    <h2 id="question-title-62760" class="mt-4 text-base font-medium text-gray-900">
-                      What would your pro wrestling finishing move be?
-                    </h2>
-                  </div>
-                  <div class="mt-2 text-sm text-gray-700 space-y-4">
-                    <p>
-                      Great question. The first thing you need to decide is should your finishing move be something you do to hurt your opponent enough to then get the pin, or a submission move that causes your opponent to give up.
-                    </p>
-                    <p>
-                      Personally, I've always found submission moves to be a lot less exciting than a powerbomb or a moonsault off the top rope. Sure there's a few classics that the crowd goes nuts for like the Sharpshooter, but most of them just don't get the same pop as a Tombstone or a Stone Cold Stunner. If I had to choose, my first choice would be&hellip;
-                    </p>
-                  </div>
-                  <div class="mt-6 flex justify-between space-x-8">
-                    <div class="flex space-x-6">
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/thumb-up -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                          </svg>
-                          <span class="font-medium text-gray-900">1.5k</span>
-                          <span class="sr-only">likes</span>
-                        </button>
-                      </span>
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/chat-alt -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="font-medium text-gray-900">117</span>
-                          <span class="sr-only">replies</span>
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </li>
-
-              <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
-                <article aria-labelledby="question-title-41387">
-                  <div>
-                    <div class="flex space-x-3">
-                      <div class="flex-shrink-0">
-                        <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1504703395950-b89145a5425b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                      </div>
-                      <div class="min-w-0 flex-1">
-                        <p class="text-sm font-medium text-gray-900">
-                          <a href="#" class="hover:underline">Jillian Steward</a>
-                        </p>
-                        <p class="text-sm text-gray-500">
-                          <a href="#" class="hover:underline">December 8 at 5:34 PM</a>
-                        </p>
-                      </div>
-                    </div>
-                    <h2 id="question-title-41387" class="mt-4 text-base font-medium text-gray-900">
-                      How on earth do magnets work though seriously?
-                    </h2>
-                  </div>
-                  <div class="mt-2 text-sm text-gray-700 space-y-4">
-                    <p>
-                      Magnets are an incredibly interesting natural phenomenon, with their discovery dating back at least 2500 years.
-                    </p>
-                    <p>
-                      Scientists will tell you a bunch of stuff about how in magnetic materials, most of the electrons spin in the same direction. Somehow that apparently magically makes random bits of metal stick together. Sure, okay scientists. Here's the truth, what they don't want you to know&hellip;
-                    </p>
-                  </div>
-                  <div class="mt-6 flex justify-between space-x-8">
-                    <div class="flex space-x-6">
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/thumb-up -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                          </svg>
-                          <span class="font-medium text-gray-900">776</span>
-                          <span class="sr-only">likes</span>
-                        </button>
-                      </span>
-                      <span class="inline-flex items-center text-sm">
-                        <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                          <!-- Heroicon name: solid/chat-alt -->
-                          <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                          </svg>
-                          <span class="font-medium text-gray-900">27</span>
-                          <span class="sr-only">replies</span>
-                        </button>
-                      </span>
-                    </div>
-                  </div>
-                </article>
-              </li>
-            </ul>
+            <a routerLink="/user"
+              class="text-gray-600 hover:bg-gray-50 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+              <!-- Heroicon name: outline/trending-up -->
+              <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              <span class="truncate">
+                <a routerLink="/user">Usuarios</a>
+              </span>
+            </a>
           </div>
-        </main>
-        <aside class="hidden xl:block xl:col-span-3">
-          <div class="sticky top-4 space-y-4">
-            <section aria-labelledby="who-to-follow-heading">
-              <div class="bg-white rounded-lg shadow">
-                <div class="p-6">
-                  <h2 id="who-to-follow-heading" class="text-base font-medium text-gray-900">
-                    A quién seguir
-                  </h2>
-                  <div class="mt-6 flow-root">
-                    <ul class="-my-4 divide-y divide-gray-200">
-                      <li class="flex items-center py-4 space-x-3">
-                        <div class="flex-shrink-0">
-                          <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                          <p class="text-sm font-medium text-gray-900">
-                            <a href="#">Leonard Krasner</a>
-                          </p>
-                          <p class="text-sm text-gray-500">
-                            <a href="#">@leonardkrasner</a>
-                          </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                          <button type="button" class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
-                            <!-- Heroicon name: solid/plus -->
-                            <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                            </svg>
-                            <span>
-                              Seguir
-                            </span>
-                          </button>
-                        </div>
-                      </li>
-
-                      <li class="flex items-center py-4 space-x-3">
-                        <div class="flex-shrink-0">
-                          <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                          <p class="text-sm font-medium text-gray-900">
-                            <a href="#">Floyd Miles</a>
-                          </p>
-                          <p class="text-sm text-gray-500">
-                            <a href="#">@floydmiles</a>
-                          </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                          <button type="button" class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
-                            <!-- Heroicon name: solid/plus -->
-                            <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                            </svg>
-                            <span>
-                              Seguir
-                            </span>
-                          </button>
-                        </div>
-                      </li>
-
-                      <li class="flex items-center py-4 space-x-3">
-                        <div class="flex-shrink-0">
-                          <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                          <p class="text-sm font-medium text-gray-900">
-                            <a href="#">Emily Selman</a>
-                          </p>
-                          <p class="text-sm text-gray-500">
-                            <a href="#">@emilyselman</a>
-                          </p>
-                        </div>
-                        <div class="flex-shrink-0">
-                          <button type="button" class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
-                            <!-- Heroicon name: solid/plus -->
-                            <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                              <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd" />
-                            </svg>
-                            <span>
-                              Seguir
-                            </span>
-                          </button>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="mt-6">
-                    <a href="#" class="w-full block text-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                      Ver todos
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </section>
-            <section aria-labelledby="trending-heading">
-              <div class="bg-white rounded-lg shadow">
-                <div class="p-6">
-                  <h2 id="trending-heading" class="text-base font-medium text-gray-900">
-                    Popular
-                  </h2>
-                  <div class="mt-6 flow-root">
-                    <ul class="-my-4 divide-y divide-gray-200">
-                      <li class="flex py-4 space-x-3">
-                        <div class="flex-shrink-0">
-                          <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                          <p class="text-sm text-gray-800">What books do you have on your bookshelf just to look smarter than you actually are?</p>
-                          <div class="mt-2 flex">
-                            <span class="inline-flex items-center text-sm">
-                              <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                                <!-- Heroicon name: solid/chat-alt -->
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                  <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="font-medium text-gray-900">291</span>
-                              </button>
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-
-                      <li class="flex py-4 space-x-3">
-                        <div class="flex-shrink-0">
-                          <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                          <p class="text-sm text-gray-800">Have you ever lied about your age to buy a kid&#039;s meal at a restaurant?</p>
-                          <div class="mt-2 flex">
-                            <span class="inline-flex items-center text-sm">
-                              <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                                <!-- Heroicon name: solid/chat-alt -->
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                  <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="font-medium text-gray-900">164</span>
-                              </button>
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-
-                      <li class="flex py-4 space-x-3">
-                        <div class="flex-shrink-0">
-                          <img class="h-8 w-8 rounded-full" src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80" alt="">
-                        </div>
-                        <div class="min-w-0 flex-1">
-                          <p class="text-sm text-gray-800">Does Santa Claus pay property taxes for his workshop at the North Pole?</p>
-                          <div class="mt-2 flex">
-                            <span class="inline-flex items-center text-sm">
-                              <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                                <!-- Heroicon name: solid/chat-alt -->
-                                <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                  <path fill-rule="evenodd" d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z" clip-rule="evenodd" />
-                                </svg>
-                                <span class="font-medium text-gray-900">133</span>
-                              </button>
-                            </span>
-                          </div>
-                        </div>
-                      </li>
-                    </ul>
-                  </div>
-                  <div class="mt-6">
-                    <a href="#" class="w-full block text-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                      Ver todos
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </section>
-          </div>
-        </aside>
+        </nav>
       </div>
+      <main class="lg:col-span-8 xl:col-span-7">
+        <button routerLink="/profile/my/publication"> Crear publicación </button> <!-- todo faltan estilos -->
+        <form action="/posts/new" method="POST" class="flex mb-4 flex-col">
+          <textarea class="w-full resize-y rounded-md shadow border-0 text-sm flex-3 mb-2 sm:mb-0 mr-0 sm:mr-3 p-4"
+            rows="5" name="content" placeholder="Escribe algo..."></textarea>
+          <div class="w-full flex justify-end" style="margin-bottom: -35px">
+            <button style="top: -45px; right: 10px; max-width: 100px;"
+              class="flex-1 justify-center h-full max-h-14 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-black focus:outline-none w-full relative">
+              Publicar
+            </button>
+          </div>
+        </form>
+        <div class="px-4 sm:px-0"></div>
+        <div class="">
+          <h1 class="sr-only">Recent questions</h1>
+          <ul class="space-y-4">
+            <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
+              <article aria-labelledby="question-title-81614">
+                <div>
+                  <div class="flex space-x-3">
+                    <div class="flex-shrink-0">
+                      <img class="h-10 w-10 rounded-full"
+                        src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                        alt="">
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-sm font-medium text-gray-900">
+                        <a href="#" class="hover:underline">Dries Vincent</a>
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <a href="#" class="hover:underline">December 9 at 11:43 AM</a>
+                      </p>
+                    </div>
+                  </div>
+                  <h2 id="question-title-81614" class="mt-4 text-base font-medium text-gray-900">
+                    What would you have done differently if you ran Jurassic Park?
+                  </h2>
+                </div>
+                <div class="mt-2 text-sm text-gray-700 space-y-4">
+                  <p>
+                    Jurassic Park was an incredible idea and a magnificent feat of engineering, but poor protocols and a
+                    disregard for human safety killed what could have otherwise been one of the best businesses of our
+                    generation.
+                  </p>
+                  <p>
+                    Ultimately, I think that if you wanted to run the park successfully and keep visitors safe, the most
+                    important thing to prioritize would be&hellip;
+                  </p>
+                </div>
+                <div class="mt-6 flex justify-between space-x-8">
+                  <div class="flex space-x-6">
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/thumb-up -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path
+                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span class="font-medium text-gray-900">29</span>
+                        <span class="sr-only">likes</span>
+                      </button>
+                    </span>
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/chat-alt -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path fill-rule="evenodd"
+                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                            clip-rule="evenodd" />
+                        </svg>
+                        <span class="font-medium text-gray-900">11</span>
+                        <span class="sr-only">replies</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
+              <article aria-labelledby="question-title-89019">
+                <div>
+                  <div class="flex space-x-3">
+                    <div class="flex-shrink-0">
+                      <img class="h-10 w-10 rounded-full"
+                        src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                        alt="">
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-sm font-medium text-gray-900">
+                        <a href="#" class="hover:underline">Lindsay Walton</a>
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <a href="#" class="hover:underline">December 8 at 10:45 PM</a>
+                      </p>
+                    </div>
+                  </div>
+                  <h2 id="question-title-89019" class="mt-4 text-base font-medium text-gray-900">
+                    What&#039;s it like to be a golden retriever?
+                  </h2>
+                </div>
+                <div class="mt-2 text-sm text-gray-700 space-y-4">
+                  <p>
+                    Man I am glad you asked this question. I'm a 6 year old golden retriever and while I still have a
+                    few years left to experience, I think I've been around long enough to tell you what it's really
+                    like.
+                  </p>
+                  <p>Most people think being a dog is awesome. You sleep as much as you want, all of your meals are
+                    prepared for you, and someone literally picks up your poop you. And yeah, you know what, those parts
+                    <em>are</em> pretty awesome. But there's a dark side to being a golden retriever that they don't
+                    tell you about&hellip;
+                  </p>
+                </div>
+                <div class="mt-6 flex justify-between space-x-8">
+                  <div class="flex space-x-6">
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/thumb-up -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path
+                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span class="font-medium text-gray-900">316</span>
+                        <span class="sr-only">likes</span>
+                      </button>
+                    </span>
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/chat-alt -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path fill-rule="evenodd"
+                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                            clip-rule="evenodd" />
+                        </svg>
+                        <span class="font-medium text-gray-900">41</span>
+                        <span class="sr-only">replies</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
+              <article aria-labelledby="question-title-92742">
+                <div>
+                  <div class="flex space-x-3">
+                    <div class="flex-shrink-0">
+                      <img class="h-10 w-10 rounded-full"
+                        src="https://images.unsplash.com/photo-1520785643438-5bf77931f493?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                        alt="">
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-sm font-medium text-gray-900">
+                        <a href="#" class="hover:underline">Blake Reid</a>
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <a href="#" class="hover:underline">December 8 at 10:11 PM</a>
+                      </p>
+                    </div>
+
+                  </div>
+                  <h2 id="question-title-92742" class="mt-4 text-base font-medium text-gray-900">
+                    Am I actually dead like the guy from the Sixth Sense?
+                  </h2>
+                </div>
+                <div class="mt-2 text-sm text-gray-700 space-y-4">
+                  <p>
+                    This is something most people wonder about themselves at least 4 or 5 times throughout their life.
+                    Everyone ignores you for weeks on end (including your immediate family) and the only person who will
+                    talk to you is a little boy you are treating because he thinks he sees dead people.
+                  </p>
+                  <p>The fact is, you can't <em>really</em> know if you're just a weird dead ghost thing until the rest
+                    of the world finally decides to acknowledge you again. But there are a few things you can test that
+                    are generally <em>correlated</em> with not being a weird dead ghost thing, namely&hellip;</p>
+                </div>
+                <div class="mt-6 flex justify-between space-x-8">
+                  <div class="flex space-x-6">
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/thumb-up -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path
+                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span class="font-medium text-gray-900">114</span>
+                        <span class="sr-only">likes</span>
+                      </button>
+                    </span>
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/chat-alt -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path fill-rule="evenodd"
+                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                            clip-rule="evenodd" />
+                        </svg>
+                        <span class="font-medium text-gray-900">19</span>
+                        <span class="sr-only">replies</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
+              <article aria-labelledby="question-title-41150">
+                <div>
+                  <div class="flex space-x-3">
+                    <div class="flex-shrink-0">
+                      <img class="h-10 w-10 rounded-full"
+                        src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                        alt="">
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-sm font-medium text-gray-900">
+                        <a href="#" class="hover:underline">Kristin Watson</a>
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <a href="#" class="hover:underline">December 8 at 7:11 PM</a>
+                      </p>
+                    </div>
+                  </div>
+                  <h2 id="question-title-41150" class="mt-4 text-base font-medium text-gray-900">
+                    What&#039;s the most unforgettable meal you&#039;ve ever had?
+                  </h2>
+                </div>
+                <div class="mt-2 text-sm text-gray-700 space-y-4">
+                  <p>
+                    One time we ordered a pizza from this local place downtown we'd always wanted to try. Everyone told
+                    us it was the best pizza they'd ever had in their entire lives and we couldn't wait to see what it
+                    was all about.
+                  </p>
+                  <p>
+                    We placed the order at 5:45pm and it showed up at around 6:30pm. We opened the box excited to take
+                    in the aroma of this incredible pie, but we were not prepared for what we saw. Instead of the
+                    pepperoni pizza we ordered, they had delivered us a&hellip;
+                  </p>
+                </div>
+                <div class="mt-6 flex justify-between space-x-8">
+                  <div class="flex space-x-6">
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/thumb-up -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path
+                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span class="font-medium text-gray-900">121</span>
+                        <span class="sr-only">likes</span>
+                      </button>
+                    </span>
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/chat-alt -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path fill-rule="evenodd"
+                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                            clip-rule="evenodd" />
+                        </svg>
+                        <span class="font-medium text-gray-900">8</span>
+                        <span class="sr-only">replies</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
+              <article aria-labelledby="question-title-62760">
+                <div>
+                  <div class="flex space-x-3">
+                    <div class="flex-shrink-0">
+                      <img class="h-10 w-10 rounded-full"
+                        src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                        alt="">
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-sm font-medium text-gray-900">
+                        <a href="#" class="hover:underline">Hector Gibbons</a>
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <a href="#" class="hover:underline">December 8 at 6:02 PM</a>
+                      </p>
+                    </div>
+                  </div>
+                  <h2 id="question-title-62760" class="mt-4 text-base font-medium text-gray-900">
+                    What would your pro wrestling finishing move be?
+                  </h2>
+                </div>
+                <div class="mt-2 text-sm text-gray-700 space-y-4">
+                  <p>
+                    Great question. The first thing you need to decide is should your finishing move be something you do
+                    to hurt your opponent enough to then get the pin, or a submission move that causes your opponent to
+                    give up.
+                  </p>
+                  <p>
+                    Personally, I've always found submission moves to be a lot less exciting than a powerbomb or a
+                    moonsault off the top rope. Sure there's a few classics that the crowd goes nuts for like the
+                    Sharpshooter, but most of them just don't get the same pop as a Tombstone or a Stone Cold Stunner.
+                    If I had to choose, my first choice would be&hellip;
+                  </p>
+                </div>
+                <div class="mt-6 flex justify-between space-x-8">
+                  <div class="flex space-x-6">
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/thumb-up -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path
+                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span class="font-medium text-gray-900">1.5k</span>
+                        <span class="sr-only">likes</span>
+                      </button>
+                    </span>
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/chat-alt -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path fill-rule="evenodd"
+                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                            clip-rule="evenodd" />
+                        </svg>
+                        <span class="font-medium text-gray-900">117</span>
+                        <span class="sr-only">replies</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </li>
+
+            <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
+              <article aria-labelledby="question-title-41387">
+                <div>
+                  <div class="flex space-x-3">
+                    <div class="flex-shrink-0">
+                      <img class="h-10 w-10 rounded-full"
+                        src="https://images.unsplash.com/photo-1504703395950-b89145a5425b?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                        alt="">
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-sm font-medium text-gray-900">
+                        <a href="#" class="hover:underline">Jillian Steward</a>
+                      </p>
+                      <p class="text-sm text-gray-500">
+                        <a href="#" class="hover:underline">December 8 at 5:34 PM</a>
+                      </p>
+                    </div>
+                  </div>
+                  <h2 id="question-title-41387" class="mt-4 text-base font-medium text-gray-900">
+                    How on earth do magnets work though seriously?
+                  </h2>
+                </div>
+                <div class="mt-2 text-sm text-gray-700 space-y-4">
+                  <p>
+                    Magnets are an incredibly interesting natural phenomenon, with their discovery dating back at least
+                    2500 years.
+                  </p>
+                  <p>
+                    Scientists will tell you a bunch of stuff about how in magnetic materials, most of the electrons
+                    spin in the same direction. Somehow that apparently magically makes random bits of metal stick
+                    together. Sure, okay scientists. Here's the truth, what they don't want you to know&hellip;
+                  </p>
+                </div>
+                <div class="mt-6 flex justify-between space-x-8">
+                  <div class="flex space-x-6">
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/thumb-up -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path
+                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                        </svg>
+                        <span class="font-medium text-gray-900">776</span>
+                        <span class="sr-only">likes</span>
+                      </button>
+                    </span>
+                    <span class="inline-flex items-center text-sm">
+                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                        <!-- Heroicon name: solid/chat-alt -->
+                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                          aria-hidden="true">
+                          <path fill-rule="evenodd"
+                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                            clip-rule="evenodd" />
+                        </svg>
+                        <span class="font-medium text-gray-900">27</span>
+                        <span class="sr-only">replies</span>
+                      </button>
+                    </span>
+                  </div>
+                </div>
+              </article>
+            </li>
+          </ul>
+        </div>
+      </main>
+      <aside class="hidden xl:block xl:col-span-3">
+        <div class="sticky top-4 space-y-4">
+          <section aria-labelledby="who-to-follow-heading">
+            <div class="bg-white rounded-lg shadow">
+              <div class="p-6">
+                <h2 id="who-to-follow-heading" class="text-base font-medium text-gray-900">
+                  A quién seguir
+                </h2>
+                <div class="mt-6 flow-root">
+                  <ul class="-my-4 divide-y divide-gray-200">
+                    <li class="flex items-center py-4 space-x-3">
+                      <div class="flex-shrink-0">
+                        <img class="h-8 w-8 rounded-full"
+                          src="https://images.unsplash.com/photo-1519345182560-3f2917c472ef?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                          alt="">
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="text-sm font-medium text-gray-900">
+                          <a href="#">Leonard Krasner</a>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                          <a href="#">@leonardkrasner</a>
+                        </p>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <button type="button"
+                          class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
+                          <!-- Heroicon name: solid/plus -->
+                          <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                              clip-rule="evenodd" />
+                          </svg>
+                          <span>
+                            Seguir
+                          </span>
+                        </button>
+                      </div>
+                    </li>
+
+                    <li class="flex items-center py-4 space-x-3">
+                      <div class="flex-shrink-0">
+                        <img class="h-8 w-8 rounded-full"
+                          src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                          alt="">
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="text-sm font-medium text-gray-900">
+                          <a href="#">Floyd Miles</a>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                          <a href="#">@floydmiles</a>
+                        </p>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <button type="button"
+                          class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
+                          <!-- Heroicon name: solid/plus -->
+                          <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                              clip-rule="evenodd" />
+                          </svg>
+                          <span>
+                            Seguir
+                          </span>
+                        </button>
+                      </div>
+                    </li>
+
+                    <li class="flex items-center py-4 space-x-3">
+                      <div class="flex-shrink-0">
+                        <img class="h-8 w-8 rounded-full"
+                          src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                          alt="">
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="text-sm font-medium text-gray-900">
+                          <a href="#">Emily Selman</a>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                          <a href="#">@emilyselman</a>
+                        </p>
+                      </div>
+                      <div class="flex-shrink-0">
+                        <button type="button"
+                          class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
+                          <!-- Heroicon name: solid/plus -->
+                          <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd"
+                              d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                              clip-rule="evenodd" />
+                          </svg>
+                          <span>
+                            Seguir
+                          </span>
+                        </button>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="mt-6">
+                  <a href="#"
+                    class="w-full block text-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Ver todos
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+          <section aria-labelledby="trending-heading">
+            <div class="bg-white rounded-lg shadow">
+              <div class="p-6">
+                <h2 id="trending-heading" class="text-base font-medium text-gray-900">
+                  Popular
+                </h2>
+                <div class="mt-6 flow-root">
+                  <ul class="-my-4 divide-y divide-gray-200">
+                    <li class="flex py-4 space-x-3">
+                      <div class="flex-shrink-0">
+                        <img class="h-8 w-8 rounded-full"
+                          src="https://images.unsplash.com/photo-1463453091185-61582044d556?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                          alt="">
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="text-sm text-gray-800">What books do you have on your bookshelf just to look smarter
+                          than you actually are?</p>
+                        <div class="mt-2 flex">
+                          <span class="inline-flex items-center text-sm">
+                            <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                              <!-- Heroicon name: solid/chat-alt -->
+                              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                  d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                                  clip-rule="evenodd" />
+                              </svg>
+                              <span class="font-medium text-gray-900">291</span>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="flex py-4 space-x-3">
+                      <div class="flex-shrink-0">
+                        <img class="h-8 w-8 rounded-full"
+                          src="https://images.unsplash.com/photo-1502685104226-ee32379fefbe?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                          alt="">
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="text-sm text-gray-800">Have you ever lied about your age to buy a kid&#039;s meal at a
+                          restaurant?</p>
+                        <div class="mt-2 flex">
+                          <span class="inline-flex items-center text-sm">
+                            <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                              <!-- Heroicon name: solid/chat-alt -->
+                              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                  d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                                  clip-rule="evenodd" />
+                              </svg>
+                              <span class="font-medium text-gray-900">164</span>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+
+                    <li class="flex py-4 space-x-3">
+                      <div class="flex-shrink-0">
+                        <img class="h-8 w-8 rounded-full"
+                          src="https://images.unsplash.com/photo-1500917293891-ef795e70e1f6?ixlib=rb-1.2.1&amp;ixid=eyJhcHBfaWQiOjEyMDd9&amp;auto=format&amp;fit=facearea&amp;facepad=2&amp;w=256&amp;h=256&amp;q=80"
+                          alt="">
+                      </div>
+                      <div class="min-w-0 flex-1">
+                        <p class="text-sm text-gray-800">Does Santa Claus pay property taxes for his workshop at the
+                          North Pole?</p>
+                        <div class="mt-2 flex">
+                          <span class="inline-flex items-center text-sm">
+                            <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                              <!-- Heroicon name: solid/chat-alt -->
+                              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd"
+                                  d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                                  clip-rule="evenodd" />
+                              </svg>
+                              <span class="font-medium text-gray-900">133</span>
+                            </button>
+                          </span>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+                <div class="mt-6">
+                  <a href="#"
+                    class="w-full block text-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
+                    Ver todos
+                  </a>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </aside>
     </div>
   </div>
+</div>

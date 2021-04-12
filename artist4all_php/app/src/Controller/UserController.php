@@ -4,8 +4,6 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class UserController {
-
-  // TODO: avisar de que he cambiado de delete a deactivated, crear notificaciones y los logs, contact page on session/ footer removed from app component
   public static function initRoutes($app) {
     $app->post('/register', '\Artist4all\Controller\UserController:register');
     $app->post('/login', '\Artist4all\Controller\UserController:login');
@@ -18,14 +16,17 @@ class UserController {
     $app->get('/user/{username:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:getUserByUsername');
 
     $app->get('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:isFollowingThatUser');
-    $app->post('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:followUser');
-    $app->delete('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:unfollowUser'); 
+    $app->post('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:requestOrFollowUser');
+    // TODO: cambiar a patch 
+    $app->post('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}/{id_follow:[0-9 ]+}', '\Artist4all\Controller\UserController:updateFollowRequest'); 
     
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/followers', '\Artist4all\Controller\UserController:countFollowers');  
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/follower', '\Artist4all\Controller\UserController:countFollowers');  
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/followed', '\Artist4all\Controller\UserController:countFollowed'); 
 
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/list/followers', '\Artist4all\Controller\UserController:getFollowers');
+    $app->get('/user/{username:[a-zA-Z0-9 ]+}/list/follower', '\Artist4all\Controller\UserController:getFollowers');
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/list/followed', '\Artist4all\Controller\UserController:getUsersFollowed');
+    // TODO: cambiar a patch 
+    $app->post('/user/my/settings/account/privacy', '\Artist4all\Controller\UserController:switchPrivateAccount');
   }
 
   public function register(Request $request, Response $response, array $args) {
@@ -78,7 +79,6 @@ class UserController {
     $result = \Artist4all\Model\User\UserDB::getInstance()->changePassword($password_hashed, $token);
     if (!$result) {
       $response = $response->withStatus(500, 'Error on the password modification'); 
-      return $response;
     } else {
       $session = new \Artist4all\Model\User\Session($user->getToken(), $user);
       $response = $response->withJson($session)->withStatus(200, 'Password changed');
@@ -103,7 +103,7 @@ class UserController {
   }
 
   public function isFollowingThatUser(Request $request, Response $response, array $args) {
-    $authorizated = $this->isAuthorizated($request, $response); 
+    $this->isAuthorizated($request, $response); 
     $username_follower = $args['username_follower'];
     $username_followed = $args['username_followed']; 
     $follower = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username_follower);
@@ -118,58 +118,80 @@ class UserController {
     return $response;
   }
 
-  public function followUser(Request $request, Response $response, array $args) {
+  public function requestOrFollowUser(Request $request, Response $response, array $args) {
+    $this->isAuthorizated($request, $response);   
     $data = $request->getParsedBody();
-    $token = trim($data['token']);
-    $result = \Artist4all\Model\User\UserDB::getInstance()->isValidToken($token);
-    if (!$result) {
-      $response = $response->withStatus(500, 'Unauthenticated user');
-      return $response;
-    } else {
-      $username_follower = $args['username_follower'];
-      $username_followed = $args['username_followed']; 
-      $follower = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username_follower);
-      $followed = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username_followed);
-      if (is_null($follower) || is_null($followed)) {
-        $response = $response->withStatus(404, 'User not found');
-        return $response;
-      }
-      $result = \Artist4all\Model\User\UserDB::getInstance()->followUser($follower, $followed);
-      if(is_null($result)) $response = $response->withStatus(500, 'Error at following');
-      else $response = $response->withJson($result)->withStatus(200, 'Added to your followed list');
-      return $response;
-    }
+    if (!isset($data['id_follow'])) $id = null;
+    else $id = $data['id_follow'];       
+    return $this->createOrUpdateFollow($args, $data, $id, $response);
   }
 
-  public function unfollowUser(Request $request, Response $response, array $args) {
-    $data = $request->getParsedBody();
-    $authorizated = $this->isAuthorizated($request, $response); 
-    $id = (int) $data['id_follow'];
-    $result = \Artist4all\Model\User\UserDB::getInstance()->unfollowUser($id);
-    if(is_null($result)) $response = $response->withStatus(500, 'Error at unfollowing');
-    else $response = $response->withJson($result)->withStatus(200, 'Removed from your followed list');
-    return $response; 
+  // TODO: una vez cambiado a patch, adaptar la function
+  public function updateFollowRequest(Request $request, Response $response, array $args) {  
+    $this->isAuthorizated($request, $response); 
+     $id = $args['id_follow'];
+    $data = $request->getParsedBody();   
+    
+    return $this->createOrUpdateFollow($args, $data, $id, $response);
+  }
+
+  private function createOrUpdateFollow($args, $data, $id, $response) { 
+    $username_follower = $args['username_follower'];
+    $username_followed = $args['username_followed'];   
+    $follower = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username_follower);
+    $followed = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username_followed);
+    if (is_null($follower) || is_null($followed)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    }
+    $data['id_follower'] = $follower->getId();
+    $data['id_followed'] = $followed->getId(); 
+    $logFollow = [
+      'id' => $id,
+      'id_follower' => $data['id_follower'],
+      'id_followed' => $data['id_followed'], 
+      'status_follow' => (int) $data['status_follow']
+    ];
+    $logFollow = \Artist4all\Model\User\UserDB::getInstance()->persistFollow($logFollow);
+    if(is_null($logFollow)) {
+      $response = $response->withStatus(500);
+    } else {
+      if ($logFollow['status_follow'] == 2) {
+        $this->createNotification($follower, $followed, 'te ha enviado una solicitud de amistad', 2, $response);
+      } else if ($logFollow['status_follow'] == 3) {
+        $this->createNotification($follower, $followed, 'ha empezado a seguirte', 1, $response);
+      }
+      $response = $response->withJson($logFollow);
+    } 
+    return $response;
+  }
+
+  private function createNotification($user_responsible, $user_receiver, $bodyNotification, $typeNotification, $response) {
+    $notification = new \Artist4all\Model\Notification\Notification(null, $user_responsible, $user_receiver, $bodyNotification, 0, $typeNotification, '');
+    $newNotification = \Artist4all\Model\Notification\NotificationDB::getInstance()->insertNotification($notification);
+    if (is_null($newNotification)) $response = $response->withStatus(500, 'Error at creating the notification');
+    return $newNotification;
   }
 
   public function countFollowers(Request $request, Response $response, array $args) {
-    $authorizated = $this->isAuthorizated($request, $response);   
+    $this->isAuthorizated($request, $response);   
     $username = $args['username'];
     return $this->countFollowersOrFollowedUsers($username, 'followers', $response);
   }
 
   public function countFollowed(Request $request, Response $response, array $args) {
-    $authorizated = $this->isAuthorizated($request, $response);  
+    $this->isAuthorizated($request, $response);  
     $username = $args['username'];
     return $this->countFollowersOrFollowedUsers($username, 'followed', $response);
   }
 
   public function getFollowers(Request $request, Response $response, array $args) {
-    $authorizated = $this->isAuthorizated($request, $response);  
+     $this->isAuthorizated($request, $response);  
     return $this->getFollowersOrFollowedUsers($args, 'followers', $response);
   }
 
   public function getUsersFollowed(Request $request, Response $response, array $args) {
-    $authorizated = $this->isAuthorizated($request, $response);
+    $this->isAuthorizated($request, $response);
     return $this->getFollowersOrFollowedUsers($args, 'followed', $response);
   } 
 
@@ -182,11 +204,33 @@ class UserController {
     return $response;
   }
 
+  public function switchPrivateAccount(Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();
+    $username = $data['username'];
+    $user = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    } else {
+      $isPrivate = $data['isPrivate'];  
+      $token = $data['token'];
+      $user->setIsPrivate($isPrivate);
+      $result = \Artist4all\Model\User\UserDB::getInstance()->switchPrivateAccount($user, $token);
+      if (!$result) {
+        $response = $response->withStatus(400, 'Error at switching private mode');
+      } else {
+        $session = new \Artist4all\Model\User\Session($user->getToken(), $user);
+        $response = $response->withJson($session)->withStatus(200, 'Switched private mode');
+      }
+      return $response;
+    }
+  }
+
   private function isAuthorizated(Request $request, Response $response) {  
     $token = trim($request->getHeader('Authorization')[0]);
     $result = \Artist4all\Model\User\UserDB::getInstance()->isValidToken($token);
     if (!$result) {
-      $response = $response->withStatus(403, 'Unauthorized user');
+      $response = $response->withStatus(401, 'Unauthorized user');
       return $response;
     } else {
       return $result;
@@ -262,6 +306,7 @@ class UserController {
     $password = $data['password'];
     $isArtist = $data['isArtist'];
     $aboutMe = $data['aboutMe'];
+    $isPrivate = $data['isPrivate'];
     // todo comprueba si existe un usuario según el email y el username 
    
     if (is_null($id)) {
@@ -269,6 +314,7 @@ class UserController {
     } else {
       $token = trim($data['token']);
       $folderUrl = "assets/img".DIRECTORY_SEPARATOR;
+      //TODO:Mover la img pasada a una carpeta interna 'assets', limitar el tamaño y el formato de la img
       foreach ($_FILES as $file) {
           $nombreImg = $file["tmp_name"];
           $urlImg = $folderUrl.$file["name"];

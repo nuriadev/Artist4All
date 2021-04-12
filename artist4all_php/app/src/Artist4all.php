@@ -7,6 +7,7 @@ class Artist4all {
     $app = AppFactory::create();
     \Artist4all\Controller\UserController::initRoutes($app);
     \Artist4all\Controller\PublicationController::initRoutes($app);
+    \Artist4all\Controller\NotificationController::initRoutes($app);
     $app->run();
   }
 }

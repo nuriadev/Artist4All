@@ -31,7 +31,7 @@ class PublicationDB {
         $publicationAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
         if (!$publicationAssoc) return null;
         $imgsPublication = $this->getPublicationImgs($id);
-        $data['imgsPublication'] = $imgsPublication;
+        $publicationAssoc['imgsPublication'] = $imgsPublication;
         $publication = \Artist4all\Model\Publication\Publication::fromAssoc($publicationAssoc);
         return $publication;
     }
@@ -51,7 +51,7 @@ class PublicationDB {
     }
 
     public function getPublicationImgs(int $id) : ?array {
-        $sql = 'SELECT imgPublication FROM imgsPublications WHERE id_publication=:id_publication';
+        $sql = 'SELECT imgPublication FROM imgs_publications WHERE id_publication=:id_publication';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([ ':id_publication' => $id ]);
         $imgsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
@@ -61,6 +61,13 @@ class PublicationDB {
             $imgsPublication[] = $imgAssoc;
         }
         return $imgsPublication;
+    }
+
+    public function deletePublicationImgs(int $id) : bool {
+        $sql = "DELETE FROM imgs_publications WHERE id_publication=:id_publication";
+        $statement = $this->conn->prepare($sql);
+        $result = $statement->execute([ 'id_publication' => $id ]);
+        return $result; 
     }
 
     public function persistPublication(Publication $publication) : ?\Artist4all\Model\Publication\Publication {
@@ -99,8 +106,7 @@ class PublicationDB {
             upload_date=:upload_date,
             n_likes=:n_likes,
             n_comments=:n_comments
-        WHERE id=:id
-        )';
+        WHERE id=:id';
         $statement = $this->conn->prepare($sql);
         $result = $statement->execute([
             ':id' => $publication->getId(),
@@ -115,7 +121,7 @@ class PublicationDB {
     }
 
     public function insertPublicationImgs(int $id, string $img) : bool {
-        $sql = 'INSERT INTO imgsPublications VALUES(
+        $sql = 'INSERT INTO imgs_publications VALUES(
             :id,
             :imgPublication,
             :id_publication

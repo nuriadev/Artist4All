@@ -53,9 +53,7 @@ export class UserSettingsProfileComponent implements OnInit {
     this.imgToUpload = newImgAvatar;
   }
 
-  // todo: poder modificar sin modificar la foto
-  // todo añadir notificacion de cambio correcto
-  // no se envia si no se escoge una img
+  userEdited:User;
   edit() {
     this._userService.edit(
       this.id,
@@ -68,19 +66,8 @@ export class UserSettingsProfileComponent implements OnInit {
       this.imgToUpload,
       this.token).subscribe(
         (result) => {
-          let user = new User(
-            result.user['id'],
-            result.user['name'],
-            result.user['surname1'],
-            result.user['surname2'],
-            result.user['email'],
-            result.user['username'],
-            result.user['password'],
-            result.user['isArtist'],
-            result.user['imgAvatar'],
-            result.user['aboutMe']
-          );
-          let userSession = new Session(result.token, user);
+          this.userEdited = result.user;
+          let userSession = new Session(result.token, this.userEdited);
           this._sessionService.setCurrentSession(userSession);
           location.reload();
         }, (error) => {
