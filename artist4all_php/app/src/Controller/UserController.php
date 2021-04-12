@@ -18,7 +18,7 @@ class UserController {
     $app->get('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:isFollowingThatUser');
     $app->post('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}', '\Artist4all\Controller\UserController:requestOrFollowUser');
     // TODO: cambiar a patch 
-    $app->post('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}/{id:[0-9 ]+}', '\Artist4all\Controller\UserController:updateFollowRequest'); 
+    $app->post('/user/{username_follower:[a-zA-Z0-9 ]+}/follow/{username_followed:[a-zA-Z0-9 ]+}/{id_follow:[0-9 ]+}', '\Artist4all\Controller\UserController:updateFollowRequest'); 
     
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/follower', '\Artist4all\Controller\UserController:countFollowers');  
     $app->get('/user/{username:[a-zA-Z0-9 ]+}/followed', '\Artist4all\Controller\UserController:countFollowed'); 
@@ -119,18 +119,19 @@ class UserController {
   }
 
   public function requestOrFollowUser(Request $request, Response $response, array $args) {
+    $this->isAuthorizated($request, $response);   
     $data = $request->getParsedBody();
-    if (!isset($data['id'])) $id = null;
-    else $id = $data['id'];
-    $this->isAuthorizated($request, $response);         
+    if (!isset($data['id_follow'])) $id = null;
+    else $id = $data['id_follow'];       
     return $this->createOrUpdateFollow($args, $data, $id, $response);
   }
 
   // TODO: una vez cambiado a patch, adaptar la function
-  public function updateFollowRequest(Request $request, Response $response, array $args) {
-    $id = $args['id'];
-    $data = $request->getParsedBody();
-    $this->isAuthorizated($request, $response);  
+  public function updateFollowRequest(Request $request, Response $response, array $args) {  
+    $this->isAuthorizated($request, $response); 
+     $id = $args['id_follow'];
+    $data = $request->getParsedBody();   
+    
     return $this->createOrUpdateFollow($args, $data, $id, $response);
   }
 
@@ -236,7 +237,6 @@ class UserController {
     }
   }
 
-  // TODO: recoger lo de status 2
   private function countFollowersOrFollowedUsers(string $username, string $followedOrFollowing, Response $response) {
     $user = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username);
     if (is_null($user)) {

@@ -87,7 +87,7 @@ export class UserService {
     status_follow:number,
     token:string):Observable<any> {
     let requestOrFollowUserFormData:FormData = new FormData();
-    if (id_follow != null) requestOrFollowUserFormData.append('id',''+id_follow);
+    if (id_follow != null) requestOrFollowUserFormData.append('id_follow',''+id_follow);
     requestOrFollowUserFormData.append('status_follow',''+status_follow);
     return this.http.post(
       this.url + '/user/' + username_follower + '/follow/' + username_followed,
@@ -103,6 +103,7 @@ export class UserService {
     status_follow:number,
     token:string):Observable<any> {
       let cancelRequestOrUnfollowFormData:FormData = new FormData();
+/*       cancelRequestOrUnfollowFormData.append('id_follow',''+id_follow); */
       cancelRequestOrUnfollowFormData.append('status_follow',''+status_follow);
       //TODO cambiar a patch y usar la ruta de requestOrFollowUser
       return this.http.post(

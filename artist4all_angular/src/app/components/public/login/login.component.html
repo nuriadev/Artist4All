@@ -11,19 +11,20 @@
             Correo electrónico
           </label>
           <div class="mt-1">
-            <input formControlName="email" type="email" placeholder="Introduce tu email"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+            <input formControlName="email" type="email" placeholder="Introduce tu email" class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
             focus:placeholder-gray-600
             focus:bg-white
             focus:border-purple-500
             focus:outline-none">
           </div>
-          <div *ngIf="email.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
-            <div *ngIf="email.errors.required" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+          <div *ngIf="email.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass]="'error'">
+            <div *ngIf="email.errors.required"
+              class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
               <i class="fas fa-times-circle"></i>
               Se requiere un correo.
             </div>
-            <div *ngIf="email.errors.pattern" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+            <div *ngIf="email.errors.pattern"
+              class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
               <i class="fas fa-times-circle"></i>
               Correo no válido.
             </div>
@@ -35,21 +36,24 @@
           </label>
           <div class="relative">
             <input formControlName="password" type="password" id="inputPassword" placeholder="Introduce tu contraseña"
-            class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
+              class="text-md block px-3 py-2 rounded-lg w-full bg-white border-2 border-gray-300 shadow-md
             focus:bg-white
             focus:border-purple-500
             focus:outline-none">
-            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5" (click)="showOrHidePassword();">
+            <div class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"
+              (click)="showOrHidePassword();">
               <i class="fas fa-eye fa-lg hover:text-gray-400" id="showIcon"></i>
               <i class="fas fa-eye-slash fa-lg hover:text-gray-400 hidden" id="hideIcon"></i>
             </div>
           </div>
-          <div *ngIf="password.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass] = "'error'">
-           <div *ngIf="password.errors.required" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+          <div *ngIf="password.errors && isValidFormSubmitted != null && !isValidFormSubmitted" [ngClass]="'error'">
+            <div *ngIf="password.errors.required"
+              class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
               <i class="fas fa-times-circle"></i>
               Se requiere una contraseña.
             </div>
-            <div *ngIf="password.errors.pattern" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+            <div *ngIf="password.errors.pattern"
+              class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
               <i class="fas fa-times-circle"></i>
               Contraseña no válida.
             </div>
@@ -58,7 +62,7 @@
         <div class="flex items-center justify-between">
           <div class="flex items-center">
             <input id="remember_me" name="remember_me" type="checkbox"
-            class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
+              class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 rounded">
             <label for="remember_me" class="ml-2 block text-sm text-gray-900">
               Recuérdame
             </label>
@@ -70,8 +74,7 @@
           </div>
         </div>
         <div>
-          <button type="submit"
-          class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700
+          <button type="submit" class="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700
           focus:outline-none
           focus:ring-2
           focus:ring-offset-2
@@ -86,7 +89,8 @@
       </form>
       <div class="text-sm">
         <p href="#" class="font-normal text-center text-black mt-6">
-          ¿Aún no tienes una cuenta? Regístrate <a routerLink="/register" class="font-medium text-purple-600 hover:text-purple-500">aquí</a>
+          ¿Aún no tienes una cuenta? Regístrate <a routerLink="/register"
+            class="font-medium text-purple-600 hover:text-purple-500">aquí</a>
         </p>
       </div>
 

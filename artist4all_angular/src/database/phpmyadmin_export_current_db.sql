@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: artist4all_db:3306
--- Tiempo de generación: 10-04-2021 a las 22:23:48
+-- Tiempo de generación: 12-04-2021 a las 12:44:55
 -- Versión del servidor: 10.2.36-MariaDB-1:10.2.36+maria~bionic
 -- Versión de PHP: 7.4.15
 
@@ -68,7 +68,9 @@ CREATE TABLE `notifications` (
 --
 
 INSERT INTO `notifications` (`id`, `id_responsible`, `id_receiver`, `bodyNotification`, `isRead`, `typeNotification`, `notification_date`) VALUES
-(1, 44, 24, 'te ha enviado una solicitud de amistad', 0, 2, '2021-04-10 21:05:38');
+(1, 44, 24, 'te ha enviado una solicitud de amistad', 0, 2, '2021-04-10 21:05:38'),
+(2, 24, 45, 'te ha enviado una solicitud de amistad', 0, 2, '2021-04-12 08:12:38'),
+(4, 45, 1, 'ha empezado a seguirte', 0, 1, '2021-04-12 09:56:15');
 
 -- --------------------------------------------------------
 
@@ -148,12 +150,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `isPrivate`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$96dvqk1CdJ2rMlqmKAfX.OlUZvQOaMwGeGjB4IlSsdz02eF93LwfO', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJDk2ZHZxazFDZEoyck1scW1LQWZYLk9sVVp2UU9hTXdHZUdqQjRJbFNzZHowMmVGOTNMd2ZPLkJQTFMudnRzZjY=.DHXWQsBkfUKL7klYEzLVZb/50IL5ATh3y/hNLvClUgM=', 0, 0),
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$96dvqk1CdJ2rMlqmKAfX.OlUZvQOaMwGeGjB4IlSsdz02eF93LwfO', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
 (24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
 (27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
 (36, 'Erik ', 'Sung ', 'Yang ', 'erik@gmail.com ', 'No salt added ', '$2y$10$luteHXzZULMCwJTV6Z/sgOnyzGaivSKFt11JL7DLpuaQgy84Fd9wa', 1, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
-(44, 'q', 'q', 'q', 'q', 'q', '$2y$10$j9DMh1sMCNxA8RQzQtBX6eUKJ2cxpfSSOlLvIs8INoWW53Uei6SKi', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0);
+(44, 'q', 'q', 'q', 'q', 'q', '$2y$10$j9DMh1sMCNxA8RQzQtBX6eUKJ2cxpfSSOlLvIs8INoWW53Uei6SKi', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
+(45, 'aa', 'aa', 'aa', 'a@a.com', 'aaaaa', '$2y$10$Rbunly6dpazaosA6g4L7mODG3.fHBAqD/5NI2fZOuxGeTb9eB77pm', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YUBhLmNvbS4kMnkkMTAkUmJ1bmx5NmRwYXphb3NBNmc0TDdtT0RHMy5mSEJBcUQvNU5JMmZaT3V4R2VUYjllQjc3cG0uLklsdUtTTnluNA==.vdrEpRW8R4yQ9IQvtRCcN5vG/1jtQXQgVg0tKGYZ1Ys=', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -178,7 +181,9 @@ INSERT INTO `users_followed` (`id`, `id_follower`, `id_followed`, `status_follow
 (37, 1, 24, 3),
 (56, 1, 36, 3),
 (80, 44, 24, 2),
-(85, 44, 27, 1);
+(85, 44, 27, 1),
+(86, 24, 45, 1),
+(89, 45, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -268,7 +273,7 @@ ALTER TABLE `imgs_publications`
 -- AUTO_INCREMENT de la tabla `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `notifications_type`
@@ -280,25 +285,25 @@ ALTER TABLE `notifications_type`
 -- AUTO_INCREMENT de la tabla `publications`
 --
 ALTER TABLE `publications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT de la tabla `users_followed`
 --
 ALTER TABLE `users_followed`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
 
 --
 -- AUTO_INCREMENT de la tabla `users_followed_status`
 --
 ALTER TABLE `users_followed_status`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- Restricciones para tablas volcadas

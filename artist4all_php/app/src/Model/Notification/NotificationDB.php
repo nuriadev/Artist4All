@@ -35,9 +35,14 @@ class NotificationDB {
     }
 
     public function getMyNotifications(int $id_receiver) : ?array {
-        $sql = 'SELECT * FROM notifications WHERE id_receiver=:id_receiver ORDER BY id DESC';
+        $sql = 'SELECT * FROM notifications WHERE 
+        id_receiver=:id_receiver AND
+        isRead=:isRead ORDER BY id DESC';
         $statement = $this->conn->prepare($sql);
-        $result = $statement->execute([ ':id_receiver' => $id_receiver ]);
+        $result = $statement->execute([ 
+            ':id_receiver' => $id_receiver,
+            ':isRead' => 0
+        ]);
         $notificationsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
         if (!$notificationsAssoc) return null;
         $notifications = [];

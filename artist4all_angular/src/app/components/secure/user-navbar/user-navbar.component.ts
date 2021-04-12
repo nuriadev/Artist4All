@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
-import { months } from 'moment';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SessionService } from 'src/app/core/services/session.service';
