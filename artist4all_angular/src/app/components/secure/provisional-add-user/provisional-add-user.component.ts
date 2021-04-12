@@ -6,27 +6,26 @@ import { UserService } from 'src/app/core/services/user.service';
 @Component({
   selector: 'app-provisional-add-user',
   templateUrl: './provisional-add-user.component.html',
-  styleUrls: ['./provisional-add-user.component.css']
+  styleUrls: ['./provisional-add-user.component.css'],
 })
 export class ProvisionalAddUserComponent implements OnInit {
-
   constructor(
     private _userService: UserService,
     private _sessionService: SessionService
-  ) { }
+  ) {}
 
   userlist: Array<User> = [];
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
 
   ngOnInit(): void {
-    this._userService.getOtherUsers(this.user.username).subscribe(
+    this._userService.getAllOtherUsers(this.user.id).subscribe(
       (result) => {
         this.userlist = result;
-      }, (error) => {
+      },
+      (error) => {
         console.error(error);
       }
-    )
+    );
   }
-
 }

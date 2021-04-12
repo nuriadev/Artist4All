@@ -26,7 +26,7 @@
       <div class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
         <aside class="py-6 lg:col-span-3">
           <nav>
-            <a routerLink="/settings/profile" id="profile"
+            <a routerLink="/user/{{ id }}/settings/profile" id="profile"
               class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium"
               aria-current="page">
               <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
@@ -40,7 +40,7 @@
               </span>
             </a>
 
-            <a routerLink="/settings/account" id="account"
+            <a routerLink="/user/{{ id }}/settings/account" id="account"
               class="bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group border-l-4 px-3 py-2 flex items-center text-sm font-medium">
               <svg class="text-teal-500 group-hover:text-teal-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -55,7 +55,7 @@
               </span>
             </a>
 
-            <a routerLink="/settings/password" id="password"
+            <a routerLink="/user/{{ id }}/settings/password" id="password"
               class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
               <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -131,7 +131,7 @@
                       Activar cuenta privada
                     </p>
                     <p class="text-sm text-gray-500" id="privacy-option-2-description">
-                      Una vez activado este modo, sólo los usuarios aceptados podrán ver tus publicaciones
+                      Una vez activado este modo, sólo tus seguidores podrán ver tus publicaciones.
                     </p>
                   </div>
                   <!-- Enabled: "bg-teal-500", Not Enabled: "bg-gray-200" //-->

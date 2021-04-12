@@ -5,23 +5,22 @@ import { LoginUser } from '../models/loginUser';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   private url = 'http://localhost:81';
 
-  login(user:LoginUser):Observable<any> {
-    let loginFormData:FormData = new FormData();
-    loginFormData.append('email', user.email);
-    loginFormData.append('password', user.password);
+  login(user: LoginUser): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('email', user.email);
+    newForm.append('password', user.password);
 
-    return this.http.post(this.url + '/login', loginFormData);
+    return this.http.post(this.url + '/login', newForm);
   }
 
-  logout(token:string):Observable<any> {
-    let logoutFormData:FormData = new FormData();
-    logoutFormData.append('token',token);
+  logout(token: string): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('token', token);
 
-    return this.http.post(this.url + '/logout', logoutFormData);
+    return this.http.post(this.url + '/logout', newForm);
   }
-
 }

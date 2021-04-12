@@ -8,23 +8,22 @@ import { UserService } from 'src/app/core/services/user.service';
 @Component({
   selector: 'app-user-settings-account',
   templateUrl: './user-settings-account.component.html',
-  styleUrls: ['./user-settings-account.component.css']
+  styleUrls: ['./user-settings-account.component.css'],
 })
 export class UserSettingsAccountComponent implements OnInit {
-
   constructor(
     private _sessionService: SessionService,
-    private _userService: UserService,
-    private _router: Router
-  ) { }
+    private _userService: UserService
+  ) {}
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
-  userEdited:User;
+  id: number = this.user.id;
+  userEdited: User;
 
   sliderSwitchPrivate = document.getElementById('sliderSwitchPrivate');
   toggleButtonPrivate = document.getElementById('toggleButtonPrivate');
-  staredPrivate:boolean;
+  staredPrivate: boolean;
   ngOnInit(): void {
     let sliderSwitchPrivate = document.getElementById('sliderSwitchPrivate');
     let toggleButtonPrivate = document.getElementById('toggleButtonPrivate');
@@ -41,7 +40,7 @@ export class UserSettingsAccountComponent implements OnInit {
     }
   }
 
-  isPrivate:boolean;
+  isPrivate: boolean;
   alternatePrivateAccount() {
     let sliderSwitchPrivate = document.getElementById('sliderSwitchPrivate');
     let toggleButtonPrivate = document.getElementById('toggleButtonPrivate');
@@ -70,15 +69,15 @@ export class UserSettingsAccountComponent implements OnInit {
         this.isPrivate = false;
       }
     }
-    this._userService.switchPrivateAccount(this.user, this.token).subscribe(
+    this._userService.privateAccountSwitcher(this.user, this.token).subscribe(
       (result) => {
         this.userEdited = result.user;
         let userSession = new Session(result.token, this.userEdited);
         this._sessionService.setCurrentSession(userSession);
-      }, (error) => {
+      },
+      (error) => {
         console.log(error);
       }
-    )
+    );
   }
-
 }

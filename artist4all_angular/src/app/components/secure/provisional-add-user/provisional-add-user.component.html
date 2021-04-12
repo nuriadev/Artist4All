@@ -4,7 +4,7 @@
 <div *ngIf="userlist == null"> No hay usuarios registrados </div>
 <div *ngIf="userlist != null">
   <section *ngFor="let user of userlist; index as i;">
-    <table routerLink="/profile/{{user.username}}">
+    <table routerLink="/user/{{ user.id }}/profile">
       <tr>
         <td>
           {{ user.username }}
@@ -13,4 +13,3 @@
     </table>
   </section>
 </div>
-

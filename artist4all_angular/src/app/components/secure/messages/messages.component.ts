@@ -5,13 +5,10 @@ import { UserService } from 'src/app/core/services/user.service';
   selector: 'app-messages',
   templateUrl: './messages.component.html',
   styleUrls: ['./messages.component.css'],
-  providers: [UserService]
+  providers: [UserService],
 })
 export class MessagesComponent implements OnInit {
+  constructor(private _userService: UserService, private _router: Router) {}
 
-  constructor(private _userService: UserService, private _router: Router) { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

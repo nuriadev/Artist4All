@@ -5,7 +5,7 @@
 <div *ngIf="userlist == null && typeList == 'followed'"> Todavía no sigues a ningún usuario </div>
 <div *ngIf="userlist != null">
   <section *ngFor="let user of userlist; index as i;">
-    <table routerLink="/profile/{{user.username}}">
+    <table routerLink="/user/{{ user.id }}/profile">
       <tr>
         <td>
           {{ user.username }}

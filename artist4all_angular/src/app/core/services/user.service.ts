@@ -2,116 +2,126 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { User } from '../models/user';
+import { Session } from '../models/session';
 
 @Injectable()
 export class UserService {
-  constructor(private http:HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  private url = "http://localhost:81";
+  private url = 'http://localhost:81';
 
-  register(newUser:User):Observable<any> {
-    let registerFormData:FormData = new FormData();
-    registerFormData.append('name', newUser.name);
-    registerFormData.append('surname1', newUser.surname1);
-    registerFormData.append('surname2', newUser.surname2);
-    registerFormData.append('email', newUser.email);
-    registerFormData.append('username', newUser.username);
-    registerFormData.append('password', newUser.password);
-    registerFormData.append('isArtist',''+newUser.isArtist);
-    registerFormData.append('imgAvatar', 'http://localhost:81/assets/img/defaultAvatarImg.png');
-    registerFormData.append('aboutMe', 'Bienvenido a mi perfil!!!');
-    registerFormData.append('isPrivate',''+newUser.isPrivate);
+  register(newUser: User): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('name', newUser.name);
+    newForm.append('surname1', newUser.surname1);
+    newForm.append('surname2', newUser.surname2);
+    newForm.append('email', newUser.email);
+    newForm.append('username', newUser.username);
+    newForm.append('password', newUser.password);
+    newForm.append('isArtist', '' + newUser.isArtist);
+    newForm.append(
+      'imgAvatar',
+      'http://localhost:81/assets/img/defaultAvatarImg.png'
+    );
+    newForm.append('aboutMe', 'Bienvenido a mi perfil!!!');
+    newForm.append('isPrivate', '' + newUser.isPrivate);
 
-    return this.http.post(this.url + '/register', registerFormData);
+    return this.http.post(this.url + '/register', newForm);
   }
 
   edit(
-    id:number,
-    name:string,
-    surname1:string,
-    surname2:string,
-    email:string,
-    username:string,
-    aboutMe:string,
-    files:FileList,
-    token:string):Observable<any> {
-      let editFormData:FormData = new FormData();
-      editFormData.append('id',''+id);
-      editFormData.append('name', name);
-      editFormData.append('surname1', surname1);
-      editFormData.append('surname2', surname2);
-      editFormData.append('email', email);
-      editFormData.append('username', username);
-      editFormData.append('aboutMe', aboutMe);
-      if (!files) editFormData.append('newImgAvatar', null);
-      else editFormData.append('newImgAvatar', files[0],files[0].name);
-      editFormData.append('token', token);
- //    TODO Cambiar a patch
-    return this.http.post(this.url + '/user/my/settings/profile', editFormData);
+    id: number,
+    name: string,
+    surname1: string,
+    surname2: string,
+    email: string,
+    username: string,
+    aboutMe: string,
+    files: FileList,
+    token: string
+  ): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('id', '' + id);
+    newForm.append('name', name);
+    newForm.append('surname1', surname1);
+    newForm.append('surname2', surname2);
+    newForm.append('email', email);
+    newForm.append('username', username);
+    newForm.append('aboutMe', aboutMe);
+    if (!files) newForm.append('newImgAvatar', null);
+    else newForm.append('newImgAvatar', files[0], files[0].name);
+    newForm.append('token', token);
+    //    TODO Cambiar a patch
+    return this.http.post(this.url + '/user/' + id + '/profile', newForm);
   }
 
-  editPassword(
-    id:number,
-    password:string,
-    token:string):Observable<any> {
-      let editPasswordFormData:FormData = new FormData();
-      editPasswordFormData.append('id',''+id);
-      editPasswordFormData.append('password', password);
-      editPasswordFormData.append('token', token);
-   //    TODO Cambiar a patch
-      return this.http.post(this.url + '/user/my/settings/password', editPasswordFormData);
+  editPassword(id: number, password: string, token: string): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('password', password);
+    newForm.append('token', token);
+    //    TODO Cambiar a patch
+    return this.http.post(this.url + '/user/' + id + '/password', newForm);
   }
 
-  getOtherUsers(username:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/list');
+  getAllOtherUsers(id: number): Observable<any> {
+    return this.http.get(this.url + '/user/' + id + '/list');
   }
 
-  getUserByUsername(username:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username);
+  getUserById(id: number): Observable<any> {
+    return this.http.get(this.url + '/user/' + id);
   }
 
   isFollowingThatUser(
-    username_follower:string,
-    username_followed:string,
-    token:string):Observable<any> {
+    id_follower: number,
+    id_followed: number,
+    token: string
+  ): Observable<any> {
     return this.http.get(
-      this.url + '/user/' + username_follower + '/follow/' + username_followed,
-      { headers: new HttpHeaders({ 'Authorization': token })}
+      this.url + '/user/' + id_follower + '/follow/' + id_followed,
+      { headers: new HttpHeaders({ Authorization: token }) }
     );
   }
 
   requestOrFollowUser(
-    id_follow:number,
-    username_follower:string,
-    username_followed:string,
-    status_follow:number,
-    token:string):Observable<any> {
-    let requestOrFollowUserFormData:FormData = new FormData();
-    if (id_follow != null) requestOrFollowUserFormData.append('id_follow',''+id_follow);
-    requestOrFollowUserFormData.append('status_follow',''+status_follow);
+    id_follow: number,
+    id_follower: number,
+    id_followed: number,
+    status_follow: number,
+    token: string
+  ): Observable<any> {
+    let newForm: FormData = new FormData();
+    if (id_follow != null) newForm.append('id_follow', '' + id_follow);
+    newForm.append('status_follow', '' + status_follow);
     return this.http.post(
-      this.url + '/user/' + username_follower + '/follow/' + username_followed,
-      requestOrFollowUserFormData,
-      { headers: new HttpHeaders({ 'Authorization': token }) }
+      this.url + '/user/' + id_follower + '/follow/' + id_followed,
+      newForm,
+      { headers: new HttpHeaders({ Authorization: token }) }
     );
   }
 
-  cancelRequestOrUnfollowUser(
-    id_follow:number,
-    username_follower:string,
-    username_followed:string,
-    status_follow:number,
-    token:string):Observable<any> {
-      let cancelRequestOrUnfollowFormData:FormData = new FormData();
-/*       cancelRequestOrUnfollowFormData.append('id_follow',''+id_follow); */
-      cancelRequestOrUnfollowFormData.append('status_follow',''+status_follow);
-      //TODO cambiar a patch y usar la ruta de requestOrFollowUser
-      return this.http.post(
-        this.url + '/user/' + username_follower + '/follow/' + username_followed + '/' + id_follow,
-        cancelRequestOrUnfollowFormData,
-        { headers: new HttpHeaders({ 'Authorization': token }) }
-      );
-/*     let options = {
+  updateFollowRequest(
+    id_follow: number,
+    id_follower: number,
+    id_followed: number,
+    status_follow: number,
+    token: string
+  ): Observable<any> {
+    let newForm: FormData = new FormData();
+    /*       cancelRequestOrUnfollowFormData.append('id_follow',''+id_follow); */
+    newForm.append('status_follow', '' + status_follow);
+    //TODO cambiar a patch y usar la ruta de requestOrFollowUser
+    return this.http.post(
+      this.url +
+        '/user/' +
+        id_follower +
+        '/follow/' +
+        id_followed +
+        '/' +
+        id_follow,
+      newForm,
+      { headers: new HttpHeaders({ Authorization: token }) }
+    );
+    /*     let options = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token }),
       body: { id_follow: id_follow }
     };
@@ -121,30 +131,26 @@ export class UserService {
     ); */
   }
 
-  countFollowers(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/follower', { headers: new HttpHeaders({ 'Authorization': token })});
+  getFollowers(id: number, token: string): Observable<any> {
+    return this.http.get(this.url + '/user/' + id + '/follower', {
+      headers: new HttpHeaders({ Authorization: token }),
+    });
   }
 
-  countFollowed(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username +'/followed', { headers: new HttpHeaders({ 'Authorization': token })});
+  getFollowed(id: number, token: string): Observable<any> {
+    return this.http.get(this.url + '/user/' + id + '/followed', {
+      headers: new HttpHeaders({ Authorization: token }),
+    });
   }
 
-  getFollowers(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/list/follower', { headers: new HttpHeaders({ 'Authorization': token })});
-  }
-
-  getUsersFollowed(username:string, token:string):Observable<any> {
-    return this.http.get(this.url + '/user/' + username + '/list/followed', { headers: new HttpHeaders({ 'Authorization': token })});
-  }
-
-  switchPrivateAccount(user:User, token:string):Observable<any> {
-    let switchPrivateAccountFormData:FormData = new FormData();
-    switchPrivateAccountFormData.append('username', user.username);
-    switchPrivateAccountFormData.append('isPrivate',''+user.isPrivate);
-    switchPrivateAccountFormData.append('token', token);
+  privateAccountSwitcher(user: User, token: string): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('isPrivate', '' + user.isPrivate);
+    newForm.append('token', token);
     // TODO: pasar a patch
-    return this.http.post(this.url + '/user/my/settings/account/privacy', switchPrivateAccountFormData);
+    return this.http.post(
+      this.url + '/user/' + user.id + '/settings/account/privacy',
+      newForm
+    );
   }
-
-
 }

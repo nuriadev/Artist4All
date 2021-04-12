@@ -1,50 +1,61 @@
 <?php
+
 namespace Artist4all\Controller;
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class PublicationController {
-  public static function initRoutes($app) {
-    $app->post('/user/my/publication', '\Artist4all\Controller\PublicationController:createPublication');    
+class PublicationController
+{
+  public static function initRoutes($app)
+  {
+    $app->post('/user/{id:[0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:createPublication');
     // TODO: pasar a patch
-    $app->post('/user/my/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
-    $app->delete('/user/my/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:deletePublication');
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
-    $app->get('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
+    $app->post('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
+    $app->delete('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:deletePublication');
+    $app->get('/user/{id:[0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
+    $app->get('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
 
-    $app->post('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}/like', '\Artist4all\Controller\PublicationController:addLike');
-    $app->delete('/user/{username:[a-zA-Z0-9 ]+}/publication/{id:[0-9 ]+}/like', '\Artist4all\Controller\PublicationController:removeLike');
+    $app->post('/user/{my_id:[0-9 ]+}/like/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:addLike');
+    $app->delete('/user/{my_id:[0-9 ]+}/like/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:removeLike');
   }
 
-  public function getPublicationById(Request $request, Response $response, array $args) {
-    $authorized = $this->isAuthorizated($request, $response);
-    $id = $args['id'];
-    $username = $args['username'];
-    $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationById($id);
+  public function getPublicationById(Request $request, Response $response, array $args)
+  {
+    $id_publication = $args['id_publication'];
+    $id_user = $args['id_user']; 
+    $authorized = $this->isAuthorizated($request, $response); 
+    $user = \Artist4all\Model\User::getUserById($id_user);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    } 
+    $publication = \Artist4all\Model\Publication::getPublicationById($id_publication);
     if (is_null($publication)) $response = $response->withStatus(404, 'Publication not found');
     else $response = $response->withJson($publication);
     return $response;
   }
 
-  public function getUserPublications(Request $request, Response $response, array $args) {
-    $authorized = $this->isAuthorizated($request, $response);
-    $username = $args['username'];
-    $user = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username);
+  public function getUserPublications(Request $request, Response $response, array $args)
+  {
+    $id = $args['id'];
+    $authorized = $this->isAuthorizated($request, $response); 
+    $user = \Artist4all\Model\User::getUserById($id);
     if (is_null($user)) {
       $response = $response->withStatus(404, 'User not found');
       return $response;
     } else {
-      $publications = \Artist4all\Model\Publication\PublicationDB::getInstance()->getUserPublications($user->getId());
-      if (empty($publications)) $response = $response->withStatus(200, 'Without results');
+      $publications = \Artist4all\Model\Publication::getUserPublications($user->getId());
+      if (empty($publications)) $response = $response->withStatus(204, 'Without results');
       else $response = $response->withJson($publications);
       return $response;
     }
   }
 
-  private function isAuthorizated(Request $request, Response $response) {
+  private function isAuthorizated(Request $request, Response $response)
+  {
     $token = trim($request->getHeader('Authorization')[0]);
-    $result = \Artist4all\Model\User\UserDB::getInstance()->isValidToken($token);
+    $result = \Artist4all\Model\User::isValidToken($token);
     if (!$result) {
       $response = $response->withStatus(401, 'Unauthorized user');
       return $response;
@@ -54,42 +65,62 @@ class PublicationController {
   }
 
   // todo: view, edit, delete, comentarios, likes
-  public function createPublication(Request $request, Response $response, array $args) {
+  public function createPublication(Request $request, Response $response, array $args)
+  {
+    $id_user = $args['id'];
     $data = $request->getParsedBody();
+    $user = \Artist4all\Model\User::getUserById($id_user);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    }
     $publication = $this->validatePersist($data, null, $response);
     if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');
-    else $response = $response->withJson($publication)->withStatus(200, 'Publication created');
+    else $response = $response->withJson($publication)->withStatus(201, 'Publication created');
     return $response;
   }
 
-  public function editPublication(Request $request, Response $response, array $args) {
-    $id = $args['id'];
+  public function editPublication(Request $request, Response $response, array $args)
+  {
+    $id_user = $args['id_user'];
+    $id_publication = $args['id_publication'];
     $data = $request->getParsedBody();
-    $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationById($id);
+    $user = \Artist4all\Model\User::getUserById($id_user);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    }
+    $publication = \Artist4all\Model\Publication::getPublicationById($id_publication);
     if (is_null($publication)) {
       $response = $response->withStatus(404, 'Publication not found');
       return $response;
     }
-    if (!isset($data['id_user'])) $data['id_user'] = $publication->getIdUser();
+    $data['id_user'] = $id_user;
     if (!isset($data['n_likes'])) $data['n_likes'] = $publication->getLikes();
     if (!isset($data['n_comments'])) $data['n_comments'] = $publication->getComments();
     if (!isset($data['upload_date'])) $data['upload_date'] = $publication->getUploadDatePublication();
-    if (empty($data['imgsPublication'])) $data['imgsPublication'] = implode(',', \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationImgs($publication->getId()));
-    else $deleteImgs = \Artist4all\Model\Publication\PublicationDB::getInstance()->deletePublicationImgs($publication->getId()); 
-    $publication = $this->validatePersist($data, $id, $response);
+    if (empty($data['imgsPublication'])) $data['imgsPublication'] = implode(',', \Artist4all\Model\Publication::getPublicationImgs($publication->getId()));
+    else $deleteImgs = \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
+    $publication = $this->validatePersist($data, $id_publication, $response);
     if (is_null($publication)) $response = $response->withStatus(500, 'Error at editing publication');
     else $response = $response->withJson($publication)->withStatus(200, 'Publication edited');
     return $response;
   }
 
-  public function deletePublication(Request $request, Response $response, array $args) {
-    $data = $request->getParsedBody();
-    $id = $args['id'];
-    $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationById($id);
+  public function deletePublication(Request $request, Response $response, array $args)
+  {
+    $id_user = $args['id_user'];
+    $id_publication = $args['id_publication'];
+    $user = \Artist4all\Model\User::getUserById($id_user);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    }
+    $publication = \Artist4all\Model\Publication::getPublicationById($id_publication);
     if (is_null($publication)) {
       $response = $response->withStatus(404, 'Publication not found');
     } else {
-      $result = \Artist4all\Model\Publication\PublicationDB::getInstance()->deletePublicationById($id);
+      $result = \Artist4all\Model\Publication::deletePublicationById($id_publication);
       if (!$result) $response = $response->withStatus(500, 'Error at removing publication');
       else $response = $response->withStatus(200, 'Publication deleted');
     }
@@ -112,13 +143,13 @@ class PublicationController {
     return $response;
   }
   */
-  public function addLike(Request $request, Response $response, array $args) {
-    $id = $args['id'];
-    $username = $args['username'];
+  public function addLike(Request $request, Response $response, array $args)
+  {
+    $id_user = $args['my_id'];
     $data = $request->getParsedBody();
-    $myId= $data['my_id'];
-    $publisherUser = \Artist4all\Model\User\UserDB::getInstance()->getUserByUsername($username);
-    $likeGiverUser = \Artist4all\Model\User\UserDB::getInstance()->getUserById($myId);
+    $id_publisher = $data['id_user'];
+    $publisherUser = \Artist4all\Model\User::getUserById($id_publisher);
+    $likeGiverUser = \Artist4all\Model\User::getUserById($id_user);
     if (is_null($publisherUser) || is_null($likeGiverUser)) {
       $response = $response->withStatus(404, 'User not found');
       return $response;
@@ -129,24 +160,26 @@ class PublicationController {
     // return $response;
   }
 
-  public function removeLike(Request $request, Response $response, array $args) {
+  public function removeLike(Request $request, Response $response, array $args)
+  {
     // $id = $args['id'];
     // $result = \Artist4all\Model\User\UserDB::getInstance()->unfollowUser($id);
     // if(!$result) $response = $response->withStatus(500, 'Error at unfollwing');
     // else $response = $response->withJson($result)->withStatus(200, 'Removed from your followed list');
     // return $response;
-  } 
+  }
 
-  private function validatePersist($data, $id, $response) {
+  private function validatePersist($data, $id, $response)
+  {
     //todo: mirar si hay que validar algo
     $data['imgsPublication'] = json_decode($data['imgsPublication']);
-    
+
     //!No mueve la img seleccionada al apartado querido, lo mismo con los usuarios
     //todo validar tamaño, max, formato, etc. 
     $folderUrl = "assets/img" . DIRECTORY_SEPARATOR;
     foreach ($_FILES as $file) {
-      $nombreImg= $file["tmp_name"]; 
-      $urlImg = $folderUrl.$file["name"];
+      $nombreImg = $file["tmp_name"];
+      $urlImg = $folderUrl . $file["name"];
       move_uploaded_file($nombreImg, $urlImg);
     }
 
@@ -154,24 +187,24 @@ class PublicationController {
     // todo validar que no sea empty
     $token = trim($data['token']);
     $data['id'] = $id;
-    $publication = \Artist4all\Model\Publication\Publication::fromAssoc($data);
-    $canPublish = \Artist4all\Model\Publication\PublicationDB::getInstance()->canPublish($publication, $token);
+    $publication = \Artist4all\Model\Publication::fromAssoc($data);
+    $canPublish = \Artist4all\Model\Publication::canPublish($publication, $token);
     if (!$canPublish) {
       $response = $response->withStatus(500, 'Error at publishing');
       return $response;
     } else {
-      $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->persistPublication($publication);
+      $publication = \Artist4all\Model\Publication::persistPublication($publication);
       if (!empty($publication->getImgsPublication())) {
         foreach ($publication->getImgsPublication() as $img) {
-          $resultImg = \Artist4all\Model\Publication\PublicationDB::getInstance()->insertPublicationImgs($publication->getId(), $img);
+          $resultImg = \Artist4all\Model\Publication::insertPublicationImgs($publication->getId(), $img);
           if (!$resultImg) {
             $response = $response->withStatus(500, 'Error at publishing');
             return $response;
           }
         }
       }
-      $publication = \Artist4all\Model\Publication\PublicationDB::getInstance()->getPublicationById($publication->getId());
-      return $publication; 
-    }  
+      $publication = \Artist4all\Model\Publication::getPublicationById($publication->getId());
+      return $publication;
+    }
   }
 }

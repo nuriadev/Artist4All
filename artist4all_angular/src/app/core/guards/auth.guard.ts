@@ -6,8 +6,10 @@ import { SessionService } from '../services/session.service';
   providedIn: 'root',
 })
 export class AuthGuard implements CanActivate {
-
-  constructor(private _router: Router, private _sessionService: SessionService) { }
+  constructor(
+    private _router: Router,
+    private _sessionService: SessionService
+  ) {}
 
   canActivate() {
     if (this._sessionService.isAuthenticated()) {
@@ -16,5 +18,4 @@ export class AuthGuard implements CanActivate {
     this._router.navigate(['/login']);
     return false;
   }
-
 }

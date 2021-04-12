@@ -8,30 +8,29 @@ import { UserService } from 'src/app/core/services/user.service';
 @Component({
   selector: 'app-user-settings-profile',
   templateUrl: './user-settings-profile.component.html',
-  styleUrls: ['./user-settings-profile.component.css']
+  styleUrls: ['./user-settings-profile.component.css'],
 })
 export class UserSettingsProfileComponent implements OnInit {
-
   constructor(
     private _sessionService: SessionService,
     private _userService: UserService,
     private _router: Router
-  ) { }
+  ) {}
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
-  id:number;
-  name:string;
-  surname1:string;
-  name_2:string;
-  surname1_2:string;
-  surname2:string;
-  email:string;
-  username:string;
-  password:string;
-  isArtist:number;
-  imgAvatar:FileList;
-  aboutMe:string;
+  id: number;
+  name: string;
+  surname1: string;
+  name_2: string;
+  surname1_2: string;
+  surname2: string;
+  email: string;
+  username: string;
+  password: string;
+  isArtist: number;
+  imgAvatar: FileList;
+  aboutMe: string;
 
   ngOnInit(): void {
     this.id = this.user.id;
@@ -53,26 +52,30 @@ export class UserSettingsProfileComponent implements OnInit {
     this.imgToUpload = newImgAvatar;
   }
 
-  userEdited:User;
+  userEdited: User;
   edit() {
-    this._userService.edit(
-      this.id,
-      this.name,
-      this.surname1,
-      this.surname2,
-      this.email,
-      this.username,
-      this.aboutMe,
-      this.imgToUpload,
-      this.token).subscribe(
+    this._userService
+      .edit(
+        this.id,
+        this.name,
+        this.surname1,
+        this.surname2,
+        this.email,
+        this.username,
+        this.aboutMe,
+        this.imgToUpload,
+        this.token
+      )
+      .subscribe(
         (result) => {
           this.userEdited = result.user;
           let userSession = new Session(result.token, this.userEdited);
           this._sessionService.setCurrentSession(userSession);
           location.reload();
-        }, (error) => {
+        },
+        (error) => {
           console.log(error);
         }
-      )
+      );
   }
 }

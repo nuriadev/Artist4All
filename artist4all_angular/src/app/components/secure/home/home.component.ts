@@ -18,4 +18,7 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
   }
 
+  user = this._sessionService.getCurrentUser();
+  id = this.user.id;
+
 }

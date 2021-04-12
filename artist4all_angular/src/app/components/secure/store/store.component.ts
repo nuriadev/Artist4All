@@ -5,13 +5,10 @@ import { UserService } from 'src/app/core/services/user.service';
   selector: 'app-store',
   templateUrl: './store.component.html',
   styleUrls: ['./store.component.css'],
-  providers: [UserService]
+  providers: [UserService],
 })
 export class StoreComponent implements OnInit {
+  constructor(private _userService: UserService, private _router: Router) {}
 
-  constructor(private _userService: UserService, private _router: Router) { }
-
-  ngOnInit(): void {
-  }
-
+  ngOnInit(): void {}
 }

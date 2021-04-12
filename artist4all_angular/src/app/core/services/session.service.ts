@@ -5,8 +5,7 @@ import { Session } from '../models/session';
 
 @Injectable()
 export class SessionService {
-
-  constructor(private _router: Router) { }
+  constructor(private _router: Router) {}
 
   setCurrentSession(session: Session) {
     localStorage.setItem('currentUser', JSON.stringify(session));
@@ -19,16 +18,16 @@ export class SessionService {
   getCurrentUser(): User {
     var session: Session = this.getCurrentSession();
     return session.user;
-  };
+  }
 
   getCurrentToken(): string {
     var session = this.getCurrentSession();
     return session.token;
-  };
+  }
 
   isAuthenticated(): boolean {
-    return (this.getCurrentToken() != null) ? true : false;
-  };
+    return this.getCurrentToken() != null ? true : false;
+  }
 
   logout(): void {
     localStorage.removeItem('currentUser');
