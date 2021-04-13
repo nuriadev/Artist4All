@@ -79,4 +79,18 @@ class Session implements \JsonSerializable
     $randomTokenPart = str_shuffle($randomTokenPart);
     return $randomTokenPart;
   }
+
+  public static function verifyToken($token)
+  {
+    $secret_key = 'my secret key';
+    $token_values = explode('.', $token);
+    $header = $token[0];
+    $payload = $token[1];
+    $signature = $token[2];
+    // se calcula codificando el encabezamiento y el contenido en base64url y concatenandolas con un punto
+    $resulted_signature = base64_encode(hash_hmac('sha256', $header . '.' . $payload, $secret_key, true));
+    // token formado por el encabezado, el contenido y la firma que se concatenan con puntos
+    if ($resulted_signature == $signature) return $token;
+    else return null;
+  }
 }

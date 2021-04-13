@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
       setTimeout(() => {
         this.spinner.hide();
         this.loaded = true;
-      }, 1200);
+      }, 1500);
       this.id_user = params.get('id_user');
       if (parseInt(this.id_user) == this.user.id) {
         setTimeout(() => {
@@ -73,7 +73,7 @@ export class ProfileComponent implements OnInit {
           this.getUserPublications(this.id, this.token);
         }, 1200);
       } else {
-        this._userService.getUserById(parseInt(this.id_user)).subscribe(
+        this._userService.getUserById(parseInt(this.id_user), this.token).subscribe(
           (result) => {
             this.id = result.id;
             this.name = result.name;

@@ -286,7 +286,6 @@ class User implements \JsonSerializable
   public static function updateUser(\Artist4all\Model\User $user): ?\Artist4all\Model\User
   {
     $sql = 'UPDATE users SET
-        id=:id,
         name=:name, 
         surname1=:surname1, 
         surname2=:surname2, 
@@ -296,11 +295,10 @@ class User implements \JsonSerializable
         isArtist=:isArtist, 
         imgAvatar=:imgAvatar,
         aboutMe=:aboutMe
-    WHERE token=:token';
+    WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
-      ':id' => $user->getId(),
       ':name' => $user->getName(),
       ':surname1' => $user->getSurname1(),
       ':surname2' => $user->getSurname2(),
@@ -310,7 +308,7 @@ class User implements \JsonSerializable
       ':isArtist' => $user->isArtist(),
       ':imgAvatar' => $user->getImgAvatar(),
       ':aboutMe' => $user->getAboutMe(),
-      ':token' => $user->getToken(),
+      ':id' => $user->getId(),
     ]);
     if (!$result) return null;
     return $user;
@@ -329,27 +327,27 @@ class User implements \JsonSerializable
   }
 
   // todo pasar usuario
-  public static function logout(string $token): bool
+  public static function logout(int $id): bool
   {
-    $sql = 'UPDATE users SET token=:token WHERE token=:tokenReceived';
+    $sql = 'UPDATE users SET token=:token WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':token' => '',
-      ':tokenReceived' => $token
+      ':tokenReceived' => $id
     ]);
     return $result;
   }
 
   //TODO pasar usuario y contraseña
-  public static function changePassword(string $password, string $token): bool
+  public static function changePassword(string $password, int $id): bool
   {
-    $sql = 'UPDATE users SET password=:password WHERE token=:token';
+    $sql = 'UPDATE users SET password=:password WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':password' => $password,
-      ':token' => $token
+      ':id' => $id
     ]);
     return $result;
   }
@@ -449,26 +447,26 @@ class User implements \JsonSerializable
     return $listFollowed;
   }
 
-  // todo remove when we have a middleware
-  public static function isValidToken(string $token): bool
+  public static function getIdByToken(string $token): ?int
   {
-    $sql = 'SELECT * FROM users WHERE token=:token';
+    $sql = 'SELECT id FROM users WHERE token=:token';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
-    $result = $statement->execute([':token' => $token]);
-    return $result;
+    $id_user = $statement->execute([':token' => $token]);
+    if (!$id_user) return null;
+    return $id_user;
   }
 
   public static function privateAccountSwitcher(
     int $isPrivate,
-    string $token
+    int $id
   ): bool {
-    $sql = 'UPDATE users SET isPrivate=:isPrivate WHERE token=:token';
+    $sql = 'UPDATE users SET isPrivate=:isPrivate WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':isPrivate' => $isPrivate,
-      ':token' => $token
+      ':id' => $id
     ]);
     return $result;
   }

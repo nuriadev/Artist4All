@@ -23,13 +23,12 @@ class PublicationController
   public function getPublicationById(Request $request, Response $response, array $args)
   {
     $id_publication = $args['id_publication'];
-    $id_user = $args['id_user']; 
-    $authorized = $this->isAuthorizated($request, $response); 
+    $id_user = $args['id_user'];
     $user = \Artist4all\Model\User::getUserById($id_user);
     if (is_null($user)) {
       $response = $response->withStatus(404, 'User not found');
       return $response;
-    } 
+    }
     $publication = \Artist4all\Model\Publication::getPublicationById($id_publication);
     if (is_null($publication)) $response = $response->withStatus(404, 'Publication not found');
     else $response = $response->withJson($publication);
@@ -39,7 +38,6 @@ class PublicationController
   public function getUserPublications(Request $request, Response $response, array $args)
   {
     $id = $args['id'];
-    $authorized = $this->isAuthorizated($request, $response); 
     $user = \Artist4all\Model\User::getUserById($id);
     if (is_null($user)) {
       $response = $response->withStatus(404, 'User not found');
@@ -49,18 +47,6 @@ class PublicationController
       if (empty($publications)) $response = $response->withStatus(204, 'Without results');
       else $response = $response->withJson($publications);
       return $response;
-    }
-  }
-
-  private function isAuthorizated(Request $request, Response $response)
-  {
-    $token = trim($request->getHeader('Authorization')[0]);
-    $result = \Artist4all\Model\User::isValidToken($token);
-    if (!$result) {
-      $response = $response->withStatus(401, 'Unauthorized user');
-      return $response;
-    } else {
-      return $result;
     }
   }
 
@@ -184,27 +170,19 @@ class PublicationController
     }
 
     if (empty($data["imgsPublication"])) $data['imgsPublication'] = null;
-    // todo validar que no sea empty
-    $token = trim($data['token']);
     $data['id'] = $id;
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
-    $canPublish = \Artist4all\Model\Publication::canPublish($publication, $token);
-    if (!$canPublish) {
-      $response = $response->withStatus(500, 'Error at publishing');
-      return $response;
-    } else {
-      $publication = \Artist4all\Model\Publication::persistPublication($publication);
-      if (!empty($publication->getImgsPublication())) {
-        foreach ($publication->getImgsPublication() as $img) {
-          $resultImg = \Artist4all\Model\Publication::insertPublicationImgs($publication->getId(), $img);
-          if (!$resultImg) {
-            $response = $response->withStatus(500, 'Error at publishing');
-            return $response;
-          }
+    $publication = \Artist4all\Model\Publication::persistPublication($publication);
+    if (!empty($publication->getImgsPublication())) {
+      foreach ($publication->getImgsPublication() as $img) {
+        $resultImg = \Artist4all\Model\Publication::insertPublicationImgs($publication->getId(), $img);
+        if (!$resultImg) {
+          $response = $response->withStatus(500, 'Error at publishing');
+          return $response;
         }
       }
-      $publication = \Artist4all\Model\Publication::getPublicationById($publication->getId());
-      return $publication;
     }
+    $publication = \Artist4all\Model\Publication::getPublicationById($publication->getId());
+    return $publication;
   }
 }

@@ -60,6 +60,7 @@ class UserController
     if (!isset($data['isArtist'])) $data['isArtist'] = $user->isArtist();
     if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();
     if (!isset($data['isPrivate'])) $data['isPrivate'] = $user->isPrivate();
+    if (!isset($data['token'])) $data['token'] = $user->getToken();
     $user = $this->validatePersist($data, $id, $response);
     if (is_null($user)) {
       $response = $response->withStatus(500, 'Error at editing');
@@ -82,8 +83,7 @@ class UserController
     //TODO: si se puede adaptarlo a validatePersist
     $password = trim($data["password"]); // todo validar campos
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
-    $token = trim($data["token"]);
-    $result = \Artist4all\Model\User::changePassword($password_hashed, $token);
+    $result = \Artist4all\Model\User::changePassword($password_hashed, $id);
     if (!$result) {
       $response = $response->withStatus(500, 'Error on the password modification');
     } else {
@@ -95,9 +95,8 @@ class UserController
 
   public function logout(Request $request, Response $response, array $args)
   {
-    $data = $request->getParsedBody();
-    $token = trim($data["token"]);
-    $result = \Artist4all\Model\User::logout($token);
+    $id = $args['id'];
+    $result = \Artist4all\Model\User::logout($id);
     if (!$result) $response = $response->withStatus(500, 'Error at closing session');
     else $response = $response->withStatus(204, 'Session closed');
     return $response;
@@ -218,8 +217,7 @@ class UserController
       return $response;
     } else {
       $isPrivate = $data['isPrivate'];
-      $token = $data['token'];
-      $result = \Artist4all\Model\User::privateAccountSwitcher($isPrivate, $token);
+      $result = \Artist4all\Model\User::privateAccountSwitcher($isPrivate, $user->getId());
       if (!$result) {
         $response = $response->withStatus(400, 'Error at switching');
       } else {

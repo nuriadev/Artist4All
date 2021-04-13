@@ -256,31 +256,6 @@ class Publication implements \JsonSerializable
     return $result;
   }
 
-  //TODO Remove when set middleware
-  public static function canPublish(
-    \Artist4all\Model\Publication $publication,
-    string $token
-  ): bool {
-    $sql = 'SELECT * FROM users WHERE token=:token';
-    $conn = Database::getInstance()->getConnection();
-    $statement = $conn->prepare($sql);
-    $result = $statement->execute([':token' => $token]);
-    $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
-    if (!$userAssoc) return false;
-    $user = \Artist4all\Model\User::fromAssoc($userAssoc);
-    if ($user->getId() == $publication->getIdUser()) return true;
-    return false;
-  }
-
-  public static function isValidToken(string $token): bool
-  {
-    $sql = 'SELECT * FROM users WHERE token=:token';
-    $conn = Database::getInstance()->getConnection();
-    $statement = $conn->prepare($sql);
-    $result = $statement->execute([':token' => $token]);
-    return $result;
-  }
-
   public static function deletePublicationById(int $id): bool
   {
     $sql = "DELETE FROM publications WHERE id=:id";

@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { LoginUser } from '../models/loginUser';
+import { User } from '../models/user';
 
 @Injectable()
 export class AuthenticationService {
@@ -17,10 +18,11 @@ export class AuthenticationService {
     return this.http.post(this.url + '/login', newForm);
   }
 
-  logout(token: string): Observable<any> {
+  logout(id_user: number, token: string): Observable<any> {
     let newForm: FormData = new FormData();
-    newForm.append('token', token);
-
-    return this.http.post(this.url + '/logout', newForm);
+    newForm.append('id', '' + id_user);
+    return this.http.post(this.url + '/logout', {
+      headers: new HttpHeaders({ Authorization: token }),
+    });
   }
 }

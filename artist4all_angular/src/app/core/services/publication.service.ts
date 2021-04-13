@@ -31,9 +31,10 @@ export class PublicationService {
     newForm.append('upload_date', '' + newPublication.upload_date);
     newForm.append('n_likes', '' + newPublication.n_likes);
     newForm.append('n_comments', '' + newPublication.n_comments);
-    newForm.append('token', token);
 
-    return this.http.post(this.url + id_user + '/publication', newForm);
+    return this.http.post(this.url + id_user + '/publication', newForm, {
+      headers: new HttpHeaders({ Authorization: token }),
+    });
   }
 
   getUserPublications(id_user: number, token: string): Observable<any> {
@@ -67,12 +68,14 @@ export class PublicationService {
       newForm.append('imgsPublication', JSON.stringify(imgsPublication));
     }
     newForm.append('bodyPublication', publication.bodyPublication);
-    newForm.append('token', token);
 
     // TODO: pasar a patch
     return this.http.post(
       this.url + publication.id_user + '/publication/' + publication.id,
-      newForm
+      newForm,
+      {
+        headers: new HttpHeaders({ Authorization: token }),
+      }
     );
   }
 

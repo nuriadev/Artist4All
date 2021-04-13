@@ -67,7 +67,7 @@ export class UserSettingsPasswordComponent implements OnInit {
     }
     this.isValidFormSubmitted = true;
     let values:any = this.passwordForm.value;
-    this._userService.editPassword(this.user.id, values, this.token).subscribe(
+    this._userService.changePassword(this.user.id, values, this.token).subscribe(
       (result) => {
         this.userEdited = result.user;
         let userSession = new Session(result.token, this.userEdited);

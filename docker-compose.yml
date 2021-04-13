@@ -17,7 +17,7 @@ services:
     volumes: 
       - ./artist4all_angular/dist/Artist4All:/usr/share/nginx/html
     ports: 
-      - 82:80
+      - 80:80
 
   artist4all_db:
     image: mariadb:10.2

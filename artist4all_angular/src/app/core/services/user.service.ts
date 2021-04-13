@@ -50,27 +50,32 @@ export class UserService {
     newForm.append('aboutMe', aboutMe);
     if (!files) newForm.append('newImgAvatar', null);
     else newForm.append('newImgAvatar', files[0], files[0].name);
-    newForm.append('token', token);
     //    TODO Cambiar a patch
-    return this.http.post(this.url + '/user/' + id + '/profile', newForm);
+    return this.http.post(this.url + '/user/' + id + '/profile', newForm, {
+      headers: new HttpHeaders({ Authorization: token }),
+    });
   }
 
-  editPassword(id, formValues, token):Observable<any> {
-    let newForm:FormData = new FormData();
-    newForm.append('id',''+id);
+  changePassword(id: number, formValues, token: string): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('id', '' + id);
     newForm.append('password', formValues.password);
-    newForm.append('token', token);
     //    TODO Cambiar a patch
-    return this.http.post(this.url + '/user/' + id + '/password', newForm);
-
+    return this.http.post(this.url + '/user/' + id + '/password', newForm, {
+      headers: new HttpHeaders({ Authorization: token }),
+    });
   }
 
-  getAllOtherUsers(id: number): Observable<any> {
-    return this.http.get(this.url + '/user/' + id + '/list');
+  getAllOtherUsers(id: number, token: string): Observable<any> {
+    return this.http.get(this.url + '/user/' + id + '/list', {
+      headers: new HttpHeaders({ Authorization: token }),
+    });
   }
 
-  getUserById(id: number): Observable<any> {
-    return this.http.get(this.url + '/user/' + id);
+  getUserById(id: number, token: string): Observable<any> {
+    return this.http.get(this.url + '/user/' + id, {
+      headers: new HttpHeaders({ Authorization: token }),
+    });
   }
 
   isFollowingThatUser(
@@ -148,11 +153,11 @@ export class UserService {
   privateAccountSwitcher(user: User, token: string): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('isPrivate', '' + user.isPrivate);
-    newForm.append('token', token);
     // TODO: pasar a patch
     return this.http.post(
       this.url + '/user/' + user.id + '/settings/account/privacy',
-      newForm
+      newForm,
+      { headers: new HttpHeaders({ Authorization: token }) }
     );
   }
 }
