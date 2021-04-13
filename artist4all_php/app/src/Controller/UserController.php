@@ -122,7 +122,6 @@ class UserController
 
   public function isFollowingThatUser(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     $id_follower = $args['id_follower'];
     $id_followed = $args['id_followed'];
     $follower = \Artist4all\Model\User::getUserById($id_follower);
@@ -139,7 +138,6 @@ class UserController
 
   public function requestOrFollowUser(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     $data = $request->getParsedBody();
     if (!isset($data['id_follow'])) $id = null;
     else $id = $data['id_follow'];
@@ -149,7 +147,6 @@ class UserController
   // TODO: una vez cambiado a patch, adaptar la function
   public function updateFollowRequest(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     $id = $args['id_follow'];
     $data = $request->getParsedBody();
     return $this->createOrUpdateFollow($args, $data, $id, $response);
@@ -178,32 +175,23 @@ class UserController
       $response = $response->withStatus(500);
     } else {
       if ($logFollow['status_follow'] == 2) {
-        $this->createNotification($follower, $followed, 'te ha enviado una solicitud de amistad', 2, $response);
+        \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 2, $response);
       } else if ($logFollow['status_follow'] == 3) {
-        $this->createNotification($follower, $followed, 'ha empezado a seguirte', 1, $response);
-      }
+        \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 1, $response);
+        \Artist4all\Controller\NotificationController::createNotification($followed, $follower, 3, $response);
+      } 
       $response = $response->withJson($logFollow);
     }
     return $response;
   }
 
-  private function createNotification($user_responsible, $user_receiver, $bodyNotification, $typeNotification, $response)
-  {
-    $notification = new \Artist4all\Model\Notification(null, $user_responsible, $user_receiver, $bodyNotification, 0, $typeNotification, '');
-    $newNotification = \Artist4all\Model\Notification::insertNotification($notification);
-    if (is_null($newNotification)) $response = $response->withStatus(500, 'Error at creating the notification');
-    return $newNotification;
-  }
-
   public function getFollowers(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     return $this->getFollowersOrFollowed($args, 'followers', $response);
   }
 
   public function getFollowed(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     return $this->getFollowersOrFollowed($args, 'followed', $response);
   }
 
@@ -226,19 +214,6 @@ class UserController
         $response = $response->withJson($session)->withStatus(200, 'Switched');
       }
       return $response;
-    }
-  }
-
-  //TODO Quitar cuando este el middleware
-  private function isAuthorizated(Request $request, Response $response)
-  {
-    $token = trim($request->getHeader('Authorization')[0]);
-    $result = \Artist4all\Model\User::isValidToken($token);
-    if (!$result) {
-      $response = $response->withStatus(401, 'Unauthorized user');
-      return $response;
-    } else {
-      return $result;
     }
   }
 

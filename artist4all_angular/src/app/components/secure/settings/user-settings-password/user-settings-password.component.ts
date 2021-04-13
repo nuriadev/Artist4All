@@ -6,6 +6,11 @@ import { Session } from 'src/app/core/models/session';
 import { User } from 'src/app/core/models/user';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-settings-password',
@@ -17,7 +22,8 @@ export class UserSettingsPasswordComponent implements OnInit {
     private _sessionService: SessionService,
     private _userService: UserService,
     private _router: Router,
-    private _formBuilder:FormBuilder
+    private _formBuilder:FormBuilder,
+    private _snackBar: MatSnackBar
   ) { }
 
   user = this._sessionService.getCurrentUser();
@@ -59,7 +65,10 @@ export class UserSettingsPasswordComponent implements OnInit {
   get passwordConfirm() { return this.passwordForm.get('passwordConfirm'); }
 
   userEdited:User;
-  // todo añadir notificacion de cambio correcto
+
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+
   editPassword() {
     this.isValidFormSubmitted = false;
     if (this.passwordForm.invalid) {
@@ -70,6 +79,7 @@ export class UserSettingsPasswordComponent implements OnInit {
     this._userService.changePassword(this.user.id, values, this.token).subscribe(
       (result) => {
         this.userEdited = result.user;
+        this.openSnackBar();
         let userSession = new Session(result.token, this.userEdited);
         this._sessionService.setCurrentSession(userSession);
         this.passwordForm.reset();
@@ -77,5 +87,13 @@ export class UserSettingsPasswordComponent implements OnInit {
         console.log(error);
       }
     )
+  }
+
+  openSnackBar() {
+    this._snackBar.open('Contraseña modificada.', 'OK', {
+      duration: 500,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition
+    });
   }
 }

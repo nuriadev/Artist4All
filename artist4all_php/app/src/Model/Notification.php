@@ -7,7 +7,7 @@ class Notification implements \JsonSerializable
   private ?int $id;
   private  \Artist4all\Model\User $user_responsible;
   private  \Artist4all\Model\User $user_receiver;
-  private string $bodyNotification;
+  private ?string $bodyNotification;
   private int $isRead;
   private string $typeNotification;
   private string $notification_date;
@@ -17,7 +17,7 @@ class Notification implements \JsonSerializable
     ?int $id,
     \Artist4all\Model\User  $user_responsible,
     \Artist4all\Model\User  $user_receiver,
-    string $bodyNotification,
+    ?string $bodyNotification,
     int $isRead,
     string $typeNotification,
     string $notification_date
@@ -61,12 +61,12 @@ class Notification implements \JsonSerializable
     $this->user_receiver = $user_receiver;
   }
 
-  public function getBodyNotification(): string
+  public function getBodyNotification(): ?string
   {
     return $this->bodyNotification;
   }
 
-  public function setBodyNotification(string $bodyNotification)
+  public function setBodyNotification(?string $bodyNotification)
   {
     $this->bodyNotification = $bodyNotification;
   }
@@ -139,6 +139,7 @@ class Notification implements \JsonSerializable
     $result = $statement->execute([':id' => $id]);
     $notificationAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
     if (!$notificationAssoc) return null;
+    $notification['bodyNotification'] = null;
     $notification = \Artist4all\Model\Notification::fromAssoc($notificationAssoc);
     return $notification;
   }
@@ -164,6 +165,7 @@ class Notification implements \JsonSerializable
       $user_receiver = \Artist4all\Model\User::getUserById($id_receiver);
       $notificationAssoc['user_responsible'] = $user_responsible;
       $notificationAssoc['user_receiver'] = $user_receiver;
+      $notificationAssoc['bodyNotification'] = null;
       $notifications[] = \Artist4all\Model\Notification::fromAssoc($notificationAssoc);
     }
     return $notifications;
@@ -196,4 +198,29 @@ class Notification implements \JsonSerializable
     $notification->setId($id);
     return $notification;
   }
+
+  public static function notificationRead(int $id) : bool {
+    $sql = 'UPDATE  notifications SET isRead=:isRead WHERE id=:id
+      :typeNotification,
+      :notification_date
+    )';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':isRead' => 1,
+      ':id' => $id
+    ]);
+    return $result;
+  }
+
+  public static function removeNotification(int $id) {
+    $sql = 'DELETE FROM notifications WHERE id=:id';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':id' => $id
+    ]);
+    return $result;
+  }
+
 }

@@ -7,6 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -73,7 +74,8 @@ import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    MatBadgeModule
+    MatBadgeModule,
+    MatSnackBarModule
   ],
   providers: [UserService, AuthenticationService, SessionService, AuthGuard],
   bootstrap: [AppComponent],

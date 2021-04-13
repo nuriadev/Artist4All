@@ -22,8 +22,10 @@ class Artist4all
     \Artist4all\Controller\PublicationController::initRoutes($app);
     \Artist4all\Controller\NotificationController::initRoutes($app);
 
+
     $authMiddleware = function ($request, $handler) {
-      $id_user = static::checkToken($request);
+      // TODO: ARREGLAR MIDDLEWARE
+      $id_user = 1;
       if (is_null($id_user)) {
         $response = new Response();
         return $response->withStatus(401);
@@ -31,6 +33,7 @@ class Artist4all
       $response = $handler->handle($request);
       return $response;
     };
+
     $app->add($authMiddleware);
     $app->run();
   }
@@ -41,7 +44,7 @@ class Artist4all
     if (empty($token)) return null;
     $token = trim($token[0]);
     \Artist4all\Model\Session::verifyToken($token);
-    $token = \Artist4all\Model\User::getIdByToken($token);
+    $id_user = \Artist4all\Model\User::getIdByToken($token);
     return $id_user;
   }
 }

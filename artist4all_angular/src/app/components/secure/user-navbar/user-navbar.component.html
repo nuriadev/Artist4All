@@ -60,13 +60,15 @@
                   class="h-8 w-8 rounded-full object-cover mx-1" src="{{ notification.user_responsible.imgAvatar }}"
                   alt="avatar">
                 <p class="text-gray-600 text-sm mx-2">
-                  <a routerLink="/user/{{ notification.user_responsible.id }}/profile" class="font-bold"> {{
+                  <a routerLink="/user/{{ notification.user_responsible.id }}/profile"class="font-bold"> {{
                     notification.user_responsible.username }} </a>
                   {{ notification.bodyNotification }}
                   <span class="font-bold"></span> . {{ notification.notification_date }}
                 </p>
-                <button class=""><i class="fas fa-check text-green inline-block"></i>Aceptar</button>
-                <button class=""><i class="fas fa-times inline-block"></i>Rechazar</button>
+                <button *ngIf="notification.typeNotification == 2" (click)="acceptOrDeclineRequest(notification.id, notification.user_responsible.id, i, 3)"><i class="fas fa-check-circle text-green"></i>Aceptar</button>
+                <button *ngIf="notification.typeNotification == 2" (click)="acceptOrDeclineRequest(notification.id, notification.user_responsible.id, i, 1)"><i class="fas fa-times-circle text-red"></i>Rechazar</button>
+                <button *ngIf="notification.typeNotification != 2" (click)="notificationRead(notification.id)"><i class="fas fa-times inline-block"></i>Leído</button>
+                <button *ngIf="notification.typeNotification != 2" (click)="removeNotification(notification.id)"><i class="fas fa-times inline-block"></i>Borrar</button>
               </div>
             </div>
             <a href="#" class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
