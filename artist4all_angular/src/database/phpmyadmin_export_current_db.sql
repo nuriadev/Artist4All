@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: artist4all_db:3306
--- Tiempo de generación: 12-04-2021 a las 12:44:55
+-- Tiempo de generación: 13-04-2021 a las 16:56:53
 -- Versión del servidor: 10.2.36-MariaDB-1:10.2.36+maria~bionic
--- Versión de PHP: 7.4.15
+-- Versión de PHP: 7.4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -45,7 +45,9 @@ INSERT INTO `imgs_publications` (`id`, `imgPublication`, `id_publication`) VALUE
 (7, 'http://localhost:81/assets/img/defaultAvatarImg.png', 74),
 (29, 'http://localhost:81/assets/img/ashokaMandalore.jpg', 90),
 (30, 'http://localhost:81/assets/img/defaultAvatarImg.png', 90),
-(31, 'http://localhost:81/assets/img/lolLogo.png', 90);
+(31, 'http://localhost:81/assets/img/lolLogo.png', 90),
+(41, 'http://localhost:81/assets/img/defaultAvatarImg.png', 109),
+(42, 'http://localhost:81/assets/img/lolLogo.png', 109);
 
 -- --------------------------------------------------------
 
@@ -57,7 +59,6 @@ CREATE TABLE `notifications` (
   `id` int(11) NOT NULL,
   `id_responsible` int(11) NOT NULL,
   `id_receiver` int(11) NOT NULL,
-  `bodyNotification` varchar(255) NOT NULL,
   `isRead` tinyint(4) NOT NULL,
   `typeNotification` int(11) NOT NULL,
   `notification_date` datetime NOT NULL
@@ -67,10 +68,10 @@ CREATE TABLE `notifications` (
 -- Volcado de datos para la tabla `notifications`
 --
 
-INSERT INTO `notifications` (`id`, `id_responsible`, `id_receiver`, `bodyNotification`, `isRead`, `typeNotification`, `notification_date`) VALUES
-(1, 44, 24, 'te ha enviado una solicitud de amistad', 0, 2, '2021-04-10 21:05:38'),
-(2, 24, 45, 'te ha enviado una solicitud de amistad', 0, 2, '2021-04-12 08:12:38'),
-(4, 45, 1, 'ha empezado a seguirte', 0, 1, '2021-04-12 09:56:15');
+INSERT INTO `notifications` (`id`, `id_responsible`, `id_receiver`, `isRead`, `typeNotification`, `notification_date`) VALUES
+(1, 44, 24, 0, 2, '2021-04-10 21:05:38'),
+(2, 24, 45, 0, 2, '2021-04-12 08:12:38'),
+(4, 45, 1, 0, 1, '2021-04-12 09:56:15');
 
 -- --------------------------------------------------------
 
@@ -121,7 +122,8 @@ INSERT INTO `publications` (`id`, `id_user`, `bodyPublication`, `upload_date`, `
 (72, 1, 'mi nueva publi sin img', '2021-03-31 20:20:26', 0, 0),
 (73, 1, 'mis img', '2021-03-31 20:20:40', 0, 0),
 (74, 1, 'mis img 2', '2021-03-31 20:21:51', 0, 0),
-(90, 1, 'stop (edited66)', '2021-04-09 08:21:06', 0, 0);
+(90, 1, 'stop (edited66)', '2021-04-09 08:21:06', 0, 0),
+(109, 45, 'prrrrrrr', '2021-04-12 15:04:38', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -150,13 +152,13 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `isPrivate`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$96dvqk1CdJ2rMlqmKAfX.OlUZvQOaMwGeGjB4IlSsdz02eF93LwfO', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$sAWlvdkOhQnb3dSPlQkMGur81bFxiuyUTSYpta3hr5NfhRrKOi6JW', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJDk2ZHZxazFDZEoyck1scW1LQWZYLk9sVVp2UU9hTXdHZUdqQjRJbFNzZHowMmVGOTNMd2ZPLiFUY3FwQTlKTno=.q+xmfXWCiVY2goIpioYTfpeA/yZ9JjdDpZUA8XvQlYI=', 0, 0),
 (24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
 (27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
 (36, 'Erik ', 'Sung ', 'Yang ', 'erik@gmail.com ', 'No salt added ', '$2y$10$luteHXzZULMCwJTV6Z/sgOnyzGaivSKFt11JL7DLpuaQgy84Fd9wa', 1, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (44, 'q', 'q', 'q', 'q', 'q', '$2y$10$j9DMh1sMCNxA8RQzQtBX6eUKJ2cxpfSSOlLvIs8INoWW53Uei6SKi', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
-(45, 'aa', 'aa', 'aa', 'a@a.com', 'aaaaa', '$2y$10$Rbunly6dpazaosA6g4L7mODG3.fHBAqD/5NI2fZOuxGeTb9eB77pm', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YUBhLmNvbS4kMnkkMTAkUmJ1bmx5NmRwYXphb3NBNmc0TDdtT0RHMy5mSEJBcUQvNU5JMmZaT3V4R2VUYjllQjc3cG0uLklsdUtTTnluNA==.vdrEpRW8R4yQ9IQvtRCcN5vG/1jtQXQgVg0tKGYZ1Ys=', 1, 0);
+(45, 'aa', 'aa', 'aa', 'a@a.com', 'aaaaa', '$2y$10$x0FSNiLIsKTDvXxTu8ruluiUeE6v2XTlFIrBTGjRcGXdn7RmItnde', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 1, 0);
 
 -- --------------------------------------------------------
 
@@ -267,7 +269,7 @@ ALTER TABLE `users_followed_status`
 -- AUTO_INCREMENT de la tabla `imgs_publications`
 --
 ALTER TABLE `imgs_publications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
 
 --
 -- AUTO_INCREMENT de la tabla `notifications`
@@ -285,7 +287,7 @@ ALTER TABLE `notifications_type`
 -- AUTO_INCREMENT de la tabla `publications`
 --
 ALTER TABLE `publications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=95;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
