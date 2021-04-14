@@ -6,11 +6,6 @@ import { Session } from 'src/app/core/models/session';
 import { User } from 'src/app/core/models/user';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -24,7 +19,6 @@ export class UserSettingsPasswordComponent implements OnInit {
     private _userService: UserService,
     private _router: Router,
     private _formBuilder: FormBuilder,
-    private _snackBar: MatSnackBar
   ) {}
 
   user = this._sessionService.getCurrentUser();
@@ -78,16 +72,14 @@ export class UserSettingsPasswordComponent implements OnInit {
   }
 
   userEdited: User;
-  editPassword() {
-    let values: any = this.passwordForm.value;
+  editPassword(formValues) {
     this._userService
-      .changePassword(this.user.id, values, this.token)
+      .changePassword(this.user.id, formValues, this.token)
       .subscribe(
         (result) => {
           this.userEdited = result.user;
           let userSession = new Session(result.token, this.userEdited);
           this._sessionService.setCurrentSession(userSession);
-          this.openSnackBar();
         },
         (error) => {
           console.log(error);
@@ -95,22 +87,12 @@ export class UserSettingsPasswordComponent implements OnInit {
       );
   }
 
-  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
-  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-  openSnackBar() {
-    this._snackBar.open('Contraseña modificada.', 'OK', {
-      duration: 1000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
-    });
-  }
-
+  values: any;
   editingAnimation() {
     this.isValidFormSubmitted = false;
     if (this.passwordForm.invalid) {
       return;
     }
-    this.isValidFormSubmitted = true;
     Swal.fire({
       title: 'Estás seguro de que quieres modificar la contraseña?',
       text: 'Esta acción es irreversible.',
@@ -122,7 +104,9 @@ export class UserSettingsPasswordComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.passwordForm.reset();
+        this.isValidFormSubmitted = true;
+        this.values = this.passwordForm.value;
+        this.editPassword(this.values);
         Swal.fire({
           title: 'Modificando contraseña...',
           showConfirmButton: false,
@@ -140,7 +124,7 @@ export class UserSettingsPasswordComponent implements OnInit {
               showConfirmButton: false,
               timer: 1000,
             });
-            this.editPassword();
+            this.passwordForm.reset();
           }
         });
       }

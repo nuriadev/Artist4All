@@ -5,7 +5,8 @@ import { AuthenticationService } from 'src/app/core/services/authentication.serv
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
-import Swal from 'sweetalert2';
+import Swal from
+'sweetalert2';
 
 @Component({
   selector: 'app-user-navbar',
@@ -90,7 +91,6 @@ export class UserNavbarComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.logout();
         const Toast = Swal.mixin({
           toast: true,
           position: 'top-end',
@@ -107,7 +107,6 @@ export class UserNavbarComponent implements OnInit {
           title: 'Cerrando sessión...',
         }).then((result) => {
           if (result.dismiss === Swal.DismissReason.timer) {
-            this._router.navigate(['']);
             const Toast = Swal.mixin({
               toast: true,
               position: 'top-end',
@@ -123,6 +122,8 @@ export class UserNavbarComponent implements OnInit {
               icon: 'success',
             });
           }
+          this.logout();
+          this._router.navigate(['']);
         });
       }
     });

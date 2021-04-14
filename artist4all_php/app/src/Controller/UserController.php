@@ -44,8 +44,7 @@ class UserController
   public function login(Request $request, Response $response, array $args)
   {
     $data = $request->getParsedBody();
-    return $response = $response->withJson($request->getAttribute('route')->getName());
-    //return $this->loginProcess($data, $response);
+    return $this->loginProcess($data, $response);
   }
 
   public function editProfile(Request $request, Response $response, array $args)

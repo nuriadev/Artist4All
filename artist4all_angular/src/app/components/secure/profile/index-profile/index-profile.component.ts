@@ -137,22 +137,34 @@ export class ProfileComponent implements OnInit {
   n_comments: number;
   id_like: number;
   likePublication(index: number) {
-    this.isLiked = true;
-    this.n_likes++;
-    this._publicationService
-      .addLike(this.publications[index], this.user.id, this.id, this.token)
-      .subscribe(
-        (result) => {
-          this.id_like = result;
-          // TODO: snackbar on click
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    //this.isLiked = true;
+    let likeIcon = document.getElementById(index + 'likeIcon');
+    if (!this.isLiked) {
+      likeIcon.style.color = "rgba(59, 130, 246, var(--tw-text-opacity))";
+      likeIcon.onmouseover = function() { likeIcon.style.color = 'rgba(29, 78, 216, var(--tw-text-opacity))'; }
+      likeIcon.onmouseout = function() { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; }
+      this.isLiked = true;
+    } else {
+      likeIcon.style.color = "rgba(156, 163, 175, var(--tw-text-opacity))";
+      likeIcon.onmouseover = function() { likeIcon.style.color = 'rgba(107, 114, 128, var(--tw-text-opacity))'; }//likeIcon.style.color = '#B0BBC1';
+      likeIcon.onmouseout = function() { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; }
+      this.isLiked = false;
+    }
+
+    // this._publicationService
+    //   .addLike(this.publications[index], this.user.id, this.id, this.token)
+    //   .subscribe(
+    //     (result) => {
+    //       this.id_like = result;
+    //       // TODO: snackbar on click
+    //     },
+    //     (error) => {
+    //       console.log(error);
+    //     }
+    //   );
   }
 
-  removeLikePublication(index: number) {
+  updateLikeStatus(index: number) {
     this.isLiked = false;
     this.n_likes--;
     this._publicationService
