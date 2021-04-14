@@ -21,7 +21,7 @@ export class AuthenticationService {
   logout(id_user: number, token: string): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('id', '' + id_user);
-    return this.http.post(this.url + '/logout', {
+    return this.http.post(this.url + '/logout', newForm, {
       headers: new HttpHeaders({ Authorization: token }),
     });
   }

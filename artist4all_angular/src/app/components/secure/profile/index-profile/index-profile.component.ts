@@ -8,6 +8,11 @@ import { Publication } from 'src/app/core/models/publication';
 import { Notification } from 'src/app/core/models/notification';
 import { User } from 'src/app/core/models/user';
 import { NotificationService } from 'src/app/core/services/notification.service';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -21,7 +26,8 @@ export class ProfileComponent implements OnInit {
     private _publicationService: PublicationService,
     private _notificationService: NotificationService,
     private _activeRoute: ActivatedRoute,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private _snackBar: MatSnackBar
   ) {}
 
   publications: Array<Publication> = [];
@@ -73,41 +79,43 @@ export class ProfileComponent implements OnInit {
           this.getUserPublications(this.id, this.token);
         }, 1200);
       } else {
-        this._userService.getUserById(parseInt(this.id_user), this.token).subscribe(
-          (result) => {
-            this.id = result.id;
-            this.name = result.name;
-            this.surname1 = result.surname1;
-            this.surname2 = result.surname2;
-            this.email = result.email;
-            this.username = result.username;
-            this.imgAvatar = result.imgAvatar;
-            this.aboutMe = result.aboutMe;
-            this.isPrivate = result.isPrivate;
-            this.isMyProfile = false;
-            this._userService
-              .isFollowingThatUser(this.user.id, this.id, this.token)
-              .subscribe(
-                (result) => {
-                  if (result != null) {
-                    this.id_follow = result.id;
-                    this.status_follow = result.status_follow;
-                  } else {
-                    this.id_follow = null;
-                    this.status_follow = 1;
+        this._userService
+          .getUserById(parseInt(this.id_user), this.token)
+          .subscribe(
+            (result) => {
+              this.id = result.id;
+              this.name = result.name;
+              this.surname1 = result.surname1;
+              this.surname2 = result.surname2;
+              this.email = result.email;
+              this.username = result.username;
+              this.imgAvatar = result.imgAvatar;
+              this.aboutMe = result.aboutMe;
+              this.isPrivate = result.isPrivate;
+              this.isMyProfile = false;
+              this._userService
+                .isFollowingThatUser(this.user.id, this.id, this.token)
+                .subscribe(
+                  (result) => {
+                    if (result != null) {
+                      this.id_follow = result.id;
+                      this.status_follow = result.status_follow;
+                    } else {
+                      this.id_follow = null;
+                      this.status_follow = 1;
+                    }
+                  },
+                  (error) => {
+                    console.log(error);
                   }
-                },
-                (error) => {
-                  console.log(error);
-                }
-              );
-            this.getFollowersAndFollowed(this.id, this.token);
-            this.getUserPublications(this.id, this.token);
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
+                );
+              this.getFollowersAndFollowed(this.id, this.token);
+              this.getUserPublications(this.id, this.token);
+            },
+            (error) => {
+              console.log(error);
+            }
+          );
       }
     });
   }
@@ -136,6 +144,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(
         (result) => {
           this.id_like = result;
+          // TODO: snackbar on click
         },
         (error) => {
           console.log(error);
@@ -148,7 +157,14 @@ export class ProfileComponent implements OnInit {
     this.n_likes--;
     this._publicationService
       .removelike(this.publications[index], this.id, this.token)
-      .subscribe();
+      .subscribe(
+        (result) => {
+          //TODO: snackbar y pedir confirmación / pasar a patch
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
   isLiked: boolean;
@@ -170,8 +186,10 @@ export class ProfileComponent implements OnInit {
     if (this.isPrivate == 0) {
       this.status_follow = 3;
       this.n_followers++;
+      this.message = 'Añadido a seguidos.';
     } else {
       this.status_follow = 2;
+      this.message = 'Petición de amistad enviada.';
     }
     this._userService
       .requestOrFollowUser(
@@ -192,8 +210,13 @@ export class ProfileComponent implements OnInit {
   }
 
   updateFollowRequest() {
-    if (this.status_follow == 3) this.n_followers--;
-    this.status_follow = 1;
+    if (this.status_follow == 3) {
+      this.n_followers--;
+      this.message = 'Eliminado de seguidos.';
+    } else {
+      this.status_follow = 1;
+      this.message = 'Petición de amistad cancelada.';
+    }
     this._userService
       .updateFollowRequest(
         this.id_follow,
@@ -205,6 +228,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(
         (result) => {
           this.id_follow = result.id;
+          this.openSnackBar(this.message);
         },
         (error) => {
           console.log(error);
@@ -278,6 +302,17 @@ export class ProfileComponent implements OnInit {
         console.log(error);
       }
     );
+  }
+
+  message: string;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'OK', {
+      duration: 1000,
+      horizontalPosition: this.horizontalPosition,
+      verticalPosition: this.verticalPosition,
+    });
   }
 
   adaptDateOfPublication(upload_date: string) {

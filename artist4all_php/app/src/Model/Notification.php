@@ -199,7 +199,8 @@ class Notification implements \JsonSerializable
     return $notification;
   }
 
-  public static function notificationRead(int $id) : bool {
+  public static function notificationRead(int $id): bool
+  {
     $sql = 'UPDATE  notifications SET isRead=:isRead WHERE id=:id
       :typeNotification,
       :notification_date
@@ -213,7 +214,8 @@ class Notification implements \JsonSerializable
     return $result;
   }
 
-  public static function removeNotification(int $id) {
+  public static function removeNotification(int $id)
+  {
     $sql = 'DELETE FROM notifications WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -222,5 +224,4 @@ class Notification implements \JsonSerializable
     ]);
     return $result;
   }
-
 }

@@ -11,6 +11,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-settings-password',
@@ -22,78 +23,127 @@ export class UserSettingsPasswordComponent implements OnInit {
     private _sessionService: SessionService,
     private _userService: UserService,
     private _router: Router,
-    private _formBuilder:FormBuilder,
+    private _formBuilder: FormBuilder,
     private _snackBar: MatSnackBar
-  ) { }
+  ) {}
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
   id: number = this.user.id;
   passwordForm: FormGroup;
-  passwordPattern='[A-Za-z0-9 ]+';
+  passwordPattern = '[A-Za-z0-9 ]+';
   isValidFormSubmitted = null;
 
   ngOnInit(): void {
-    this.passwordForm = this._formBuilder.group({
-      password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
-      passwordConfirm: ['', [Validators.required]],
-    }, { validators: matchingPasswords });
+    this.passwordForm = this._formBuilder.group(
+      {
+        password: [
+          '',
+          [Validators.required, Validators.pattern(this.passwordPattern)],
+        ],
+        passwordConfirm: ['', [Validators.required]],
+      },
+      { validators: matchingPasswords }
+    );
   }
 
-  checkMatchPasswords():  boolean  {
-    return this.passwordForm.hasError('notMatching')  &&
+  checkMatchPasswords(): boolean {
+    return (
+      this.passwordForm.hasError('notMatching') &&
       this.passwordForm.get('password').dirty &&
       this.passwordForm.get('passwordConfirm').dirty
+    );
   }
 
   showOrHidePassword() {
     let showIcon = document.getElementById('showIcon');
     let hideIcon = document.getElementById('hideIcon');
-    let inputPassword:any = document.getElementById('inputPassword');
+    let inputPassword: any = document.getElementById('inputPassword');
     if (showIcon.style.display === 'none') {
-      showIcon.style.display = "block";
+      showIcon.style.display = 'block';
       hideIcon.style.display = 'none';
       inputPassword.type = 'password';
     } else {
-      hideIcon.style.display = "block";
-      showIcon.style.display = "none";
-       inputPassword.type = 'text';
+      hideIcon.style.display = 'block';
+      showIcon.style.display = 'none';
+      inputPassword.type = 'text';
     }
   }
 
-  get password() { return this.passwordForm.get('password'); }
-  get passwordConfirm() { return this.passwordForm.get('passwordConfirm'); }
+  get password() {
+    return this.passwordForm.get('password');
+  }
+  get passwordConfirm() {
+    return this.passwordForm.get('passwordConfirm');
+  }
 
-  userEdited:User;
+  userEdited: User;
+  editPassword() {
+    let values: any = this.passwordForm.value;
+    this._userService
+      .changePassword(this.user.id, values, this.token)
+      .subscribe(
+        (result) => {
+          this.userEdited = result.user;
+          let userSession = new Session(result.token, this.userEdited);
+          this._sessionService.setCurrentSession(userSession);
+          this.openSnackBar();
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
 
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
-
-  editPassword() {
-    this.isValidFormSubmitted = false;
-    if (this.passwordForm.invalid) {
-       return;
-    }
-    this.isValidFormSubmitted = true;
-    let values:any = this.passwordForm.value;
-    this._userService.changePassword(this.user.id, values, this.token).subscribe(
-      (result) => {
-        this.userEdited = result.user;
-        this.openSnackBar();
-        let userSession = new Session(result.token, this.userEdited);
-        this._sessionService.setCurrentSession(userSession);
-        this.passwordForm.reset();
-      }, (error) => {
-        console.log(error);
-      }
-    )
-  }
-
   openSnackBar() {
     this._snackBar.open('Contraseña modificada.', 'OK', {
-      duration: 500,
+      duration: 1000,
       horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition
+      verticalPosition: this.verticalPosition,
+    });
+  }
+
+  editingAnimation() {
+    this.isValidFormSubmitted = false;
+    if (this.passwordForm.invalid) {
+      return;
+    }
+    this.isValidFormSubmitted = true;
+    Swal.fire({
+      title: 'Estás seguro de que quieres modificar la contraseña?',
+      text: 'Esta acción es irreversible.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.passwordForm.reset();
+        Swal.fire({
+          title: 'Modificando contraseña...',
+          showConfirmButton: false,
+          timerProgressBar: true,
+          timer: 1000,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            Swal.fire({
+              title: 'Contraseña modificada',
+              position: 'center',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000,
+            });
+            this.editPassword();
+          }
+        });
+      }
     });
   }
 }

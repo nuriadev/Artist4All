@@ -9,8 +9,8 @@ class UserController
 {
   public static function initRoutes($app)
   {
-    $app->post('/register', '\Artist4all\Controller\UserController:register');
-    $app->post('/login', '\Artist4all\Controller\UserController:login');
+    $app->post('/register', '\Artist4all\Controller\UserController:register')->setName('/register');
+    $app->post('/login', '\Artist4all\Controller\UserController:login')->setName('/login');;
     $app->post('/logout', '\Artist4all\Controller\UserController:logout');
     // TODO: cambiar a patch los 2 edits
     $app->post('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
@@ -44,7 +44,8 @@ class UserController
   public function login(Request $request, Response $response, array $args)
   {
     $data = $request->getParsedBody();
-    return $this->loginProcess($data, $response);
+    return $response = $response->withJson($request->getAttribute('route')->getName());
+    //return $this->loginProcess($data, $response);
   }
 
   public function editProfile(Request $request, Response $response, array $args)
@@ -95,7 +96,8 @@ class UserController
 
   public function logout(Request $request, Response $response, array $args)
   {
-    $id = $args['id'];
+    $data = $request->getParsedBody();
+    $id = $data['id'];
     $result = \Artist4all\Model\User::logout($id);
     if (!$result) $response = $response->withStatus(500, 'Error at closing session');
     else $response = $response->withStatus(204, 'Session closed');
@@ -179,7 +181,7 @@ class UserController
       } else if ($logFollow['status_follow'] == 3) {
         \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 1, $response);
         \Artist4all\Controller\NotificationController::createNotification($followed, $follower, 3, $response);
-      } 
+      }
       $response = $response->withJson($logFollow);
     }
     return $response;
@@ -243,7 +245,7 @@ class UserController
       $content = implode(".", $arrayAux);
       // creamos el token a partir de la variable $content
       $token = \Artist4all\Model\Session::tokenGenerator($content);
-      $userWithToken = \Artist4all\Model\User::createOrUpdateToken($token, $user);
+      $userWithToken = \Artist4all\Model\User::insertOrUpdateToken($token, $user);
       $session = new \Artist4all\Model\Session($token, $user);
       $response = $response->withJson($session)->withStatus(200, 'Session started');
     } else {

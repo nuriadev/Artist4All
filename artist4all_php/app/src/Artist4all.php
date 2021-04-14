@@ -6,6 +6,8 @@ use Slim\Factory\AppFactory as AppFactory;
 use Slim\Psr7\Response as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+use Slim\Exception\NotFoundException;
+
 
 class Artist4all
 {
@@ -22,23 +24,32 @@ class Artist4all
     \Artist4all\Controller\PublicationController::initRoutes($app);
     \Artist4all\Controller\NotificationController::initRoutes($app);
 
+   /*  $app->add(function ($request, $handler) {
+      $route = $request->getAttribute('route');
+      $publicRoutes = array(
+        '/login',
+        '/register',
+      );
+      $name = $route->getName();
+      if (!in_array($name, $publicRoutes)) {
+        $response = $handler->handle($request);
+        return $response;
+      } else {
+        $user_id = static::checkToken($request);
+        if (is_null($user_id)) {
+          $response = new Response();
+          return $response->withStatus(401);
+        } else {
+          $response = $handler->handle($request);
+          return $response;
+        }
+      }
+    }); */
 
-    $authMiddleware = function ($request, $handler) {
-      // TODO: ARREGLAR MIDDLEWARE
-      $id_user = 1;
-      if (is_null($id_user)) {
-        $response = new Response();
-        return $response->withStatus(401);
-      } 
-      $response = $handler->handle($request);
-      return $response;
-    };
-
-    $app->add($authMiddleware);
     $app->run();
   }
 
-  private static function checkToken(Request $request): ?int
+  public static function checkToken(Request $request): ?int
   {
     $token = $request->getHeader('Authorization');
     if (empty($token)) return null;

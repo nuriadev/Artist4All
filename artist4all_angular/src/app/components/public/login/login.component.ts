@@ -6,6 +6,7 @@ import { User } from 'src/app/core/models/user';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { FormControl, FormBuilder, Validators } from '@angular/forms';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -30,8 +31,11 @@ export class LoginComponent implements OnInit {
   isValidFormSubmitted = null;
 
   loginForm = this._formBuilder.group({
-    email: ['', [Validators.required,Validators.pattern(this.emailPattern)]],
-    password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]]
+    email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+    password: [
+      '',
+      [Validators.required, Validators.pattern(this.passwordPattern)],
+    ],
   });
 
   get email() {
@@ -56,9 +60,9 @@ export class LoginComponent implements OnInit {
       (result) => {
         if (result.token != null) {
           this.user = result.user;
+          this.loggingAnimation();
           let userSession = new Session(result.token, this.user);
           this._sessionService.setCurrentSession(userSession);
-          this._router.navigate(['/home']);
         }
       },
       (error) => {
@@ -81,5 +85,41 @@ export class LoginComponent implements OnInit {
       showIcon.style.display = 'none';
       inputPassword.type = 'text';
     }
+  }
+
+  loggingAnimation() {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 1000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        Swal.showLoading(),
+          toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
+    Toast.fire({
+      title: 'Iniciando sesión...',
+    }).then((result) => {
+      if (result.dismiss === Swal.DismissReason.timer) {
+        this._router.navigate(['/home']);
+        const Toast = Swal.mixin({
+          toast: true,
+          position: 'top-end',
+          showConfirmButton: false,
+          timer: 1000,
+          didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseleave', Swal.resumeTimer);
+          },
+        });
+        Toast.fire({
+          title: 'Sesión iniciada',
+          icon: 'success',
+        });
+      }
+    });
   }
 }

@@ -17,16 +17,29 @@ export class NotificationService {
     });
   }
 
-  notificationRead(id_notification:number, id_responsible:number, token:string): Observable<any>  {
-    return this.http.patch(this.url + id_responsible + '/notification/' + id_notification, {
-      headers: new HttpHeaders({ Authorization: token }),
-    });
+  notificationRead(
+    id_notification: number,
+    id_responsible: number,
+    token: string
+  ): Observable<any> {
+    return this.http.patch(
+      this.url + id_responsible + '/notification/' + id_notification,
+      {
+        headers: new HttpHeaders({ Authorization: token }),
+      }
+    );
   }
 
-  removeNotification(id_notification: number, id_user:number, token:string): Observable<any>  {
-    return this.http.delete(this.url + id_user + '/notification/' + id_notification, {
-      headers: new HttpHeaders({ Authorization: token }),
-    });
+  removeNotification(
+    id_notification: number,
+    id_user: number,
+    token: string
+  ): Observable<any> {
+    return this.http.delete(
+      this.url + id_user + '/notification/' + id_notification,
+      {
+        headers: new HttpHeaders({ Authorization: token }),
+      }
+    );
   }
-
 }
