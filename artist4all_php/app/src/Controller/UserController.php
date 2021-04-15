@@ -13,7 +13,7 @@ class UserController
     $app->post('/login', '\Artist4all\Controller\UserController:login');
     $app->post('/logout', '\Artist4all\Controller\UserController:logout');
     // TODO: cambiar a patch los 2 edits
-    $app->post('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
+    $app->patch('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
     $app->post('/user/{id:[0-9 ]+}/password', '\Artist4all\Controller\UserController:changePassword');
 
     $app->get('/user/{id:[0-9 ]+}/list', '\Artist4all\Controller\UserController:getAllOtherUsers');

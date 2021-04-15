@@ -6,7 +6,7 @@ export class Publication {
   bodyPublication: string;
   upload_date: Date;
   likes: any[];
-  comments:Comment[];
+  comments:Array<Comment>;
   // todo  comentarios arrayPara los comentarios de las publicaciones
 
   constructor(
@@ -16,7 +16,7 @@ export class Publication {
     bodyPublication: string,
     upload_date: Date,
     likes: any[],
-    comments:Comment[]
+    comments:Array<Comment>
   ) {
     this.id = id;
     this.id_user = id_user;

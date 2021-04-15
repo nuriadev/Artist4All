@@ -1,12 +1,11 @@
 <?php
-
 namespace Artist4all\Middleware;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Server\RequestHandlerInterface;
 use Tuupola\Middleware\CorsMiddleware as CorsHandler;
 
-class corsMiddleware {
+class CorsMiddleware {
   public static function corsHandler($app)
     {
         $cors = new CorsHandler([
