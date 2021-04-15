@@ -211,10 +211,10 @@
           </div>
 
           <div *ngIf="publications != null">
-            <ul>
-              <li>
-                <article aria-labelledby="question-title-81614" class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8"
-                  *ngFor="let publication of publications; index as i;">
+            <div class="lg:col-span-8 lg:pt-8 lg:pb-10 xl:col-span-7">
+            <ul class="space-y-4" *ngFor="let publication of publications; index as i;">
+              <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
+                <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                   <div>
                     <div class="flex space-x-3">
                       <div class="min-w-0 flex-1 mb-3">
@@ -237,6 +237,15 @@
                     </div>
                     <div class="mt-6 flex justify-between space-x-8">
                       <div class="flex space-x-6">
+                        <div *ngFor="let img of publication.imgsPublication; index as i;">
+                          <div *ngIf="publication.imgsPublication != null">
+                            <!--   TODO: permitir inline-block, limitar los border de las publicaciones -->
+                            <img src="{{ img.imgPublication }}" style="float: left;
+                            width:  200px;
+                            height: 200px;
+                            object-fit: cover;">
+                          </div>
+                        </div>
                         <span class="inline-flex items-center text-sm">
                           <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
                             <!-- Heroicon name: solid/thumb-up -->
@@ -262,12 +271,7 @@
                             <span class="sr-only">replies</span>
                           </button>
                         </span>
-                        <div *ngFor="let img of publication.imgsPublication; index as i;">
-                          <div *ngIf="publication.imgsPublication != null">
-                            <!--   TODO: permitir inline-block, limitar los border de las publicaciones -->
-                            <img src="{{ img.imgPublication }}">
-                          </div>
-                        </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -275,8 +279,10 @@
               </li>
             </ul>
           </div>
+          </div>
         </article>
       </main>
     </div>
   </div>
 </div>
+<app-footer></app-footer>
