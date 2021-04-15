@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: artist4all_db:3306
--- Tiempo de generación: 13-04-2021 a las 16:56:53
+-- Tiempo de generación: 15-04-2021 a las 15:25:36
 -- Versión del servidor: 10.2.36-MariaDB-1:10.2.36+maria~bionic
 -- Versión de PHP: 7.4.14
 
@@ -103,27 +103,41 @@ CREATE TABLE `publications` (
   `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
   `bodyPublication` varchar(255) NOT NULL,
-  `upload_date` datetime NOT NULL,
-  `n_likes` int(11) NOT NULL,
-  `n_comments` int(11) NOT NULL
+  `upload_date` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `publications`
 --
 
-INSERT INTO `publications` (`id`, `id_user`, `bodyPublication`, `upload_date`, `n_likes`, `n_comments`) VALUES
-(1, 1, 'Mi primera publicacion', '2021-03-23 17:27:03', 0, 0),
-(2, 1, 'Mi primera publicacion', '2021-03-23 17:27:31', 0, 0),
-(4, 1, 'Mi 2da publicaciÃ³n', '2021-03-23 17:39:02', 0, 0),
-(9, 1, 'Mi primera publicacion', '2021-03-23 17:45:45', 0, 0),
-(64, 1, 'WE', '2021-03-31 20:01:39', 0, 0),
-(67, 1, 'qweqreqrewqrewqweqrewqreq', '2021-03-31 20:06:50', 0, 0),
-(72, 1, 'mi nueva publi sin img', '2021-03-31 20:20:26', 0, 0),
-(73, 1, 'mis img', '2021-03-31 20:20:40', 0, 0),
-(74, 1, 'mis img 2', '2021-03-31 20:21:51', 0, 0),
-(90, 1, 'stop (edited66)', '2021-04-09 08:21:06', 0, 0),
-(109, 45, 'prrrrrrr', '2021-04-12 15:04:38', 0, 0);
+INSERT INTO `publications` (`id`, `id_user`, `bodyPublication`, `upload_date`) VALUES
+(1, 1, 'Mi primera publicacion', '2021-03-23 17:27:03'),
+(2, 1, 'Mi primera publicacion', '2021-03-23 17:27:31'),
+(4, 1, 'Mi 2da publicaciÃ³n', '2021-03-23 17:39:02'),
+(9, 1, 'Mi primera publicacion', '2021-03-23 17:45:45'),
+(64, 1, 'WE', '2021-03-31 20:01:39'),
+(67, 1, 'qweqreqrewqrewqweqrewqreq', '2021-03-31 20:06:50'),
+(72, 1, 'mi nueva publi sin img', '2021-03-31 20:20:26'),
+(73, 1, 'mis img', '2021-03-31 20:20:40'),
+(74, 1, 'mis img 2', '2021-03-31 20:21:51'),
+(90, 1, 'stop (edited66)', '2021-04-09 08:21:06'),
+(109, 45, 'prrrrrrr', '2021-04-12 15:04:38');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `publication_comments`
+--
+
+CREATE TABLE `publication_comments` (
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `bodyNotification` varchar(255) NOT NULL,
+  `isEdited` int(11) NOT NULL,
+  `comment_date` datetime NOT NULL,
+  `id_publication` int(11) NOT NULL,
+  `id_comment_reference` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -152,13 +166,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `isPrivate`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$sAWlvdkOhQnb3dSPlQkMGur81bFxiuyUTSYpta3hr5NfhRrKOi6JW', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJDk2ZHZxazFDZEoyck1scW1LQWZYLk9sVVp2UU9hTXdHZUdqQjRJbFNzZHowMmVGOTNMd2ZPLiFUY3FwQTlKTno=.q+xmfXWCiVY2goIpioYTfpeA/yZ9JjdDpZUA8XvQlYI=', 0, 0),
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJHNBV2x2ZGtPaFFuYjNkU1BsUWtNR3VyODFiRnhpdXlVVFNZcHRhM2hyNU5maFJyS09pNkpXLno0ZVdvRCtrUlg=.v8YowsLvQ2uq1NJKM4GBDD0+zBhl7aNXtgVMi4mTJSE=', 1, 0),
 (24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
 (27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
 (36, 'Erik ', 'Sung ', 'Yang ', 'erik@gmail.com ', 'No salt added ', '$2y$10$luteHXzZULMCwJTV6Z/sgOnyzGaivSKFt11JL7DLpuaQgy84Fd9wa', 1, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (44, 'q', 'q', 'q', 'q', 'q', '$2y$10$j9DMh1sMCNxA8RQzQtBX6eUKJ2cxpfSSOlLvIs8INoWW53Uei6SKi', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
-(45, 'aa', 'aa', 'aa', 'a@a.com', 'aaaaa', '$2y$10$x0FSNiLIsKTDvXxTu8ruluiUeE6v2XTlFIrBTGjRcGXdn7RmItnde', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 1, 0);
+(45, 'aa', 'aa', 'aa', 'a@a.com', 'aaaaa', '$2y$10$x0FSNiLIsKTDvXxTu8ruluiUeE6v2XTlFIrBTGjRcGXdn7RmItnde', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 1, 0),
+(50, 'yy', 'yy', 'yy', 'y@y.com', 'yyyyy', '$2y$10$9CYw7LXPPHnCrRVx0wOxfeLVU2c4nx5OX4F6M8sFpiD7O2O3j6yRK', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -207,6 +222,20 @@ INSERT INTO `users_followed_status` (`id`, `status`) VALUES
 (2, 'Pendiente de aceptación'),
 (3, 'Seguido');
 
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `users_likes_publications`
+--
+
+CREATE TABLE `users_likes_publications` (
+  `id` int(11) NOT NULL,
+  `my_id` int(11) NOT NULL,
+  `id_publisher` int(11) NOT NULL,
+  `id_publication` int(11) NOT NULL,
+  `status_like` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 --
 -- Índices para tablas volcadas
 --
@@ -241,6 +270,15 @@ ALTER TABLE `publications`
   ADD KEY `id_user` (`id_user`);
 
 --
+-- Indices de la tabla `publication_comments`
+--
+ALTER TABLE `publication_comments`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_user` (`id_user`),
+  ADD KEY `id_publication` (`id_publication`),
+  ADD KEY `id_comment_reference` (`id_comment_reference`);
+
+--
 -- Indices de la tabla `users`
 --
 ALTER TABLE `users`
@@ -260,6 +298,15 @@ ALTER TABLE `users_followed`
 --
 ALTER TABLE `users_followed_status`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indices de la tabla `users_likes_publications`
+--
+ALTER TABLE `users_likes_publications`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `id_publisher` (`id_publisher`),
+  ADD KEY `my_id` (`my_id`),
+  ADD KEY `id_publication` (`id_publication`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -290,10 +337,16 @@ ALTER TABLE `publications`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=110;
 
 --
+-- AUTO_INCREMENT de la tabla `publication_comments`
+--
+ALTER TABLE `publication_comments`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT de la tabla `users_followed`
@@ -306,6 +359,12 @@ ALTER TABLE `users_followed`
 --
 ALTER TABLE `users_followed_status`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+
+--
+-- AUTO_INCREMENT de la tabla `users_likes_publications`
+--
+ALTER TABLE `users_likes_publications`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Restricciones para tablas volcadas
@@ -332,12 +391,28 @@ ALTER TABLE `publications`
   ADD CONSTRAINT `publications_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
+-- Filtros para la tabla `publication_comments`
+--
+ALTER TABLE `publication_comments`
+  ADD CONSTRAINT `publication_comments_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `publication_comments_ibfk_2` FOREIGN KEY (`id_publication`) REFERENCES `publications` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `publication_comments_ibfk_3` FOREIGN KEY (`id_comment_reference`) REFERENCES `publication_comments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `users_followed`
 --
 ALTER TABLE `users_followed`
   ADD CONSTRAINT `users_followed_ibfk_1` FOREIGN KEY (`id_follower`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `users_followed_ibfk_2` FOREIGN KEY (`id_followed`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `users_followed_ibfk_3` FOREIGN KEY (`status_follow`) REFERENCES `users_followed_status` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Filtros para la tabla `users_likes_publications`
+--
+ALTER TABLE `users_likes_publications`
+  ADD CONSTRAINT `users_likes_publications_ibfk_1` FOREIGN KEY (`id_publisher`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_likes_publications_ibfk_2` FOREIGN KEY (`my_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_likes_publications_ibfk_3` FOREIGN KEY (`id_publication`) REFERENCES `publications` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

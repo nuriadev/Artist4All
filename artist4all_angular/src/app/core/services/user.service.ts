@@ -83,7 +83,6 @@ export class UserService {
     id_followed: number,
     token: string
   ): Observable<any> {
-    console.log(id_follower, id_followed, token);
     return this.http.get(
       this.url + '/user/' + id_follower + '/follow/' + id_followed,
       { headers: new HttpHeaders({ Authorization: token }) }
