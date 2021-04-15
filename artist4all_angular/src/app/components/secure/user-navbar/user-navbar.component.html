@@ -1,10 +1,10 @@
-<header class="bg-gray-800  shadow-sm lg:static lg:overflow-y-visible">
+<header class="bg-white  shadow-sm lg:static lg:overflow-y-visible">
   <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
     <div class="relative flex justify-between xl:grid xl:grid-cols-12 lg:gap-8">
       <div class="flex md:absolute md:left-0 md:inset-y-0 lg:static xl:col-span-2">
         <div class="flex-shrink-0 flex items-center">
           <a routerLink="/home">
-            <img class="block h-6 md:h-8 w-auto md:ml-4" src="assets/img/logoLight.png" alt="logo">
+            <img class="block h-6 md:h-8 w-auto md:ml-4" src="assets/img/logo.png" alt="logo">
           </a>
         </div>
       </div>
@@ -32,7 +32,7 @@
       <div class="hidden lg:flex lg:items-center lg:justify-end xl:col-span-3">
         <div (click)="toggleNotifications();" class="focus:outline-none">
           <button href="#"
-            class="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none">
+            class="bg-white p-1 rounded-full text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
             <span class="sr-only">Ver notificaciones</span>
             <!-- Heroicon name: outline/bell -->
             <!--           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
@@ -110,7 +110,7 @@
           </div>
         </div>
         <ul class="flex items-center">
-          <div class="ml-4 text-white">
+          <div class="ml-4 text-black">
             {{ user.name }} {{ user.surname1 }}
           </div>
           <div class="ml-3 relative">
