@@ -51,8 +51,8 @@ export class EditPublicationComponent implements OnInit {
               this.id = this.miPublication.id;
               this.id_user = this.miPublication.id_user;
               this.bodyPublication = this.miPublication.bodyPublication;
-              this.n_likes = this.miPublication.n_likes;
-              this.n_comments = this.miPublication.n_comments;
+         /*      this.n_likes = this.miPublication.n_likes;
+              this.n_comments = this.miPublication.n_comments; */
               // todo: si this.imgToUpload is null, no borro las imgs de la db, en caso contrario sí
             },
             (error) => {
@@ -75,8 +75,8 @@ export class EditPublicationComponent implements OnInit {
           this.imgToUpload,
           this.bodyPublication,
           null,
-          this.n_likes,
-          this.n_comments
+          null,
+          null
         ),
         this.token
       )

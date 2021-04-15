@@ -6,6 +6,7 @@ import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
 import {
   MatSnackBar,
+  MatSnackBarConfig,
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
@@ -92,6 +93,7 @@ export class UserSettingsAccountComponent implements OnInit {
     );
   }
 
+
   message: string;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -99,7 +101,7 @@ export class UserSettingsAccountComponent implements OnInit {
     this._snackBar.open(message, 'OK', {
       duration: 1000,
       horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
+      verticalPosition: this.verticalPosition
     });
   }
 }

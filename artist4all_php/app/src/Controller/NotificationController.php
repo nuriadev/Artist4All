@@ -11,43 +11,36 @@ class NotificationController
   {
     // TODO: GET all my notifications, delete notifications
     $app->get('/user/{id:[0-9 ]+}/notification', '\Artist4all\Controller\NotificationController:getNotifications');
-    $app->patch('/user/{id_user:[0-9 ]+}/notification/{id:_notification:[0-9 ]+}', '\Artist4all\Controller\NotificationController:notificationRead');
-    $app->delete('/user/{id_user:[0-9 ]+}/notification/{id:_notification:[0-9 ]+}', '\Artist4all\Controller\NotificationController:removeNotification');
+    $app->patch('/user/{id_user:[0-9 ]+}/notification/{id_notification:[0-9 ]+}', '\Artist4all\Controller\NotificationController:notificationRead');
+    $app->delete('/user/{id_user:[0-9 ]+}/notification/{id_notification:[0-9 ]+}', '\Artist4all\Controller\NotificationController:removeNotification');
   }
 
   public function getNotifications(Request $request, Response $response, array $args)
   {
     $id = $args['id'];
-    $user = \Artist4all\Model\User::getUserById($id);
-    if (is_null($user)) {
-      $response = $response->withStatus(404, 'User not found');
-      return $response;
-    }
+    $user = \Artist4all\Controller\UserController::getUserByIdSummary($id, $response);
     $notifications = \Artist4all\Model\Notification::getNotifications($user->getId());
     if (is_null($notifications)) $response = $response->withStatus(204, 'No notifications collected');
     else $response = $response->withJson($notifications);
     return $response;
   }
 
+
   public function notificationRead(Request $request, Response $response, array $args)
   {
     $id_user = $args['id_user'];
-    $user = \Artist4all\Model\User::getUserById($id_user);
-    if (is_null($user)) {
-      $response = $response->withStatus(404, 'User not found');
+    $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
+    $id_notification = $args['id_notification'];
+    $notification = \Artist4all\Model\Notification::getNotificationById($id_notification);
+    if (is_null($notification)) {
+      $response = $response->withStatus(404, 'Notification not found');
       return $response;
     }
-    $id_publication = $args['id_publication'];
-    $publication = \Artist4all\Model\Notification::getNotificationById($id_publication);
-    if (is_null($publication)) {
-      $response = $response->withStatus(404, 'Publication not found');
-      return $response;
-    }
-    $result = \Artist4all\Model\Notification::notificationRead($publication->getId());
-    if(!$result) {
-      $response = $response->withStatus(500, 'Error at updating publication status');
+    $result = \Artist4all\Model\Notification::notificationRead($notification->getId());
+    if (!$result) {
+      $response = $response->withStatus(500, 'Error at updating notification status');
     } else {
-      $response = $response->withStatus(204, 'Publication status updated');
+      $response = $response->withStatus(204, 'Notification status updated');
     }
     return $response;
   }
@@ -60,23 +53,19 @@ class NotificationController
     return $newNotification;
   }
 
-  public function removeNotification(Request $request, Response $response, array $args) 
+  public function removeNotification(Request $request, Response $response, array $args)
   {
     $id_user = $args['id_user'];
-    $user = \Artist4all\Model\User::getUserById($id_user);
-    if (is_null($user)) {
-      $response = $response->withStatus(404, 'User not found');
+    $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
+    $id_notification = $args['id_notification'];
+    $notification = \Artist4all\Model\Notification::getNotificationById($id_notification);
+    if (is_null($notification)) {
+      $response = $response->withStatus(404, 'Notification not found');
       return $response;
     }
-    $id_publication = $args['id_publication'];
-    $publication = \Artist4all\Model\Notification::getNotificationById($id_publication);
-    if (is_null($publication)) {
-      $response = $response->withStatus(404, 'Publication not found');
-      return $response;
-    }
-    $result = \Artist4all\Model\Notification::removeNotification($publication->getId());
-    if(!$result) $response = $response->withStatus(500, 'Error at removing publication');
-    else $response = $response->withStatus(200, 'Publication removed');
+    $result = \Artist4all\Model\Notification::removeNotification($notification->getId());
+    if (!$result) $response = $response->withStatus(500, 'Error at removing notification');
+    else $response = $response->withStatus(200, 'Notification removed');
     return $response;
   }
 }

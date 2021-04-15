@@ -5,8 +5,8 @@ namespace Artist4all\Model;
 class Notification implements \JsonSerializable
 {
   private ?int $id;
-  private  \Artist4all\Model\User $user_responsible;
-  private  \Artist4all\Model\User $user_receiver;
+  private \Artist4all\Model\User $user_responsible;
+  private \Artist4all\Model\User $user_receiver;
   private ?string $bodyNotification;
   private int $isRead;
   private string $typeNotification;
@@ -15,8 +15,8 @@ class Notification implements \JsonSerializable
 
   public function __construct(
     ?int $id,
-    \Artist4all\Model\User  $user_responsible,
-    \Artist4all\Model\User  $user_receiver,
+    \Artist4all\Model\User $user_responsible,
+    \Artist4all\Model\User $user_receiver,
     ?string $bodyNotification,
     int $isRead,
     string $typeNotification,
@@ -46,7 +46,7 @@ class Notification implements \JsonSerializable
     return $this->user_responsible;
   }
 
-  public function setUserResponsible(string $user_responsible)
+  public function setUserResponsible(\Artist4all\Model\User $user_responsible)
   {
     $this->user_responsible = $user_responsible;
   }
@@ -56,7 +56,7 @@ class Notification implements \JsonSerializable
     return $this->user_receiver;
   }
 
-  public function setUserReceiver(int $user_receiver)
+  public function setUserReceiver(\Artist4all\Model\User $user_receiver)
   {
     $this->user_receiver = $user_receiver;
   }

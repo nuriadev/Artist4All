@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -75,7 +76,8 @@ import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/
     MatButtonModule,
     MatIconModule,
     MatBadgeModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatInputModule
   ],
   providers: [UserService, AuthenticationService, SessionService, AuthGuard],
   bootstrap: [AppComponent],

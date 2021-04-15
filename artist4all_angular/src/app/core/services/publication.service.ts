@@ -29,8 +29,6 @@ export class PublicationService {
     }
     newForm.append('bodyPublication', newPublication.bodyPublication);
     newForm.append('upload_date', '' + newPublication.upload_date);
-    newForm.append('n_likes', '' + newPublication.n_likes);
-    newForm.append('n_comments', '' + newPublication.n_comments);
 
     return this.http.post(this.url + id_user + '/publication', newForm, {
       headers: new HttpHeaders({ Authorization: token }),
@@ -92,27 +90,51 @@ export class PublicationService {
     );
   }
 
-  addLike(
+  isPublicationLiked(
+    my_id: number,
+    publication: any,
+    token: string
+  ): Observable<any> {
+    return this.http.get(
+      this.url + my_id + '/like/publication/' + publication.id,
+      { headers: new HttpHeaders({ Authorization: token }) }
+    );
+  }
+
+  likePublication(
     publication: Publication,
     my_id: number,
     id_publisher: number,
+    status_like: number,
     token: string
   ): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('id_publisher', '' + id_publisher);
+    newForm.append('status_like', '' + status_like);
     return this.http.post(
-      this.url + my_id + '/like/publication' + publication.id,
+      this.url + my_id + '/like/publication/' + publication.id,
       newForm,
       { headers: new HttpHeaders({ Authorization: token }) }
     );
   }
 
-  removelike(
+  updateLikeStatus(
+    id_like: number,
     publication: Publication,
     my_id: number,
+    id_publisher: number,
+    status_like: number,
     token: string
   ): Observable<any> {
-    let options = {
+    let newForm: FormData = new FormData();
+    newForm.append('id_publisher', '' + id_publisher);
+    newForm.append('status_like', '' + status_like);
+    return this.http.post(
+      this.url + my_id + '/like/publication/' + publication.id + '/' + id_like,
+      newForm,
+      { headers: new HttpHeaders({ Authorization: token }) }
+    );
+    /*  let options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         Authorization: token,
@@ -122,6 +144,6 @@ export class PublicationService {
     return this.http.delete(
       this.url + my_id + '/like/publication' + publication.id,
       options
-    );
+    ); */
   }
 }

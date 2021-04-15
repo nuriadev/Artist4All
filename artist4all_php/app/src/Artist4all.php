@@ -41,7 +41,6 @@ class Artist4all
         }
       }
     }); */
-
     $app->run();
   }
 

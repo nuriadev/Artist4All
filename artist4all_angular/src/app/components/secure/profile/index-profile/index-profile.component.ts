@@ -111,6 +111,10 @@ export class ProfileComponent implements OnInit {
                 );
               this.getFollowersAndFollowed(this.id, this.token);
               this.getUserPublications(this.id, this.token);
+              this.publications.forEach((element, index) => {
+                console.log(this.publications[index]);
+                this.isPublicationLiked(index, this.user.id, element);
+              });
             },
             (error) => {
               console.log(error);
@@ -136,42 +140,56 @@ export class ProfileComponent implements OnInit {
   n_likes: number;
   n_comments: number;
   id_like: number;
+  status_like: number;
   likePublication(index: number) {
-    //this.isLiked = true;
-    let likeIcon = document.getElementById(index + 'likeIcon');
-    if (!this.isLiked) {
-      likeIcon.style.color = "rgba(59, 130, 246, var(--tw-text-opacity))";
-      likeIcon.onmouseover = function() { likeIcon.style.color = 'rgba(29, 78, 216, var(--tw-text-opacity))'; }
-      likeIcon.onmouseout = function() { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; }
-      this.isLiked = true;
-    } else {
-      likeIcon.style.color = "rgba(156, 163, 175, var(--tw-text-opacity))";
-      likeIcon.onmouseover = function() { likeIcon.style.color = 'rgba(107, 114, 128, var(--tw-text-opacity))'; }//likeIcon.style.color = '#B0BBC1';
-      likeIcon.onmouseout = function() { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; }
-      this.isLiked = false;
-    }
-
-    // this._publicationService
-    //   .addLike(this.publications[index], this.user.id, this.id, this.token)
-    //   .subscribe(
-    //     (result) => {
-    //       this.id_like = result;
-    //       // TODO: snackbar on click
-    //     },
-    //     (error) => {
-    //       console.log(error);
-    //     }
-    //   );
-  }
-
-  updateLikeStatus(index: number) {
-    this.isLiked = false;
-    this.n_likes--;
+    this.isLiked = true;
+  //  this.publications[index].n_likes++;
+    this.status_like = 1;
     this._publicationService
-      .removelike(this.publications[index], this.id, this.token)
+      .likePublication(
+        this.publications[index],
+        this.user.id,
+        this.id,
+        this.status_like,
+        this.token
+      )
       .subscribe(
         (result) => {
-          //TODO: snackbar y pedir confirmación / pasar a patch
+          this.id_like = result.id;
+          // TODO: snackbar on click
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+  }
+  // TODO: que pueda cambiar de like a no like
+  removeLike(index: number) {
+    this.isLiked = false;
+    //this.publications[index].n_likes--;
+    let likeIcon = document.getElementById(index + 'likeIcon');
+    likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
+    likeIcon.onmouseover = function () {
+      likeIcon.style.color = 'rgba(107, 114, 128, var(--tw-text-opacity))';
+    };
+    likeIcon.onmouseout = function () {
+      likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
+    };
+    this.isLiked = false;
+    this.status_like = 0;
+    this._publicationService
+      .updateLikeStatus(
+        this.id_like,
+        this.publications[index],
+        this.user.id,
+        this.id,
+        this.status_like,
+        this.token
+      )
+      .subscribe(
+        (result) => {
+          //TODO: snackbar / pasar a patch
+          this.id_like = result.id;
         },
         (error) => {
           console.log(error);
@@ -180,19 +198,50 @@ export class ProfileComponent implements OnInit {
   }
 
   isLiked: boolean;
-  isPublicationLiked(index: number) {
-    let likeIcon = document.getElementById('likeIcon' + index);
-    let notLikedIcon = document.getElementById('notLikedIcon' + index);
-    if (!this.isLiked) {
-      likeIcon.style.display = 'block';
-      notLikedIcon.style.display = 'none';
-      this.isLiked = true;
-    } else {
-      notLikedIcon.style.display = 'block';
-      likeIcon.style.display = 'none';
-      this.isLiked = false;
-    }
+  isPublicationLiked(
+    index: number,
+    my_id: number,
+    publication: any
+  ) {
+    this._publicationService
+      .isPublicationLiked(my_id, publication, this.token)
+      .subscribe(
+        (result) => {
+          if (result == null) this.status_like = 0;
+          else this.status_like = result.status_like;
+          let likeIcon = document.getElementById(index + 'likeIcon');
+          if (this.status_like == 0) {
+            likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))';
+            likeIcon.onmouseover = function () {
+              likeIcon.style.color =
+                'rgba(29, 78, 216, var(--tw-text-opacity))';
+            };
+            likeIcon.onmouseout = function () {
+              likeIcon.style.color =
+                'rgba(59, 130, 246, var(--tw-text-opacity))';
+            };
+            this.isLiked = false;
+          } else {
+            likeIcon.style.color =
+              'rgba(156, 163, 175, var(--tw-text-opacity))';
+            likeIcon.onmouseover = function () {
+              likeIcon.style.color =
+                'rgba(107, 114, 128, var(--tw-text-opacity))';
+            };
+            likeIcon.onmouseout = function () {
+              likeIcon.style.color =
+                'rgba(156, 163, 175, var(--tw-text-opacity))';
+            };
+            this.isLiked = true;
+          }
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+      console.log(this.status_like);
   }
+
 
   requestOrFollowUser() {
     if (this.isPrivate == 0) {
@@ -214,6 +263,7 @@ export class ProfileComponent implements OnInit {
       .subscribe(
         (result) => {
           this.id_follow = result.id;
+          // añadir snackbar
         },
         (error) => {
           console.log(error);
@@ -306,9 +356,10 @@ export class ProfileComponent implements OnInit {
             element.upload_date = this.adaptDateOfPublication(
               element.upload_date
             );
+            // LE PASAMOS EL ID NUESTRO Y EL DEL USUARIO DEL PERFIL Y EL ID DE LA PUBLICACIÓN
+            this.publications = result;
           });
         }
-        this.publications = result;
       },
       (error) => {
         console.log(error);
@@ -316,6 +367,7 @@ export class ProfileComponent implements OnInit {
     );
   }
 
+  //#039be5
   message: string;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
@@ -323,7 +375,7 @@ export class ProfileComponent implements OnInit {
     this._snackBar.open(message, 'OK', {
       duration: 1000,
       horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition,
+      verticalPosition: this.verticalPosition
     });
   }
 

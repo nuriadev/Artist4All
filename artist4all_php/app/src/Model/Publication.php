@@ -264,4 +264,62 @@ class Publication implements \JsonSerializable
     $result = $statement->execute(['id' => $id]);
     return $result;
   }
+
+  public static function persistLike(array $logLike): ?array
+  {
+    if (is_null($logLike['id'])) return static::insertLikePublication($logLike);
+    else return static::updateLikePublication($logLike);
+  }
+
+  public static function insertLikePublication(array $logLike): ?array
+  {
+    $sql =  'INSERT INTO users_likes_publications VALUES(
+      :id,
+      :my_id,
+      :id_publisher,
+      :id_publication,
+      :status_like
+    )';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':id' => $logLike['id'],
+      ':my_id' => $logLike['my_id'],
+      ':id_publisher' => $logLike['id_publisher'],
+      ':id_publication' => (int)$logLike['id_publication'],
+      ':status_like' => $logLike['status_like']
+    ]);
+    if (!$result) return null;
+    $id = $conn->lastInsertId();
+    $logLike['id'] = $id;
+    return $logLike;
+  }
+
+  public static function updateLikePublication(array $logLike): ?array
+  {
+    $sql = 'UPDATE users_likes_publications SET status_like=:status_like WHERE id=:id';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':id' => (int) $logLike['id'],
+      ':status_like' => $logLike['status_like']
+    ]);
+    if (!$result) return null;
+    return $logLike;
+  }
+
+  public static function isPublicationLiked(int $my_id, int $id_publisher, int $id_publication): ?array
+  {
+    $sql = 'SELECT * FROM users_likes_publications WHERE my_id=:my_id AND id_publisher=:id_publisher AND id_publication=:id_publication';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':my_id' => $my_id,
+      ':id_publisher' => $id_publisher,
+      ':id_publication' => $id_publication
+    ]);
+    $logLike = $statement->fetch(\PDO::FETCH_ASSOC);
+    if (!$logLike) return null;
+    return $logLike;
+  }
 }
