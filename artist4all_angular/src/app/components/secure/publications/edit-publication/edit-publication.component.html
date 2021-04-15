@@ -10,6 +10,6 @@
   <label for="imgOptional">Imagen(opcional): </label>
   <input type="file" (change)="addImgPublication($event.target.files)" id="imgPublication" multiple /> <br>
   <!--TODO: route navigate.back()-->
-  <button type="button" routerLink="/home"> Cancelar </button>
+  <button type="button" (click)="redirectBack()"> Cancelar </button>
   <button type="submit"> Guardar los cambios </button>
 </form>

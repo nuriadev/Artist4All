@@ -221,13 +221,16 @@
                         <p class="text-sm text-gray-500 mt-4 inline-block">
                           <span class="hover:underline">{{ publication.upload_date }}</span>
                         </p>
-                        <div class="inline-block ml-20" *ngIf="isMyProfile">
-                          <a class="inline-block" routerLink="/user/{{ id }}/publication/{{ publication.id }}">
-                            <i class="fas fa-edit fa-lg hover:text-blue-700"></i>
-                          </a>
-                          <a class="inline-block" *ngIf="isMyProfile" (click)="deletePublication(i);">
-                            <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 ml-1"></i>
-                          </a>
+                        <div class="inline-block float-right mt-3" *ngIf="isMyProfile">
+                          <button class="inline-block py-1 px-3 border border-gray-300 rounded-md shadow-sm justify-center text-sm font-medium text-gray-700
+                          hover:bg-gray-50 hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500
+                            mr-2" routerLink="/user/{{ id }}/publication/{{ publication.id }}">
+                            <i class="fas fa-edit fa-lg text-blue-500 hover:text-blue-600"></i> Editar
+                          </button>
+                          <button class="inline-block py-1 px-3 border border-gray-300 rounded-md shadow-sm justify-center text-sm font-medium text-gray-700
+                          hover:bg-gray-50 focus:outline-none hover:text-red-500 focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500" *ngIf="isMyProfile" (click)="deletePublication(i);">
+                            <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 mr-1"></i> Eliminar
+                          </button>
                         </div>
                       </div>
 
@@ -247,7 +250,21 @@
                           </div>
                         </div>
                         <span class="inline-flex items-center text-sm">
-                          <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                          <!--TODO: Button de like del perfil propio, para ver los que le han dado like-->
+                          <button *ngIf="!isMyProfile" (click)="likePublication(i)" id="{{i + 'likeIcon'}}" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
+                            <!-- Heroicon name: solid/thumb-up -->
+                            <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                              fill="currentColor" aria-hidden="true">
+                              <path
+                                d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
+                            </svg>
+                            <span class="font-medium text-gray-900">{{ publication.n_likes }}</span>
+                            <span class="sr-only">likes</span>
+                          </button>
+
+
+                          <!--TODO-->
+                          <button (click)="likePublication(i)" id="{{i + 'likeIcon'}}" class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
                             <!-- Heroicon name: solid/thumb-up -->
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                               fill="currentColor" aria-hidden="true">
@@ -259,7 +276,7 @@
                           </button>
                         </span>
                         <span class="inline-flex items-center text-sm">
-                          <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
+                          <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 focus:outline-none">
                             <!-- Heroicon name: solid/chat-alt -->
                             <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                               fill="currentColor" aria-hidden="true">

@@ -37,8 +37,8 @@ export class CreatePublicationComponent implements OnInit {
           this.imgToUpload,
           this.bodyPublication,
           null,
-          0,
-          0
+          null,
+          null
         ),
         this.token
       )

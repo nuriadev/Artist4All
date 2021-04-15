@@ -314,7 +314,7 @@ class User implements \JsonSerializable
     return $user;
   }
 
-  public static function createOrUpdateToken(string $token, \Artist4all\Model\User $user): bool
+  public static function insertOrUpdateToken(string $token, \Artist4all\Model\User $user): bool
   {
     $sql = 'UPDATE users SET token=:token WHERE email=:email';
     $conn = Database::getInstance()->getConnection();
@@ -334,7 +334,7 @@ class User implements \JsonSerializable
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':token' => '',
-      ':tokenReceived' => $id
+      ':id' => $id
     ]);
     return $result;
   }

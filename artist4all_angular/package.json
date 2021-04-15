@@ -26,6 +26,7 @@
     "ngx-build-plus": "^11.0.0",
     "ngx-spinner": "^11.0.1",
     "rxjs": "~6.6.0",
+    "sweetalert2": "^10.16.2",
     "tslib": "^2.0.0",
     "zone.js": "~0.10.2"
   },

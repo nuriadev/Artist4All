@@ -13,7 +13,7 @@ class UserController
     $app->post('/login', '\Artist4all\Controller\UserController:login');
     $app->post('/logout', '\Artist4all\Controller\UserController:logout');
     // TODO: cambiar a patch los 2 edits
-    $app->post('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
+    $app->patch('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
     $app->post('/user/{id:[0-9 ]+}/password', '\Artist4all\Controller\UserController:changePassword');
 
     $app->get('/user/{id:[0-9 ]+}/list', '\Artist4all\Controller\UserController:getAllOtherUsers');
@@ -51,11 +51,7 @@ class UserController
   {
     $id = $args['id'];
     $data = $request->getParsedBody();
-    $user = \Artist4all\Model\User::getUserById($id);
-    if (is_null($user)) {
-      $response = $response->withStatus(404, 'User not found');
-      return $response;
-    }
+    $user = static::getUserByIdSummary($id, $response);
     if (!isset($data['password'])) $data['password'] = $user->getPassword();
     if (!isset($data['isArtist'])) $data['isArtist'] = $user->isArtist();
     if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();
@@ -75,11 +71,7 @@ class UserController
   {
     $id = $args['id'];
     $data = $request->getParsedBody();
-    $user = \Artist4all\Model\User::getUserById($id);
-    if (is_null($user)) {
-      $response = $response->withStatus(404, 'User not found');
-      return $response;
-    }
+    $user = static::getUserByIdSummary($id, $response);
     //TODO: si se puede adaptarlo a validatePersist
     $password = trim($data["password"]); // todo validar campos
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
@@ -95,7 +87,8 @@ class UserController
 
   public function logout(Request $request, Response $response, array $args)
   {
-    $id = $args['id'];
+    $data = $request->getParsedBody();
+    $id = $data['id'];
     $result = \Artist4all\Model\User::logout($id);
     if (!$result) $response = $response->withStatus(500, 'Error at closing session');
     else $response = $response->withStatus(204, 'Session closed');
@@ -114,23 +107,28 @@ class UserController
   public function getUserById(Request $request, Response $response, array $args)
   {
     $id = $args['id'];
-    $user = \Artist4all\Model\User::getUserById($id);
-    if (is_null($user)) $response = $response->withStatus(404, 'User not found');
-    else $response = $response->withJson($user);
+    $user = static::getUserByIdSummary($id, $response);
+    $response = $response->withJson($user);
     return $response;
+  }
+
+  public static function getUserByIdSummary(int $id, Response $response)
+  {
+    $user = \Artist4all\Model\User::getUserById($id);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    } else {
+      return $user;
+    }
   }
 
   public function isFollowingThatUser(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     $id_follower = $args['id_follower'];
     $id_followed = $args['id_followed'];
-    $follower = \Artist4all\Model\User::getUserById($id_follower);
-    $followed = \Artist4all\Model\User::getUserById($id_followed);
-    if (is_null($follower) || is_null($followed)) {
-      $response = $response->withStatus(404, 'User not found');
-      return $response;
-    }
+    $follower = static::getUserByIdSummary($id_follower, $response);
+    $followed = static::getUserByIdSummary($id_followed, $response);
     $result = \Artist4all\Model\User::isFollowingThatUser($follower, $followed);
     if (is_null($result)) $response = $response->withStatus(204, 'User not followed');
     else $response = $response->withJson($result)->withStatus(200, 'User followed');
@@ -139,38 +137,30 @@ class UserController
 
   public function requestOrFollowUser(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     $data = $request->getParsedBody();
     if (!isset($data['id_follow'])) $id = null;
     else $id = $data['id_follow'];
-    return $this->createOrUpdateFollow($args, $data, $id, $response);
+    return $this->persistFollow($args, $data, $id, $response);
   }
 
   // TODO: una vez cambiado a patch, adaptar la function
   public function updateFollowRequest(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     $id = $args['id_follow'];
     $data = $request->getParsedBody();
-    return $this->createOrUpdateFollow($args, $data, $id, $response);
+    return $this->persistFollow($args, $data, $id, $response);
   }
 
-  private function createOrUpdateFollow($args, $data, $id, $response)
+  private function persistFollow($args, $data, $id, $response)
   {
     $id_follower = $args['id_follower'];
     $id_followed = $args['id_followed'];
-    $follower = \Artist4all\Model\User::getUserById($id_follower);
-    $followed = \Artist4all\Model\User::getUserById($id_followed);
-    if (is_null($follower) || is_null($followed)) {
-      $response = $response->withStatus(404, 'User not found');
-      return $response;
-    }
-    $data['id_follower'] = $follower->getId();
-    $data['id_followed'] = $followed->getId();
+    $follower = static::getUserByIdSummary($id_follower, $response);
+    $followed = static::getUserByIdSummary($id_followed, $response);
     $logFollow = [
       'id' => $id,
-      'id_follower' => $data['id_follower'],
-      'id_followed' => $data['id_followed'],
+      'id_follower' => $follower->getId(),
+      'id_followed' => $followed->getId(),
       'status_follow' => (int) $data['status_follow']
     ];
     $logFollow = \Artist4all\Model\User::persistFollow($logFollow);
@@ -178,32 +168,23 @@ class UserController
       $response = $response->withStatus(500);
     } else {
       if ($logFollow['status_follow'] == 2) {
-        $this->createNotification($follower, $followed, 'te ha enviado una solicitud de amistad', 2, $response);
+        \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 2, $response);
       } else if ($logFollow['status_follow'] == 3) {
-        $this->createNotification($follower, $followed, 'ha empezado a seguirte', 1, $response);
+        \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 1, $response);
+        \Artist4all\Controller\NotificationController::createNotification($followed, $follower, 3, $response);
       }
       $response = $response->withJson($logFollow);
     }
     return $response;
   }
 
-  private function createNotification($user_responsible, $user_receiver, $bodyNotification, $typeNotification, $response)
-  {
-    $notification = new \Artist4all\Model\Notification(null, $user_responsible, $user_receiver, $bodyNotification, 0, $typeNotification, '');
-    $newNotification = \Artist4all\Model\Notification::insertNotification($notification);
-    if (is_null($newNotification)) $response = $response->withStatus(500, 'Error at creating the notification');
-    return $newNotification;
-  }
-
   public function getFollowers(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     return $this->getFollowersOrFollowed($args, 'followers', $response);
   }
 
   public function getFollowed(Request $request, Response $response, array $args)
   {
-    $this->isAuthorizated($request, $response);
     return $this->getFollowersOrFollowed($args, 'followed', $response);
   }
 
@@ -211,41 +192,23 @@ class UserController
   {
     $id = $args['id'];
     $data = $request->getParsedBody();
-    $user = \Artist4all\Model\User::getUserById($id);
-    if (is_null($user)) {
-      $response = $response->withStatus(404, 'User not found');
-      return $response;
-    } else {
-      $isPrivate = $data['isPrivate'];
-      $result = \Artist4all\Model\User::privateAccountSwitcher($isPrivate, $user->getId());
-      if (!$result) {
-        $response = $response->withStatus(400, 'Error at switching');
-      } else {
-        $user->setIsPrivate($isPrivate);
-        $session = new \Artist4all\Model\Session($user->getToken(), $user);
-        $response = $response->withJson($session)->withStatus(200, 'Switched');
-      }
-      return $response;
-    }
-  }
-
-  //TODO Quitar cuando este el middleware
-  private function isAuthorizated(Request $request, Response $response)
-  {
-    $token = trim($request->getHeader('Authorization')[0]);
-    $result = \Artist4all\Model\User::isValidToken($token);
+    $user = static::getUserByIdSummary($id, $response);
+    $isPrivate = $data['isPrivate'];
+    $result = \Artist4all\Model\User::privateAccountSwitcher($isPrivate, $user->getId());
     if (!$result) {
-      $response = $response->withStatus(401, 'Unauthorized user');
-      return $response;
+      $response = $response->withStatus(400, 'Error at switching');
     } else {
-      return $result;
+      $user->setIsPrivate($isPrivate);
+      $session = new \Artist4all\Model\Session($user->getToken(), $user);
+      $response = $response->withJson($session)->withStatus(200, 'Switched');
     }
+    return $response;
   }
 
   private function getFollowersOrFollowed(array $args, string $followedOrFollowing, Response $response)
   {
     $id = $args['id'];
-    $user = \Artist4all\Model\User::getUserById($id);
+    $user = static::getUserByIdSummary($id, $response);
     if ($followedOrFollowing == 'followers') $users = \Artist4all\Model\User::getFollowers($user->getId());
     else $users = \Artist4all\Model\User::getFollowed($user->getId());
     if (empty($users)) $response = $response->withStatus(204, 'No users collected');
@@ -268,7 +231,7 @@ class UserController
       $content = implode(".", $arrayAux);
       // creamos el token a partir de la variable $content
       $token = \Artist4all\Model\Session::tokenGenerator($content);
-      $userWithToken = \Artist4all\Model\User::createOrUpdateToken($token, $user);
+      $userWithToken = \Artist4all\Model\User::insertOrUpdateToken($token, $user);
       $session = new \Artist4all\Model\Session($token, $user);
       $response = $response->withJson($session)->withStatus(200, 'Session started');
     } else {

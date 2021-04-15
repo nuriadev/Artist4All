@@ -19,6 +19,7 @@ import { UserSettingsPasswordComponent } from './components/secure/settings/user
 import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
 import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
 
+
 const routes: Routes = [
   {path:'', component:LandingComponent},
   {path:'register',component:RegisterComponent},
