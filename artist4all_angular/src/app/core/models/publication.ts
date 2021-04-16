@@ -1,29 +1,32 @@
 import { Comment } from './comment';
+import { User } from './user';
 export class Publication {
   id: number;
-  id_user: number;
+  user: User;
   imgsPublication: FileList;
   bodyPublication: string;
   upload_date: Date;
-  likes: any[];
-  comments:Array<Comment>;
-  // todo  comentarios arrayPara los comentarios de las publicaciones
+  n_likes: number;
+  n_comments: number;
+  isLiking: number;
 
   constructor(
     id: number,
-    id_user: number,
+    user: User,
     imgsPublication: FileList,
     bodyPublication: string,
     upload_date: Date,
-    likes: any[],
-    comments:Array<Comment>
+    n_likes: number,
+    n_comments: number,
+    isLiking: number
   ) {
     this.id = id;
-    this.id_user = id_user;
+    this.user = user;
     this.imgsPublication = imgsPublication;
     this.bodyPublication = bodyPublication;
     this.upload_date = upload_date;
-    this.likes = likes;
-    this.comments = comments;
+    this.n_likes = n_likes;
+    this.n_comments = n_comments;
+    this.isLiking = isLiking;
   }
 }

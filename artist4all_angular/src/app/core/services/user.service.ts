@@ -51,9 +51,7 @@ export class UserService {
     if (!files) newForm.append('newImgAvatar', null);
     else newForm.append('newImgAvatar', files[0], files[0].name);
     //    TODO Cambiar a patch
-    return this.http.patch(this.url + '/user/' + id + '/profile', newForm, {
-      headers: new HttpHeaders({ Authorization: token }),
-    });
+    return this.http.patch(this.url + '/user/' + id + '/profile', newForm, { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   changePassword(id: number, formValues, token: string): Observable<any> {
@@ -61,32 +59,19 @@ export class UserService {
     newForm.append('id', '' + id);
     newForm.append('password', formValues.password);
     //    TODO Cambiar a patch
-    return this.http.post(this.url + '/user/' + id + '/password', newForm, {
-      headers: new HttpHeaders({ Authorization: token }),
-    });
+    return this.http.post(this.url + '/user/' + id + '/password', newForm, { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   getAllOtherUsers(id: number, token: string): Observable<any> {
-    return this.http.get(this.url + '/user/' + id + '/list', {
-      headers: new HttpHeaders({ Authorization: token }),
-    });
+    return this.http.get(this.url + '/user/' + id + '/list', { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   getUserById(id: number, token: string): Observable<any> {
-    return this.http.get(this.url + '/user/' + id, {
-      headers: new HttpHeaders({ Authorization: token }),
-    });
+    return this.http.get(this.url + '/user/' + id, { headers: new HttpHeaders({ Authorization: token }) });
   }
 
-  isFollowingThatUser(
-    id_follower: number,
-    id_followed: number,
-    token: string
-  ): Observable<any> {
-    return this.http.get(
-      this.url + '/user/' + id_follower + '/follow/' + id_followed,
-      { headers: new HttpHeaders({ Authorization: token }) }
-    );
+  isFollowingThatUser(id_follower: number, id_followed: number, token: string): Observable<any> {
+    return this.http.get(this.url + '/user/' + id_follower + '/follow/' + id_followed, { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   requestOrFollowUser(
@@ -99,11 +84,7 @@ export class UserService {
     let newForm: FormData = new FormData();
     if (id_follow != null) newForm.append('id_follow', '' + id_follow);
     newForm.append('status_follow', '' + status_follow);
-    return this.http.post(
-      this.url + '/user/' + id_follower + '/follow/' + id_followed,
-      newForm,
-      { headers: new HttpHeaders({ Authorization: token }) }
-    );
+    return this.http.post(this.url + '/user/' + id_follower + '/follow/' + id_followed, newForm, { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   updateFollowRequest(
@@ -117,17 +98,7 @@ export class UserService {
     /*       cancelRequestOrUnfollowFormData.append('id_follow',''+id_follow); */
     newForm.append('status_follow', '' + status_follow);
     //TODO cambiar a patch y usar la ruta de requestOrFollowUser
-    return this.http.post(
-      this.url +
-        '/user/' +
-        id_follower +
-        '/follow/' +
-        id_followed +
-        '/' +
-        id_follow,
-      newForm,
-      { headers: new HttpHeaders({ Authorization: token }) }
-    );
+    return this.http.post(this.url + '/user/' + id_follower + '/follow/' + id_followed + '/' + id_follow, newForm, { headers: new HttpHeaders({ Authorization: token }) });
     /*     let options = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token }),
       body: { id_follow: id_follow }
@@ -139,25 +110,17 @@ export class UserService {
   }
 
   getFollowers(id: number, token: string): Observable<any> {
-    return this.http.get(this.url + '/user/' + id + '/follower', {
-      headers: new HttpHeaders({ Authorization: token }),
-    });
+    return this.http.get(this.url + '/user/' + id + '/follower', { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   getFollowed(id: number, token: string): Observable<any> {
-    return this.http.get(this.url + '/user/' + id + '/followed', {
-      headers: new HttpHeaders({ Authorization: token }),
-    });
+    return this.http.get(this.url + '/user/' + id + '/followed', { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   privateAccountSwitcher(user: User, token: string): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('isPrivate', '' + user.isPrivate);
     // TODO: pasar a patch
-    return this.http.post(
-      this.url + '/user/' + user.id + '/settings/account/privacy',
-      newForm,
-      { headers: new HttpHeaders({ Authorization: token }) }
-    );
+    return this.http.post(this.url + '/user/' + user.id + '/settings/account/privacy',  newForm, { headers: new HttpHeaders({ Authorization: token }) });
   }
 }

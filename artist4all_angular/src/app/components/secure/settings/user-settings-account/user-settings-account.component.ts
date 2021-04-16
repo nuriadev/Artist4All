@@ -86,11 +86,9 @@ export class UserSettingsAccountComponent implements OnInit {
         this.userEdited = result.user;
         let userSession = new Session(result.token, this.userEdited);
         this._sessionService.setCurrentSession(userSession);
-      },
-      (error) => {
+      }, (error) => {
         console.log(error);
-      }
-    );
+    });
   }
 
 
@@ -98,10 +96,6 @@ export class UserSettingsAccountComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   openSnackBar(message: string) {
-    this._snackBar.open(message, 'OK', {
-      duration: 1000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition
-    });
+    this._snackBar.open(message, 'OK', { duration: 1000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition });
   }
 }

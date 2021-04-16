@@ -33,20 +33,16 @@ export class ListOfFollowersOrFollowedComponent implements OnInit {
         this._userService.getFollowers(this.id, this.token).subscribe(
           (result) => {
             this.userlist = result;
-          },
-          (error) => {
+          }, (error) => {
             console.error(error);
-          }
-        );
+        });
       } else if (this.typeList == 'followed') {
         this._userService.getFollowed(this.id, this.token).subscribe(
           (result) => {
             this.userlist = result;
-          },
-          (error) => {
+          }, (error) => {
             console.error(error);
-          }
-        );
+        });
       }
     });
   }

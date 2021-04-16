@@ -45,106 +45,44 @@ class User implements \JsonSerializable
     $this->isPrivate = $isPrivate;
   }
 
-  public function getId(): ?int
-  {
-    return $this->id;
-  }
-  public function setId(?int $id)
-  {
-    $this->id = $id;
-  }
-  public function getName(): string
-  {
-    return $this->name;
-  }
-  public function setName(string $name)
-  {
-    $this->name = $name;
-  }
-  public function getSurname1(): string
-  {
-    return $this->surname1;
-  }
-  public function setSurname1(string $surname1)
-  {
-    $this->surname1 = $surname1;
-  }
-  public function getSurname2(): string
-  {
-    return $this->surname2;
-  }
-  public function setSurname2(string $surname2)
-  {
-    $this->surname2 = $surname2;
-  }
-  public function getEmail(): string
-  {
-    return $this->email;
-  }
-  public function setEmail(string $email)
-  {
-    $this->email = $email;
-  }
-  public function getUsername(): string
-  {
-    return $this->username;
-  }
-  public function setUsername(string $username)
-  {
-    $this->username = $username;
-  }
-  public function getPassword(): string
-  {
-    return $this->password;
-  }
-  public function setPassword(string $password)
-  {
-    $this->password = $password;
-  }
-  public function isArtist()
-  {
-    return $this->isArtist;
-  }
-  public function setIsArtist(int $isArtist)
-  {
-    $this->isArtist = $isArtist;
-  }
-  public function getImgAvatar(): ?string
-  {
-    return $this->imgAvatar;
-  }
-  public function setImgAvatar(?string $imgAvatar)
-  {
-    $this->imgAvatar = $imgAvatar;
-  }
-  public function getAboutMe(): ?string
-  {
-    return $this->aboutMe;
-  }
-  public function setAboutMe(?string $aboutMe)
-  {
-    $this->aboutMe = $aboutMe;
-  }
-  public function getToken(): ?string
-  {
-    return $this->token;
-  }
-  public function setToken(?string $token)
-  {
-    $this->token = $token;
-  }
-  public function isPrivate()
-  {
-    return $this->isPrivate;
-  }
-  public function setIsPrivate(int $isPrivate)
-  {
-    $this->isPrivate = $isPrivate;
-  }
+  public function getId(): ?int { return $this->id; }
+  public function setId(?int $id) { $this->id = $id; }
+  
+  public function getName(): string { return $this->name; }
+  public function setName(string $name) { $this->name = $name; }
+  
+  public function getSurname1(): string { return $this->surname1; }
+  public function setSurname1(string $surname1) { $this->surname1 = $surname1; }
+  
+  public function getSurname2(): string { return $this->surname2;}
+  public function setSurname2(string $surname2) { $this->surname2 = $surname2; }
+  
+  public function getEmail(): string { return $this->email; }
+  public function setEmail(string $email) { $this->email = $email; }
+
+  public function getUsername(): string { return $this->username; }
+  public function setUsername(string $username) { $this->username = $username; }
+  
+  public function getPassword(): string { return $this->password; }
+  public function setPassword(string $password) { $this->password = $password; }
+  
+  public function isArtist() { return $this->isArtist; }
+  public function setIsArtist(int $isArtist) { $this->isArtist = $isArtist; }
+  
+  public function getImgAvatar(): ?string { return $this->imgAvatar; }
+  public function setImgAvatar(?string $imgAvatar) { $this->imgAvatar = $imgAvatar; }
+  
+  public function getAboutMe(): ?string { return $this->aboutMe; }
+  public function setAboutMe(?string $aboutMe) { $this->aboutMe = $aboutMe; }
+  
+  public function getToken(): ?string { return $this->token; }
+  public function setToken(?string $token) { $this->token = $token; }
+  
+  public function isPrivate() {  return $this->isPrivate; }
+  public function setIsPrivate(int $isPrivate) { $this->isPrivate = $isPrivate; }
 
   // Needed to deserialize an object from an associative array
-  public static function fromAssoc(array $data): \Artist4all\Model\User
-  {
+  public static function fromAssoc(array $data): \Artist4all\Model\User {
     return new \Artist4all\Model\User(
       $data['id'],
       $data['name'],
@@ -162,8 +100,7 @@ class User implements \JsonSerializable
   }
 
   // Needed for implicit JSON serialization with json_encode()
-  public function jsonSerialize()
-  {
+  public function jsonSerialize() {
     return [
       'id' => $this->id,
       'name' => $this->name,
@@ -180,8 +117,7 @@ class User implements \JsonSerializable
   }
 
   // DAO METHODS
-  public static function getAllOtherUsers(string $username): ?array
-  {
+  public static function getAllOtherUsers(string $username): ?array {
     $sql = 'SELECT * FROM users WHERE username!=:username';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -195,8 +131,7 @@ class User implements \JsonSerializable
     return $users;
   }
 
-  public static function getUserByUsername(string $username): ?\Artist4all\Model\User
-  {
+  public static function getUserByUsername(string $username): ?\Artist4all\Model\User {
     $sql = 'SELECT * FROM users WHERE username=:username';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -207,8 +142,7 @@ class User implements \JsonSerializable
     return $user;
   }
 
-  public static function getUserById(int $id): ?\Artist4all\Model\User
-  {
+  public static function getUserById(int $id): ?\Artist4all\Model\User {
     $sql = 'SELECT * FROM users WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -219,8 +153,18 @@ class User implements \JsonSerializable
     return $user;
   }
 
-  public static function getUserByEmail(string $email): ?\Artist4all\Model\User
-  {
+  public static function getUserByToken(string $token): ?\Artist4all\Model\User {
+    $sql = 'SELECT * FROM users WHERE token=:token';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([':token' => $token]);
+    $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
+    if (!$userAssoc) return null;
+    $user = \Artist4all\Model\User::fromAssoc($userAssoc);
+    return $user;
+  }
+
+  public static function getUserByEmail(string $email): ?\Artist4all\Model\User {
     $sql = 'SELECT * FROM users WHERE email=:email AND deactivated=:deactivated';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -234,15 +178,13 @@ class User implements \JsonSerializable
     return $user;
   }
 
-  public static function persistUser(User $user): ?\Artist4all\Model\User
-  {
+  public static function persistUser(User $user): ?\Artist4all\Model\User {
     if (is_null($user->getId())) return static::insertUser($user);
     else return static::updateUser($user);
   }
 
   // registra un usuario
-  public static function insertUser(\Artist4all\Model\User $user): ?\Artist4all\Model\User
-  {
+  public static function insertUser(\Artist4all\Model\User $user): ?\Artist4all\Model\User {
     $sql = 'INSERT INTO users VALUES (
         :id, 
         :name, 
@@ -283,8 +225,7 @@ class User implements \JsonSerializable
     return $user;
   }
 
-  public static function updateUser(\Artist4all\Model\User $user): ?\Artist4all\Model\User
-  {
+  public static function updateUser(\Artist4all\Model\User $user): ?\Artist4all\Model\User {
     $sql = 'UPDATE users SET
         name=:name, 
         surname1=:surname1, 
@@ -314,8 +255,7 @@ class User implements \JsonSerializable
     return $user;
   }
 
-  public static function insertOrUpdateToken(string $token, \Artist4all\Model\User $user): bool
-  {
+  public static function insertOrUpdateToken(string $token, \Artist4all\Model\User $user): bool {
     $sql = 'UPDATE users SET token=:token WHERE email=:email';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -327,8 +267,7 @@ class User implements \JsonSerializable
   }
 
   // todo pasar usuario
-  public static function logout(int $id): bool
-  {
+  public static function logout(int $id): bool {
     $sql = 'UPDATE users SET token=:token WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -340,8 +279,7 @@ class User implements \JsonSerializable
   }
 
   //TODO pasar usuario y contraseña
-  public static function changePassword(string $password, int $id): bool
-  {
+  public static function changePassword(string $password, int $id): bool {
     $sql = 'UPDATE users SET password=:password WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -352,10 +290,7 @@ class User implements \JsonSerializable
     return $result;
   }
 
-  public static function isFollowingThatUser(
-    \Artist4all\Model\User $user_follower,
-    \Artist4all\Model\User $user_followed
-  ): ?array {
+  public static function isFollowingThatUser(\Artist4all\Model\User $user_follower, \Artist4all\Model\User $user_followed): ?array {
     $sql = 'SELECT * FROM users_followed WHERE 
     id_follower=:id_follower AND 
     id_followed=:id_followed';
@@ -370,14 +305,12 @@ class User implements \JsonSerializable
     return $followed;
   }
 
-  public static function persistFollow(array $logFollow): ?array
-  {
+  public static function persistFollow(array $logFollow): ?array {
     if (is_null($logFollow['id'])) return static::insertRequestOrFollow($logFollow);
     else return static::updateFollowStatus($logFollow);
   }
 
-  public static function insertRequestOrFollow(array $logFollow): ?array
-  {
+  public static function insertRequestOrFollow(array $logFollow): ?array {
     $sql = 'INSERT INTO users_followed VALUES (
         :id,
         :id_follower,
@@ -398,8 +331,7 @@ class User implements \JsonSerializable
     return $logFollow;
   }
 
-  public static function updateFollowStatus(array $logFollow): ?array
-  {
+  public static function updateFollowStatus(array $logFollow): ?array {
     $sql = 'UPDATE users_followed SET status_follow=:status_follow WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -411,8 +343,7 @@ class User implements \JsonSerializable
     return $logFollow;
   }
 
-  public static function getFollowers(int $id_followed): ?array
-  {
+  public static function getFollowers(int $id_followed): ?array {
     $sql = 'SELECT id_follower FROM users_followed WHERE id_followed=:id_followed AND status_follow=:status_follow';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -429,8 +360,7 @@ class User implements \JsonSerializable
     return $listFollowers;
   }
 
-  public static function getFollowed(int $id_follower): ?array
-  {
+  public static function getFollowed(int $id_follower): ?array {
     $sql = 'SELECT id_followed FROM users_followed WHERE id_follower=:id_follower AND status_follow=:status_follow';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -447,8 +377,7 @@ class User implements \JsonSerializable
     return $listFollowed;
   }
 
-  public static function getIdByToken(string $token): ?int
-  {
+  public static function getIdByToken(string $token): ?int {
     $sql = 'SELECT id FROM users WHERE token=:token';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -457,10 +386,7 @@ class User implements \JsonSerializable
     return $id_user;
   }
 
-  public static function privateAccountSwitcher(
-    int $isPrivate,
-    int $id
-  ): bool {
+  public static function privateAccountSwitcher(int $isPrivate, int $id): bool {
     $sql = 'UPDATE users SET isPrivate=:isPrivate WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);

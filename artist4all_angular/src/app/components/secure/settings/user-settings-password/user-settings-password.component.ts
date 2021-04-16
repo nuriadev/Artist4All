@@ -29,24 +29,14 @@ export class UserSettingsPasswordComponent implements OnInit {
   isValidFormSubmitted = null;
 
   ngOnInit(): void {
-    this.passwordForm = this._formBuilder.group(
-      {
-        password: [
-          '',
-          [Validators.required, Validators.pattern(this.passwordPattern)],
-        ],
-        passwordConfirm: ['', [Validators.required]],
-      },
-      { validators: matchingPasswords }
-    );
+    this.passwordForm = this._formBuilder.group({
+      password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
+      passwordConfirm: ['', [Validators.required]]
+    }, { validators: matchingPasswords });
   }
 
   checkMatchPasswords(): boolean {
-    return (
-      this.passwordForm.hasError('notMatching') &&
-      this.passwordForm.get('password').dirty &&
-      this.passwordForm.get('passwordConfirm').dirty
-    );
+    return (this.passwordForm.hasError('notMatching') && this.passwordForm.get('password').dirty && this.passwordForm.get('passwordConfirm').dirty);
   }
 
   showOrHidePassword() {
@@ -64,35 +54,25 @@ export class UserSettingsPasswordComponent implements OnInit {
     }
   }
 
-  get password() {
-    return this.passwordForm.get('password');
-  }
-  get passwordConfirm() {
-    return this.passwordForm.get('passwordConfirm');
-  }
+  get password() { return this.passwordForm.get('password'); }
+  get passwordConfirm() { return this.passwordForm.get('passwordConfirm'); }
 
   userEdited: User;
   editPassword(formValues) {
-    this._userService
-      .changePassword(this.user.id, formValues, this.token)
-      .subscribe(
+    this._userService.changePassword(this.user.id, formValues, this.token).subscribe(
         (result) => {
           this.userEdited = result.user;
           let userSession = new Session(result.token, this.userEdited);
           this._sessionService.setCurrentSession(userSession);
-        },
-        (error) => {
+        }, (error) => {
           console.log(error);
-        }
-      );
+    });
   }
 
   values: any;
   editingAnimation() {
     this.isValidFormSubmitted = false;
-    if (this.passwordForm.invalid) {
-      return;
-    }
+    if (this.passwordForm.invalid) { return; }
     Swal.fire({
       title: 'Estás seguro de que quieres modificar la contraseña?',
       text: 'Esta acción es irreversible.',
@@ -107,23 +87,11 @@ export class UserSettingsPasswordComponent implements OnInit {
         this.isValidFormSubmitted = true;
         this.values = this.passwordForm.value;
         this.editPassword(this.values);
-        Swal.fire({
-          title: 'Modificando contraseña...',
-          showConfirmButton: false,
-          timerProgressBar: true,
-          timer: 1000,
-          didOpen: () => {
-            Swal.showLoading();
-          },
+        Swal.fire({ title: 'Modificando contraseña...', showConfirmButton: false, timerProgressBar: true, timer: 1000,
+          didOpen: () => { Swal.showLoading(); },
         }).then((result) => {
           if (result.dismiss === Swal.DismissReason.timer) {
-            Swal.fire({
-              title: 'Contraseña modificada',
-              position: 'center',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 1000,
-            });
+            Swal.fire({ title: 'Contraseña modificada', position: 'center', icon: 'success',  showConfirmButton: false, timer: 1000, });
             this.passwordForm.reset();
           }
         });

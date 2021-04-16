@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
@@ -13,13 +13,14 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { element } from 'protractor';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
   styleUrls: ['./index-profile.component.css'],
   providers: [UserService],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, AfterViewChecked {
   constructor(
     private _sessionService: SessionService,
     private _userService: UserService,
@@ -79,9 +80,7 @@ export class ProfileComponent implements OnInit {
           this.getUserPublications(this.id, this.token);
         }, 1200);
       } else {
-        this._userService
-          .getUserById(parseInt(this.id_user), this.token)
-          .subscribe(
+        this._userService.getUserById(parseInt(this.id_user), this.token).subscribe(
             (result) => {
               this.id = result.id;
               this.name = result.name;
@@ -93,9 +92,7 @@ export class ProfileComponent implements OnInit {
               this.aboutMe = result.aboutMe;
               this.isPrivate = result.isPrivate;
               this.isMyProfile = false;
-              this._userService
-                .isFollowingThatUser(this.user.id, this.id, this.token)
-                .subscribe(
+              this._userService.isFollowingThatUser(this.user.id, this.id, this.token).subscribe(
                   (result) => {
                     if (result != null) {
                       this.id_follow = result.id;
@@ -104,144 +101,77 @@ export class ProfileComponent implements OnInit {
                       this.id_follow = null;
                       this.status_follow = 1;
                     }
-                  },
-                  (error) => {
+                  }, (error) => {
                     console.log(error);
-                  }
-                );
+              });
               this.getFollowersAndFollowed(this.id, this.token);
               this.getUserPublications(this.id, this.token);
-              this.publications.forEach((element, index) => {
-                console.log(this.publications[index]);
-                this.isPublicationLiked(index, this.user.id, element);
-              });
-            },
-            (error) => {
+            }, (error) => {
               console.log(error);
-            }
-          );
+        });
       }
     });
   }
 
+  ngAfterViewChecked(): void {
+    this.setLikeStyles(this.publications);
+  }
+
+  setLikeStyles(publications) {
+    publications.forEach((publication, index) => {
+      let likeIcon = document.getElementById(index + 'likeIcon');
+      if(publication.isLiking == 0) {
+        likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
+        likeIcon.onmouseover = function () { likeIcon.style.color = '#039be5'; };
+        likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; };
+      } else {
+        likeIcon.style.color = '#F50303';
+        likeIcon.onmouseover = function () { likeIcon.style.color = 'rgba(29, 78, 216, var(--tw-text-opacity))'; };
+        likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; };
+      }
+    })
+  }
+
   deletePublication(index: number) {
-    this._publicationService
-      .delete(this.user.id, this.publications[index].id, this.token)
-      .subscribe(
+    this._publicationService.delete(this.user.id, this.publications[index].id, this.token).subscribe(
         (result) => {
           location.reload();
-        },
-        (error) => {
+        }, (error) => {
           console.log(error);
-        }
-      );
+    });
   }
 
-  n_likes: number;
-  n_comments: number;
-  id_like: number;
-  status_like: number;
-  likePublication(index: number) {
-    this.isLiked = true;
-  //  this.publications[index].n_likes++;
-    this.status_like = 1;
-    this._publicationService
-      .likePublication(
-        this.publications[index],
-        this.user.id,
-        this.id,
-        this.status_like,
-        this.token
-      )
-      .subscribe(
-        (result) => {
-          this.id_like = result.id;
-          // TODO: snackbar on click
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-  }
-  // TODO: que pueda cambiar de like a no like
-  removeLike(index: number) {
-    this.isLiked = false;
-    //this.publications[index].n_likes--;
+  updateLikeStatus(index: number) {
     let likeIcon = document.getElementById(index + 'likeIcon');
-    likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
-    likeIcon.onmouseover = function () {
-      likeIcon.style.color = 'rgba(107, 114, 128, var(--tw-text-opacity))';
-    };
-    likeIcon.onmouseout = function () {
-      likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
-    };
-    this.isLiked = false;
-    this.status_like = 0;
-    this._publicationService
-      .updateLikeStatus(
-        this.id_like,
-        this.publications[index],
-        this.user.id,
-        this.id,
-        this.status_like,
-        this.token
-      )
-      .subscribe(
-        (result) => {
-          //TODO: snackbar / pasar a patch
-          this.id_like = result.id;
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
+    if (this.publications[index].isLiking == 1) {
+      this.publications[index].n_likes--;
+      this.publications[index].isLiking = 0;
+      likeIcon.style.color = '#F50303';
+      likeIcon.onmouseover = function () { likeIcon.style.color = 'rgba(107, 114, 128, var(--tw-text-opacity))'; };
+      likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; };
+      this.updateStatusLike(index);
+    } else {
+      this.publications[index].n_likes++;
+      this.publications[index].isLiking = 1;
+      likeIcon.style.color = '#F50303';
+      likeIcon.onmouseover = function () { likeIcon.style.color = '#039be5'; };
+      likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; };
+      this.addLike(index);
+    }
   }
 
-  isLiked: boolean;
-  isPublicationLiked(
-    index: number,
-    my_id: number,
-    publication: any
-  ) {
-    this._publicationService
-      .isPublicationLiked(my_id, publication, this.token)
-      .subscribe(
+  addLike(index: number) {
+    this._publicationService.likePublication(this.publications[index], this.user.id, this.token).subscribe(
         (result) => {
-          if (result == null) this.status_like = 0;
-          else this.status_like = result.status_like;
-          let likeIcon = document.getElementById(index + 'likeIcon');
-          if (this.status_like == 0) {
-            likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))';
-            likeIcon.onmouseover = function () {
-              likeIcon.style.color =
-                'rgba(29, 78, 216, var(--tw-text-opacity))';
-            };
-            likeIcon.onmouseout = function () {
-              likeIcon.style.color =
-                'rgba(59, 130, 246, var(--tw-text-opacity))';
-            };
-            this.isLiked = false;
-          } else {
-            likeIcon.style.color =
-              'rgba(156, 163, 175, var(--tw-text-opacity))';
-            likeIcon.onmouseover = function () {
-              likeIcon.style.color =
-                'rgba(107, 114, 128, var(--tw-text-opacity))';
-            };
-            likeIcon.onmouseout = function () {
-              likeIcon.style.color =
-                'rgba(156, 163, 175, var(--tw-text-opacity))';
-            };
-            this.isLiked = true;
-          }
-        },
-        (error) => {
+          // TODO: snackbar on click
+        }, (error) => {
           console.log(error);
-        }
-      );
-      console.log(this.status_like);
+    });
   }
 
+  updateStatusLike(index: number) {
+    this._publicationService.updateLikeStatus(this.publications[index], this.user.id, this.token).subscribe();
+  }
 
   requestOrFollowUser() {
     if (this.isPrivate == 0) {
@@ -252,23 +182,13 @@ export class ProfileComponent implements OnInit {
       this.status_follow = 2;
       this.message = 'Petición de amistad enviada.';
     }
-    this._userService
-      .requestOrFollowUser(
-        this.id_follow,
-        this.user.id,
-        this.id,
-        this.status_follow,
-        this.token
-      )
-      .subscribe(
+    this._userService.requestOrFollowUser(this.id_follow, this.user.id, this.id, this.status_follow, this.token).subscribe(
         (result) => {
           this.id_follow = result.id;
           // añadir snackbar
-        },
-        (error) => {
+        },(error) => {
           console.log(error);
-        }
-      );
+    });
   }
 
   updateFollowRequest() {
@@ -279,23 +199,13 @@ export class ProfileComponent implements OnInit {
       this.status_follow = 1;
       this.message = 'Petición de amistad cancelada.';
     }
-    this._userService
-      .updateFollowRequest(
-        this.id_follow,
-        this.user.id,
-        this.id,
-        this.status_follow,
-        this.token
-      )
-      .subscribe(
+    this._userService.updateFollowRequest(this.id_follow,  this.user.id, this.id, this.status_follow, this.token).subscribe(
         (result) => {
           this.id_follow = result.id;
           this.openSnackBar(this.message);
-        },
-        (error) => {
+        },(error) => {
           console.log(error);
-        }
-      );
+    });
   }
 
   isUserFollowed() {
@@ -328,11 +238,9 @@ export class ProfileComponent implements OnInit {
         } else {
           this.n_followers = 0;
         }
-      },
-      (error) => {
+      }, (error) => {
         console.error(error);
-      }
-    );
+    });
     this._userService.getFollowed(id_user, token).subscribe(
       (result) => {
         if (result != null) {
@@ -341,30 +249,23 @@ export class ProfileComponent implements OnInit {
         } else {
           this.n_followed = 0;
         }
-      },
-      (error) => {
+      },(error) => {
         console.error(error);
-      }
-    );
+    });
   }
 
   getUserPublications(id_user: number, token: string) {
     this._publicationService.getUserPublications(id_user, token).subscribe(
       (result) => {
         if (result != null) {
-          result.forEach((element) => {
-            element.upload_date = this.adaptDateOfPublication(
-              element.upload_date
-            );
-            // LE PASAMOS EL ID NUESTRO Y EL DEL USUARIO DEL PERFIL Y EL ID DE LA PUBLICACIÓN
-            this.publications = result;
+          result.forEach((publication) => {
+            publication.upload_date = this.adaptDateOfPublication(publication.upload_date);
           });
+          this.publications = result;
         }
-      },
-      (error) => {
+      }, (error) => {
         console.log(error);
-      }
-    );
+    });
   }
 
   //#039be5
@@ -372,37 +273,12 @@ export class ProfileComponent implements OnInit {
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';
   verticalPosition: MatSnackBarVerticalPosition = 'bottom';
   openSnackBar(message: string) {
-    this._snackBar.open(message, 'OK', {
-      duration: 1000,
-      horizontalPosition: this.horizontalPosition,
-      verticalPosition: this.verticalPosition
-    });
+    this._snackBar.open(message, 'OK', { duration: 1000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition });
   }
 
   adaptDateOfPublication(upload_date: string) {
-    const days = [
-      'Domingo',
-      'Lunes',
-      'Martes',
-      'Miércoles',
-      'Jueves',
-      'Viernes',
-      'Sábado',
-    ];
-    const months = [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre',
-    ];
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
     let numberDay = new Date(upload_date).getDay();
     let nameDay = days[numberDay];
     let nameMonth = months[new Date(upload_date).getMonth()];
@@ -413,16 +289,7 @@ export class ProfileComponent implements OnInit {
     let month = date[1];
     let day = date[2];
     let hourAndMin = time[0] + ':' + time[1];
-    let adaptedDate =
-      nameDay +
-      ', ' +
-      day +
-      ' de ' +
-      nameMonth +
-      ' de ' +
-      year +
-      ', a las ' +
-      hourAndMin;
+    let adaptedDate = nameDay + ', ' + day + ' de ' + nameMonth + ' de ' + year + ', a las ' + hourAndMin;
     return adaptedDate;
   }
 }
