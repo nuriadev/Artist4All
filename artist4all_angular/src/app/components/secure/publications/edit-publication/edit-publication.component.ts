@@ -4,7 +4,11 @@ import { Publication } from 'src/app/core/models/publication';
 import { PublicationService } from 'src/app/core/services/publication.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { Location } from '@angular/common';
-
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 @Component({
   selector: 'app-edit-publication',
   templateUrl: './edit-publication.component.html',
@@ -16,7 +20,8 @@ export class EditPublicationComponent implements OnInit {
     private _sessionService: SessionService,
     private _router: ActivatedRoute,
     private _activeRoute: ActivatedRoute,
-    private _location: Location
+    private _location: Location,
+    private _snackBar: MatSnackBar
   ) {}
 
   user = this._sessionService.getCurrentUser();
@@ -31,6 +36,7 @@ export class EditPublicationComponent implements OnInit {
   bodyPublication: string = '';
   n_likes: number;
   n_comments: number;
+  isEdited: number;
 
   miPublication: Publication;
   id_publication: string = '';
@@ -46,6 +52,7 @@ export class EditPublicationComponent implements OnInit {
             this.bodyPublication = this.miPublication.bodyPublication;
             this.n_likes = this.miPublication.n_likes;
             this.n_comments = this.miPublication.n_comments;
+            this.isEdited = this.miPublication.isEdited;
           },
           (error) => {
             console.log(error);
@@ -57,8 +64,10 @@ export class EditPublicationComponent implements OnInit {
   }
 
   editPublication() {
+    this.message = "Publicación editada.";
+    this.openSnackBar(this.message);
     this._publicationService.edit(
-      new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0),
+      new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0, 1),
       this.token).subscribe(
         (result) => {
           this.redirectBack();
@@ -69,5 +78,12 @@ export class EditPublicationComponent implements OnInit {
 
   redirectBack() {
     this._location.back();
+  }
+
+  message: string;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'OK', { duration: 2000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition });
   }
 }

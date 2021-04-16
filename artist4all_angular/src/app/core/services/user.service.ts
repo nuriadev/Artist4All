@@ -51,7 +51,7 @@ export class UserService {
     if (!files) newForm.append('newImgAvatar', null);
     else newForm.append('newImgAvatar', files[0], files[0].name);
     //    TODO Cambiar a patch
-    return this.http.patch(this.url + '/user/' + id + '/profile', newForm, { headers: new HttpHeaders({ Authorization: token }) });
+    return this.http.post(this.url + '/user/' + id + '/profile', newForm, { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   changePassword(id: number, formValues, token: string): Observable<any> {

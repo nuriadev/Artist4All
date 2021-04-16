@@ -9,7 +9,7 @@ class UserController {
     $app->post('/login', '\Artist4all\Controller\UserController:login');
     $app->post('/logout', '\Artist4all\Controller\UserController:logout');
     // TODO: cambiar a patch los 2 edits
-    $app->patch('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
+    $app->post('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
     $app->post('/user/{id:[0-9 ]+}/password', '\Artist4all\Controller\UserController:changePassword');
 
     $app->get('/user/{id:[0-9 ]+}/list', '\Artist4all\Controller\UserController:getAllOtherUsers');
@@ -152,10 +152,16 @@ class UserController {
       $response = $response->withStatus(500);
     } else {
       if ($logFollow['status_follow'] == 2) {
-        \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 2, $response);
-      } else if ($logFollow['status_follow'] == 3) {
+        if (!\Artist4all\Model\Notification::existsNotification($follower->getId(), $followed->getId(), 2)) {
+          \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 2, $response);
+        }
+      } else if ($logFollow['status_follow'] == 3 && $followed->isPrivate()) {
         \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 1, $response);
         \Artist4all\Controller\NotificationController::createNotification($followed, $follower, 3, $response);
+      } else if ($logFollow['status_follow'] == 3 && !$followed->isPrivate()) {
+        if (!\Artist4all\Model\Notification::existsNotification($follower->getId(), $followed->getId(), 1)) {
+          \Artist4all\Controller\NotificationController::createNotification($follower, $followed, 1, $response);
+        }
       }
       $response = $response->withJson($logFollow);
     }

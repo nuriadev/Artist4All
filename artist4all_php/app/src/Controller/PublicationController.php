@@ -68,6 +68,7 @@ class PublicationController {
     $publication = static::getPublicationByUser($request, $id_publication, $response);
     $data['user'] = $user;
     $data['isLiking'] = 0;
+    if (!isset($data['isEdited'])) $data['isEdited'] = $publication->isEdited();
     if (!isset($data['n_likes'])) $data['n_likes'] = $publication->getLikes();
     if (!isset($data['n_comments'])) $data['n_comments'] = $publication->getComments();
     if (!isset($data['upload_date'])) $data['upload_date'] = $publication->getUploadDatePublication();

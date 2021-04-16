@@ -32,6 +32,7 @@ export class PublicationService {
     newForm.append('n_likes', '' + newPublication.n_likes);
     newForm.append('n_comments', '' + newPublication.n_comments);
     newForm.append('isLiking', '' + newPublication.isLiking);
+    newForm.append('isEdited', '' + newPublication.isEdited);
 
     return this.http.post(this.url + id_user + '/publication', newForm, { headers: new HttpHeaders({ Authorization: token }) });
   }
@@ -54,6 +55,7 @@ export class PublicationService {
         imgsPublication[i] = publication.imgsPublication[i].name;
       }
       newForm.append('imgsPublication', JSON.stringify(imgsPublication));
+      newForm.append('isEdited', '' + publication.isEdited);
     }
     newForm.append('bodyPublication', publication.bodyPublication);
     // TODO: pasar a patch

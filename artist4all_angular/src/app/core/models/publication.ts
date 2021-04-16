@@ -9,6 +9,7 @@ export class Publication {
   n_likes: number;
   n_comments: number;
   isLiking: number;
+  isEdited: number;
 
   constructor(
     id: number,
@@ -18,7 +19,8 @@ export class Publication {
     upload_date: Date,
     n_likes: number,
     n_comments: number,
-    isLiking: number
+    isLiking: number,
+    isEdited: number
   ) {
     this.id = id;
     this.user = user;
@@ -28,5 +30,6 @@ export class Publication {
     this.n_likes = n_likes;
     this.n_comments = n_comments;
     this.isLiking = isLiking;
+    this.isEdited = isEdited;
   }
 }

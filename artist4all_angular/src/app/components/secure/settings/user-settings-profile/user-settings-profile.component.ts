@@ -54,7 +54,7 @@ export class UserSettingsProfileComponent implements OnInit {
 
   userEdited: User;
   edit() {
-    this._userService.edit(this.id,this.name, this.surname1, this.surname2, this.email, this.username, this.aboutMe, this.imgToUpload, this.token).subscribe(
+    this._userService.edit(this.id, this.name, this.surname1, this.surname2, this.email, this.username, this.aboutMe, this.imgToUpload, this.token).subscribe(
         (result) => {
           this.userEdited = result.user;
           let userSession = new Session(result.token, this.userEdited);

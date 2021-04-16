@@ -15,8 +15,9 @@ export class NotificationService {
     return this.http.get(this.url + id + '/notification', { headers: new HttpHeaders({ Authorization: token }) });
   }
 
+  // TODO: pasar a patch
   notificationRead(id_notification: number, id_responsible: number, token: string): Observable<any> {
-    return this.http.patch(this.url + id_responsible + '/notification/' + id_notification, { headers: new HttpHeaders({ Authorization: token }) });
+    return this.http.post(this.url + id_responsible + '/notification/' + id_notification, { headers: new HttpHeaders({ Authorization: token }) });
   }
 
   removeNotification(id_notification: number, id_user: number, token: string): Observable<any> {

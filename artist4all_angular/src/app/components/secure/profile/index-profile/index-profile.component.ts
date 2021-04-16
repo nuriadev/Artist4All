@@ -15,6 +15,7 @@ import {
 } from '@angular/material/snack-bar';
 import { element } from 'protractor';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -144,6 +145,30 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     });
   }
 
+  deletingAnimation(index: number) {
+    Swal.fire({
+      title: 'Estás seguro de que quieres eliminar esta publicación?',
+      text: 'Esta acción es irreversible.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deletePublication(index);
+        Swal.fire({ title: 'Eliminando publicación...', showConfirmButton: false, timerProgressBar: true, timer: 1000,
+          didOpen: () => { Swal.showLoading(); },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            Swal.fire({ title: 'Publicación eliminada.', position: 'center', icon: 'success',  showConfirmButton: false, timer: 1000, });
+          }
+        });
+      }
+    });
+  }
+
   updateLikeStatus(index: number) {
     let likeIcon = document.getElementById(index + 'likeIcon');
     if (this.publications[index].isLiking == 1) {
@@ -164,12 +189,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   }
 
   addLike(index: number) {
-    this._publicationService.likePublication(this.publications[index], this.user.id, this.token).subscribe(
-        (result) => {
-          // TODO: snackbar on click
-        }, (error) => {
-          console.log(error);
-    });
+    this._publicationService.likePublication(this.publications[index], this.user.id, this.token).subscribe();
   }
 
   updateStatusLike(index: number) {
@@ -183,12 +203,12 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
       this.message = 'Añadido a seguidos.';
     } else {
       this.status_follow = 2;
-      this.message = 'Petición de amistad enviada.';
+      this.message = 'Solicitud de amistad enviada.';
     }
     this._userService.requestOrFollowUser(this.id_follow, this.user.id, this.id, this.status_follow, this.token).subscribe(
         (result) => {
           this.id_follow = result.id;
-          // añadir snackbar
+          this.openSnackBar(this.message);
         },(error) => {
           console.log(error);
     });
@@ -199,9 +219,9 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
       this.n_followers--;
       this.message = 'Eliminado de seguidos.';
     } else {
-      this.status_follow = 1;
-      this.message = 'Petición de amistad cancelada.';
+      this.message = 'Solicitud de amistad cancelada.';
     }
+    this.status_follow = 1;
     this._userService.updateFollowRequest(this.id_follow,  this.user.id, this.id, this.status_follow, this.token).subscribe(
         (result) => {
           this.id_follow = result.id;
