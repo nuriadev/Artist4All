@@ -157,9 +157,7 @@ class Publication implements \JsonSerializable {
         :id,
         :id_user,
         :bodyPublication,
-        :upload_date,
-        :n_likes,
-        :n_comments
+        :upload_date
     )';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -167,9 +165,7 @@ class Publication implements \JsonSerializable {
       ':id' => $publication->getId(),
       ':id_user' => $publication->getUser()->getId(),
       ':bodyPublication' => $publication->getBodyPublication(),
-      ':upload_date' => date('Y-m-d H:i:s'),
-      ':n_likes' => $publication->getLikes(),
-      ':n_comments' => $publication->getComments()
+      ':upload_date' => date('Y-m-d H:i:s')
     ]);
     if (!$result) return null;
     $id = $conn->lastInsertId();
@@ -181,9 +177,7 @@ class Publication implements \JsonSerializable {
     $sql = 'UPDATE publications SET
         id_user=:id_user,
         bodyPublication=:bodyPublication,
-        upload_date=:upload_date,
-        n_likes=:n_likes,
-        n_comments=:n_comments
+        upload_date=:upload_date
     WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -191,9 +185,7 @@ class Publication implements \JsonSerializable {
       ':id' => $publication->getId(),
       ':id_user' => $publication->getUser()->getId(),
       ':bodyPublication' => $publication->getBodyPublication(),
-      ':upload_date' => date('Y-m-d H:i:s'),
-      ':n_likes' => $publication->getLikes(),
-      ':n_comments' => $publication->getComments()
+      ':upload_date' => date('Y-m-d H:i:s')
     ]);
     if (!$result) return null;
     return $publication;

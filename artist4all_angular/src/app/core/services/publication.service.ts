@@ -29,6 +29,9 @@ export class PublicationService {
     }
     newForm.append('bodyPublication', newPublication.bodyPublication);
     newForm.append('upload_date', '' + newPublication.upload_date);
+    newForm.append('n_likes', '' + newPublication.n_likes);
+    newForm.append('n_comments', '' + newPublication.n_comments);
+    newForm.append('isLiking', '' + newPublication.isLiking);
 
     return this.http.post(this.url + id_user + '/publication', newForm, { headers: new HttpHeaders({ Authorization: token }) });
   }

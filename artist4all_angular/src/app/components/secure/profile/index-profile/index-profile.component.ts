@@ -14,6 +14,7 @@ import {
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
 import { element } from 'protractor';
+import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -114,17 +115,19 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   }
 
   ngAfterViewChecked(): void {
-    this.setLikeStyles(this.publications);
+    if (parseInt(this.id_user) != this.user.id) {
+      this.setLikeStyles(this.publications);
+    }
   }
 
   setLikeStyles(publications) {
     publications.forEach((publication, index) => {
       let likeIcon = document.getElementById(index + 'likeIcon');
-      if(publication.isLiking == 0) {
+      if(publication.isLiking == 0 && likeIcon != null) {
         likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
         likeIcon.onmouseover = function () { likeIcon.style.color = '#039be5'; };
         likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; };
-      } else {
+      } else if (publication.isLiking == 1 && likeIcon != null) {
         likeIcon.style.color = '#F50303';
         likeIcon.onmouseover = function () { likeIcon.style.color = 'rgba(29, 78, 216, var(--tw-text-opacity))'; };
         likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; };
@@ -135,7 +138,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   deletePublication(index: number) {
     this._publicationService.delete(this.user.id, this.publications[index].id, this.token).subscribe(
         (result) => {
-          location.reload();
+          this.getUserPublications(this.id, this.token);
         }, (error) => {
           console.log(error);
     });

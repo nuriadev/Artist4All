@@ -53,6 +53,7 @@ class PublicationController {
     $id_user = $args['id'];
     $data = $request->getParsedBody();
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
+    $data['user'] = $user;
     $publication = $this->validatePersist($request, $data, null, $response);
     if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');
     else $response = $response->withJson($publication)->withStatus(201, 'Publication created');
@@ -65,7 +66,8 @@ class PublicationController {
     $data = $request->getParsedBody();
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
     $publication = static::getPublicationByUser($request, $id_publication, $response);
-    $data['id_user'] = $user->getId();
+    $data['user'] = $user;
+    $data['isLiking'] = 0;
     if (!isset($data['n_likes'])) $data['n_likes'] = $publication->getLikes();
     if (!isset($data['n_comments'])) $data['n_comments'] = $publication->getComments();
     if (!isset($data['upload_date'])) $data['upload_date'] = $publication->getUploadDatePublication();
@@ -138,6 +140,7 @@ class PublicationController {
 
     if (empty($data["imgsPublication"])) $data['imgsPublication'] = null;
     $data['id'] = $id;
+
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
     $publication = \Artist4all\Model\Publication::persistPublication($publication);
     if (!empty($publication->getImgsPublication())) {
