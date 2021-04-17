@@ -14,7 +14,6 @@ export class PublicationService {
   create(
     id_user: number,
     newPublication: Publication,
-    token: string
   ): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('id_user', '' + newPublication.user.id);
@@ -34,18 +33,18 @@ export class PublicationService {
     newForm.append('isLiking', '' + newPublication.isLiking);
     newForm.append('isEdited', '' + newPublication.isEdited);
 
-    return this.http.post(this.url + id_user + '/publication', newForm, { headers: new HttpHeaders({ Authorization: token }) });
+    return this.http.post(this.url + id_user + '/publication', newForm);
   }
 
-  getUserPublications(id_user: number, token: string): Observable<any> {
-    return this.http.get(this.url + id_user + '/publication', { headers: new HttpHeaders({ Authorization: token }) });
+  getUserPublications(id_user: number): Observable<any> {
+    return this.http.get(this.url + id_user + '/publication');
   }
 
-  getPublicationById(id_user: number, id_publication: number, token: string): Observable<any> {
-    return this.http.get(this.url + id_user + '/publication/' + id_publication, { headers: new HttpHeaders({ Authorization: token }) });
+  getPublicationById(id_user: number, id_publication: number): Observable<any> {
+    return this.http.get(this.url + id_user + '/publication/' + id_publication);
   }
 
-  edit(publication: Publication, token: string): Observable<any> {
+  edit(publication: Publication): Observable<any> {
     let newForm: FormData = new FormData();
     if (!publication.imgsPublication) {
       newForm.append('imgsPublication', null);
@@ -59,22 +58,22 @@ export class PublicationService {
     }
     newForm.append('bodyPublication', publication.bodyPublication);
     // TODO: pasar a patch
-    return this.http.post(this.url + publication.user.id + '/publication/' + publication.id, newForm, { headers: new HttpHeaders({ Authorization: token }) } );
+    return this.http.post(this.url + publication.user.id + '/publication/' + publication.id, newForm);
   }
 
-  delete(id_user: number, id_publication: number, token: string): Observable<any> {
-    return this.http.delete( this.url + id_user + '/publication/' + id_publication, { headers: new HttpHeaders({ Authorization: token }), });
+  delete(id_user: number, id_publication: number): Observable<any> {
+    return this.http.delete( this.url + id_user + '/publication/' + id_publication);
   }
 
 
-  likePublication(publication: Publication, my_id: number, token: string): Observable<any> {
+  likePublication(publication: Publication, my_id: number): Observable<any> {
     let newForm: FormData = new FormData();
-    return this.http.post(this.url + my_id + '/like/publication/' + publication.id, newForm, { headers: new HttpHeaders({ Authorization: token }) });
+    return this.http.post(this.url + my_id + '/like/publication/' + publication.id, newForm);
   }
 
-  updateLikeStatus(publication: Publication, my_id: number, token: string): Observable<any> {
+  updateLikeStatus(publication: Publication, my_id: number): Observable<any> {
     let newForm: FormData = new FormData();
-    return this.http.post(this.url + my_id + '/like/publication/' + publication.id + '/update' , newForm, { headers: new HttpHeaders({ Authorization: token }) });
+    return this.http.post(this.url + my_id + '/like/publication/' + publication.id + '/update' , newForm);
     /*  let options = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

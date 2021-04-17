@@ -18,7 +18,7 @@ import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/public/register/register.component';
 import { LoginComponent } from './components/public/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/secure/home/home.component';
 import { LandingComponent } from './components/public/landing/landing.component';
@@ -43,6 +43,7 @@ import { UserSettingsAccountComponent } from './components/secure/settings/user-
 import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
 import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
 import { CommentComponent } from './components/secure/publications/comment/comment.component';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -88,7 +89,17 @@ import { CommentComponent } from './components/secure/publications/comment/comme
     MatDividerModule,
     MatCardModule
   ],
-  providers: [UserService, AuthenticationService, SessionService, AuthGuard],
+  providers: [
+    UserService,
+    AuthenticationService,
+    SessionService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

@@ -10,8 +10,8 @@ class Artist4all {
     header("Allow: GET, POST, OPTIONS, PUT, PATCH, DELETE");
 
     $app = AppFactory::create();
-    \Artist4all\Middleware\CorsMiddleware::corsHandler($app);
-   /*  \Artist4all\Middleware\AuthMiddleware::authHandler($app); */
+    \Artist4all\Middleware\CorsMiddleware::corsHandler($app); 
+    \Artist4all\Middleware\AuthMiddleware::authHandler($app); 
     \Artist4all\Controller\UserController::initRoutes($app);
     \Artist4all\Controller\PublicationController::initRoutes($app);
     \Artist4all\Controller\NotificationController::initRoutes($app);

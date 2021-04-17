@@ -114,7 +114,7 @@ class Publication implements \JsonSerializable {
   // TODO: le pasamos a cada publicacion una variable isLiking para saber si el usuario le da ha dado a like 
   // TODO: y ya podriamos modificar si fuese necesario
   // TODO PASAR TODO POR TOKEN EN VEZ DE POR ID
-  public static function getUserPublications(int $my_id, int $id_user): ?array {
+  public static function getUserPublications(int $id_user): ?array {
     $sql = 'SELECT * FROM publications WHERE id_user=:id_user ORDER BY id DESC';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);

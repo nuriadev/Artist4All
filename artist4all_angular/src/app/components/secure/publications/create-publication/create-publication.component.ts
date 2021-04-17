@@ -38,8 +38,7 @@ export class CreatePublicationComponent implements OnInit {
     this.openSnackBar(this.message);
     this._publicationService.create(
       this.user.id,
-      new Publication(null, this.user, this.imgToUpload, this.bodyPublication, null, 0, 0, 0, 0),
-      this.token).subscribe(
+      new Publication(null, this.user, this.imgToUpload, this.bodyPublication, null, 0, 0, 0, 0)).subscribe(
         (result) => {
           this._router.navigate(['/home']);
         },

@@ -51,7 +51,7 @@ export class UserNavbarComponent implements OnInit {
     this.username = this.user.username;
     this.password = this.user.password;
     this.imgAvatar = this.user.imgAvatar;
-      this._notificationService.getNotifications(this.id, this.token).subscribe(
+      this._notificationService.getNotifications(this.id).subscribe(
       (result) => {
         if (result != null) {
           result.forEach((notification) => {
@@ -69,7 +69,7 @@ export class UserNavbarComponent implements OnInit {
   }
 
   logout() {
-    this._authenticationService.logout(this.user.id, this.token).subscribe(
+    this._authenticationService.logout(this.user.id).subscribe(
       (result) => {
         this._sessionService.logout();
       }, (error) => {
@@ -167,11 +167,11 @@ export class UserNavbarComponent implements OnInit {
 
   id_follow: number;
   acceptOrDeclineRequest(id_notification: number, id_follower: number, index: number, status_follow: number) {
-    this._userService.isFollowingThatUser(id_follower, this.user.id, this.token).subscribe(
+    this._userService.isFollowingThatUser(id_follower, this.user.id).subscribe(
       (result) => {
         if (result != null) {
           this.id_follow = result.id;
-          this._userService.updateFollowRequest(this.id_follow, id_follower, this.user.id, status_follow, this.token).subscribe(
+          this._userService.updateFollowRequest(this.id_follow, id_follower, this.user.id, status_follow).subscribe(
             (result) => {
               this.notificationRead(id_notification, index);
               if (status_follow == 3) this.message = 'Solicitud aceptada.';
@@ -187,14 +187,14 @@ export class UserNavbarComponent implements OnInit {
   }
 
   notificationRead(id_notification: number, index: number) {
-    this._notificationService.notificationRead(id_notification, this.user.id, this.token).subscribe();
+    this._notificationService.notificationRead(id_notification, this.user.id).subscribe();
     this.notifications.splice(index, 1);
     this.message = 'Notificación leída.';
     this.openSnackBar(this.message);
   }
 
   removeNotification(id_notification: number, index: number) {
-    this._notificationService.removeNotification(id_notification, this.user.id, this.token).subscribe();
+    this._notificationService.removeNotification(id_notification, this.user.id).subscribe();
     this.notifications.splice(index, 1);
     this.message = 'Notificación eliminada.';
     this.openSnackBar(this.message);

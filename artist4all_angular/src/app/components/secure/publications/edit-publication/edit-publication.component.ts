@@ -44,7 +44,7 @@ export class EditPublicationComponent implements OnInit {
     this._activeRoute.paramMap.subscribe(
       (params) => {
         this.id_publication = params.get('id_publication');
-        this._publicationService.getPublicationById(this.user.id, parseInt(this.id_publication), this.token).subscribe(
+        this._publicationService.getPublicationById(this.user.id, parseInt(this.id_publication)).subscribe(
           (result) => {
             this.miPublication = result;
             this.id = this.miPublication.id;
@@ -67,8 +67,7 @@ export class EditPublicationComponent implements OnInit {
     this.message = "Publicación editada.";
     this.openSnackBar(this.message);
     this._publicationService.edit(
-      new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0, 1),
-      this.token).subscribe(
+      new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0, 1)).subscribe(
         (result) => {
           this.redirectBack();
         }, (error) => {
