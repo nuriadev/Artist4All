@@ -18,11 +18,12 @@ import { UserSettingsProfileComponent } from './components/secure/settings/user-
 import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
 import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
 import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
+import { NoAuthGuard } from './core/guards/no-auth.guard';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
-  {path:'register',component:RegisterComponent},
-  {path:'login', component:LoginComponent},
+  {path:'register',component:RegisterComponent, canActivate:[NoAuthGuard]},
+  {path:'login', component:LoginComponent, canActivate:[NoAuthGuard]},
   {path:'home', component:HomeComponent, canActivate:[AuthGuard]},
   {path:'store',component:StoreComponent, canActivate:[AuthGuard]},
   {path:'user/:id_user/profile',component:ProfileComponent, canActivate:[AuthGuard]},
