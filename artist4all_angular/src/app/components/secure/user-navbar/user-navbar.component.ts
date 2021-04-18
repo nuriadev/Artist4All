@@ -47,18 +47,9 @@ export class UserNavbarComponent implements OnInit {
     this._notificationService.getNotifications(this.id, this.token).subscribe(
       (result) => {
         if (result != null) {
-          result.forEach((element) => {
-            // TODO: Ampliar si es necesario
-            if (element.typeNotification == 1)
-              element.bodyNotification = 'ha empezado a seguirte';
-            else if (element.typeNotification == 2)
-              element.bodyNotification =
-                'te ha enviado una solicitud de amistad';
-            else if (element.typeNotification == 3)
-              element.bodyNotification = 'ha aceptado tu solicitud';
-            element.notification_date = this.adaptDateOfNotification(
-              element.notification_date
-            );
+          result.forEach((notification) => {
+            notification.bodyNotification = this.adaptNotificationMsg(notification);
+            notification.notification_date = this.adaptDateOfNotification(notification.notification_date);
           });
           this.notifications = result;
         }
@@ -73,11 +64,19 @@ export class UserNavbarComponent implements OnInit {
     this._authenticationService.logout(this.user.id, this.token).subscribe(
       (result) => {
         this._sessionService.logout();
-      },
-      (error) => {
+      }, (error) => {
         console.log(error);
-      }
-    );
+    });
+  }
+
+  adaptNotificationMsg(notification) {
+    let adaptedMsg;
+    switch (notification.typeNotification) {
+      case 1: adaptedMsg = 'ha empezado a seguirte'; break;
+      case 2: adaptedMsg = 'te ha enviado una solicitud de amistad'; break;
+      case 3: adaptedMsg = 'ha aceptado tu solicitud'; break;
+    }
+    return notification.typeNotification = adaptedMsg;
   }
 
   logoutAlert() {
@@ -91,36 +90,22 @@ export class UserNavbarComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1000,
-          timerProgressBar: true,
+        const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000, timerProgressBar: true,
           didOpen: (toast) => {
             Swal.showLoading(),
-              toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseenter', Swal.stopTimer);
             toast.addEventListener('mouseleave', Swal.resumeTimer);
           },
         });
-        Toast.fire({
-          title: 'Cerrando sessión...',
-        }).then((result) => {
+        Toast.fire({ title: 'Cerrando sessión...' }).then((result) => {
           if (result.dismiss === Swal.DismissReason.timer) {
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 1000,
+            const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000,
               didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer);
-                toast.addEventListener('mouseleave', Swal.resumeTimer);
-              },
+                  toast.addEventListener('mouseenter', Swal.stopTimer);
+                  toast.addEventListener('mouseleave', Swal.resumeTimer);
+              }
             });
-            Toast.fire({
-              title: 'Sessión cerrada',
-              icon: 'success',
-            });
+            Toast.fire({ title: 'Sessión cerrada', icon: 'success' });
           }
           this.logout();
           this._router.navigate(['']);
@@ -164,73 +149,45 @@ export class UserNavbarComponent implements OnInit {
     let diffHours = currentDate.diff(notification_date, 'hours');
     let diffMinutes = currentDate.diff(notification_date, 'minutes');
     let diffSeconds = currentDate.diff(notification_date, 'seconds');
-
     let adaptedDate;
     if (diffYears > 1) adaptedDate = diffYears + ' años';
     else if (diffYears == 1) adaptedDate = ' 1 año';
-    else if (diffMonths > 1 && diffMonths < 12)
-      adaptedDate = diffMonths + ' meses';
+    else if (diffMonths > 1 && diffMonths < 12) adaptedDate = diffMonths + ' meses';
     else if (diffMonths == 1) adaptedDate = ' 1 mes';
-    else if (diffWeeks > 1 && diffWeeks <= 4)
-      adaptedDate = diffWeeks + ' semanas';
+    else if (diffWeeks > 1 && diffWeeks <= 4) adaptedDate = diffWeeks + ' semanas';
     else if (diffWeeks == 1) adaptedDate = ' 1 semana';
     else if (diffDays > 1 && diffDays < 7) adaptedDate = diffDays + 'd';
     else if (diffDays == 1) adaptedDate = ' 1d';
     else if (diffHours > 1 && diffHours < 24) adaptedDate = diffHours + 'h';
     else if (diffHours == 1) adaptedDate = ' 1h';
-    else if (diffMinutes > 1 && diffMinutes < 60)
-      adaptedDate = diffMinutes + 'm';
+    else if (diffMinutes > 1 && diffMinutes < 60) adaptedDate = diffMinutes + 'm';
     else if (diffMinutes == 1) adaptedDate = ' 1m';
-    else if (diffSeconds > 1 && diffSeconds < 60)
-      adaptedDate = diffSeconds + 's';
+    else if (diffSeconds > 1 && diffSeconds < 60) adaptedDate = diffSeconds + 's';
     else if (diffSeconds <= 1) adaptedDate = 'actual';
-
     return adaptedDate;
   }
 
-  acceptOrDeclineRequest(
-    id_notification: number,
-    id_follower: number,
-    index: number,
-    status_follow: number
-  ) {
-    this._userService
-      .updateFollowRequest(
-        id_notification,
-        id_follower,
-        this.user.id,
-        status_follow,
-        this.token
-      )
-      .subscribe(
+  acceptOrDeclineRequest(id_notification: number, id_follower: number, index: number, status_follow: number) {
+    this._userService.updateFollowRequest(id_notification,id_follower, this.user.id, status_follow, this.token).subscribe(
         (result) => {
           this.notificationRead(id_notification, index);
-        },
-        (error) => {
+        }, (error) => {
           console.log(error);
-        }
-      );
+    });
   }
 
   notificationRead(id_notification: number, index: number) {
-    console.log('llega');
-    this._notificationService
-      .notificationRead(id_notification, this.user.id, this.token)
-      .subscribe(
+    this._notificationService.notificationRead(id_notification, this.user.id, this.token).subscribe(
         (result) => {
           console.log(result);
           this.notifications.splice(index, 1);
           this;
-        },
-        (error) => {
+        }, (error) => {
           console.log(error);
-        }
-      );
+    });
   }
 
   removeNotification(id_notification: number) {
-    this._notificationService
-      .removeNotification(id_notification, this.user.id, this.token)
-      .subscribe();
+    this._notificationService.removeNotification(id_notification, this.user.id, this.token).subscribe();
   }
 }

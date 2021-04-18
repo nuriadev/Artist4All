@@ -1,14 +1,10 @@
 <?php
-
 namespace Artist4all\Controller;
-
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
-class UserController
-{
-  public static function initRoutes($app)
-  {
+class UserController {
+  public static function initRoutes($app) {
     $app->post('/register', '\Artist4all\Controller\UserController:register');
     $app->post('/login', '\Artist4all\Controller\UserController:login');
     $app->post('/logout', '\Artist4all\Controller\UserController:logout');
@@ -30,8 +26,7 @@ class UserController
     $app->post('/user/{id:[0-9 ]+}/settings/account/privacy', '\Artist4all\Controller\UserController:privateAccountSwitcher');
   }
 
-  public function register(Request $request, Response $response, array $args)
-  {
+  public function register(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     $user = $this->validatePersist($data, null, $response);
     if (is_null($user)) {
@@ -41,14 +36,12 @@ class UserController
     return $this->loginProcess($data, $response);
   }
 
-  public function login(Request $request, Response $response, array $args)
-  {
+  public function login(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     return $this->loginProcess($data, $response);
   }
 
-  public function editProfile(Request $request, Response $response, array $args)
-  {
+  public function editProfile(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
@@ -67,8 +60,7 @@ class UserController
     return $response;
   }
 
-  public function changePassword(Request $request, Response $response, array $args)
-  {
+  public function changePassword(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
@@ -85,8 +77,7 @@ class UserController
     return $response;
   }
 
-  public function logout(Request $request, Response $response, array $args)
-  {
+  public function logout(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     $id = $data['id'];
     $result = \Artist4all\Model\User::logout($id);
@@ -95,8 +86,7 @@ class UserController
     return $response;
   }
 
-  public function getAllOtherUsers(Request $request, Response $response, array $args)
-  {
+  public function getAllOtherUsers(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $users = \Artist4all\Model\User::getAllOtherUsers($id);
     if (is_null($users)) $response = $response->withStatus(204, 'Users not found');
@@ -104,16 +94,14 @@ class UserController
     return $response;
   }
 
-  public function getUserById(Request $request, Response $response, array $args)
-  {
+  public function getUserById(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $user = static::getUserByIdSummary($id, $response);
     $response = $response->withJson($user);
     return $response;
   }
 
-  public static function getUserByIdSummary(int $id, Response $response)
-  {
+  public static function getUserByIdSummary(int $id, Response $response) {
     $user = \Artist4all\Model\User::getUserById($id);
     if (is_null($user)) {
       $response = $response->withStatus(404, 'User not found');
@@ -123,8 +111,7 @@ class UserController
     }
   }
 
-  public function isFollowingThatUser(Request $request, Response $response, array $args)
-  {
+  public function isFollowingThatUser(Request $request, Response $response, array $args) {
     $id_follower = $args['id_follower'];
     $id_followed = $args['id_followed'];
     $follower = static::getUserByIdSummary($id_follower, $response);
@@ -135,8 +122,7 @@ class UserController
     return $response;
   }
 
-  public function requestOrFollowUser(Request $request, Response $response, array $args)
-  {
+  public function requestOrFollowUser(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     if (!isset($data['id_follow'])) $id = null;
     else $id = $data['id_follow'];
@@ -144,15 +130,13 @@ class UserController
   }
 
   // TODO: una vez cambiado a patch, adaptar la function
-  public function updateFollowRequest(Request $request, Response $response, array $args)
-  {
+  public function updateFollowRequest(Request $request, Response $response, array $args) {
     $id = $args['id_follow'];
     $data = $request->getParsedBody();
     return $this->persistFollow($args, $data, $id, $response);
   }
 
-  private function persistFollow($args, $data, $id, $response)
-  {
+  private function persistFollow($args, $data, $id, $response) {
     $id_follower = $args['id_follower'];
     $id_followed = $args['id_followed'];
     $follower = static::getUserByIdSummary($id_follower, $response);
@@ -178,18 +162,15 @@ class UserController
     return $response;
   }
 
-  public function getFollowers(Request $request, Response $response, array $args)
-  {
+  public function getFollowers(Request $request, Response $response, array $args) {
     return $this->getFollowersOrFollowed($args, 'followers', $response);
   }
 
-  public function getFollowed(Request $request, Response $response, array $args)
-  {
+  public function getFollowed(Request $request, Response $response, array $args) {
     return $this->getFollowersOrFollowed($args, 'followed', $response);
   }
 
-  public function privateAccountSwitcher(Request $request, Response $response, array $args)
-  {
+  public function privateAccountSwitcher(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
@@ -205,8 +186,7 @@ class UserController
     return $response;
   }
 
-  private function getFollowersOrFollowed(array $args, string $followedOrFollowing, Response $response)
-  {
+  private function getFollowersOrFollowed(array $args, string $followedOrFollowing, Response $response) {
     $id = $args['id'];
     $user = static::getUserByIdSummary($id, $response);
     if ($followedOrFollowing == 'followers') $users = \Artist4all\Model\User::getFollowers($user->getId());
@@ -216,8 +196,7 @@ class UserController
     return $response;
   }
 
-  private function loginProcess(array $data, Response $response)
-  {
+  private function loginProcess(array $data, Response $response) {
     // todo validacion email y password
     $email = trim($data["email"]);
     $password = trim($data["password"]);
@@ -240,8 +219,7 @@ class UserController
     return $response;
   }
 
-  private function validatePersist($data, $id, $response)
-  {
+  private function validatePersist($data, $id, $response) {
 
     // todo: si está dado de baja para volver a activar su acc según el email if / else
     // todo: crear función para reactivarCuenta 

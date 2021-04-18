@@ -28,27 +28,16 @@ export class CreatePublicationComponent implements OnInit {
 
   bodyPublication: string = '';
   createPublication() {
-    this._publicationService
-      .create(
-        this.user.id,
-        new Publication(
-          null,
-          this.user.id,
-          this.imgToUpload,
-          this.bodyPublication,
-          null,
-          null,
-          null
-        ),
-        this.token
-      )
-      .subscribe(
+    this._publicationService.create(
+      this.user.id,
+      new Publication(null, this.user, this.imgToUpload, this.bodyPublication, null, 0, 0, 0),
+      this.token).subscribe(
         (result) => {
           this._router.navigate(['/home']);
         },
         (error) => {
           console.log(error);
-        }
-      );
+    });
   }
+
 }

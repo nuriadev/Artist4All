@@ -46,40 +46,19 @@ export class RegisterComponent implements OnInit {
     this.registerForm = this._formBuilder.group(
       {
         name: ['', [Validators.required, Validators.pattern(this.namePattern)]],
-        surname1: [
-          '',
-          [Validators.required, Validators.pattern(this.surname1Pattern)],
-        ],
-        surname2: [
-          '',
-          [Validators.required, Validators.pattern(this.surname2Pattern)],
-        ],
-        email: [
-          '',
-          [Validators.required, Validators.pattern(this.emailPattern)],
-        ],
-        username: [
-          '',
-          [Validators.required, Validators.pattern(this.usernamePattern)],
-        ],
-        password: [
-          '',
-          [Validators.required, Validators.pattern(this.passwordPattern)],
-        ],
+        surname1: ['', [Validators.required, Validators.pattern(this.surname1Pattern)]],
+        surname2: [ '', [Validators.required, Validators.pattern(this.surname2Pattern)]],
+        email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+        username: ['', [Validators.required, Validators.pattern(this.usernamePattern)]],
+        password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
         passwordConfirm: ['', [Validators.required]],
         isArtist: ['', [Validators.required]],
         isPrivate: [0],
-      },
-      { validators: matchingPasswords }
-    );
+      }, { validators: matchingPasswords });
   }
 
   checkMatchPasswords(): boolean {
-    return (
-      this.registerForm.hasError('notMatching') &&
-      this.registerForm.get('password').dirty &&
-      this.registerForm.get('passwordConfirm').dirty
-    );
+    return (this.registerForm.hasError('notMatching') && this.registerForm.get('password').dirty && this.registerForm.get('passwordConfirm').dirty);
   }
 
   showOrHidePassword() {
@@ -97,27 +76,13 @@ export class RegisterComponent implements OnInit {
     }
   }
 
-  get name() {
-    return this.registerForm.get('name');
-  }
-  get surname1() {
-    return this.registerForm.get('surname1');
-  }
-  get surname2() {
-    return this.registerForm.get('surname2');
-  }
-  get email() {
-    return this.registerForm.get('email');
-  }
-  get username() {
-    return this.registerForm.get('username');
-  }
-  get password() {
-    return this.registerForm.get('password');
-  }
-  get passwordConfirm() {
-    return this.registerForm.get('passwordConfirm');
-  }
+  get name() { return this.registerForm.get('name'); }
+  get surname1() { return this.registerForm.get('surname1'); }
+  get surname2() { return this.registerForm.get('surname2'); }
+  get email() { return this.registerForm.get('email'); }
+  get username() { return this.registerForm.get('username'); }
+  get password() { return this.registerForm.get('password'); }
+  get passwordConfirm() { return this.registerForm.get('passwordConfirm'); }
 
   user: User;
   registerError: boolean = false;
@@ -138,12 +103,10 @@ export class RegisterComponent implements OnInit {
           let userSession = new Session(result.token, this.user);
           this._sessionService.setCurrentSession(userSession);
         }
-      },
-      (error) => {
+      }, (error) => {
         this.registerError = true;
         this.timer = setInterval(() => (this.registerError = false), 2000);
-      }
-    );
+    });
   }
 
   loggingAnimation() {
@@ -156,37 +119,23 @@ export class RegisterComponent implements OnInit {
       timer: 1000,
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.timer) {
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1000,
-          timerProgressBar: true,
+        const Toast = Swal.mixin({ toast: true,  position: 'top-end', showConfirmButton: false,  timer: 1000, timerProgressBar: true,
           didOpen: (toast) => {
             Swal.showLoading(),
-              toast.addEventListener('mouseenter', Swal.stopTimer);
+            toast.addEventListener('mouseenter', Swal.stopTimer);
             toast.addEventListener('mouseleave', Swal.resumeTimer);
-          },
+          }
         });
-        Toast.fire({
-          title: '<h3>Iniciando sesión...<h3>',
-        }).then((result) => {
+        Toast.fire({ title: '<h3>Iniciando sesión...<h3>' }).then((result) => {
           if (result.dismiss === Swal.DismissReason.timer) {
             this._router.navigate(['/home']);
-            const Toast = Swal.mixin({
-              toast: true,
-              position: 'top-end',
-              showConfirmButton: false,
-              timer: 1000,
+            const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000,
               didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer);
                 toast.addEventListener('mouseleave', Swal.resumeTimer);
               },
             });
-            Toast.fire({
-              title: 'Sesión iniciada',
-              icon: 'success',
-            });
+            Toast.fire({ title: 'Sesión iniciada', icon: 'success' });
           }
         });
       }

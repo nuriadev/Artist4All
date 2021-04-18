@@ -38,56 +38,33 @@ export class EditPublicationComponent implements OnInit {
     this._activeRoute.paramMap.subscribe(
       (params) => {
         this.id_publication = params.get('id_publication');
-        this._publicationService
-          .getPublicationById(
-            this.user.id,
-            parseInt(this.id_publication),
-            this.token
-          )
-          .subscribe(
-            (result) => {
-              //TODO: optimizar
-              this.miPublication = result;
-              this.id = this.miPublication.id;
-              this.id_user = this.miPublication.id_user;
-              this.bodyPublication = this.miPublication.bodyPublication;
-         /*      this.n_likes = this.miPublication.n_likes;
-              this.n_comments = this.miPublication.n_comments; */
-              // todo: si this.imgToUpload is null, no borro las imgs de la db, en caso contrario sí
-            },
-            (error) => {
-              console.log(error);
-            }
-          );
-      },
-      (error) => {
-        console.log(error);
-      }
-    );
+        this._publicationService.getPublicationById(this.user.id, parseInt(this.id_publication), this.token).subscribe(
+          (result) => {
+            this.miPublication = result;
+            this.id = this.miPublication.id;
+            this.user = this.miPublication.user;
+            this.bodyPublication = this.miPublication.bodyPublication;
+            this.n_likes = this.miPublication.n_likes;
+            this.n_comments = this.miPublication.n_comments;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    }, (error) => {
+      console.log(error);
+    });
   }
 
   editPublication() {
-    this._publicationService
-      .edit(
-        new Publication(
-          this.id,
-          this.user.id,
-          this.imgToUpload,
-          this.bodyPublication,
-          null,
-          null,
-          null
-        ),
-        this.token
-      )
-      .subscribe(
+    this._publicationService.edit(
+      new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0),
+      this.token).subscribe(
         (result) => {
           this.redirectBack();
-        },
-        (error) => {
+        }, (error) => {
           console.log(error);
-        }
-      );
+    });
   }
 
   redirectBack() {

@@ -32,18 +32,11 @@ export class LoginComponent implements OnInit {
 
   loginForm = this._formBuilder.group({
     email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
-    password: [
-      '',
-      [Validators.required, Validators.pattern(this.passwordPattern)],
-    ],
+    password: ['',[Validators.required, Validators.pattern(this.passwordPattern)]],
   });
 
-  get email() {
-    return this.loginForm.get('email');
-  }
-  get password() {
-    return this.loginForm.get('password');
-  }
+  get email() { return this.loginForm.get('email'); }
+  get password() { return this.loginForm.get('password'); }
 
   user: User;
   loginError: boolean = false;
@@ -64,12 +57,10 @@ export class LoginComponent implements OnInit {
           let userSession = new Session(result.token, this.user);
           this._sessionService.setCurrentSession(userSession);
         }
-      },
-      (error) => {
+      }, (error) => {
         this.loginError = true;
         this.timer = setInterval(() => (this.loginError = false), 2000);
-      }
-    );
+    });
   }
 
   showOrHidePassword() {
@@ -96,29 +87,20 @@ export class LoginComponent implements OnInit {
       timerProgressBar: true,
       didOpen: (toast) => {
         Swal.showLoading(),
-          toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseenter', Swal.stopTimer);
         toast.addEventListener('mouseleave', Swal.resumeTimer);
       },
     });
-    Toast.fire({
-      title: 'Iniciando sesión...',
-    }).then((result) => {
+    Toast.fire({ title: 'Iniciando sesión...' }).then((result) => {
       if (result.dismiss === Swal.DismissReason.timer) {
         this._router.navigate(['/home']);
-        const Toast = Swal.mixin({
-          toast: true,
-          position: 'top-end',
-          showConfirmButton: false,
-          timer: 1000,
+        const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000,
           didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer);
             toast.addEventListener('mouseleave', Swal.resumeTimer);
           },
         });
-        Toast.fire({
-          title: 'Sesión iniciada',
-          icon: 'success',
-        });
+        Toast.fire({ title: 'Sesión iniciada', icon: 'success' });
       }
     });
   }
