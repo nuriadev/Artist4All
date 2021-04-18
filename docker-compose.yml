@@ -13,11 +13,11 @@ services:
       
   artist4all_angular:
     image: nginx:latest
-    container_name: 'artist4all_angular'
-    volumes: 
-      - ./artist4all_angular/dist/Artist4All:/usr/share/nginx/html
+    container_name: 'artist4all_angular'   
     ports: 
       - 80:80
+    volumes: 
+      - ./artist4all_angular/dist/Artist4All:/usr/share/nginx/html
 
   artist4all_db:
     image: mariadb:10.2

@@ -59,7 +59,7 @@ export class UserSettingsPasswordComponent implements OnInit {
 
   userEdited: User;
   editPassword(formValues) {
-    this._userService.changePassword(this.user.id, formValues, this.token).subscribe(
+    this._userService.changePassword(this.user.id, formValues).subscribe(
         (result) => {
           this.userEdited = result.user;
           let userSession = new Session(result.token, this.userEdited);

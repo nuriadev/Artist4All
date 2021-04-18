@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: artist4all_db:3306
--- Tiempo de generación: 15-04-2021 a las 15:25:36
+-- Tiempo de generación: 16-04-2021 a las 13:48:15
 -- Versión del servidor: 10.2.36-MariaDB-1:10.2.36+maria~bionic
 -- Versión de PHP: 7.4.14
 
@@ -166,7 +166,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `isPrivate`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJHNBV2x2ZGtPaFFuYjNkU1BsUWtNR3VyODFiRnhpdXlVVFNZcHRhM2hyNU5maFJyS09pNkpXLno0ZVdvRCtrUlg=.v8YowsLvQ2uq1NJKM4GBDD0+zBhl7aNXtgVMi4mTJSE=', 1, 0),
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJEdab1ZOczY2bmZPQ0I1N2wvT2tma2UuRmNpU1U1OHpqbmtUdUtKTlFoT3VtSG1mNEtlTS5XLmw3WVEla1ZOaGM=./86NxGlC9Z4n4NIiZ2Wa9jxNyV4OS8GB+QbgnQeq89I=', 1, 0),
 (24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
 (27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
@@ -231,10 +231,21 @@ INSERT INTO `users_followed_status` (`id`, `status`) VALUES
 CREATE TABLE `users_likes_publications` (
   `id` int(11) NOT NULL,
   `my_id` int(11) NOT NULL,
-  `id_publisher` int(11) NOT NULL,
   `id_publication` int(11) NOT NULL,
   `status_like` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `users_likes_publications`
+--
+
+INSERT INTO `users_likes_publications` (`id`, `my_id`, `id_publication`, `status_like`) VALUES
+(22, 1, 90, 1),
+(23, 1, 74, 1),
+(24, 1, 73, 0),
+(25, 1, 67, 0),
+(26, 1, 4, 1),
+(30, 1, 72, 1);
 
 --
 -- Índices para tablas volcadas
@@ -304,7 +315,6 @@ ALTER TABLE `users_followed_status`
 --
 ALTER TABLE `users_likes_publications`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_publisher` (`id_publisher`),
   ADD KEY `my_id` (`my_id`),
   ADD KEY `id_publication` (`id_publication`);
 
@@ -364,7 +374,7 @@ ALTER TABLE `users_followed_status`
 -- AUTO_INCREMENT de la tabla `users_likes_publications`
 --
 ALTER TABLE `users_likes_publications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- Restricciones para tablas volcadas
@@ -410,9 +420,8 @@ ALTER TABLE `users_followed`
 -- Filtros para la tabla `users_likes_publications`
 --
 ALTER TABLE `users_likes_publications`
-  ADD CONSTRAINT `users_likes_publications_ibfk_1` FOREIGN KEY (`id_publisher`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_likes_publications_ibfk_2` FOREIGN KEY (`my_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `users_likes_publications_ibfk_3` FOREIGN KEY (`id_publication`) REFERENCES `publications` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `users_likes_publications_ibfk_1` FOREIGN KEY (`my_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `users_likes_publications_ibfk_2` FOREIGN KEY (`id_publication`) REFERENCES `publications` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -7,7 +7,8 @@ class NotificationController {
   public static function initRoutes($app) {
     // TODO: GET all my notifications, delete notifications
     $app->get('/user/{id:[0-9 ]+}/notification', '\Artist4all\Controller\NotificationController:getNotifications');
-    $app->patch('/user/{id_user:[0-9 ]+}/notification/{id_notification:[0-9 ]+}', '\Artist4all\Controller\NotificationController:notificationRead');
+    // todo pasar a patch
+    $app->get('/user/{id_user:[0-9 ]+}/notification/{id_notification:[0-9 ]+}', '\Artist4all\Controller\NotificationController:notificationRead');
     $app->delete('/user/{id_user:[0-9 ]+}/notification/{id_notification:[0-9 ]+}', '\Artist4all\Controller\NotificationController:removeNotification');
   }
 
@@ -36,10 +37,11 @@ class NotificationController {
   }
 
   public static function createNotification($user_responsible, $user_receiver, $typeNotification, $response) {
-    $notification = new \Artist4all\Model\Notification(null, $user_responsible, $user_receiver, null, 0, $typeNotification, '');
+    $notification = new \Artist4all\Model\Notification(null, $user_responsible, $user_receiver, 0, $typeNotification, '');
     $newNotification = \Artist4all\Model\Notification::insertNotification($notification);
     if (is_null($newNotification)) $response = $response->withStatus(500, 'Error at creating the notification');
-    return $newNotification;
+    else $response = $response->withStatus(200, 'Notification created');
+    return $newNotification; 
   }
 
   public function removeNotification(Request $request, Response $response, array $args) {

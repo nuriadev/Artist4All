@@ -9,13 +9,16 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/public/register/register.component';
 import { LoginComponent } from './components/public/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/secure/home/home.component';
 import { LandingComponent } from './components/public/landing/landing.component';
@@ -39,6 +42,8 @@ import { UserSettingsProfileComponent } from './components/secure/settings/user-
 import { UserSettingsAccountComponent } from './components/secure/settings/user-settings-account/user-settings-account.component';
 import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
 import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
+import { CommentComponent } from './components/secure/publications/comment/comment.component';
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 
 @NgModule({
   declarations: [
@@ -63,6 +68,7 @@ import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/
     UserSettingsAccountComponent,
     UserSettingsPasswordComponent,
     ListOfFollowersOrFollowedComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule,
@@ -78,9 +84,22 @@ import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/
     MatBadgeModule,
     MatSnackBarModule,
     MatInputModule,
-    MatTableModule
+    MatTableModule,
+    MatExpansionModule,
+    MatDividerModule,
+    MatCardModule
   ],
-  providers: [UserService, AuthenticationService, SessionService, AuthGuard],
+  providers: [
+    UserService,
+    AuthenticationService,
+    SessionService,
+    AuthGuard,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })

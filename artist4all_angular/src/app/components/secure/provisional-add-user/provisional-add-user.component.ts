@@ -20,7 +20,7 @@ export class ProvisionalAddUserComponent implements OnInit {
   token = this._sessionService.getCurrentToken();
 
   ngOnInit(): void {
-    this._userService.getAllOtherUsers(this.user.id, this.token).subscribe(
+    this._userService.getAllOtherUsers(this.user.id).subscribe(
       (result) => {
         this.userList = result;
         this.userList.forEach((user) => function(){

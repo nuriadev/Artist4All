@@ -6,7 +6,7 @@ import { User } from '../models/user';
 
 @Injectable()
 export class AuthenticationService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private url = 'http://localhost:81';
 
@@ -18,9 +18,10 @@ export class AuthenticationService {
     return this.http.post(this.url + '/login', newForm);
   }
 
-  logout(id_user: number, token: string): Observable<any> {
+  logout(id_user: number): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('id', '' + id_user);
-    return this.http.post(this.url + '/logout', newForm, { headers: new HttpHeaders({ Authorization: token }) });
+    return this.http.post(this.url + '/logout', newForm);
   }
+
 }

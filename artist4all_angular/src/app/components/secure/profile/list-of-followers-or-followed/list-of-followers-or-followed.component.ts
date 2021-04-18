@@ -30,14 +30,14 @@ export class ListOfFollowersOrFollowedComponent implements OnInit {
       if (parseInt(this.id_user) == this.user.id) this.id = this.user.id;
       else this.id = parseInt(this.id_user);
       if (this.typeList == 'followers') {
-        this._userService.getFollowers(this.id, this.token).subscribe(
+        this._userService.getFollowers(this.id).subscribe(
           (result) => {
             this.userlist = result;
           }, (error) => {
             console.error(error);
         });
       } else if (this.typeList == 'followed') {
-        this._userService.getFollowed(this.id, this.token).subscribe(
+        this._userService.getFollowed(this.id).subscribe(
           (result) => {
             this.userlist = result;
           }, (error) => {

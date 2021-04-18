@@ -81,7 +81,7 @@ export class UserSettingsAccountComponent implements OnInit {
       }
     }
     this.openSnackBar(this.message);
-    this._userService.privateAccountSwitcher(this.user, this.token).subscribe(
+    this._userService.privateAccountSwitcher(this.user).subscribe(
       (result) => {
         this.userEdited = result.user;
         let userSession = new Session(result.token, this.userEdited);

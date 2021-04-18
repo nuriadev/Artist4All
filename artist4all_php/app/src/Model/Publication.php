@@ -10,6 +10,7 @@ class Publication implements \JsonSerializable {
   private ?int $n_likes;
   private ?int $n_comments;
   private int $isLiking;
+  private int $isEdited;
 
   public function __construct(
     ?int $id,
@@ -19,7 +20,8 @@ class Publication implements \JsonSerializable {
     string $upload_date,
     ?int $n_likes,
     ?int $n_comments,
-    int $isLiking
+    int $isLiking,
+    int $isEdited
   ) {
     $this->id = $id;
     $this->user = $user;
@@ -29,6 +31,7 @@ class Publication implements \JsonSerializable {
     $this->n_likes = $n_likes;
     $this->n_comments = $n_comments;
     $this->isLiking = $isLiking;
+    $this->isEdited = $isEdited;
   }
 
   public function getId(): ?int { return $this->id; }
@@ -51,10 +54,13 @@ class Publication implements \JsonSerializable {
   public function setLikes(?int $n_likes) { $this->n_likes = $n_likes; }
 
   public function getComments(): ?int { return $this->n_comments; }
-  public function setComments(?int $n_comments) { $this->n_comments = $n_comments;}
+  public function setComments(?int $n_comments) { $this->n_comments = $n_comments; }
 
   public function isLiking(): ?int { return $this->isLiking; }
-  public function setIsLiking(?int $isLiking) { $this->isLiking = $isLiking;}
+  public function setIsLiking(?int $isLiking) { $this->isLiking = $isLiking; }
+
+  public function isEdited(): ?int { return $this->isEdited; }
+  public function setIsEdited(?int $isEdited) { $this->isEdited = $isEdited; }
 
   // Needed to deserialize an object from an associative array
   public static function fromAssoc(array $data): \Artist4all\Model\Publication {
@@ -66,7 +72,8 @@ class Publication implements \JsonSerializable {
       $data['upload_date'],
       $data['n_likes'],
       $data['n_comments'],
-      $data['isLiking']
+      $data['isLiking'],
+      $data['isEdited']
     );
   }
 
@@ -80,7 +87,8 @@ class Publication implements \JsonSerializable {
       'upload_date' => $this->upload_date,
       'n_likes' => $this->n_likes,
       'n_comments' => $this->n_comments,
-      'isLiking' => $this->isLiking
+      'isLiking' => $this->isLiking,
+      'isEdited' => $this->isEdited
     ];
   }
 
@@ -158,8 +166,7 @@ class Publication implements \JsonSerializable {
         :id_user,
         :bodyPublication,
         :upload_date,
-        :n_likes,
-        :n_comments
+        :isEdited
     )';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -168,8 +175,7 @@ class Publication implements \JsonSerializable {
       ':id_user' => $publication->getUser()->getId(),
       ':bodyPublication' => $publication->getBodyPublication(),
       ':upload_date' => date('Y-m-d H:i:s'),
-      ':n_likes' => $publication->getLikes(),
-      ':n_comments' => $publication->getComments()
+      ':isEdited' => $publication->isEdited()
     ]);
     if (!$result) return null;
     $id = $conn->lastInsertId();
@@ -182,8 +188,7 @@ class Publication implements \JsonSerializable {
         id_user=:id_user,
         bodyPublication=:bodyPublication,
         upload_date=:upload_date,
-        n_likes=:n_likes,
-        n_comments=:n_comments
+        isEdited=:isEdited
     WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -192,8 +197,7 @@ class Publication implements \JsonSerializable {
       ':id_user' => $publication->getUser()->getId(),
       ':bodyPublication' => $publication->getBodyPublication(),
       ':upload_date' => date('Y-m-d H:i:s'),
-      ':n_likes' => $publication->getLikes(),
-      ':n_comments' => $publication->getComments()
+      ':isEdited' => $publication->isEdited()
     ]);
     if (!$result) return null;
     return $publication;
@@ -209,7 +213,7 @@ class Publication implements \JsonSerializable {
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':id' => null,
-      ':imgPublication' => 'http://localhost:81/assets/img/' . $img,
+      ':imgPublication' => $img,
       ':id_publication' => $id
     ]);
     return $result;
@@ -261,8 +265,6 @@ class Publication implements \JsonSerializable {
     return $logLike;
   }
 
-  // TODO: lo haré por separado, contaré los likes y comentarios de las publicaciones en 2 funciones distintas,
-  // TODO: luego miraré si le estoy dando like a esa publicación
   public static function likingPublication(int $my_id, int $id_publication): ?int {
     $sql = 'SELECT * FROM users_likes_publications WHERE my_id=:my_id AND id_publication=:id_publication AND status_like=:status_like';
     $conn = Database::getInstance()->getConnection();

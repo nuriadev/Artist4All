@@ -7,11 +7,9 @@
   <div class="hidden bg-gray-800 lg:block lg:w-72" style="padding-left: 0;">
     <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
       <div class="pb-8 space-y-1">
-        <!-- Current: "bg-gray-200 text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
         <a routerLink="/home"
           class="text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
           aria-current="page">
-          <!-- Heroicon name: outline/home -->
           <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
             viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -24,7 +22,6 @@
 
         <a routerLink="/store"
           class="text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/fire -->
           <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -38,7 +35,6 @@
 
         <a routerLink="/messages"
           class="text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/user-group -->
           <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -52,7 +48,6 @@
 
         <a routerLink="/user/list"
           class="text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/trending-up -->
           <svg class="text-gray-200 group-hover:text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
             xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -77,7 +72,7 @@
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                 <div class="flex">
-                  <img class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32" src="{{ imgAvatar }}" alt="">
+                  <img class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32" src="http://localhost:81/assets/img/{{ imgAvatar }}" alt="">
                 </div>
                 <div class="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                   <div class="sm:hidden 2xl:block mt-6 min-w-0 flex-1">
@@ -209,15 +204,16 @@
           </div>
 
           <div *ngIf="publications != null">
-            <div class="lg:col-span-8 lg:pt-8 lg:pb-10 xl:col-span-7">
-              <ul class="space-y-4" *ngFor="let publication of publications; index as i;" ng-init="setLikeStyles()">
+            <div class="lg:col-span-8 lg:pt-8 lg:pb-10 xl:col-span-7" style="margin-top:-31px;">
+              <ul class="space-y-4" *ngFor="let publication of publications; index as i;">
                 <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
                   <article class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
                     <div>
                       <div class="flex space-x-3">
                         <div class="min-w-0 flex-1 mb-3">
                           <p class="text-sm text-gray-500 mt-4 inline-block">
-                            <span class="hover:underline">{{ publication.upload_date }}</span>
+                            <span *ngIf="publication.isEdited == 0" class="hover:underline">{{ publication.upload_date }}</span>
+                            <span *ngIf="publication.isEdited == 1" class="hover:underline">{{ publication.upload_date }} (editado)</span>
                           </p>
                           <div class="inline-block float-right mt-3" *ngIf="isMyProfile">
                             <button class="inline-block py-1 px-3 border border-gray-300 rounded-md shadow-sm justify-center text-sm font-medium text-gray-700
@@ -228,13 +224,13 @@
                             <button
                               class="inline-block py-1 px-3 border border-gray-300 rounded-md shadow-sm justify-center text-sm font-medium text-gray-700
                           hover:bg-gray-50 focus:outline-none hover:text-red-500 focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500"
-                              *ngIf="isMyProfile" (click)="deletePublication(i);">
+                              *ngIf="isMyProfile" (click)="deletingAnimation(i);">
                               <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 mr-1"></i> Eliminar
                             </button>
                           </div>
                         </div>
-
                       </div>
+
                       <div class="mt-2 text-sm text-gray-700 space-y-4">
                         <p>{{ publication.bodyPublication }}</p>
                       </div>
@@ -243,38 +239,35 @@
                           <div *ngFor="let img of publication.imgsPublication; index as i;">
                             <div *ngIf="publication.imgsPublication != null">
                               <!--   TODO: permitir inline-block, limitar los border de las publicaciones -->
-                              <img src="{{ img.imgPublication }}" style="float: left;
+                            <img src="http://localhost:81/assets/img/{{ img.imgPublication }}" style="float: left;
                             width:  200px;
                             height: 200px;
                             object-fit: cover;">
                             </div>
                           </div>
                           <span class="inline-flex items-center text-sm">
-                            <!--TODO: Button de like del perfil propio, para ver los que le han dado like-->
-                            <button *ngIf="!isMyProfile" (click)="likePublication(i)" id="{{i + 'likeIcon'}}"
-                              class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
-                              <!-- Heroicon name: solid/thumb-up -->
-                              <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                fill="currentColor" aria-hidden="true">
-                                <path
-                                  d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                              </svg>
-
-                              <span class="font-medium text-gray-900">0</span>
+                            <!--TODO: Button de like del perfil propio, para ver los que le han dado like, falta implementarlo-->
+                            <div *ngIf="isMyProfile">
+                              <button mat-icon-button  id="{{i + 'likeIcon'}}"
+                                class="inline-block text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
+                                <mat-icon class="text-gray-400 hover:text-gray-500">favorite</mat-icon>
+                              </button>
+                              <span class="font-medium text-gray-900 ml-2">{{ publication.n_likes }}</span>
                               <span class="sr-only">likes</span>
-                            </button>
+                            </div>
 
-                            <!--TODO-->
-                            <button mat-icon-button (click)="updateLikeStatus(i)" id="{{i + 'likeIcon'}}"
-                              class="text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
-                              <mat-icon>favorite</mat-icon>
-                            </button>
-                            <span class="font-medium text-gray-900">{{ publication.n_likes }}</span>
-                            <span class="sr-only">likes</span>
+                            <div *ngIf="!isMyProfile">
+                              <button mat-icon-button (click)="updateLikeStatus(i)" id="{{i + 'likeIcon'}}"
+                                class="text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
+                                <mat-icon>favorite</mat-icon>
+                              </button>
+                              <span class="font-medium text-gray-900 ml-2">{{ publication.n_likes }}</span>
+                              <span class="sr-only">likes</span>
+                            </div>
                           </span>
                           <span class="inline-flex items-center text-sm">
                             <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 focus:outline-none">
-                              <!-- Heroicon name: solid/chat-alt -->
+
                               <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd"

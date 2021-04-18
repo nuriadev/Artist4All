@@ -7,6 +7,11 @@ import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
 import Swal from
 'sweetalert2';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-user-navbar',
@@ -20,7 +25,8 @@ export class UserNavbarComponent implements OnInit {
     private _notificationService: NotificationService,
     private _sessionService: SessionService,
     private _userService: UserService,
-    private _router: Router
+    private _router: Router,
+    private _snackBar: MatSnackBar
   ) {}
 
   user = this._sessionService.getCurrentUser();
@@ -33,6 +39,7 @@ export class UserNavbarComponent implements OnInit {
   username: string;
   password: string;
   imgAvatar: FileList;
+  panelOpenState: boolean = false;
 
   notifications: Array<Notification>;
   ngOnInit(): void {
@@ -44,39 +51,30 @@ export class UserNavbarComponent implements OnInit {
     this.username = this.user.username;
     this.password = this.user.password;
     this.imgAvatar = this.user.imgAvatar;
-    this._notificationService.getNotifications(this.id, this.token).subscribe(
+      this._notificationService.getNotifications(this.id).subscribe(
       (result) => {
         if (result != null) {
           result.forEach((notification) => {
-            notification.bodyNotification = this.adaptNotificationMsg(notification);
-            notification.notification_date = this.adaptDateOfNotification(notification.notification_date);
+            if(notification.typeNotification == 1) notification.bodyNotification = 'ha empezado a seguirte';
+            if(notification.typeNotification == 2) notification.bodyNotification = 'te ha enviado una solicitud de amistad';
+            if(notification.typeNotification == 3) notification.bodyNotification = 'ha aceptado tu solicitud. Ahora ya puedes ver sus publicaciones';
+            notification.notification_date = this.adaptNotificationDate(notification.notification_date);
           });
           this.notifications = result;
         }
       },
       (error) => {
         console.log(error);
-      }
-    );
+      });
   }
 
   logout() {
-    this._authenticationService.logout(this.user.id, this.token).subscribe(
+    this._authenticationService.logout(this.user.id).subscribe(
       (result) => {
         this._sessionService.logout();
       }, (error) => {
         console.log(error);
     });
-  }
-
-  adaptNotificationMsg(notification) {
-    let adaptedMsg;
-    switch (notification.typeNotification) {
-      case 1: adaptedMsg = 'ha empezado a seguirte'; break;
-      case 2: adaptedMsg = 'te ha enviado una solicitud de amistad'; break;
-      case 3: adaptedMsg = 'ha aceptado tu solicitud'; break;
-    }
-    return notification.typeNotification = adaptedMsg;
   }
 
   logoutAlert() {
@@ -139,7 +137,7 @@ export class UserNavbarComponent implements OnInit {
     }
   }
 
-  adaptDateOfNotification(upload_date: string) {
+  adaptNotificationDate(upload_date: string) {
     var currentDate = moment(new Date());
     var notification_date = moment(upload_date);
     let diffYears = currentDate.diff(notification_date, 'years');
@@ -167,27 +165,45 @@ export class UserNavbarComponent implements OnInit {
     return adaptedDate;
   }
 
+  id_follow: number;
   acceptOrDeclineRequest(id_notification: number, id_follower: number, index: number, status_follow: number) {
-    this._userService.updateFollowRequest(id_notification,id_follower, this.user.id, status_follow, this.token).subscribe(
-        (result) => {
-          this.notificationRead(id_notification, index);
-        }, (error) => {
-          console.log(error);
-    });
+    this._userService.isFollowingThatUser(id_follower, this.user.id).subscribe(
+      (result) => {
+        if (result != null) {
+          this.id_follow = result.id;
+          this._userService.updateFollowRequest(this.id_follow, id_follower, this.user.id, status_follow).subscribe(
+            (result) => {
+              this.notificationRead(id_notification, index);
+              if (status_follow == 3) this.message = 'Solicitud aceptada.';
+              else this.message = 'Solicitud rechazada.';
+              this.openSnackBar(this.message);
+            }, (error) => {
+              console.log(error);
+          });
+        }
+      }, (error) => {
+        console.log(error);
+      });
   }
 
   notificationRead(id_notification: number, index: number) {
-    this._notificationService.notificationRead(id_notification, this.user.id, this.token).subscribe(
-        (result) => {
-          console.log(result);
-          this.notifications.splice(index, 1);
-          this;
-        }, (error) => {
-          console.log(error);
-    });
+    this._notificationService.notificationRead(id_notification, this.user.id).subscribe();
+    this.notifications.splice(index, 1);
+    this.message = 'Notificación leída.';
+    this.openSnackBar(this.message);
   }
 
-  removeNotification(id_notification: number) {
-    this._notificationService.removeNotification(id_notification, this.user.id, this.token).subscribe();
+  removeNotification(id_notification: number, index: number) {
+    this._notificationService.removeNotification(id_notification, this.user.id).subscribe();
+    this.notifications.splice(index, 1);
+    this.message = 'Notificación eliminada.';
+    this.openSnackBar(this.message);
+  }
+
+  message: string;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'OK', { duration: 2000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition });
   }
 }

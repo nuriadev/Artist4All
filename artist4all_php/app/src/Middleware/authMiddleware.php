@@ -34,6 +34,8 @@ class AuthMiddleware {
     $token = $request->getHeader('Authorization');
     if (empty($token)) return null;
     $token = trim($token[0]);
+    if (strpos($token, "Bearer ") !== 0) return null;
+    $token = trim(substr($token, 6)); 
     \Artist4all\Model\Session::verifyToken($token);
     $id_user = \Artist4all\Model\User::getIdByToken($token);
     return $id_user;

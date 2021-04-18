@@ -1,5 +1,6 @@
 <?php
 namespace Artist4all\Controller;
+use Slim\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
@@ -27,6 +28,7 @@ class PublicationController {
 
   public static function getPublicationByUser(Request $request, int $id_publication, Response $response) {
     $token = $request->getHeader('Authorization')[0];
+    $token = trim(substr($token, 6));
     $me = \Artist4all\Model\User::getUserByToken($token);
     $publication = \Artist4all\Model\Publication::getPublicationById($me->getId(), $id_publication);
     if (is_null($publication)) {
@@ -40,6 +42,7 @@ class PublicationController {
   public function getUserPublications(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $token = $request->getHeader('Authorization')[0];
+    $token = trim(substr($token, 6));
     $me = \Artist4all\Model\User::getUserByToken($token);
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id, $response);
     $publications = \Artist4all\Model\Publication::getUserPublications($me->getId(), $user->getId());
@@ -51,12 +54,13 @@ class PublicationController {
   // todo: view, edit, delete, comentarios, likes
   public function createPublication(Request $request, Response $response, array $args) {
     $id_user = $args['id'];
-    $data = $request->getParsedBody();
+    $data = $request->getParsedBody();  
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
+    $data['user'] = $user;
     $publication = $this->validatePersist($request, $data, null, $response);
     if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');
     else $response = $response->withJson($publication)->withStatus(201, 'Publication created');
-    return $response;
+    return $response; 
   }
 
   public function editPublication(Request $request, Response $response, array $args) {
@@ -65,11 +69,12 @@ class PublicationController {
     $data = $request->getParsedBody();
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
     $publication = static::getPublicationByUser($request, $id_publication, $response);
-    $data['id_user'] = $user->getId();
+    $data['user'] = $user;
+    $data['isLiking'] = 0;
+    if (!isset($data['isEdited'])) $data['isEdited'] = $publication->isEdited();
     if (!isset($data['n_likes'])) $data['n_likes'] = $publication->getLikes();
     if (!isset($data['n_comments'])) $data['n_comments'] = $publication->getComments();
     if (!isset($data['upload_date'])) $data['upload_date'] = $publication->getUploadDatePublication();
-    if (empty($data['imgsPublication'])) $data['imgsPublication'] = implode(',', \Artist4all\Model\Publication::getPublicationImgs($publication->getId()));
     else $deleteImgs = \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
     $publication = $this->validatePersist($request, $data, $id_publication, $response);
     if (is_null($publication)) $response = $response->withStatus(500, 'Error at editing publication');
@@ -120,36 +125,34 @@ class PublicationController {
     return $response;
   }
 
-  /* public function insertOrUpdateLike() */
-
-
   private function validatePersist($request, $data, $id, $response) {
-    //todo: mirar si hay que validar algo
-    $data['imgsPublication'] = json_decode($data['imgsPublication']);
 
-    //!No mueve la img seleccionada al apartado querido, lo mismo con los usuarios
-    //todo validar tamaño, max, formato, etc. 
-    $folderUrl = "assets/img" . DIRECTORY_SEPARATOR;
-    foreach ($_FILES as $file) {
-      $nombreImg = $file["tmp_name"];
-      $urlImg = $folderUrl . $file["name"];
-      move_uploaded_file($nombreImg, $urlImg);
-    }
-
-    if (empty($data["imgsPublication"])) $data['imgsPublication'] = null;
     $data['id'] = $id;
+    $uploadedFiles = $request->getUploadedFiles();
+    $data['imgsPublication'] = $uploadedFiles;
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
     $publication = \Artist4all\Model\Publication::persistPublication($publication);
-    if (!empty($publication->getImgsPublication())) {
-      foreach ($publication->getImgsPublication() as $img) {
-        $resultImg = \Artist4all\Model\Publication::insertPublicationImgs($publication->getId(), $img);
-        if (!$resultImg) {
-          $response = $response->withStatus(500, 'Error at publishing');
-          return $response;
+
+    $filePath = '/var/www/html/assets/img/';
+    if (!empty($_FILES) || $_FILES != null) {
+        foreach ($_FILES as $file) {
+        //todo validar tamaño, max, formato, etc. 
+          $imgName= $file["tmp_name"]; 
+          $pathImg = $filePath.$file["name"];
+          if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);   
+          else continue;          
         }
-      }
+        \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
+        foreach ($_FILES as $file) {        
+          $resultImg = \Artist4all\Model\Publication::insertPublicationImgs($publication->getId(), $file['name']);
+          if (!$resultImg) {
+            $response = $response->withStatus(500, 'Error at publishing');
+            return $response;
+          }  
+        } 
     }
     $publication = static::getPublicationByUser($request, $publication->getId(), $response);
-    return $publication;
+    return $publication; 
   }
+
 }
