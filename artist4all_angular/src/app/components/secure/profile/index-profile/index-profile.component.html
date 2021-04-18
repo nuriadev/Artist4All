@@ -72,7 +72,7 @@
             <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
               <div class="-mt-12 sm:-mt-16 sm:flex sm:items-end sm:space-x-5">
                 <div class="flex">
-                  <img class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32" src="{{ imgAvatar }}" alt="">
+                  <img class="h-24 w-24 rounded-full ring-4 ring-white sm:h-32 sm:w-32" src="http://localhost:81/assets/img/{{ imgAvatar }}" alt="">
                 </div>
                 <div class="mt-6 sm:flex-1 sm:min-w-0 sm:flex sm:items-center sm:justify-end sm:space-x-6 sm:pb-1">
                   <div class="sm:hidden 2xl:block mt-6 min-w-0 flex-1">
@@ -239,7 +239,7 @@
                           <div *ngFor="let img of publication.imgsPublication; index as i;">
                             <div *ngIf="publication.imgsPublication != null">
                               <!--   TODO: permitir inline-block, limitar los border de las publicaciones -->
-                            <img src="{{ img.imgPublication }}" style="float: left;
+                            <img src="http://localhost:81/assets/img/{{ img.imgPublication }}" style="float: left;
                             width:  200px;
                             height: 200px;
                             object-fit: cover;">

@@ -68,7 +68,7 @@ import { AuthInterceptor } from './core/interceptors/auth.interceptor';
     UserSettingsAccountComponent,
     UserSettingsPasswordComponent,
     ListOfFollowersOrFollowedComponent,
-    CommentComponent,
+    CommentComponent
   ],
   imports: [
     BrowserModule,

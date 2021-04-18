@@ -3,12 +3,16 @@
 <p>Nueva publicación:</p>
 
 
-<form #formPublication="ngForm" method="post" (ngSubmit)="createPublication(); formPublication.reset()">
+<form #formPublication="ngForm" enctype="multipart/form-data" method="post" (ngSubmit)="createPublication(); formPublication.reset()">
   <label for="body">Cuerpo:</label> <br>
   <textarea #textAreaBody="ngModel" [(ngModel)]="bodyPublication" id="bodyPublication" name="bodyPublication" cols="100"
     rows="8"></textarea> <br>
   <label for="imgOptional">Imagen(opcional): </label>
-  <input type="file" (change)="addImgPublication($event.target.files)" id="imgPublication" multiple /> <br>
-  <button type="button" routerLink="/home"> Cancelar </button>
-  <button type="submit"> Publicar </button>
+  <input type="file" (change)="addImgPublication($event.target.files)" id="imgPublication" name="imgPublication[]" multiple="multiple"/> <br>
+
+
+
+<img *ngFor='let url of images'  class="inline-block" [src]="url" height="150" width="200px" style="margin: 5px;"> <br/>
+<button type="button" routerLink="/home"> Cancelar </button>
+<button type="submit"> Publicar </button>
 </form>

@@ -11,20 +11,14 @@ export class PublicationService {
 
   private url = 'http://localhost:81/user/';
 
-  create(
-    id_user: number,
-    newPublication: Publication,
-  ): Observable<any> {
+  create(newPublication: Publication): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('id_user', '' + newPublication.user.id);
-    if (!newPublication.imgsPublication) {
-      newForm.append('imgsPublication', null);
-    } else {
-      let imgsPublication = [];
+    if (newPublication.imgsPublication != null) {
       for (var i = 0; i < newPublication.imgsPublication.length; i++) {
-        imgsPublication[i] = newPublication.imgsPublication[i].name;
+        let file = newPublication.imgsPublication.item(i);
+        newForm.append('imgPublication'+i, file, file.name);
       }
-      newForm.append('imgsPublication', JSON.stringify(imgsPublication));
     }
     newForm.append('bodyPublication', newPublication.bodyPublication);
     newForm.append('upload_date', '' + newPublication.upload_date);
@@ -32,8 +26,7 @@ export class PublicationService {
     newForm.append('n_comments', '' + newPublication.n_comments);
     newForm.append('isLiking', '' + newPublication.isLiking);
     newForm.append('isEdited', '' + newPublication.isEdited);
-
-    return this.http.post(this.url + id_user + '/publication', newForm);
+    return this.http.post(this.url + newPublication.user.id + '/publication', newForm);
   }
 
   getUserPublications(id_user: number): Observable<any> {
@@ -46,16 +39,13 @@ export class PublicationService {
 
   edit(publication: Publication): Observable<any> {
     let newForm: FormData = new FormData();
-    if (!publication.imgsPublication) {
-      newForm.append('imgsPublication', null);
-    } else {
-      let imgsPublication = [];
+    if (publication.imgsPublication != null) {
       for (var i = 0; i < publication.imgsPublication.length; i++) {
-        imgsPublication[i] = publication.imgsPublication[i].name;
+        let file = publication.imgsPublication.item(i);
+        newForm.append('imgPublication'+i, file, file.name);
       }
-      newForm.append('imgsPublication', JSON.stringify(imgsPublication));
-      newForm.append('isEdited', '' + publication.isEdited);
     }
+    newForm.append('isEdited', '' + publication.isEdited);
     newForm.append('bodyPublication', publication.bodyPublication);
     // TODO: pasar a patch
     return this.http.post(this.url + publication.user.id + '/publication/' + publication.id, newForm);

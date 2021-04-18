@@ -111,6 +111,19 @@ class UserController {
     }
   }
 
+  public static function getUserByTokenSummary(Request $request, Response $response) {
+    $token = $request->getHeader('Authorization');
+    $token = trim($token[0]);
+    $token = trim(substr($token, 6));
+    $user = \Artist4all\Model\User::getUserByToken($token);
+    if (is_null($user)) {
+      $response = $response->withStatus(404, 'User not found');
+      return $response;
+    } else {
+      return $user;
+    }
+  }
+
   public function isFollowingThatUser(Request $request, Response $response, array $args) {
     $id_follower = $args['id_follower'];
     $id_followed = $args['id_followed'];

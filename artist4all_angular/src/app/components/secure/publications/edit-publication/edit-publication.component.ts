@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Publication } from 'src/app/core/models/publication';
 import { PublicationService } from 'src/app/core/services/publication.service';
@@ -28,17 +28,31 @@ export class EditPublicationComponent implements OnInit {
   token = this._sessionService.getCurrentToken();
 
   id: number;
-  id_user: number;
+  images = [];
   imgToUpload: FileList = null;
   addImgPublication(imgPublication: FileList) {
+    this.imgsReceived = [];
+    this.images = [];
     this.imgToUpload = imgPublication;
+    if (imgPublication && imgPublication[0]) {
+      var filesAmount = imgPublication.length;
+      for (let i = 0; i < filesAmount; i++) {
+        var reader = new FileReader();
+        reader.onload = (event:any) => {
+          this.images.push(event.target.result);
+        }
+        reader.readAsDataURL(imgPublication[i]);
+      }
+    }
   }
+
   bodyPublication: string = '';
   n_likes: number;
   n_comments: number;
   isEdited: number;
+  imgsReceived = [];
 
-  miPublication: Publication;
+  miPublication;
   id_publication: string = '';
   ngOnInit(): void {
     this._activeRoute.paramMap.subscribe(
@@ -53,6 +67,11 @@ export class EditPublicationComponent implements OnInit {
             this.n_likes = this.miPublication.n_likes;
             this.n_comments = this.miPublication.n_comments;
             this.isEdited = this.miPublication.isEdited;
+            this.imgToUpload = this.miPublication.imgsPublication;
+            for (let i = 0; i < result.imgsPublication.length; i++) {
+              let file = result.imgsPublication[i];
+              this.imgsReceived.push(file.imgPublication);
+            }
           },
           (error) => {
             console.log(error);
@@ -62,6 +81,7 @@ export class EditPublicationComponent implements OnInit {
       console.log(error);
     });
   }
+
 
   editPublication() {
     this.message = "Publicación editada.";

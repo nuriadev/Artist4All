@@ -57,7 +57,7 @@
             <div *ngFor="let notification of notifications; index as i;">
               <div class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
                 <img routerLink="/user/{{ notification.user_responsible.id }}/profile"
-                  class="h-8 w-8 rounded-full object-cover mx-1" src="{{ notification.user_responsible.imgAvatar }}"
+                  class="h-8 w-8 rounded-full object-cover mx-1" src="http://localhost:81/assets/img/{{ notification.user_responsible.imgAvatar }}"
                   alt="avatar">
                 <p class="text-gray-600 text-sm mx-2">
                   <a routerLink="/user/{{ notification.user_responsible.id }}/profile" class="font-bold"> {{
@@ -119,7 +119,7 @@
             <div>
               <button mat-icon-button class="bg-gray-800 flex text-sm rounded-full focus:outline-none" id="user-menu" aria-haspopup="true">
                 <span class="sr-only">Open user menu</span>
-                <img class="rounded-full" src="{{ user.imgAvatar }}" alt="imgAvatar">
+                <img class="rounded-full" src="http://localhost:81/assets/img/{{ user.imgAvatar }}" alt="imgAvatar">
               </button>
             </div>
             <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1
@@ -159,7 +159,7 @@
     <div class="border-t border-gray-200 pt-4 pb-3">
       <div class="max-w-3xl mx-auto px-4 flex items-center sm:px-6">
         <div class="flex-shrink-0">
-          <img class="h-10 w-10 rounded-full" src="{{ user.imgAvatar }}" alt="imgAvatar">
+          <img class="h-10 w-10 rounded-full" src="http://localhost:81/assets/img/{{ user.imgAvatar }}" alt="imgAvatar">
         </div>
         <div class="ml-3">
           <div class="text-base font-medium text-gray-800">{{ user.name }} {{ user.surname1 }}</div>
