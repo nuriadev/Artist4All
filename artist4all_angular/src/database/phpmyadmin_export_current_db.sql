@@ -38,16 +38,16 @@ CREATE TABLE `imgs_publications` (
 --
 
 INSERT INTO `imgs_publications` (`id`, `imgPublication`, `id_publication`) VALUES
-(1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 64),
-(2, 'http://localhost:81/assets/img/lolLogo.png', 64),
-(5, 'http://localhost:81/assets/img/defaultAvatarImg.png', 73),
-(6, 'http://localhost:81/assets/img/lolLogo.png', 73),
-(7, 'http://localhost:81/assets/img/defaultAvatarImg.png', 74),
-(29, 'http://localhost:81/assets/img/ashokaMandalore.jpg', 90),
-(30, 'http://localhost:81/assets/img/defaultAvatarImg.png', 90),
-(31, 'http://localhost:81/assets/img/lolLogo.png', 90),
-(41, 'http://localhost:81/assets/img/defaultAvatarImg.png', 109),
-(42, 'http://localhost:81/assets/img/lolLogo.png', 109);
+(1, 'defaultAvatarImg.png', 64),
+(2, 'lolLogo.png', 64),
+(5, 'defaultAvatarImg.png', 73),
+(6, 'lolLogo.png', 73),
+(7, 'defaultAvatarImg.png', 74),
+(29, 'ashokaMandalore.jpg', 90),
+(30, 'defaultAvatarImg.png', 90),
+(31, 'lolLogo.png', 90),
+(41, 'defaultAvatarImg.png', 109),
+(42, 'lolLogo.png', 109);
 
 -- --------------------------------------------------------
 
@@ -166,14 +166,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `isPrivate`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJEdab1ZOczY2bmZPQ0I1N2wvT2tma2UuRmNpU1U1OHpqbmtUdUtKTlFoT3VtSG1mNEtlTS5XLmw3WVEla1ZOaGM=./86NxGlC9Z4n4NIiZ2Wa9jxNyV4OS8GB+QbgnQeq89I=', 1, 0),
-(24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
-(27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
-(34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
-(36, 'Erik ', 'Sung ', 'Yang ', 'erik@gmail.com ', 'No salt added ', '$2y$10$luteHXzZULMCwJTV6Z/sgOnyzGaivSKFt11JL7DLpuaQgy84Fd9wa', 1, 'http://localhost:81/assets/img/lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
-(44, 'q', 'q', 'q', 'q', 'q', '$2y$10$j9DMh1sMCNxA8RQzQtBX6eUKJ2cxpfSSOlLvIs8INoWW53Uei6SKi', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
-(45, 'aa', 'aa', 'aa', 'a@a.com', 'aaaaa', '$2y$10$x0FSNiLIsKTDvXxTu8ruluiUeE6v2XTlFIrBTGjRcGXdn7RmItnde', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 1, 0),
-(50, 'yy', 'yy', 'yy', 'y@y.com', 'yyyyy', '$2y$10$9CYw7LXPPHnCrRVx0wOxfeLVU2c4nx5OX4F6M8sFpiD7O2O3j6yRK', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0);
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJEdab1ZOczY2bmZPQ0I1N2wvT2tma2UuRmNpU1U1OHpqbmtUdUtKTlFoT3VtSG1mNEtlTS5XLmw3WVEla1ZOaGM=./86NxGlC9Z4n4NIiZ2Wa9jxNyV4OS8GB+QbgnQeq89I=', 1, 0),
+(24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
+(27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
+(34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
+(36, 'Erik ', 'Sung ', 'Yang ', 'erik@gmail.com ', 'No salt added ', '$2y$10$luteHXzZULMCwJTV6Z/sgOnyzGaivSKFt11JL7DLpuaQgy84Fd9wa', 1, 'lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
+(44, 'q', 'q', 'q', 'q', 'q', '$2y$10$j9DMh1sMCNxA8RQzQtBX6eUKJ2cxpfSSOlLvIs8INoWW53Uei6SKi', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
+(45, 'aa', 'aa', 'aa', 'a@a.com', 'aaaaa', '$2y$10$x0FSNiLIsKTDvXxTu8ruluiUeE6v2XTlFIrBTGjRcGXdn7RmItnde', 1, 'hdefaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 1, 0),
+(50, 'yy', 'yy', 'yy', 'y@y.com', 'yyyyy', '$2y$10$9CYw7LXPPHnCrRVx0wOxfeLVU2c4nx5OX4F6M8sFpiD7O2O3j6yRK', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0);
 
 -- --------------------------------------------------------
 
