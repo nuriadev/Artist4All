@@ -19,6 +19,7 @@ import { UserSettingsPasswordComponent } from './components/secure/settings/user
 import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
 import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
+import { CommentComponent } from './components/secure/publications/comment/comment.component';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
@@ -34,6 +35,7 @@ const routes: Routes = [
   {path:'contact', component:ContactComponent},
   {path:'user/:id_user/publications',component:CreatePublicationComponent, canActivate:[AuthGuard]},
   {path:'user/:id_user/publication/:id_publication',component:EditPublicationComponent, canActivate:[AuthGuard]},
+  {path:'user/:id_user/publication/:id_publication/comments',component:CommentComponent, canActivate:[AuthGuard]},
   {path:'user/list', component:ProvisionalAddUserComponent, canActivate:[AuthGuard]},
   {path:'404', component:PageNotFoundComponent},
   {path:'user/:id_user/:typeList', component:ListOfFollowersOrFollowedComponent, canActivate:[AuthGuard]},

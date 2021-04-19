@@ -39,14 +39,12 @@ export class PublicationService {
 
   edit(publication: Publication): Observable<any> {
     let newForm: FormData = new FormData();
-    Array.from(publication.imgsPublication).forEach(img => {
-      if (publication.imgsPublication !== null) {
-        for (var i = 0; i < publication.imgsPublication.length; i++) {
-          let file = publication.imgsPublication.item(i);
-          newForm.append('imgPublication'+i, file, file.name);
-        }
+    if (publication.imgsPublication !== null) {
+      for (var i = 0; i < publication.imgsPublication.length; i++) {
+        let file = publication.imgsPublication.item(i);
+        newForm.append('imgPublication'+i, file, file.name);
       }
-    });
+    }
     newForm.append('isEdited', '' + publication.isEdited);
     newForm.append('bodyPublication', publication.bodyPublication);
     // TODO: pasar a patch

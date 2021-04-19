@@ -1,1 +1,23 @@
+<app-user-navbar></app-user-navbar>
 <p>comment works!</p>
+<div class="container mt-5 mb-5">
+  <div class="d-flex justify-content-center row">
+      <div class="d-flex flex-column col-md-8">
+          <div class="coment-bottom bg-white p-2 px-4">
+            <h1 class="mb-2"> Lista de comentarios </h1>
+                <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
+              <form [formGroup]="commentForm" (ngSubmit)="postComment();">
+                <textarea formControlName="bodyComment" class="mr-3 border border-black rounded-md mt-3" placeholder=" Añade tu comentario..." cols="150" rows="3"></textarea>
+                <button class="btn btn-primary mt-2 mb-2" style="right: 0;" type="button">Comentar</button>
+              </form>
+              <div class="commented-section mt-2">
+                  <div class="d-flex flex-row align-items-center commented-user">
+                    <img class="img-fluid img-responsive rounded-circle mr-2" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="38">
+                    <h5 class="mr-2">Corey oates</h5><span class="dot mb-1"></span><span class="mb-1 ml-2">4 hours ago</span>
+                  </div>
+                  <div class="comment-text-sm"><span>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span></div>
+              </div>
+          </div>
+      </div>
+  </div>
+</div>
