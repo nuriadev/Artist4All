@@ -14,7 +14,7 @@ export class PublicationService {
   create(newPublication: Publication): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('id_user', '' + newPublication.user.id);
-    if (newPublication.imgsPublication != null) {
+    if (newPublication.imgsPublication !== null) {
       for (var i = 0; i < newPublication.imgsPublication.length; i++) {
         let file = newPublication.imgsPublication.item(i);
         newForm.append('imgPublication'+i, file, file.name);
@@ -39,12 +39,14 @@ export class PublicationService {
 
   edit(publication: Publication): Observable<any> {
     let newForm: FormData = new FormData();
-    if (publication.imgsPublication != null) {
-      for (var i = 0; i < publication.imgsPublication.length; i++) {
-        let file = publication.imgsPublication.item(i);
-        newForm.append('imgPublication'+i, file, file.name);
+    Array.from(publication.imgsPublication).forEach(img => {
+      if (publication.imgsPublication !== null) {
+        for (var i = 0; i < publication.imgsPublication.length; i++) {
+          let file = publication.imgsPublication.item(i);
+          newForm.append('imgPublication'+i, file, file.name);
+        }
       }
-    }
+    });
     newForm.append('isEdited', '' + publication.isEdited);
     newForm.append('bodyPublication', publication.bodyPublication);
     // TODO: pasar a patch
@@ -52,7 +54,7 @@ export class PublicationService {
   }
 
   delete(id_user: number, id_publication: number): Observable<any> {
-    return this.http.delete( this.url + id_user + '/publication/' + id_publication);
+    return this.http.delete(this.url + id_user + '/publication/' + id_publication);
   }
 
 
