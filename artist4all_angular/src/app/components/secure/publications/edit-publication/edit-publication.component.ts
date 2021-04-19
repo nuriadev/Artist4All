@@ -30,6 +30,7 @@ export class EditPublicationComponent implements OnInit {
   id: number;
   images = [];
   imgToUpload: FileList = null;
+  imgToUploadAux: FileList = null;
   addImgPublication(imgPublication: FileList) {
     this.imgsReceived = [];
     this.images = [];
