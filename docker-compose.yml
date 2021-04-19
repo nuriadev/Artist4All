@@ -10,6 +10,8 @@ services:
       - 81:80
     links: 
       - artist4all_db
+    environment:
+      - "TZ=Europe/Madrid"
       
   artist4all_angular:
     image: nginx:latest
