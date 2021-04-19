@@ -11,7 +11,7 @@
   <input type="file" (change)="addImgPublication($event.target.files)" id="imgPublication" name="imgPublication[]" multiple="multiple"/> <br>
 
   <img *ngFor='let url of images' class="inline-block" [src]="url" height="150" width="200px" style="margin: 5px;"> <br/>
-  <div *ngIf="imgToUpload != null">
+  <div *ngIf="imgToUpload == null">
       <img *ngFor='let img of imgsReceived' src="http://localhost:81/assets/img/{{ img }}" class="inline-block" height="150" width="200px" style="margin: 5px;">
   </div>
 
