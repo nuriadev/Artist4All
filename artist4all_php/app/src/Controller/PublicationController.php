@@ -1,12 +1,11 @@
 <?php
 namespace Artist4all\Controller;
-use Slim\Psr7\UploadedFile;
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 
 class PublicationController {
   public static function initRoutes($app) {
-    $app->post('/user/{id:[0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:createPublication');
+    $app->post('/user/{id_user:[0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:createPublication');
     // TODO: pasar a patch
     $app->post('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
     $app->delete('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:deletePublication');
@@ -53,7 +52,7 @@ class PublicationController {
 
   // todo: view, edit, delete, comentarios, likes
   public function createPublication(Request $request, Response $response, array $args) {
-    $id_user = $args['id'];
+    $id_user = $args['id_user'];
     $data = $request->getParsedBody();  
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
     $data['user'] = $user;

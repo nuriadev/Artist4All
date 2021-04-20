@@ -8,7 +8,7 @@
                 <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
               <form [formGroup]="commentForm" (ngSubmit)="postComment();">
                 <textarea formControlName="bodyComment" class="mr-3 border border-black rounded-md mt-3" placeholder=" Añade tu comentario..." cols="150" rows="3"></textarea>
-                <button class="btn btn-primary mt-2 mb-2" style="right: 0;" type="button">Comentar</button>
+                <button class="btn btn-primary mt-2 mb-2" style="right: 0;" type="submit">Comentar</button>
               </form>
               <div class="commented-section mt-2">
                   <div class="d-flex flex-row align-items-center commented-user">

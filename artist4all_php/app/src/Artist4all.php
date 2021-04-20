@@ -15,6 +15,7 @@ class Artist4all {
     \Artist4all\Controller\UserController::initRoutes($app);
     \Artist4all\Controller\PublicationController::initRoutes($app);
     \Artist4all\Controller\NotificationController::initRoutes($app);
+    \Artist4all\Controller\CommentController::initRoutes($app);
     $app->run();
   }
 }

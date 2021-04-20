@@ -13,25 +13,30 @@ export class CommentService {
 
   postComment(comment: Comment): Observable<any> {
     let newForm: FormData = new FormData();
-
-    return this.http.post(this.url, newForm);
+    newForm.append('id', '' + comment.id);
+    newForm.append('id_user', '' + comment.user.id);
+    newForm.append('bodyComment', comment.bodyComment);
+    newForm.append('isEdited', '' + comment.isEdited);
+    newForm.append('comment_date', null);
+    newForm.append('id_comment_reference', '' + comment.id_comment_reference);
+    return this.http.post(this.url + comment.user.id + '/publication/' + comment.id_publication + '/comment', newForm);
   }
 
-  getCommentSubcomments(id_user: number): Observable<any> {
-    return this.http.get(this.url + id_user + '/publication');
+  getPublicationComments(id_user: number, id_publication: number): Observable<any> {
+    return this.http.get(this.url + id_user + '/publication/' + id_publication + '/comment');
   }
 
-  getCommentById(id_user: number, id_publication: number): Observable<any> {
-    return this.http.get(this.url + id_user + '/publication/' + id_publication);
+  getCommentSubcomments(id_user: number, id_publication: number, id_comment: number): Observable<any> {
+    return this.http.get(this.url + id_user + '/publication/' + id_publication + '/comment/' + id_comment);
   }
 
-  edit(comment: Comment): Observable<any> {
+  editComment(comment: Comment): Observable<any> {
     let newForm: FormData = new FormData();
     return this.http.post(this.url, newForm);
   }
 
-  delete(id_user: number, id_publication: number): Observable<any> {
-    return this.http.delete(this.url + id_user + '/publication/' + id_publication);
+  delete(id_user: number, id_publication: number, id_comment: number): Observable<any> {
+    return this.http.delete(this.url + id_user + '/publication/' + id_publication + '/comment/' + id_comment);
   }
 
 }

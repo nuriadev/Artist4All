@@ -6,6 +6,7 @@ export class Comment {
   bodyComment: string;
   isEdited: number;
   comment_date: Date;
+  id_publication: number;
   id_comment_reference: number;
 
   constructor(
@@ -14,6 +15,7 @@ export class Comment {
     bodyComment: string,
     isEdited: number,
     comment_date: Date,
+    id_publication: number,
     id_comment_reference: number
   ) {
     this.id = id;
@@ -21,6 +23,7 @@ export class Comment {
     this.bodyComment = bodyComment;
     this.isEdited = isEdited;
     this.comment_date = comment_date;
+    this.id_publication = id_publication;
     this.id_comment_reference = id_comment_reference;
   }
 }
