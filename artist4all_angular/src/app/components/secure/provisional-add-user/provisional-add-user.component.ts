@@ -19,11 +19,14 @@ export class ProvisionalAddUserComponent implements OnInit {
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
 
+  username: string;
+
   ngOnInit(): void {
     this._userService.getAllOtherUsers(this.user.id).subscribe(
       (result) => {
         this.userList = result;
         this.userList.forEach((user) => function(){
+          this.username = user.username;
           this.displayedColumns['username'] = [user.username];
         });
       },
@@ -33,7 +36,7 @@ export class ProvisionalAddUserComponent implements OnInit {
     );
   }
 
-  displayedColumns: string[];
+  displayedColumns: string[] = ['username'];
   dataSource = new MatTableDataSource(this.userList);
 
   applyFilter(event: Event) {

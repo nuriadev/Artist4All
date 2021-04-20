@@ -5,16 +5,14 @@ import { UserService } from 'src/app/core/services/user.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { PublicationService } from 'src/app/core/services/publication.service';
 import { Publication } from 'src/app/core/models/publication';
-import { Notification } from 'src/app/core/models/notification';
 import { User } from 'src/app/core/models/user';
-import { NotificationService } from 'src/app/core/services/notification.service';
+
 import {
   MatSnackBar,
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
-import { element } from 'protractor';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
+
 import Swal from 'sweetalert2';
 @Component({
   selector: 'app-profile',
@@ -27,7 +25,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     private _sessionService: SessionService,
     private _userService: UserService,
     private _publicationService: PublicationService,
-    private _notificationService: NotificationService,
     private _activeRoute: ActivatedRoute,
     private spinner: NgxSpinnerService,
     private _snackBar: MatSnackBar

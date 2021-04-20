@@ -67,7 +67,6 @@ export class EditPublicationComponent implements OnInit {
             this.n_likes = this.miPublication.n_likes;
             this.n_comments = this.miPublication.n_comments;
             this.isEdited = this.miPublication.isEdited;
-            this.imgToUpload = this.miPublication.imgsPublication;
             for (let i = 0; i < result.imgsPublication.length; i++) {
               let file = result.imgsPublication[i];
               this.imgsReceived.push(file.imgPublication);
