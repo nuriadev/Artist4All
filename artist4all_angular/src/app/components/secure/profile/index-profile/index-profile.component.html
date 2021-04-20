@@ -206,10 +206,15 @@
           <div *ngIf="publications != null">
             <div *ngFor="let publication of publications; index as i;">
               <mat-card style="max-width: 700px; margin-left: auto; margin-right: auto; margin-top: 20px">
-                <mat-card-header>
-                  <div mat-card-avatar class="example-header-image"></div>
                   <mat-card-subtitle>{{ publication.upload_date }}</mat-card-subtitle>
-                </mat-card-header>
+                <mat-card-content>
+                  <p>
+                    The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+                    A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+                    bred for hunting.
+                  </p>
+                </mat-card-content>
+                
                 <div *ngFor="let img of publication.imgsPublication; index as i;">
                   <div *ngIf="publication.imgsPublication != null">
                     <!--   TODO: permitir inline-block, limitar los border de las publicaciones -->
@@ -220,15 +225,9 @@
                   </div>
                 </div>
                 <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" style="margin-left:0px">
-                <mat-card-content>
-                  <p>
-                    The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-                    A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-                    bred for hunting.
-                  </p>
-                </mat-card-content>
+                
                 <mat-card-actions>
-                  <div class="mt-6 flex justify-start space-x-8">
+                  <div class="flex justify-start space-x-8">
                   <span class="inline-flex items-center text-sm">
                     <!--TODO: Button de like del perfil propio, para ver los que le han dado like, falta implementarlo-->
                     <div *ngIf="isMyProfile">
@@ -341,6 +340,9 @@
                             </button>
                             <span class="font-medium text-gray-900 ml-2">{{ publication.n_comments }}</span>
                             <span class="sr-only">replies</span>
+                          </span>
+                          <span>
+                            
                           </span>
                         </div>
                       </div>
