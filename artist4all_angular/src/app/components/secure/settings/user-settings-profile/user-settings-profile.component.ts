@@ -15,7 +15,7 @@ export class UserSettingsProfileComponent implements OnInit {
     private _sessionService: SessionService,
     private _userService: UserService,
     private _router: Router
-  ) {}
+  ) { }
 
   user = this._sessionService.getCurrentUser();
   token = this._sessionService.getCurrentToken();
@@ -31,6 +31,7 @@ export class UserSettingsProfileComponent implements OnInit {
   isArtist: number;
   imgAvatar: FileList;
   aboutMe: string;
+  isHidden: boolean;
 
   ngOnInit(): void {
     this.id = this.user.id;
@@ -45,6 +46,7 @@ export class UserSettingsProfileComponent implements OnInit {
     this.isArtist = this.user.isArtist;
     this.imgAvatar = this.user.imgAvatar;
     this.aboutMe = this.user.aboutMe;
+    this.isHidden = true;
   }
 
   imgToUpload: FileList = null;
@@ -55,13 +57,24 @@ export class UserSettingsProfileComponent implements OnInit {
   userEdited: User;
   edit() {
     this._userService.edit(this.id, this.name, this.surname1, this.surname2, this.email, this.username, this.aboutMe, this.imgToUpload).subscribe(
-        (result) => {
-          this.userEdited = result.user;
-          let userSession = new Session(result.token, this.userEdited);
-          this._sessionService.setCurrentSession(userSession);
-          location.reload();
-        }, (error) => {
-          console.log(error);
+      (result) => {
+        this.userEdited = result.user;
+        let userSession = new Session(result.token, this.userEdited);
+        this._sessionService.setCurrentSession(userSession);
+        location.reload();
+      }, (error) => {
+        console.log(error);
       });
+  }
+
+  showAlert() {
+    let alert = (<HTMLInputElement>document.getElementById("alert"));
+    if (this.isHidden) {
+      alert.classList.remove("hidden");
+      this.isHidden = false;
+    } else {
+      alert.classList.add("hidden");
+    }
+
   }
 }

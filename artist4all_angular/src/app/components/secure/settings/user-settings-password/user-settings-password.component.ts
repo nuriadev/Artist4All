@@ -98,4 +98,16 @@ export class UserSettingsPasswordComponent implements OnInit {
       }
     });
   }
+
+  isHidden = true;
+  showAlert() {
+    let alert = (<HTMLInputElement>document.getElementById("alert"));
+    if (this.isHidden) {
+      alert.classList.remove("hidden");
+      this.isHidden = false;
+    } else {
+      alert.classList.add("hidden");
+    }
+
+  }
 }
