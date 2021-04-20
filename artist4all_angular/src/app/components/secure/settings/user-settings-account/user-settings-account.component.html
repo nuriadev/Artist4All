@@ -1,33 +1,76 @@
 <app-user-navbar></app-user-navbar>
+<div class="lg:grid lg:grid-cols-12 lg:gap-8">
+  <div class="hidden lg:block lg:col-span-3 xl:col-span-2 bg-gray-800">
+    <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px; height: 950px;">
+      <div class="pb-8 space-y-1">
+        <!-- Current: "bg-gray-200 style="padding:25px;"text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
+        <a routerLink="/home"
+          class="bg-gray-900 text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
+          aria-current="page">
+          <!-- Heroicon name: outline/home -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="truncate">
+            <a routerLink="/home" class="hover:text-gray-200">Home</a>
+          </span>
+        </a>
 
-<div class="relative bg-light-blue-700 pb-32 overflow-hidden">
-  <div
-    class="inset-y-0 absolute flex justify-center inset-x-0 left-1/2 transform -translate-x-1/2 w-full overflow-hidden lg:inset-y-0"
-    aria-hidden="true">
-    <div class="flex-grow bg-light-blue-900 bg-opacity-75"></div>
-    <svg class="flex-shrink-0" width="1750" height="308" viewBox="0 0 1750 308" xmlns="http://www.w3.org/2000/svg">
-      <path opacity=".75" d="M1465.84 308L16.816 0H1750v308h-284.16z" fill="#075985" />
-      <path opacity=".75" d="M1733.19 0L284.161 308H0V0h1733.19z" fill="#0c4a6e" />
-    </svg>
-    <div class="flex-grow bg-light-blue-800 bg-opacity-75"></div>
+        <a routerLink="/store"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/fire -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+            </path>
+          </svg>
+          <span class="truncate">
+            <a routerLink="/store" class="hover:text-gray-200">Tienda</a>
+          </span>
+        </a>
+
+        <a routerLink="/user/{{ id }}/messages"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/user-group -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+            </path>
+          </svg>
+          <span class="truncate">
+            <a routerLink="/user/{{ id }}/messages" class="hover:text-gray-200">Mensajería</a>
+          </span>
+        </a>
+
+        <a routerLink="/user/list"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/trending-up -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+            aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          <span class="truncate">
+            <a routerLink="/user/list" class="hover:text-gray-200">Usuarios</a>
+          </span>
+        </a>
+      </div>
+    </nav>
   </div>
-  <header class="relative py-10">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold text-white">
-        Configuración
-      </h1>
-    </div>
-  </header>
-</div>
 
-<main class="relative -mt-32">
-  <div class="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8">
+<main class="lg:col-span-9 mt-8">
+  <div class="lg:col-span-8 pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8">
     <div class="bg-white rounded-lg shadow overflow-hidden">
       <div class="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
         <aside class="py-6 lg:col-span-3">
           <nav>
             <a routerLink="/user/{{ id }}/settings/profile" id="profile"
-              class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium"
+              class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group border-l-4 px-3 py-2 flex items-center text-sm font-medium"
               aria-current="page">
               <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
@@ -41,7 +84,7 @@
             </a>
 
             <a routerLink="/user/{{ id }}/settings/account" id="account"
-              class="bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group border-l-4 px-3 py-2 flex items-center text-sm font-medium">
+              class="bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
               <svg class="text-teal-500 group-hover:text-teal-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
                 xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
                 aria-hidden="true">
@@ -67,33 +110,6 @@
                 Contraseña
               </span>
             </a>
-
-            <!-- <button (click)="changeSection('notifications');" id="notificactions" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
-                  <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-                  </svg>
-                  <span class="truncate">
-                    Notificaciones
-                  </span>
-                </button> -->
-
-            <!--  <a href="#" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
-                  <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                  </svg>
-                  <span class="truncate">
-                    Billing
-                  </span>
-                </a>
-
-                <a href="#" class="border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900 group mt-1 border-l-4 px-3 py-2 flex items-center text-sm font-medium">
-                  <svg class="text-gray-400 group-hover:text-gray-500 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 14v6m-3-3h6M6 10h2a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2zm10 0h2a2 2 0 002-2V6a2 2 0 00-2-2h-2a2 2 0 00-2 2v2a2 2 0 002 2zM6 20h2a2 2 0 002-2v-2a2 2 0 00-2-2H6a2 2 0 00-2 2v2a2 2 0 002 2z" />
-                  </svg>
-                  <span class="truncate">
-                    Integrations
-                  </span>
-                </a> -->
           </nav>
         </aside>
 
@@ -109,22 +125,6 @@
                 </p>
               </div>
               <ul class="mt-2 divide-y divide-gray-200">
-                <!--   <li class="py-4 flex items-center justify-between">
-                        <div class="flex flex-col">
-                          <p class="text-sm font-medium text-gray-900" id="privacy-option-1-label">
-                            Available to hire
-                          </p>
-                          <p class="text-sm text-gray-500" id="privacy-option-1-description">
-                            Nulla amet tempus sit accumsan. Aliquet turpis sed sit lacinia.
-                          </p>
-                        </div>
-                       Enabled: "bg-teal-500", Not Enabled: "bg-gray-200"
-                        <button type="button" class="bg-gray-200 ml-4 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500" aria-pressed="true" aria-labelledby="privacy-option-1-label" aria-describedby="privacy-option-1-description">
-                          <span class="sr-only">Use setting</span>
-                          Enabled: "translate-x-5", Not Enabled: "translate-x-0"
-                          <span aria-hidden="true" class="translate-x-0 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                        </button>
-                      </li> -->
                 <li class="py-4 flex items-center justify-between">
                   <div class="flex flex-col">
                     <p class="text-sm font-medium text-gray-900" id="privacy-option-2-label">
@@ -144,51 +144,12 @@
                       class="translate-x-0 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
                   </button>
                 </li>
-                <!--  <li class="py-4 flex items-center justify-between">
-                        <div class="flex flex-col">
-                          <p class="text-sm font-medium text-gray-900" id="privacy-option-3-label">
-                            Allow commenting
-                          </p>
-                          <p class="text-sm text-gray-500" id="privacy-option-3-description">
-                            Integer amet, nunc hendrerit adipiscing nam. Elementum ame
-                          </p>
-                        </div>
-                        Enabled: "bg-teal-500", Not Enabled: "bg-gray-200"
-                        <button type="button" class="bg-gray-200 ml-4 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500" aria-pressed="true" aria-labelledby="privacy-option-3-label" aria-describedby="privacy-option-3-description">
-                          <span class="sr-only">Use setting</span>
-                          Enabled: "translate-x-5", Not Enabled: "translate-x-0"
-                          <span aria-hidden="true" class="translate-x-0 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                        </button>
-                      </li>
-                      <li class="py-4 flex items-center justify-between">
-                        <div class="flex flex-col">
-                          <p class="text-sm font-medium text-gray-900" id="privacy-option-4-label">
-                            Allow mentions
-                          </p>
-                          <p class="text-sm text-gray-500" id="privacy-option-4-description">
-                            Adipiscing est venenatis enim molestie commodo eu gravid
-                          </p>
-                        </div>
-                        Enabled: "bg-teal-500", Not Enabled: "bg-gray-200"
-                        <button type="button" class="bg-gray-200 ml-4 relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500" aria-pressed="true" aria-labelledby="privacy-option-4-label" aria-describedby="privacy-option-4-description">
-                          <span class="sr-only">Use setting</span>
-                         Enabled: "translate-x-5", Not Enabled: "translate-x-0"
-                          <span aria-hidden="true" class="translate-x-0 inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"></span>
-                        </button>
-                      </li> -->
               </ul>
             </div>
-            <!--          <div class="mt-4 py-4 px-4 flex justify-end sm:px-6">
-                    <button routerLink="/home" class="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
-                      Volver a la home
-                    </button>
-                    <button type="submit" class="ml-5 bg-blue-500 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
-                      Guardar los cambios
-                    </button>
-                  </div> -->
           </div>
         </div>
       </div>
     </div>
   </div>
 </main>
+</div>
