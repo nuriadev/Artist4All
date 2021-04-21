@@ -1,3 +1,4 @@
+
 <ngx-spinner bdColor="rgb(255, 255, 255)" size="medium" template="<img src='assets/img/loadingSpinner.gif'/>">
   <p style="font-size: 20px;">Cargando...</p>
 </ngx-spinner>
@@ -183,6 +184,12 @@
             </div>
           </div>
 
+          <div class="mt-6 sm:mt-2 2xl:mt-5">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+              <div class="font-normal px-1 text-sm">{{ aboutMe }}</div>
+            </div>
+          </div>
+
           <!-- Tabs -->
           <div class="mt-6 sm:mt-2 2xl:mt-5">
             <div class="border-b border-gray-200">
@@ -205,7 +212,7 @@
 
           <div *ngIf="publications != null">
             <div *ngFor="let publication of publications; index as i;">
-              <mat-card style="max-width: 700px; margin-left: auto; margin-right: auto; margin-top: 20px">
+              <mat-card style="max-width: 980px; margin-left: auto; margin-right: auto; margin-top: 20px">
                   <mat-card-subtitle>{{ publication.upload_date }}</mat-card-subtitle>
                 <mat-card-content>
                   <p>
@@ -214,18 +221,27 @@
                     bred for hunting.
                   </p>
                 </mat-card-content>
-
-                <div *ngFor="let img of publication.imgsPublication; index as i;">
-                  <div *ngIf="publication.imgsPublication != null">
-                    <!--   TODO: permitir inline-block, limitar los border de las publicaciones -->
-                  <img src="http://localhost:81/assets/img/{{ img.imgPublication }}" style="float: left;
-                  width:  200px;
-                  height: 200px;
-                  object-fit: cover;">
+                  <div id="carousel{{publication.id}}" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item" *ngFor="let img of publication.imgsPublication; index as i;"
+                              [ngClass]="{'active': i == 0 }">￼
+                              <div *ngIf="publication.imgsPublication != null">
+                                  <img src="http://localhost:81/assets/img/{{ img.imgPublication }}" class="h-96 w-full object-contain"> 
+                              </div>
+                              <div *ngIf="publication.imgsPublication.length > 1">
+                                <a class="carousel-control-prev" href="#carousel{{publication.id}}" role="button" data-slide="prev">
+                                  <i class="fas fa-chevron-left" style="color: black; font-size:25px;"></i>
+                                  <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carousel{{publication.id}}" role="button" data-slide="next">
+                                  <i class="fas fa-chevron-right" style="color: black; font-size:25px;"></i>
+                                  <span class="sr-only">Next</span>
+                                </a>
+                              </div>
+                              
+                      </div>      
+                    </div>
                   </div>
-                </div>
-                <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" style="margin-left:0px">
-
                 <mat-card-actions>
                   <div class="flex justify-start space-x-8">
                   <span class="inline-flex items-center text-sm">
@@ -260,6 +276,10 @@
                     </button>
                     <span class="font-medium text-gray-900 ml-2">{{ publication.n_comments }}</span>
                     <span class="sr-only">replies</span>
+                  </span>
+                  <span class="items-end mt-2">
+                    <a *ngIf="isMyProfile" routerLink="/user/{{ id }}/publication/{{ publication.id }}" class="text-blue-700">Editar</a>
+                      <a *ngIf="isMyProfile" (click)="deletingAnimation(i);" class="text-red-500">Eliminar</a>
                   </span>
                   </div>
                 </mat-card-actions>
