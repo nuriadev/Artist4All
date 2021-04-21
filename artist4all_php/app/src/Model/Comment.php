@@ -89,18 +89,19 @@ class Comment implements \JsonSerializable{
   }
 
   public static function getPublicationComments(int $id): ?array {
-    $sql = 'SELECT * FROM publication_comments WHERE id=:id AND id_comment_reference=:id_comment_reference ORDER BY id DESC';
+    $sql = 'SELECT * FROM publication_comments WHERE id_publication=:id_publication AND id_comment_reference=:id_comment_reference ORDER BY id DESC';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
-      ':id' => $id,
-      ':id_comment_reference' => null
+      ':id_publication' => $id,
+      ':id_comment_reference' => 0
     ]);
     $commentsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
     if (!$commentsAssoc) return null;
     $comments = [];
     foreach ($commentsAssoc as $commentAssoc) {
-      $comments[] = \Artist4all\Model\Publication::fromAssoc($commentAssoc);
+      $commentAssoc['user'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user']);
+      $comments[] = \Artist4all\Model\Comment::fromAssoc($commentAssoc);
     }
     return $comments;
   }
@@ -114,7 +115,7 @@ class Comment implements \JsonSerializable{
     if (!$subCommentsAssoc) return null;
     $subComments = [];
     foreach ($subCommentsAssoc as $subCommentAssoc) {
-      $subComments[] = \Artist4all\Model\Publication::fromAssoc($subCommentAssoc);
+      $subComments[] = \Artist4all\Model\Comment::fromAssoc($subCommentAssoc);
     }
     return $subComments;
   }
@@ -143,7 +144,7 @@ class Comment implements \JsonSerializable{
       ':isEdited' => $comment->isEdited(),
       ':comment_date' => date('Y-m-d H:i:s'),  
       ':id_publication' => $comment->getIdPublication(), 
-      ':id_comment_reference' => $comment->getIdCommentReference() == null ? null : $comment->getIdCommentReference()
+      ':id_comment_reference' => $comment->getIdCommentReference() == null ? 0 : $comment->getIdCommentReference()
     ]);
     if (!$result) return null;
     $id = $conn->lastInsertId();

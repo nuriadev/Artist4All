@@ -9,7 +9,7 @@ class PublicationController {
     // TODO: pasar a patch
     $app->post('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
     $app->delete('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:deletePublication');
-    $app->get('/user/{id:[0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
+    $app->get('/user/{id_user:[0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
     $app->get('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
 
     $app->post('/user/{my_id:[0-9 ]+}/like/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:likePublication');
@@ -39,7 +39,7 @@ class PublicationController {
   }
   
   public function getUserPublications(Request $request, Response $response, array $args) {
-    $id = $args['id'];
+    $id = $args['id_user'];
     $token = $request->getHeader('Authorization')[0];
     $token = trim(substr($token, 6));
     $me = \Artist4all\Model\User::getUserByToken($token);

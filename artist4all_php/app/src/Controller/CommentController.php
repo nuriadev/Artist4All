@@ -41,7 +41,7 @@ class CommentController {
     else $data['id_comment_reference'] = intval($data['id_comment_reference']); 
     $comment = $this->validatePersist($request, $data, null, $response);
     if (is_null($comment)) $response = $response->withStatus(500, 'Error at commenting');
-    else $response = $response->withJson($data)->withStatus(201, 'Comment uploaded');
+    else $response = $response->withJson($comment)->withStatus(201, 'Comment uploaded');
     return $response; 
   }
 

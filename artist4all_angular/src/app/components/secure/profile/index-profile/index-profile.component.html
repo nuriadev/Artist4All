@@ -214,7 +214,7 @@
                     bred for hunting.
                   </p>
                 </mat-card-content>
-                
+
                 <div *ngFor="let img of publication.imgsPublication; index as i;">
                   <div *ngIf="publication.imgsPublication != null">
                     <!--   TODO: permitir inline-block, limitar los border de las publicaciones -->
@@ -225,7 +225,7 @@
                   </div>
                 </div>
                 <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" style="margin-left:0px">
-                
+
                 <mat-card-actions>
                   <div class="flex justify-start space-x-8">
                   <span class="inline-flex items-center text-sm">
@@ -249,8 +249,8 @@
                     </div>
                   </span>
                   <span class="inline-flex items-center text-sm">
-                    <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 focus:outline-none">
-
+                    <button routerLink="/user/{{ publication.user.id }}/publication/{{ publication.id }}/comments"
+                    class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 focus:outline-none">
                       <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                         fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd"
@@ -342,7 +342,7 @@
                             <span class="sr-only">replies</span>
                           </span>
                           <span>
-                            
+
                           </span>
                         </div>
                       </div>
