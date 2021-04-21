@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { error } from 'protractor';
 import { Publication } from 'src/app/core/models/publication';
 import { User } from 'src/app/core/models/user';
 import { CommentService } from 'src/app/core/services/comment.service';
@@ -8,6 +9,7 @@ import { PublicationService } from 'src/app/core/services/publication.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { Comment } from '../../../../core/models/comment';
 
+  const indexSelected = null;
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -39,6 +41,7 @@ export class CommentComponent implements OnInit {
 
   publication: Publication;
   comments: Array<Comment>;
+  lo: Array<Comment>;
   commentForm: FormGroup;
   id_publication: string = "";
   ngOnInit(): void {
@@ -57,7 +60,12 @@ export class CommentComponent implements OnInit {
     this.id_publication = params.get('id_publication');
       this._commentService.getPublicationComments(this.id, parseInt(this.id_publication)).subscribe(
       (result) => {
-        this.comments = result;
+        if (result != null) {
+          result.forEach((comment) => {
+            comment.comment_date = this.adaptDateOfComment(comment.comment_date);
+          });
+          this.comments = result;
+        }
       }, (error) => {
         console.log(error);
       });
@@ -70,7 +78,8 @@ export class CommentComponent implements OnInit {
       isEdited: [0],
       comment_date: [null],
       id_publication: [parseInt(this.id_publication)],
-      id_comment_reference: [null]
+      id_comment_reference: [null],
+      subcomments: [null]
     });
   }
 
@@ -78,9 +87,12 @@ export class CommentComponent implements OnInit {
   showingSubcommentForm: boolean = false;
   toggleSubcommentResponseForm(index: number): void {
     let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
+    let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     if (!this.showingSubcommentForm) {
       formSubcommentResponseForm.style.display = 'block';
       this.showingSubcommentForm = true;
+      formResponseContainer.style.display = 'none';
+      this.showingForm = false;
     } else {
       formSubcommentResponseForm.style.display = 'none';
       this.showingSubcommentForm = false;
@@ -89,13 +101,14 @@ export class CommentComponent implements OnInit {
 
   showingForm: boolean = false;
   toggleResponseForm(index: number): void {
+    let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     let subcommentContainer = document.getElementById(index + 'subcommentContainer');
     if (!this.showingForm) {
       formResponseContainer.style.display = 'block';
-      subcommentContainer.style.display = 'none';
       this.showingForm = true;
       this.showingSubcomments = false;
+      this.showingSubcommentForm = false;
     } else {
       formResponseContainer.style.display = 'none';
       this.showingForm = false;
@@ -104,12 +117,25 @@ export class CommentComponent implements OnInit {
 
   showingSubcomments: boolean = false;
   toggleSubcomments(index: number) {
+    if (indexSelected != index) this.lo = [];
+    this._commentService.getCommentSubcomments(this.user.id, this.comments[index].id_publication, this.comments[index].id).subscribe(
+      (result) => {
+        if (result != null) {
+          result.forEach((subcomment) => {
+            subcomment.comment_date = this.adaptDateOfComment(subcomment.comment_date);
+          });
+          this.lo = result;
+        }
+      }, (error) => {
+        console.log(error);
+      }
+    )
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     let subcommentContainer = document.getElementById(index + 'subcommentContainer');
     if (!this.showingSubcomments) {
       subcommentContainer.style.display = 'block';
-      formResponseContainer.style.display = 'none';
       this.showingSubcomments = true;
+      formResponseContainer.style.display = 'none';
       this.showingForm = false;
     } else {
       subcommentContainer.style.display = 'none';
@@ -144,6 +170,23 @@ export class CommentComponent implements OnInit {
       }, (error) => {
         console.log(error);
     });
+  }
+
+  adaptDateOfComment(upload_date: string) {
+    const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+    const months = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+    let numberDay = new Date(upload_date).getDay();
+    let nameDay = days[numberDay];
+    let nameMonth = months[new Date(upload_date).getMonth()];
+    let datetime = upload_date.split(' ');
+    let date = datetime[0].split('-');
+    let time = datetime[1].split(':');
+    let year = date[0];
+    let month = date[1];
+    let day = date[2];
+    let hourAndMin = time[0] + ':' + time[1];
+    let adaptedDate = nameDay + ', ' + day + ' de ' + nameMonth + ' de ' + year + ', a las ' + hourAndMin;
+    return adaptedDate;
   }
 
 }

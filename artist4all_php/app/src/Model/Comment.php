@@ -10,7 +10,6 @@ class Comment implements \JsonSerializable{
   private int $id_publication;
   private ?int $id_comment_reference;
 
-
   public function __construct(
     ?int $id,
     \Artist4all\Model\User $user,
@@ -115,6 +114,7 @@ class Comment implements \JsonSerializable{
     if (!$subCommentsAssoc) return null;
     $subComments = [];
     foreach ($subCommentsAssoc as $subCommentAssoc) {
+      $subCommentAssoc['user'] = \Artist4all\Model\User::getUserById($subCommentAssoc['id_user']);
       $subComments[] = \Artist4all\Model\Comment::fromAssoc($subCommentAssoc);
     }
     return $subComments;
