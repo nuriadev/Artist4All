@@ -9,7 +9,6 @@ import { PublicationService } from 'src/app/core/services/publication.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { Comment } from '../../../../core/models/comment';
 
-  const indexSelected = null;
 @Component({
   selector: 'app-comment',
   templateUrl: './comment.component.html',
@@ -41,7 +40,7 @@ export class CommentComponent implements OnInit {
 
   publication: Publication;
   comments: Array<Comment>;
-  lo: Array<Comment>;
+  subcomments: Array<Comment>;
   commentForm: FormGroup;
   id_publication: string = "";
   ngOnInit(): void {
@@ -83,9 +82,80 @@ export class CommentComponent implements OnInit {
     });
   }
 
+  showingForm: boolean = false;
+  toggleResponseForm(index: number): void {
+    let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
+    let formResponseContainer = document.getElementById(index + 'formResponseContainer');
+    let subcommentContainer = document.getElementById(index + 'subcommentContainer');
+    if (!this.showingForm) {
+      formResponseContainer.style.display = 'block';
+      this.showingForm = true;
+      if (subcommentContainer) subcommentContainer.style.display = 'none';
+      this.showingSubcomments = false;
+      if (formSubcommentResponseForm) formSubcommentResponseForm.style.display = 'none';
+      this.showingSubcommentForm = false;
+    } else {
+      formResponseContainer.style.display = 'none';
+      this.showingForm = false;
+    }
+  }
+
+  showingSubcomments: boolean = false;
+  //TODO: poner un spinner de carga antes de mostrar o sacar algun div
+  toggleSubcomments(index: number) {
+    this.comments.forEach((comment, indexArray) => {
+      if (document.getElementById(indexArray + 'subcommentContainer')) {
+        document.getElementById(indexArray + 'subcommentContainer').style.display = 'none';
+        this.showingSubcomments = false;
+      }
+      if (document.getElementById(indexArray + 'noSubcommentContainer')) {
+        document.getElementById(indexArray + 'noSubcommentContainer').style.display = 'none';
+        this.showingSubcomments = false;
+      }
+    });
+    let formResponseContainer = document.getElementById(index + 'formResponseContainer');
+    let subcommentContainer = document.getElementById(index + 'subcommentContainer');
+    let noSubcommentContainer = document.getElementById(index + 'noSubcommentContainer');
+    this._commentService.getCommentSubcomments(this.user.id, this.comments[index].id_publication, this.comments[index].id).subscribe(
+      (result) => {
+        if (result != null) {
+          result.forEach((subcomment) => {
+            subcomment.comment_date = this.adaptDateOfComment(subcomment.comment_date);
+          });
+          this.subcomments = result;
+          if (!this.showingSubcomments) {
+            subcommentContainer.style.display = 'block';
+            this.showingSubcomments = true;
+            formResponseContainer.style.display = 'none';
+            this.showingForm = false;
+          } else {
+            subcommentContainer.style.display = 'none';
+            this.showingSubcomments = false;
+          }
+        } else {
+          if (!this.showingSubcomments) {
+            noSubcommentContainer.style.display = 'block';
+            this.showingSubcomments = true;
+            formResponseContainer.style.display = 'none';
+            this.showingForm = false;
+          } else {
+            noSubcommentContainer.style.display = 'none';
+            this.showingSubcomments = false;
+          }
+        }
+      }, (error) => {
+        console.log(error);
+    });
+  }
 
   showingSubcommentForm: boolean = false;
   toggleSubcommentResponseForm(index: number): void {
+    this.comments.forEach((comment, indexArray) => {
+      if (document.getElementById(indexArray + 'formSubcommentResponseForm')) {
+        document.getElementById(indexArray + 'formSubcommentResponseForm').style.display = 'none';
+        this.showingSubcommentForm = false;
+      }
+    });
     let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     if (!this.showingSubcommentForm) {
@@ -99,49 +169,6 @@ export class CommentComponent implements OnInit {
     }
   }
 
-  showingForm: boolean = false;
-  toggleResponseForm(index: number): void {
-    let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
-    let formResponseContainer = document.getElementById(index + 'formResponseContainer');
-    let subcommentContainer = document.getElementById(index + 'subcommentContainer');
-    if (!this.showingForm) {
-      formResponseContainer.style.display = 'block';
-      this.showingForm = true;
-      this.showingSubcomments = false;
-      this.showingSubcommentForm = false;
-    } else {
-      formResponseContainer.style.display = 'none';
-      this.showingForm = false;
-    }
-  }
-
-  showingSubcomments: boolean = false;
-  toggleSubcomments(index: number) {
-    if (indexSelected != index) this.lo = [];
-    this._commentService.getCommentSubcomments(this.user.id, this.comments[index].id_publication, this.comments[index].id).subscribe(
-      (result) => {
-        if (result != null) {
-          result.forEach((subcomment) => {
-            subcomment.comment_date = this.adaptDateOfComment(subcomment.comment_date);
-          });
-          this.lo = result;
-        }
-      }, (error) => {
-        console.log(error);
-      }
-    )
-    let formResponseContainer = document.getElementById(index + 'formResponseContainer');
-    let subcommentContainer = document.getElementById(index + 'subcommentContainer');
-    if (!this.showingSubcomments) {
-      subcommentContainer.style.display = 'block';
-      this.showingSubcomments = true;
-      formResponseContainer.style.display = 'none';
-      this.showingForm = false;
-    } else {
-      subcommentContainer.style.display = 'none';
-      this.showingSubcomments = false;
-    }
-  }
 
 
   isValidFormSubmitted = null;
