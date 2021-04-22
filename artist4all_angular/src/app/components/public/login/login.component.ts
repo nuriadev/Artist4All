@@ -81,7 +81,7 @@ export class LoginComponent implements OnInit {
   loggingAnimation() {
     const Toast = Swal.mixin({
       toast: true,
-      position: 'top-end',
+      position: 'top-left',
       showConfirmButton: false,
       timer: 1000,
       timerProgressBar: true,
@@ -94,7 +94,7 @@ export class LoginComponent implements OnInit {
     Toast.fire({ title: 'Iniciando sesión...' }).then((result) => {
       if (result.dismiss === Swal.DismissReason.timer) {
         this._router.navigate(['/home']);
-        const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000,
+        const Toast = Swal.mixin({ toast: true, position: 'top-left', showConfirmButton: false, timer: 1000,
           didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer);
             toast.addEventListener('mouseleave', Swal.resumeTimer);

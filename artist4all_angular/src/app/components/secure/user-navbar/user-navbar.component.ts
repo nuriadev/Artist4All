@@ -88,7 +88,7 @@ export class UserNavbarComponent implements OnInit {
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
-        const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000, timerProgressBar: true,
+        const Toast = Swal.mixin({ toast: true, position: 'top-left', showConfirmButton: false, timer: 1000, timerProgressBar: true,
           didOpen: (toast) => {
             Swal.showLoading(),
             toast.addEventListener('mouseenter', Swal.stopTimer);
@@ -97,7 +97,7 @@ export class UserNavbarComponent implements OnInit {
         });
         Toast.fire({ title: 'Cerrando sessión...' }).then((result) => {
           if (result.dismiss === Swal.DismissReason.timer) {
-            const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000,
+            const Toast = Swal.mixin({ toast: true, position: 'top-left', showConfirmButton: false, timer: 1000,
               didOpen: (toast) => {
                   toast.addEventListener('mouseenter', Swal.stopTimer);
                   toast.addEventListener('mouseleave', Swal.resumeTimer);
