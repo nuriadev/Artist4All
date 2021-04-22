@@ -82,13 +82,19 @@ export class CommentComponent implements OnInit {
     });
   }
 
+
+  responseFormIndexAux = -1;
   showingForm: boolean = false;
   toggleResponseForm(index: number): void {
+    if (index != this.responseFormIndexAux) {
+      this.showingForm = false;
+    }
+    this.responseFormIndexAux = index;
     let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     let subcommentContainer = document.getElementById(index + 'subcommentContainer');
     if (!this.showingForm) {
-      formResponseContainer.style.display = 'block';
+      if (formResponseContainer) formResponseContainer.style.display = 'block';
       this.showingForm = true;
       if (subcommentContainer) subcommentContainer.style.display = 'none';
       this.showingSubcomments = false;
@@ -100,22 +106,16 @@ export class CommentComponent implements OnInit {
     }
   }
 
+  subcommentIndexAux = -1;
   showingSubcomments: boolean = false;
   //TODO: poner un spinner de carga antes de mostrar o sacar algun div
   toggleSubcomments(index: number) {
-    this.comments.forEach((comment, indexArray) => {
-      if (document.getElementById(indexArray + 'subcommentContainer')) {
-        document.getElementById(indexArray + 'subcommentContainer').style.display = 'none';
-        this.showingSubcomments = false;
-      }
-      if (document.getElementById(indexArray + 'noSubcommentContainer')) {
-        document.getElementById(indexArray + 'noSubcommentContainer').style.display = 'none';
-        this.showingSubcomments = false;
-      }
-    });
-    let formResponseContainer = document.getElementById(index + 'formResponseContainer');
-    let subcommentContainer = document.getElementById(index + 'subcommentContainer');
-    let noSubcommentContainer = document.getElementById(index + 'noSubcommentContainer');
+    this.subcomments = [];
+    if (index != this.subcommentIndexAux) {
+      this.showingSubcomments = false;
+    }
+    this.subCommentFormAuxIndex = -1;
+    this.subcommentIndexAux = index;
     this._commentService.getCommentSubcomments(this.user.id, this.comments[index].id_publication, this.comments[index].id).subscribe(
       (result) => {
         if (result != null) {
@@ -123,48 +123,44 @@ export class CommentComponent implements OnInit {
             subcomment.comment_date = this.adaptDateOfComment(subcomment.comment_date);
           });
           this.subcomments = result;
-          if (!this.showingSubcomments) {
-            subcommentContainer.style.display = 'block';
-            this.showingSubcomments = true;
-            formResponseContainer.style.display = 'none';
-            this.showingForm = false;
-          } else {
-            subcommentContainer.style.display = 'none';
-            this.showingSubcomments = false;
+        }
+        let formResponseContainer = document.getElementById(index + 'formResponseContainer');
+        let subcommentContainer = document.getElementById(index + 'subcommentContainer');
+        if (!this.showingSubcomments) {
+          if (this.subcomments.length == 0) {
+            if (subcommentContainer) {
+              subcommentContainer.innerHTML = 'Este comentario actualmente no tiene respuestas.';
+            }
           }
+          if (subcommentContainer) subcommentContainer.style.display = 'block';
+          this.showingSubcomments = true;
+          if (formResponseContainer) formResponseContainer.style.display = 'none';
+          this.showingForm = false;
         } else {
-          if (!this.showingSubcomments) {
-            noSubcommentContainer.style.display = 'block';
-            this.showingSubcomments = true;
-            formResponseContainer.style.display = 'none';
-            this.showingForm = false;
-          } else {
-            noSubcommentContainer.style.display = 'none';
-            this.showingSubcomments = false;
-          }
+          if (subcommentContainer) subcommentContainer.style.display = 'none';
+          this.showingSubcomments = false;
         }
       }, (error) => {
         console.log(error);
     });
   }
 
+  subCommentFormAuxIndex = -1;
   showingSubcommentForm: boolean = false;
   toggleSubcommentResponseForm(index: number): void {
-    this.comments.forEach((comment, indexArray) => {
-      if (document.getElementById(indexArray + 'formSubcommentResponseForm')) {
-        document.getElementById(indexArray + 'formSubcommentResponseForm').style.display = 'none';
-        this.showingSubcommentForm = false;
-      }
-    });
+    if (index != this.subCommentFormAuxIndex) {
+      this.showingSubcommentForm = false;
+    }
+    this.subCommentFormAuxIndex = index;
     let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     if (!this.showingSubcommentForm) {
-      formSubcommentResponseForm.style.display = 'block';
+      if (formSubcommentResponseForm) formSubcommentResponseForm.style.display = 'block';
       this.showingSubcommentForm = true;
-      formResponseContainer.style.display = 'none';
+      if (formResponseContainer) formResponseContainer.style.display = 'none';
       this.showingForm = false;
     } else {
-      formSubcommentResponseForm.style.display = 'none';
+      if (formSubcommentResponseForm) formSubcommentResponseForm.style.display = 'none';
       this.showingSubcommentForm = false;
     }
   }
