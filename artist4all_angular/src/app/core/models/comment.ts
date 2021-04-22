@@ -8,6 +8,7 @@ export class Comment {
   comment_date: Date;
   id_publication: number;
   id_comment_reference: number;
+  user_reference: User;
 
   constructor(
     id: number,
@@ -16,7 +17,8 @@ export class Comment {
     isEdited: number,
     comment_date: Date,
     id_publication: number,
-    id_comment_reference: number
+    id_comment_reference: number,
+    user_reference: User
   ) {
     this.id = id;
     this.user = user;
@@ -25,5 +27,6 @@ export class Comment {
     this.comment_date = comment_date;
     this.id_publication = id_publication;
     this.id_comment_reference = id_comment_reference;
+    this.user_reference = user_reference;
   }
 }

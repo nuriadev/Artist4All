@@ -19,6 +19,9 @@ export class CommentService {
     newForm.append('isEdited', '' + comment.isEdited);
     newForm.append('comment_date', null);
     newForm.append('id_comment_reference', '' + comment.id_comment_reference);
+    if (comment.user_reference != null) {
+      newForm.append('id_user_reference', '' + comment.user_reference.id);
+    }
     return this.http.post(this.url + comment.user.id + '/publication/' + comment.id_publication + '/comment', newForm);
   }
 

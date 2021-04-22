@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: artist4all_db:3306
--- Tiempo de generación: 22-04-2021 a las 12:44:10
+-- Tiempo de generación: 22-04-2021 a las 16:49:44
 -- Versión del servidor: 10.2.36-MariaDB-1:10.2.36+maria~bionic
--- Versión de PHP: 7.4.15
+-- Versión de PHP: 7.4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -141,22 +141,19 @@ CREATE TABLE `publication_comments` (
   `isEdited` int(11) NOT NULL,
   `comment_date` datetime NOT NULL,
   `id_publication` int(11) NOT NULL,
-  `id_comment_reference` int(11) NOT NULL
+  `id_comment_reference` int(11) NOT NULL,
+  `id_user_reference` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `publication_comments`
 --
 
-INSERT INTO `publication_comments` (`id`, `id_user`, `bodyComment`, `isEdited`, `comment_date`, `id_publication`, `id_comment_reference`) VALUES
-(1, 1, '12', 0, '2021-04-15 21:19:23', 90, 0),
-(4, 1, 'mi comment 2', 0, '2021-04-20 16:14:14', 112, 0),
-(11, 1, 'hi 1st', 0, '2021-04-21 12:04:51', 112, 0),
-(13, 44, 'hi', 0, '2021-04-21 12:05:51', 112, 11),
-(14, 36, 'sea otters', 0, '2021-04-21 12:06:51', 112, 11),
-(16, 1, 'hiiiii 2nd', 0, '2021-04-21 12:08:51', 112, 0),
-(17, 44, 'hi 2', 0, '2021-04-21 12:09:51', 112, 16),
-(18, 36, 'sea otters 2', 0, '2021-04-21 12:10:51', 112, 16);
+INSERT INTO `publication_comments` (`id`, `id_user`, `bodyComment`, `isEdited`, `comment_date`, `id_publication`, `id_comment_reference`, `id_user_reference`) VALUES
+(53, 1, '1r comment\n\n', 0, '2021-04-22 16:43:23', 112, 0, NULL),
+(54, 44, '2nd comentario', 0, '2021-04-22 16:43:50', 112, 0, NULL),
+(55, 44, '3r comment', 0, '2021-04-22 16:45:16', 112, 53, 1),
+(56, 1, '4th comment', 0, '2021-04-22 16:46:41', 112, 55, 44);
 
 -- --------------------------------------------------------
 
@@ -185,7 +182,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `isPrivate`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJEdab1ZOczY2bmZPQ0I1N2wvT2tma2UuRmNpU1U1OHpqbmtUdUtKTlFoT3VtSG1mNEtlTS5XLk1Ib3JkcVZRNio=.t0+HQU/Aqj5Hc0Jpap/xs7ulOATmZyKvhvIhZEg+Z9w=', 1, 0),
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJEdab1ZOczY2bmZPQ0I1N2wvT2tma2UuRmNpU1U1OHpqbmtUdUtKTlFoT3VtSG1mNEtlTS5XLktMSkNrb3ItNGg=.nu3uEb5mRljpXR/zgPTRdgZgekpl8/oZDOMQfKGD6Is=', 1, 0),
 (24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
 (27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
@@ -307,7 +304,8 @@ ALTER TABLE `publications`
 ALTER TABLE `publication_comments`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_user` (`id_user`),
-  ADD KEY `id_publication` (`id_publication`);
+  ADD KEY `id_publication` (`id_publication`),
+  ADD KEY `id_user_reference` (`id_user_reference`);
 
 --
 -- Indices de la tabla `users`
@@ -370,7 +368,7 @@ ALTER TABLE `publications`
 -- AUTO_INCREMENT de la tabla `publication_comments`
 --
 ALTER TABLE `publication_comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
 
 --
 -- AUTO_INCREMENT de la tabla `users`

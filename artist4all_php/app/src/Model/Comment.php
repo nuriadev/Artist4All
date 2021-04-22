@@ -9,6 +9,7 @@ class Comment implements \JsonSerializable{
   private string $comment_date;
   private int $id_publication;
   private ?int $id_comment_reference;
+  private ?\Artist4all\Model\User $user_reference;
 
   public function __construct(
     ?int $id,
@@ -17,7 +18,8 @@ class Comment implements \JsonSerializable{
     int $isEdited,
     string $comment_date,
     int $id_publication,
-    ?int $id_comment_reference
+    ?int $id_comment_reference,
+    ?\Artist4all\Model\User $user_reference
   ) {
     $this->id = $id;
     $this->user = $user;
@@ -26,6 +28,7 @@ class Comment implements \JsonSerializable{
     $this->comment_date = $comment_date;
     $this->id_publication = $id_publication;
     $this->id_comment_reference = $id_comment_reference;
+    $this->user_reference = $user_reference;
   }
 
   public function getId(): ?int { return $this->id; }
@@ -49,6 +52,9 @@ class Comment implements \JsonSerializable{
   public function getIdCommentReference(): ?int { return $this->id_comment_reference; }
   public function setIdCommentReference(?int $id_comment_reference) { $this->id_comment_reference = $id_comment_reference; }
 
+  public function getUserReference(): ?\Artist4all\Model\User { return $this->user_reference; }
+  public function setUserReference(?\Artist4all\Model\User $user_reference) { $this->user_reference = $user_reference; }
+  
   // Needed to deserialize an object from an associative array
   public static function fromAssoc(array $data): \Artist4all\Model\Comment {
     return new \Artist4all\Model\Comment(
@@ -58,7 +64,8 @@ class Comment implements \JsonSerializable{
       $data['isEdited'],
       $data['comment_date'],
       $data['id_publication'],
-      $data['id_comment_reference']
+      $data['id_comment_reference'],
+      $data['user_reference']
     );
   }
 
@@ -71,7 +78,8 @@ class Comment implements \JsonSerializable{
       'isEdited' => $this->isEdited,
       'comment_date' => $this->comment_date,
       'id_publication' => $this->id_publication,
-      'id_comment_reference' => $this->id_comment_reference
+      'id_comment_reference' => $this->id_comment_reference,
+      'user_reference' => $this->user_reference
     ];
   }
 
@@ -83,6 +91,8 @@ class Comment implements \JsonSerializable{
     $commentAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
     if (!$commentAssoc) return null;
     $commentAssoc['user'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user']);
+    if ($commentAssoc['id_user_reference'] != null) $commentAssoc['user_reference'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user_reference']);
+    $commentAssoc['user_reference'] = null;
     $comment = \Artist4all\Model\Comment::fromAssoc($commentAssoc);
     return $comment;
   }
@@ -100,6 +110,8 @@ class Comment implements \JsonSerializable{
     $comments = [];
     foreach ($commentsAssoc as $commentAssoc) {
       $commentAssoc['user'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user']);
+      if ($commentAssoc['id_user_reference'] != null) $commentAssoc['user_reference'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user_reference']);
+      $commentAssoc['user_reference'] = null;
       $comments[] = \Artist4all\Model\Comment::fromAssoc($commentAssoc);
     }
     return $comments;
@@ -115,6 +127,8 @@ class Comment implements \JsonSerializable{
     $subComments = [];
     foreach ($subCommentsAssoc as $subCommentAssoc) {
       $subCommentAssoc['user'] = \Artist4all\Model\User::getUserById($subCommentAssoc['id_user']);
+      if ($subCommentAssoc['id_user_reference'] != null) $subCommentAssoc['user_reference'] = \Artist4all\Model\User::getUserById($subCommentAssoc['id_user_reference']);
+      $commentAssoc['user_reference'] = null;
       $subComments[] = \Artist4all\Model\Comment::fromAssoc($subCommentAssoc);
     }
     return $subComments;
@@ -133,7 +147,8 @@ class Comment implements \JsonSerializable{
         :isEdited,
         :comment_date, 
         :id_publication,
-        :id_comment_reference
+        :id_comment_reference,
+        :id_user_reference
     )';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
@@ -144,7 +159,8 @@ class Comment implements \JsonSerializable{
       ':isEdited' => $comment->isEdited(),
       ':comment_date' => date('Y-m-d H:i:s'),  
       ':id_publication' => $comment->getIdPublication(), 
-      ':id_comment_reference' => $comment->getIdCommentReference() == null ? 0 : $comment->getIdCommentReference()
+      ':id_comment_reference' => $comment->getIdCommentReference() == null ? 0 : $comment->getIdCommentReference(),
+      ':id_user_reference' => $comment->getUserReference()->getId()
     ]);
     if (!$result) return null;
     $id = $conn->lastInsertId();

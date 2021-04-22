@@ -34,6 +34,13 @@ class CommentController {
   public function postComment(Request $request, Response $response, array $args) {
     $id_user = $args['id_user'];
     $data = $request->getParsedBody();  
+    if (isset($data['id_user_reference'])) {
+      $id_user_reference = $data['id_user_reference'];
+      $user_reference = \Artist4all\Controller\UserController::getUserByIdSummary($id_user_reference, $response);
+      $data['user_reference'] = $user_reference;
+    } else {
+      $data['user_reference'] = null;
+    }
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
     $data['user'] = $user;
     $data['id_publication'] = $args['id_publication'];

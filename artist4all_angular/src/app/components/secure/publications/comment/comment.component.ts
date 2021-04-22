@@ -39,8 +39,8 @@ export class CommentComponent implements OnInit {
   token = this._sessionService.getCurrentToken();
 
   publication: Publication;
-  comments: Array<Comment>;
-  subcomments: Array<Comment>;
+  comments: Array<Comment> = [];
+  subcomments: Array<Comment> = [];
   commentForm: FormGroup;
   commentFormResponse: FormGroup;
   id_publication: string = "";
@@ -78,7 +78,8 @@ export class CommentComponent implements OnInit {
       isEdited: [0],
       comment_date: [null],
       id_publication: [parseInt(this.id_publication)],
-      id_comment_reference: [null]
+      id_comment_reference: [null],
+      user_reference: [null]
     });
   }
 
@@ -104,7 +105,7 @@ export class CommentComponent implements OnInit {
       this.showingSubcomments = false;
       if (formSubcommentResponseForm) formSubcommentResponseForm.style.display = 'none';
       this.showingSubcommentForm = false;
-      this.createResponseForm(index);
+      this.createResponseForm(index, this.comments);
     } else {
       formResponseContainer.style.display = 'none';
       this.showingForm = false;
@@ -154,6 +155,7 @@ export class CommentComponent implements OnInit {
   subCommentFormAuxIndex = -1;
   showingSubcommentForm: boolean = false;
   toggleSubcommentResponseForm(index: number): void {
+    console.log(this.subcomments[index])
     if (index != this.subCommentFormAuxIndex) {
       this.showingSubcommentForm = false;
     }
@@ -166,14 +168,14 @@ export class CommentComponent implements OnInit {
       this.showingSubcommentForm = true;
       if (formResponseContainer) formResponseContainer.style.display = 'none';
       this.showingForm = false;
-      this.createResponseForm(index);
+      this.createResponseForm(index, this.subcomments);
     } else {
       if (formSubcommentResponseForm) formSubcommentResponseForm.style.display = 'none';
       this.showingSubcommentForm = false;
     }
   }
 
-  createResponseForm(index: number) {
+  createResponseForm(index: number, comments: Array<Comment>) {
     this.commentFormResponse = this._formBuilder.group({
       id: [null],
       user: [this.user],
@@ -182,7 +184,8 @@ export class CommentComponent implements OnInit {
       isEdited: [0],
       comment_date: [null],
       id_publication: [parseInt(this.id_publication)],
-      id_comment_reference: [this.comments[index].id]
+      id_comment_reference: [comments[index].id],
+      user_reference: [comments[index].user]
     });
   }
 
@@ -202,22 +205,23 @@ export class CommentComponent implements OnInit {
     this.isValidFormSubmitted = true;
     let comment: Comment = this.commentForm.value;
     this._commentService.postComment(comment).subscribe(
-      (result) => {
+      async (result) => {
         this.newComment = result;
-        this.comments.unshift(this.newComment);
+        console.log(this.newComment);
+        await this.comments.unshift(this.newComment);
         this.commentForm.reset();
         this.commentForm.controls['user'].setValue(this.user);
         this.commentForm.controls['id_publication'].setValue(parseInt(this.id_publication));
         this.commentForm.controls['isEdited'].setValue(0);
         this.commentForm.controls['id_comment_reference'].setValue(null);
+        this.commentForm.controls['user_reference'].setValue(null);
       }, (error) => {
         console.log(error);
     });
   }
 
   newSubcomment: Comment;
-  postResponse(index: number) {
-    console.log(this.commentFormResponse.controls.bodyResponse)
+  postResponse(index: number, type: number, commentsArray: Array<Comment>) {
     this.isValidFormSubmitted = false;
     if (this.commentFormResponse.invalid) {
       return;
@@ -228,12 +232,15 @@ export class CommentComponent implements OnInit {
       (result) => {
         console.log(result);
         this.newSubcomment = result;
-        this.subcomments.unshift(this.newSubcomment);
+        if (type == 1) this.subcomments.unshift(this.newSubcomment);
         this.commentFormResponse.reset();
         this.commentFormResponse.controls['user'].setValue(this.user);
         this.commentFormResponse.controls['id_publication'].setValue(parseInt(this.id_publication));
         this.commentFormResponse.controls['isEdited'].setValue(0);
-        this.commentFormResponse.controls['id_comment_reference'].setValue(this.comments[index].id);
+        this.commentFormResponse.controls['id_comment_reference'].setValue(commentsArray[index].id);
+        this.commentFormResponse.controls['user_reference'].setValue(commentsArray[index].user);
+        if (type == 1) this.subCommentFormAuxIndex = -1;
+        else this.responseFormIndexAux = -1;
       }, (error) => {
         console.log(error);
     });
