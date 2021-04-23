@@ -74,14 +74,14 @@
                 <div class="mt-2">
 
                   <p class="comment-text">
-                    <a routerLink="/user/{{ comment.user.id }}/profile" class="text-blue-500">
+                    <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
                       @{{ subcomment.user_reference.username }}
                     </a>{{ subcomment.bodyComment }}
                   </p>
                 </div>
                 <div class="bg-white p-2">
                 <div class="d-flex flex-row fs-12">
-                  <div class="p-2 cursor -ml-1" (click)="toggleSubcommentResponseForm(ind);">
+                  <div class="p-2 cursor -ml-1" (click)="toggleSubcommentResponseForm(ind, i);">
                     <i class="fas fa-comment-dots"></i>
                     <span class="ml-1">Responder</span>
                   </div>
@@ -96,8 +96,8 @@
                     </div>
                     <div class="mt-2 text-right">
                       <button class="btn btn-outline-primary btn-sm ml-1 shadow-none mr-1"
-                        (click)="toggleSubcommentResponseForm(ind);" type="button">Cancelar</button>
-                      <button class="btn btn-primary btn-sm shadow-none" type="submit">Responder</button>
+                        (click)="toggleSubcommentResponseForm(ind, i);" type="button">Cancelar</button>
+                      <button class="btn btn-primary btn-sm shadow-none" type="submit">Publicar respuesta</button>
                     </div>
                   </form>
                 </div>
