@@ -47,7 +47,7 @@
           </div>
 
           <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="bg-light p-2">
-            <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, 0, comments);">
+            <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, null, 0);">
               <div class="d-flex flex-row align-items-start">
                 <img class="rounded-circle" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
                 <textarea formControlName="bodyComment" class="form-control ml-1 shadow-none textarea"></textarea>
@@ -75,7 +75,7 @@
 
                   <p class="comment-text">
                     <a routerLink="/user/{{ comment.user.id }}/profile" class="text-blue-500">
-                      @{{ subcomment.user_reference.id }}
+                      @{{ subcomment.user_reference.username }}
                     </a>{{ subcomment.bodyComment }}
                   </p>
                 </div>
@@ -89,7 +89,7 @@
               </div>
               <div class="bg-white p-2 rounded-md">
                 <div id="{{ind +'formSubcommentResponseForm'}}" *ngIf="subCommentFormAuxIndex===ind" class="bg-light p-2 mt-1">
-                  <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(ind, 1, subcomments);">
+                  <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, ind, 1);">
                     <div class="d-flex flex-row align-items-start">
                       <img class="rounded-circle" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
                       <textarea formControlName="bodyComment" class="form-control ml-1 shadow-none textarea"></textarea>

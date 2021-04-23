@@ -92,7 +92,7 @@ class Comment implements \JsonSerializable{
     if (!$commentAssoc) return null;
     $commentAssoc['user'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user']);
     if ($commentAssoc['id_user_reference'] != null) $commentAssoc['user_reference'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user_reference']);
-    $commentAssoc['user_reference'] = null;
+    else $commentAssoc['user_reference'] = null;
     $comment = \Artist4all\Model\Comment::fromAssoc($commentAssoc);
     return $comment;
   }
@@ -111,7 +111,7 @@ class Comment implements \JsonSerializable{
     foreach ($commentsAssoc as $commentAssoc) {
       $commentAssoc['user'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user']);
       if ($commentAssoc['id_user_reference'] != null) $commentAssoc['user_reference'] = \Artist4all\Model\User::getUserById($commentAssoc['id_user_reference']);
-      $commentAssoc['user_reference'] = null;
+      else $commentAssoc['user_reference'] = null;
       $comments[] = \Artist4all\Model\Comment::fromAssoc($commentAssoc);
     }
     return $comments;
@@ -128,7 +128,7 @@ class Comment implements \JsonSerializable{
     foreach ($subCommentsAssoc as $subCommentAssoc) {
       $subCommentAssoc['user'] = \Artist4all\Model\User::getUserById($subCommentAssoc['id_user']);
       if ($subCommentAssoc['id_user_reference'] != null) $subCommentAssoc['user_reference'] = \Artist4all\Model\User::getUserById($subCommentAssoc['id_user_reference']);
-      $commentAssoc['user_reference'] = null;
+      else $commentAssoc['user_reference'] = null;
       $subComments[] = \Artist4all\Model\Comment::fromAssoc($subCommentAssoc);
     }
     return $subComments;
@@ -160,7 +160,7 @@ class Comment implements \JsonSerializable{
       ':comment_date' => date('Y-m-d H:i:s'),  
       ':id_publication' => $comment->getIdPublication(), 
       ':id_comment_reference' => $comment->getIdCommentReference() == null ? 0 : $comment->getIdCommentReference(),
-      ':id_user_reference' => $comment->getUserReference()->getId()
+      ':id_user_reference' => $comment->getUserReference() == null ? null : $comment->getUserReference()->getId()
     ]);
     if (!$result) return null;
     $id = $conn->lastInsertId();
