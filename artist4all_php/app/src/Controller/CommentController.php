@@ -54,13 +54,16 @@ class CommentController {
 
   public function editComment(Request $request, Response $response, array $args) {
     $id_user = $args['id_user'];
+    $id_comment = $args['id_comment'];
     $data = $request->getParsedBody();
-    $id_comment = $data['id_comment'];
     $comment = \Artist4all\Model\Comment::getCommentById($id_comment);
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
     $data['user'] = $user;
-    if (!isset($data['isEdited'])) $data['isEdited'] = $comment->isEdited();
+    $data['id'] = $id_comment;
     if (!isset($data['comment_date'])) $data['comment_date'] = $comment->getCommentDate();
+    if (!isset($data['id_comment_reference'])) $data['id_comment_reference'] = $comment->getIdCommentReference();
+    if (!isset($data['id_publication'])) $data['id_publication'] = $comment->getIdPublication();
+    if (!isset($data['user_reference'])) $data['user_reference'] = $comment->getUserReference();
     $comment = $this->validatePersist($request, $data, $id_comment, $response);
     if (is_null($comment)) $response = $response->withStatus(500, 'Error at editing comment');
     else $response = $response->withJson($comment)->withStatus(200, 'Comment edited');

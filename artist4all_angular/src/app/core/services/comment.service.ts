@@ -35,7 +35,9 @@ export class CommentService {
 
   editComment(comment: Comment): Observable<any> {
     let newForm: FormData = new FormData();
-    return this.http.post(this.url, newForm);
+    newForm.append('bodyComment', comment.bodyComment);
+    newForm.append('isEdited', '' + comment.isEdited);
+    return this.http.post(this.url + comment.user.id + '/publication/' + comment.id_publication + '/comment/' + comment.id, newForm);
   }
 
   delete(id_user: number, id_publication: number, id_comment: number): Observable<any> {

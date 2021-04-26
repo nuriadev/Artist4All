@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: artist4all_db:3306
--- Tiempo de generación: 26-04-2021 a las 12:15:59
+-- Tiempo de generación: 26-04-2021 a las 15:49:32
 -- Versión del servidor: 10.2.36-MariaDB-1:10.2.36+maria~bionic
--- Versión de PHP: 7.4.15
+-- Versión de PHP: 7.4.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -164,7 +164,10 @@ INSERT INTO `publication_comments` (`id`, `id_user`, `bodyComment`, `isEdited`, 
 (107, 1, '12th comment', 0, '2021-04-26 12:04:55', 112, 0, NULL),
 (108, 1, '13th comment', 0, '2021-04-26 12:05:17', 112, 107, 1),
 (109, 1, '14th comment', 0, '2021-04-26 12:06:59', 112, 0, NULL),
-(110, 1, '15th comment', 0, '2021-04-26 12:07:11', 112, 0, NULL);
+(110, 1, '1800 comment', 1, '2021-04-26 15:48:04', 112, 0, NULL),
+(114, 1, 'hola', 0, '2021-04-26 15:02:59', 112, 110, 1),
+(117, 1, 'hola3', 0, '2021-04-26 15:06:25', 112, 102, 1),
+(118, 1, 'hola2', 0, '2021-04-26 15:06:49', 112, 110, 1);
 
 -- --------------------------------------------------------
 
@@ -193,7 +196,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `isPrivate`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJEdab1ZOczY2bmZPQ0I1N2wvT2tma2UuRmNpU1U1OHpqbmtUdUtKTlFoT3VtSG1mNEtlTS5XLng5T0x3bWJLRyE=.RNTrS4RI/9itkLPS5DNKlgir15vke4lQD1YXc0Zpc/k=', 1, 0),
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJEdab1ZOczY2bmZPQ0I1N2wvT2tma2UuRmNpU1U1OHpqbmtUdUtKTlFoT3VtSG1mNEtlTS5XLm1mM0RJbitaWGc=.tCeJ5af6n+C26q5C7JBOwIU5sACG88MvU1QkRsBcKmE=', 1, 0),
 (24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
 (27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
@@ -379,7 +382,7 @@ ALTER TABLE `publications`
 -- AUTO_INCREMENT de la tabla `publication_comments`
 --
 ALTER TABLE `publication_comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
 
 --
 -- AUTO_INCREMENT de la tabla `users`

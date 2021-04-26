@@ -22,7 +22,7 @@
       <div class="d-flex flex-column comment-section" id="myGroup">
         <div *ngFor="let comment of comments; index as i;">
           <div *ngIf="comment.user.id == id">
-            <button> Editar </button>
+            <button (click)="toggleEditForm(i, comments)"> Editar </button>
             <button> Eliminar </button>
           </div>
           <div class="bg-white p-2">
@@ -30,11 +30,17 @@
               <img class="rounded-circle" src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}" width="50">
               <div class="d-flex flex-column justify-content-start ml-2">
                 <span class="d-block font-weight-bold name">{{ comment.user.username }}</span>
-                <span class="date text-black-50">{{ comment.comment_date }}</span>
+                <span *ngIf="comment.isEdited == 0" class="date text-black-50">{{ comment.comment_date }}</span>
+                <span *ngIf="comment.isEdited == 1" class="date text-black-50">{{ comment.comment_date }} (editado)</span>
               </div>
             </div>
             <div class="mt-2">
-              <p class="comment-text">{{ comment.bodyComment }}</p>
+              <form *ngIf="editCommentIndexAux===i && showingEditForm" [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
+                <textarea formControlName="bodyComment" class="w-full">{{ comment.bodyComment }}</textarea> <br>
+                <button (click)="toggleEditForm(i, comments)">Cancelar</button>
+                <button type="submit">Editar</button>
+              </form>
+              <p *ngIf="!showingEditForm" class="comment-text">{{ comment.bodyComment }}</p>
             </div>
           </div>
           <div class="bg-white p-2">

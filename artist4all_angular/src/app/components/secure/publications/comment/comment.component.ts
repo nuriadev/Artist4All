@@ -30,6 +30,7 @@ export class CommentComponent implements OnInit {
   subcomments: Array<Comment> = [];
   commentForm: FormGroup;
   commentFormResponse: FormGroup;
+  editCommentForm: FormGroup;
   id_publication: string = "";
   ngOnInit(): void {
     this.user = this._sessionService.getCurrentUser();
@@ -37,17 +38,7 @@ export class CommentComponent implements OnInit {
     this.imgAvatar = this.user.imgAvatar;
     this._activeRoute.paramMap.subscribe((params) => {
     this.id_publication = params.get('id_publication');
-      this._commentService.getPublicationComments(this.id, parseInt(this.id_publication)).subscribe(
-      (result) => {
-        if (result != null) {
-          result.forEach((comment) => {
-            comment.comment_date = this.adaptDateOfComment(comment.comment_date);
-          });
-          this.comments = result;
-        }
-      }, (error) => {
-        console.log(error);
-      });
+      this.getPublicationComments();
     });
     this.commentForm = this._formBuilder.group({
       id: [null],
@@ -62,8 +53,19 @@ export class CommentComponent implements OnInit {
     });
   }
 
-
-
+  getPublicationComments() {
+    this._commentService.getPublicationComments(this.id, parseInt(this.id_publication)).subscribe(
+      (result) => {
+        if (result != null) {
+          result.forEach((comment) => {
+            comment.comment_date = this.adaptDateOfComment(comment.comment_date);
+          });
+        this.comments = result;
+        }
+    }, (error) => {
+      console.log(error);
+    });
+  }
 
   responseFormIndexAux = -1;
   showingForm: boolean = false;
@@ -128,6 +130,7 @@ export class CommentComponent implements OnInit {
       }, (error) => {
         console.log(error);
     });
+    this.subcomments = [];
     if (!this.showingSubcomments) {
       if (subcommentContainer) subcommentContainer.style.display = 'block';
       this.showingSubcomments = true;
@@ -207,7 +210,6 @@ export class CommentComponent implements OnInit {
 
   newSubcomment: Comment;
   postResponse(indexComments: number, indexSubcomments: number, type: number) {
-    this.subcomments = [];
     this.isValidFormSubmitted = false;
     if (this.commentFormResponse.invalid) {
       return;
@@ -234,6 +236,57 @@ export class CommentComponent implements OnInit {
       }, (error) => {
         console.log(error);
     });
+  }
+
+  editCommentIndexAux = -1;
+  showingEditForm = false;
+  toggleEditForm(index: number, commentsArray: Array<Comment>) {
+    if (index != this.editCommentIndexAux) {
+      this.showingEditForm = false;
+    }
+    this.editCommentIndexAux = index;
+    this.editCommentForm = this._formBuilder.group({
+      id: [commentsArray[index].id],
+      user: [this.user],
+      bodyComment:[commentsArray[index].bodyComment],
+      isEdited: [1],
+      comment_date: [null],
+      id_publication: [parseInt(this.id_publication)],
+      id_comment_reference: [this.comments[index].id],
+      user_reference: [this.comments[index].user]
+    });
+    if (!this.showingEditForm) {
+      this.showingEditForm = true;
+    } else {
+      this.showingEditForm = false;
+    }
+  }
+
+  editedComment: Comment;
+  editComment(index: number, commentArray: Array<Comment>, type: number) {
+    if (this.showingEditForm) {
+      this.isValidFormSubmitted = false;
+      if (this.editCommentForm.invalid) {
+        return;
+      }
+      this.isValidFormSubmitted = true;
+      commentArray[index].bodyComment = this.editCommentForm.get['bodyComment'];
+      commentArray[index].isEdited = this.editCommentForm.get['isEdited'];
+      let comment: Comment = this.editCommentForm.value;
+      this._commentService.editComment(comment).subscribe(
+        (result) => {
+          result.comment_date = this.adaptDateOfComment(result.comment_date);
+          this.editedComment = result;
+          commentArray[index] = this.editedComment;
+          this.showingEditForm = false;
+          this.editCommentForm.reset();
+          this.editCommentForm.controls['isEdited'].setValue(1);
+          if (type == 1) this.subCommentFormAuxIndex = -1;
+          else this.responseFormIndexAux = -1;
+        }, (error) => {
+          console.log(error);
+      });
+    }
   }
 
   adaptDateOfComment(upload_date: string) {
