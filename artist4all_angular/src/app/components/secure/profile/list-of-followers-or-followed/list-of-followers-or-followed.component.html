@@ -1,6 +1,6 @@
 <app-user-navbar></app-user-navbar>
 <div class="lg: max-w-full grid lg:grid-cols-12 lg:gap-8 sm:grid-cols-2" style="padding-left: 0;">
-  <div class="hidden lg:block lg:col-span-2 bg-gray-800" style="height: 1200px;">
+  <div class="hidden lg:block lg:col-span-2 bg-gray-800 min-h-screen">
     <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
       <div class="pb-8 space-y-1">
         <!-- Current: "bg-gray-200 style="padding:25px;"text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
@@ -68,7 +68,7 @@
       <section *ngFor="let user of userlist; index as i;">
 
         <div
-          class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+          class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 mb-3 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
           <div class="flex-shrink-0">
             <img class="h-10 w-10 rounded-full" src="http://localhost:81/assets/img/{{ user.imgAvatar }}" alt="">
           </div>

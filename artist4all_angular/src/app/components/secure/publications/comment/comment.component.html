@@ -1,6 +1,86 @@
 <app-user-navbar></app-user-navbar>
-<p>comment works!</p>
-<div class="container mt-5 mb-5">
+<div class="lg: max-w-full grid lg:grid-cols-12 lg:gap-8 sm:grid-cols-2" style="padding-left: 0;">
+  <div class="hidden lg:block lg:col-span-2 bg-gray-800 min-h-screen">
+    <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
+      <div class="pb-8 space-y-1">
+        <!-- Current: "bg-gray-200 style="padding:25px;"text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
+        <a routerLink="/home"
+          class="bg-gray-900 text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
+          aria-current="page">
+          <!-- Heroicon name: outline/home -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="truncate">
+            <a routerLink="/home" class="hover:text-gray-200">Home</a>
+          </span>
+        </a>
+
+        <a routerLink="/store"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/fire -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+            </path>
+          </svg>
+          <span class="truncate">
+            <a routerLink="/store" class="hover:text-gray-200">Tienda</a>
+          </span>
+        </a>
+
+        <a routerLink="/user/{{ id }}/messages"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/user-group -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+            </path>
+          </svg>
+          <span class="truncate">
+            <a routerLink="/user/{{ id }}/messages" class="hover:text-gray-200">Mensajería</a>
+          </span>
+        </a>
+
+        <a routerLink="/user/list"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/trending-up -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          <span class="truncate">
+            <a routerLink="/user/list" class="hover:text-gray-200">Usuarios</a>
+          </span>
+        </a>
+      </div>
+    </nav>
+  </div><div class="container mt-5 mb-5">
+
+    <mat-card style="max-width: 980px; margin-left: auto; margin-right: auto; margin-top: 20px">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Shiba Inu</mat-card-title>
+        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+      <mat-card-content>
+        <p>
+          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+          bred for hunting.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button>LIKE</button>
+        <button mat-button>SHARE</button>
+      </mat-card-actions>
+    </mat-card>
+    
   <div class="d-flex justify-content-center row">
     <div class="d-flex flex-column col-md-8">
       <div class="coment-bottom bg-white p-2 px-4">
@@ -109,4 +189,6 @@
       </div>
     </div>
   </div>
+</div>
+
 </div>
