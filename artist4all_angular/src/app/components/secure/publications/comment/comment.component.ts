@@ -106,7 +106,6 @@ export class CommentComponent implements OnInit {
   showingSubcomments: boolean = false;
   //TODO: poner un spinner de carga antes de mostrar o sacar algun div
   toggleSubcomments(index: number) {
-    console.log(this.showingSubcomments);
     this.subcomments = [];
     if (index != this.subcommentIndexAux) {
       this.showingSubcomments = false;
@@ -123,16 +122,14 @@ export class CommentComponent implements OnInit {
             subcomment.comment_date = this.adaptDateOfComment(subcomment.comment_date);
           });
           this.subcomments = result;
+        } else {
+          this.subcomments = null;
         }
       }, (error) => {
         console.log(error);
     });
     if (!this.showingSubcomments) {
-
-        subcommentContainer.innerHTML = 'Este comentario actualmente no tiene respuestas.';
-
-        subcommentContainer.style.display = 'block';
-
+      if (subcommentContainer) subcommentContainer.style.display = 'block';
       this.showingSubcomments = true;
       if (formResponseContainer) formResponseContainer.style.display = 'none';
       this.showingForm = false;
@@ -183,6 +180,9 @@ export class CommentComponent implements OnInit {
 
   newComment: Comment;
   postComment() {
+    this.subcommentIndexAux = -1;
+    this.responseFormIndexAux = -1;
+    this.subCommentFormAuxIndex = -1;
     this.isValidFormSubmitted = false;
     if (this.commentForm.invalid) {
       return;
@@ -207,6 +207,7 @@ export class CommentComponent implements OnInit {
 
   newSubcomment: Comment;
   postResponse(indexComments: number, indexSubcomments: number, type: number) {
+    this.subcomments = [];
     this.isValidFormSubmitted = false;
     if (this.commentFormResponse.invalid) {
       return;

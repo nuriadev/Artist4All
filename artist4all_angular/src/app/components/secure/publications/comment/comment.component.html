@@ -61,6 +61,7 @@
           </div>
 
           <div id="{{i + 'subcommentContainer'}}" *ngIf="subcommentIndexAux===i" class="p-2 w-10/12 ml-16">
+            <div *ngIf="subcomments == null">Este comentario actualmente no tiene respuestas.</div>
             <div *ngIf="subcomments != null">
               <div *ngFor="let subcomment of subcomments; index as ind;">
                 <div class="d-flex flex-row user-info">
