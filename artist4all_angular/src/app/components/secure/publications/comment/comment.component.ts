@@ -210,7 +210,7 @@ export class CommentComponent implements OnInit {
 
   newSubcomment: Comment;
   postResponse(indexComments: number, indexSubcomments: number, type: number) {
-    this.subcomments = [];
+    if (this.subcomments == null) this.subcomments = [];
     this.isValidFormSubmitted = false;
     if (this.commentFormResponse.invalid) {
       return;
