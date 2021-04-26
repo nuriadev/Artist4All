@@ -1,18 +1,64 @@
 <app-user-navbar></app-user-navbar>
-<p>comment works!</p>
-<div class="container mt-5 mb-5">
-  <div class="d-flex justify-content-center row">
-    <div class="d-flex flex-column col-md-8">
-      <div class="coment-bottom bg-white p-2 px-4">
-        <h1 class="mb-2"> Lista de comentarios </h1>
-        <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
-        <form [formGroup]="commentForm" (ngSubmit)="postComment();">
-          <textarea formControlName="bodyComment" class="mr-3 border border-black rounded-md mt-3"
-            placeholder=" Añade tu comentario..." cols="150" rows="3"></textarea>
-          <button class="btn btn-primary mt-2 mb-2" style="right: 0;" type="submit">Comentar</button>
-        </form>
+<div class="lg: max-w-full grid lg:grid-cols-12 lg:gap-8 sm:grid-cols-2" style="padding-left: 0;">
+  <div class="hidden lg:block lg:col-span-2 bg-gray-800 min-h-screen">
+    <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
+      <div class="pb-8 space-y-1">
+        <!-- Current: "bg-gray-200 style="padding:25px;"text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
+        <a routerLink="/home"
+          class="bg-gray-900 text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
+          aria-current="page">
+          <!-- Heroicon name: outline/home -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+          </svg>
+          <span class="truncate">
+            <a routerLink="/home" class="hover:text-gray-200">Home</a>
+          </span>
+        </a>
+
+        <a routerLink="/store"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/fire -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+            </path>
+          </svg>
+          <span class="truncate">
+            <a routerLink="/store" class="hover:text-gray-200">Tienda</a>
+          </span>
+        </a>
+
+        <a routerLink="/user/{{ id }}/messages"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/user-group -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+            </path>
+          </svg>
+          <span class="truncate">
+            <a routerLink="/user/{{ id }}/messages" class="hover:text-gray-200">Mensajería</a>
+          </span>
+        </a>
+
+        <a routerLink="/user/list"
+          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+          <!-- Heroicon name: outline/trending-up -->
+          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          <span class="truncate">
+            <a routerLink="/user/list" class="hover:text-gray-200">Usuarios</a>
+          </span>
+        </a>
       </div>
-    </div>
+    </nav>
   </div>
 </div>
 
@@ -41,82 +87,188 @@
                 <button type="submit">Editar</button>
               </form>
               <p *ngIf="!showingEditForm" class="comment-text">{{ comment.bodyComment }}</p>
-            </div>
-          </div>
-          <div class="bg-white p-2">
-            <div class="d-flex flex-row fs-12">
-              <div class="p-2 cursor" (click)="toggleResponseForm(i)">
-                <i class="fas fa-comment-dots"></i>
-                <span class="ml-1">Comentar</span>
-              </div>
-              <div class="p-2 cursor" (click)="toggleSubcomments(i)">
-                <i class="fas fa-comments"></i>
-                <span class="ml-1">Ver respuestas</span>
-              </div>
-            </div>
-          </div>
+  <div class="lg:col-span-2"></div>
+  <div class="container mt-5 mb-5 lg:col-span-6">
 
-          <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="bg-light p-2">
-            <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, null, 0);">
-              <div class="d-flex flex-row align-items-start">
-                <img class="rounded-circle" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
-                <textarea formControlName="bodyComment" class="form-control ml-1 shadow-none textarea"></textarea>
-              </div>
-              <div class="mt-2 text-right">
-                <button class="btn btn-outline-primary btn-sm ml-1 shadow-none mr-1" type="button"
-                  (click)="toggleResponseForm(i)">Cancelar</button>
-                <button class="btn btn-primary btn-sm shadow-none" type="submit">Publicar respuesta</button>
-              </div>
-            </form>
-          </div>
+    <mat-card style="max-width: 980px;">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Shiba Inu</mat-card-title>
+        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+      <mat-card-content>
+        <p>
+          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+          bred for hunting.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+      </mat-card-actions>
+    </mat-card>
+    <div>
 
-          <div id="{{i + 'subcommentContainer'}}" *ngIf="subcommentIndexAux===i" class="p-2 w-10/12 ml-16">
-            <div *ngIf="subcomments == null">Este comentario actualmente no tiene respuestas.</div>
-            <div *ngIf="subcomments != null">
-              <div *ngFor="let subcomment of subcomments; index as ind;">
-                <div class="d-flex flex-row user-info">
-                  <img class="rounded-circle" src="http://localhost:81/assets/img/{{ subcomment.user.imgAvatar }}"
-                    width="50">
-                  <div class="d-flex flex-column justify-content-start ml-2">
-                    <span class="d-block font-weight-bold name">{{ subcomment.user.username }}</span>
-                    <span class="date text-black-50">{{ subcomment.comment_date }}</span>
+      <section class="rounded-b-lg  mt-4 ">
+
+
+        <form action="/" accept-charset="UTF-8" method="post"><input type="hidden">
+          <textarea class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
+            placeholder="Añade tu comentario..." cols="7" rows="3" id="comment_content" spellcheck="false"></textarea>
+          <button
+            class="font-bold py-2 px-4 w-full bg-indigo-500 hover:bg-indigo-700 text-base text-white shadow-md rounded-lg ">Publicar
+          </button>
+        </form>
+
+        <div id="task-comments" class="pt-4">
+          <!--     comment-->
+          <div class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
+            <div class="flex flex-row justify-center mr-2">
+              <img alt="avatar" width="48" height="48" class="rounded-full w-10 h-10 mr-4 shadow-lg mb-4"
+                src="https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png">
+              <h3 class="text-indigo-600 font-semibold text-base text-center md:text-left ">@Shanel</h3>
+            </div>
+
+
+            <p style="width: 90%" class="text-gray-600 text-base text-center md:text-left ">Hi good morning will it be the
+              entire house. </p>
+
+          </div>
+          <!--  comment end-->
+          <!--     comment-->
+          <div class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
+            <div class="flex flex-row justify-center mr-2">
+              <img alt="avatar" width="48" height="48" class="rounded-full w-10 h-10 mr-4 shadow-lg mb-4"
+                src="https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png">
+              <h3 class="text-indigo-600 font-semibold text-lg text-center md:text-left ">@Tim Motti</h3>
+            </div>
+
+
+            <p style="width: 90%" class="text-gray-600 text-lg text-center md:text-left "><span
+                class="text-indigo-600 font-semibold">@Shanel</span> Hello. Yes, the entire exterior, including the
+              walls. </p>
+
+          </div>
+          <!--  comment end-->
+        </div>
+      </section>
+
+    </div>
+  </div>
+  <div class="lg:col-span-2"></div>
+  <div class="container mt-5">
+    <div class="d-flex justify-content-center row" style="margin-bottom: 20%;">
+      <div class="col-md-8">
+        <div class="The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+      bred for hunting.d-flex flex-column comment-section" id="myGroup">
+          <div *ngFor="let comment of comments; index as i;">
+            <div *ngIf="comment.user.id == id">
+              <button> Editar </button>
+              <button> Eliminar </button>
+            </div>
+            <div class="bg-white p-2">
+              <div class="d-flex flex-row user-info">
+                <img class="rounded-circle" src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}"
+                  width="50">
+                <div class="d-flex flex-column justify-content-start ml-2">
+                  <span class="d-block font-weight-bold name">{{ comment.user.username }}</span>
+                  <span class="date text-black-50">{{ comment.comment_date }}</span>
+                </div>
+              </div>
+              <div class="mt-2">
+                <p class="comment-text">{{ comment.bodyComment }}</p>
+              </div>
+            </div>
+            <div class="bg-white p-2">
+              <div class="d-flex flex-row fs-12">
+                <div class="p-2 cursor" (click)="toggleResponseForm(i)">
+                  <i class="fas fa-comment-dots"></i>
+                  <span class="ml-1">Comentar</span>
+                </div>
+                <div class="p-2 cursor" (click)="toggleSubcomments(i)">
+                  <i class="fas fa-comments"></i>
+                  <span class="ml-1">Ver respuestas</span>
+                </div>
+              </div>
+            </div>
+
+            <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="bg-light p-2">
+              <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, null, 0);">
+                <div class="d-flex flex-row align-items-start">
+                  <img class="rounded-circle" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
+                  <textarea formControlName="bodyComment" class="form-control ml-1 shadow-none textarea"></textarea>
+                </div>
+                <div class="mt-2 text-right">
+                  <button class="btn btn-outline-primary btn-sm ml-1 shadow-none mr-1" type="button"
+                    (click)="toggleResponseForm(i)">Cancelar</button>
+                  <button class="btn btn-primary btn-sm shadow-none" type="submit">Publicar respuesta</button>
+                </div>
+              </form>
+            </div>
+
+            <div id="{{i + 'subcommentContainer'}}" *ngIf="subcommentIndexAux===i" class="p-2 w-10/12 ml-16">
+              <div *ngIf="subcomments == null">Este comentario actualmente no tiene respuestas.</div>
+              <div *ngIf="subcomments != null">
+                <div *ngFor="let subcomment of subcomments; index as ind;">
+                  <div class="d-flex flex-row user-info">
+                    <img class="rounded-circle" src="http://localhost:81/assets/img/{{ subcomment.user.imgAvatar }}"
+                      width="50">
+                    <div class="d-flex flex-column justify-content-start ml-2">
+                      <span class="d-block font-weight-bold name">{{ subcomment.user.username }}</span>
+                      <span class="date text-black-50">{{ subcomment.comment_date }}</span>
+                    </div>
+                  </div>
+                  <div class="mt-2">
+
+                    <p class="comment-text">
+                      <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
+                        @{{ subcomment.user_reference.username }}
+                      </a>{{ subcomment.bodyComment }}
+                    </p>
+                  </div>
+                  <div class="bg-white p-2">
+                    <div class="d-flex flex-row fs-12">
+                      <div class="p-2 cursor -ml-1" (click)="toggleSubcommentResponseForm(ind, i);">
+                        <i class="fas fa-comment-dots"></i>
+                        <span class="ml-1">Responder</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="bg-white p-2 rounded-md">
+                    <div id="{{ind +'formSubcommentResponseForm'}}" *ngIf="subCommentFormAuxIndex===ind"
+                      class="bg-light p-2 mt-1">
+                      <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, ind, 1);">
+                        <div class="d-flex flex-row align-items-start">
+                          <img class="rounded-circle" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
+                          <textarea formControlName="bodyComment"
+                            class="form-control ml-1 shadow-none textarea"></textarea>
+                        </div>
+                        <div class="mt-2 text-right">
+                          <button class="btn btn-outline-primary btn-sm ml-1 shadow-none mr-1"
+                            (click)="toggleSubcommentResponseForm(ind, i);" type="button">Cancelar</button>
+                          <button class="btn btn-primary btn-sm shadow-none" type="submit">Publicar respuesta</button>
+                        </div>
+                      </form>
+                    </div>
                   </div>
                 </div>
-                <div class="mt-2">
-
-                  <p class="comment-text">
-                    <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
-                      @{{ subcomment.user_reference.username }}
-                    </a>{{ subcomment.bodyComment }}
-                  </p>
-                </div>
-                <div class="bg-white p-2">
-                <div class="d-flex flex-row fs-12">
-                  <div class="p-2 cursor -ml-1" (click)="toggleSubcommentResponseForm(ind, i);">
-                    <i class="fas fa-comment-dots"></i>
-                    <span class="ml-1">Responder</span>
-                  </div>
-                </div>
-              </div>
-              <div class="bg-white p-2 rounded-md">
-                <div id="{{ind +'formSubcommentResponseForm'}}" *ngIf="subCommentFormAuxIndex===ind" class="bg-light p-2 mt-1">
-                  <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, ind, 1);">
-                    <div class="d-flex flex-row align-items-start">
-                      <img class="rounded-circle" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
-                      <textarea formControlName="bodyComment" class="form-control ml-1 shadow-none textarea"></textarea>
-                    </div>
-                    <div class="mt-2 text-right">
-                      <button class="btn btn-outline-primary btn-sm ml-1 shadow-none mr-1"
-                        (click)="toggleSubcommentResponseForm(ind, i);" type="button">Cancelar</button>
-                      <button class="btn btn-primary btn-sm shadow-none" type="submit">Publicar respuesta</button>
-                    </div>
-                  </form>
-                </div>
-              </div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+  <div class="">
+    <div class="">
+      <div class="coment-bottom bg-white p-2 px-4">
+        <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
+        <form [formGroup]="commentForm" (ngSubmit)="postComment();">
+          <textarea formControlName="bodyComment" class="mr-3 border border-black rounded-md mt-3"
+            placeholder=" Añade tu comentario..." cols="150" rows="3"></textarea>
+          <button class="btn btn-primary mt-2 mb-2" style="right: 0;" type="submit">Comentar</button>
+        </form>
       </div>
     </div>
   </div>

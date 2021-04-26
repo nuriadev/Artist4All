@@ -1,5 +1,5 @@
 <app-user-navbar></app-user-navbar>
-<div class="lg:grid lg:grid-cols-12 lg:gap-8">
+<div class="lg:grid lg:grid-cols-12 lg:gap-8 bg-gray-100">
   <div class="hidden lg:block lg:col-span-3 xl:col-span-2 bg-gray-800">
     <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
       <div class="pb-8 space-y-1">
@@ -214,21 +214,21 @@
               </div>
 
               <div class="col-span-12 sm:col-span-6">
-                <label for="surname1" class="block text-sm font-medium text-gray-700">1r Apellido</label>
+                <label for="surname1" class="block text-sm font-medium text-gray-700">Primer apellido</label>
                 <input #inputSurname1="ngModel" [(ngModel)]="surname1" type="text" name="surname1"
                   value="{{ surname1 }}" id="surname1" autocomplete="family-name"
                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
               </div>
 
               <div class="col-span-12 sm:col-span-6">
-                <label for="surname2" class="block text-sm font-medium text-gray-700">2º Apellido</label>
+                <label for="surname2" class="block text-sm font-medium text-gray-700">Segundo apellido</label>
                 <input #inputSurname2="ngModel" [(ngModel)]="surname2" type="text" name="surname2"
                   value="{{ surname2 }}" id="surname2" autocomplete="family-name"
                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
               </div>
 
               <div class="col-span-12">
-                <label for="url" class="block text-sm font-medium text-gray-700">URL</label>
+                <label for="url" class="block text-sm font-medium text-gray-700">Página web (URL)</label>
                 <input type="text" name="url" id="url"
                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
               </div>
