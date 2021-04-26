@@ -63,6 +63,15 @@
 </div>
 
 <div class="container mt-5">
+      <div class="coment-bottom bg-white p-2 px-4">
+        <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
+        <form [formGroup]="commentForm" (ngSubmit)="postComment();">
+          <textarea formControlName="bodyComment" class="mr-3 border border-black rounded-md mt-3"
+            placeholder=" Añade tu comentario..." cols="150" rows="3"></textarea>
+          <button class="btn btn-primary mt-2 mb-2" style="right: 0;" type="submit">Comentar</button>
+        </form>
+      </div>
+
   <div class="d-flex justify-content-center row" style="margin-bottom: 20%;">
     <div class="col-md-8">
       <div class="d-flex flex-column comment-section" id="myGroup">
@@ -87,98 +96,6 @@
                 <button type="submit">Editar</button>
               </form>
               <p *ngIf="!showingEditForm" class="comment-text">{{ comment.bodyComment }}</p>
-  <div class="lg:col-span-2"></div>
-  <div class="container mt-5 mb-5 lg:col-span-6">
-
-    <mat-card style="max-width: 980px;">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Shiba Inu</mat-card-title>
-        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-      <mat-card-content>
-        <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-      </mat-card-actions>
-    </mat-card>
-    <div>
-
-      <section class="rounded-b-lg  mt-4 ">
-
-
-        <form action="/" accept-charset="UTF-8" method="post"><input type="hidden">
-          <textarea class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
-            placeholder="Añade tu comentario..." cols="7" rows="3" id="comment_content" spellcheck="false"></textarea>
-          <button
-            class="font-bold py-2 px-4 w-full bg-indigo-500 hover:bg-indigo-700 text-base text-white shadow-md rounded-lg ">Publicar
-          </button>
-        </form>
-
-        <div id="task-comments" class="pt-4">
-          <!--     comment-->
-          <div class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
-            <div class="flex flex-row justify-center mr-2">
-              <img alt="avatar" width="48" height="48" class="rounded-full w-10 h-10 mr-4 shadow-lg mb-4"
-                src="https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png">
-              <h3 class="text-indigo-600 font-semibold text-base text-center md:text-left ">@Shanel</h3>
-            </div>
-
-
-            <p style="width: 90%" class="text-gray-600 text-base text-center md:text-left ">Hi good morning will it be the
-              entire house. </p>
-
-          </div>
-          <!--  comment end-->
-          <!--     comment-->
-          <div class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
-            <div class="flex flex-row justify-center mr-2">
-              <img alt="avatar" width="48" height="48" class="rounded-full w-10 h-10 mr-4 shadow-lg mb-4"
-                src="https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png">
-              <h3 class="text-indigo-600 font-semibold text-lg text-center md:text-left ">@Tim Motti</h3>
-            </div>
-
-
-            <p style="width: 90%" class="text-gray-600 text-lg text-center md:text-left "><span
-                class="text-indigo-600 font-semibold">@Shanel</span> Hello. Yes, the entire exterior, including the
-              walls. </p>
-
-          </div>
-          <!--  comment end-->
-        </div>
-      </section>
-
-    </div>
-  </div>
-  <div class="lg:col-span-2"></div>
-  <div class="container mt-5">
-    <div class="d-flex justify-content-center row" style="margin-bottom: 20%;">
-      <div class="col-md-8">
-        <div class="The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.d-flex flex-column comment-section" id="myGroup">
-          <div *ngFor="let comment of comments; index as i;">
-            <div *ngIf="comment.user.id == id">
-              <button> Editar </button>
-              <button> Eliminar </button>
-            </div>
-            <div class="bg-white p-2">
-              <div class="d-flex flex-row user-info">
-                <img class="rounded-circle" src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}"
-                  width="50">
-                <div class="d-flex flex-column justify-content-start ml-2">
-                  <span class="d-block font-weight-bold name">{{ comment.user.username }}</span>
-                  <span class="date text-black-50">{{ comment.comment_date }}</span>
-                </div>
-              </div>
-              <div class="mt-2">
-                <p class="comment-text">{{ comment.bodyComment }}</p>
-              </div>
             </div>
             <div class="bg-white p-2">
               <div class="d-flex flex-row fs-12">
@@ -220,7 +137,6 @@
                     </div>
                   </div>
                   <div class="mt-2">
-
                     <p class="comment-text">
                       <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
                         @{{ subcomment.user_reference.username }}
@@ -260,16 +176,96 @@
       </div>
     </div>
   </div>
-  <div class="">
-    <div class="">
-      <div class="coment-bottom bg-white p-2 px-4">
-        <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ imgAvatar }}" width="50">
-        <form [formGroup]="commentForm" (ngSubmit)="postComment();">
-          <textarea formControlName="bodyComment" class="mr-3 border border-black rounded-md mt-3"
-            placeholder=" Añade tu comentario..." cols="150" rows="3"></textarea>
-          <button class="btn btn-primary mt-2 mb-2" style="right: 0;" type="submit">Comentar</button>
+
+
+ <!--  <div class="lg:col-span-2"></div>
+  <div class="container mt-5 mb-5 lg:col-span-6">
+
+    <mat-card style="max-width: 980px;">
+      <mat-card-header>
+        <div mat-card-avatar class="example-header-image"></div>
+        <mat-card-title>Shiba Inu</mat-card-title>
+        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
+      </mat-card-header>
+      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
+      <mat-card-content>
+        <p>
+          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+          bred for hunting.
+        </p>
+      </mat-card-content>
+      <mat-card-actions>
+      </mat-card-actions>
+    </mat-card>
+    <div>
+
+      <section class="rounded-b-lg  mt-4 ">
+
+
+        <form action="/" accept-charset="UTF-8" method="post"><input type="hidden">
+          <textarea class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
+            placeholder="Añade tu comentario..." cols="7" rows="3" id="comment_content" spellcheck="false"></textarea>
+          <button
+            class="font-bold py-2 px-4 w-full bg-indigo-500 hover:bg-indigo-700 text-base text-white shadow-md rounded-lg ">Publicar
+          </button>
         </form>
-      </div>
+
+        <div id="task-comments" class="pt-4">
+          <div class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
+            <div class="flex flex-row justify-center mr-2">
+              <img alt="avatar" width="48" height="48" class="rounded-full w-10 h-10 mr-4 shadow-lg mb-4"
+                src="https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png">
+              <h3 class="text-indigo-600 font-semibold text-base text-center md:text-left ">@Shanel</h3>
+            </div>
+
+
+            <p style="width: 90%" class="text-gray-600 text-base text-center md:text-left ">Hi good morning will it be the
+              entire house. </p>
+
+          </div>
+
+          <div class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
+            <div class="flex flex-row justify-center mr-2">
+              <img alt="avatar" width="48" height="48" class="rounded-full w-10 h-10 mr-4 shadow-lg mb-4"
+                src="https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png">
+              <h3 class="text-indigo-600 font-semibold text-lg text-center md:text-left ">@Tim Motti</h3>
+            </div>
+
+
+            <p style="width: 90%" class="text-gray-600 text-lg text-center md:text-left "><span
+                class="text-indigo-600 font-semibold">@Shanel</span> Hello. Yes, the entire exterior, including the
+              walls. </p>
+
+          </div>
+
+        </div>
+      </section>
+
     </div>
-  </div>
-</div>
+  </div>-->
+  <!-- <div class="lg:col-span-2"></div>
+  <div class="container mt-5">
+    <div class="d-flex justify-content-center row" style="margin-bottom: 20%;">
+      <div class="col-md-8">
+        <div class="The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
+      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
+      bred for hunting.d-flex flex-column comment-section" id="myGroup">
+          <div *ngFor="let comment of comments; index as i;">
+            <div *ngIf="comment.user.id == id">
+              <button> Editar </button>
+              <button> Eliminar </button>
+            </div>
+            <div class="bg-white p-2">
+              <div class="d-flex flex-row user-info">
+                <img class="rounded-circle" src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}"
+                  width="50">
+                <div class="d-flex flex-column justify-content-start ml-2">
+                  <span class="d-block font-weight-bold name">{{ comment.user.username }}</span>
+                  <span class="date text-black-50">{{ comment.comment_date }}</span>
+                </div>
+              </div>
+              <div class="mt-2">
+                <p class="comment-text">{{ comment.bodyComment }}</p>
+              </div>
+            </div> -->
