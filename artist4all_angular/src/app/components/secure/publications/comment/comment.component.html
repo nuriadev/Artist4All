@@ -21,6 +21,10 @@
     <div class="col-md-8">
       <div class="d-flex flex-column comment-section" id="myGroup">
         <div *ngFor="let comment of comments; index as i;">
+          <div *ngIf="comment.user.id == id">
+            <button> Editar </button>
+            <button> Eliminar </button>
+          </div>
           <div class="bg-white p-2">
             <div class="d-flex flex-row user-info">
               <img class="rounded-circle" src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}" width="50">
