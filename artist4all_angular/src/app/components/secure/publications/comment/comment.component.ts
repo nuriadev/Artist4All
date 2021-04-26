@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { error } from 'protractor';
-import { Publication } from 'src/app/core/models/publication';
 import { User } from 'src/app/core/models/user';
 import { CommentService } from 'src/app/core/services/comment.service';
 import { PublicationService } from 'src/app/core/services/publication.service';
@@ -19,26 +17,15 @@ export class CommentComponent implements OnInit {
   constructor(
     private _sessionService: SessionService,
     private _commentService: CommentService,
-    private _publicationService: PublicationService,
     private _formBuilder: FormBuilder,
     private _activeRoute: ActivatedRoute,
     ) { }
 
   id: number;
-  name: string;
-  surname1: string;
-  surname2: string;
-  email: string;
-  username: string;
-  password: string;
   imgAvatar: FileList;
-  aboutMe: string;
-  isPrivate: number;
-
   user: User;
   token = this._sessionService.getCurrentToken();
 
-  publication: Publication;
   comments: Array<Comment> = [];
   subcomments: Array<Comment> = [];
   commentForm: FormGroup;
@@ -47,15 +34,7 @@ export class CommentComponent implements OnInit {
   ngOnInit(): void {
     this.user = this._sessionService.getCurrentUser();
     this.id = this.user.id;
-    this.name = this.user.name;
-    this.surname1 = this.user.surname1;
-    this.surname2 = this.user.surname2;
-    this.email = this.user.email;
-    this.username = this.user.username;
-    this.password = this.user.password;
     this.imgAvatar = this.user.imgAvatar;
-    this.aboutMe = this.user.aboutMe;
-    this.isPrivate = this.user.isPrivate;
     this._activeRoute.paramMap.subscribe((params) => {
     this.id_publication = params.get('id_publication');
       this._commentService.getPublicationComments(this.id, parseInt(this.id_publication)).subscribe(
@@ -94,6 +73,7 @@ export class CommentComponent implements OnInit {
     }
     this.responseFormIndexAux = index;
     this.subCommentFormAuxIndex = -1;
+    this.subcommentIndexAux = -1;
     let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     let subcommentContainer = document.getElementById(index + 'subcommentContainer');
@@ -104,7 +84,17 @@ export class CommentComponent implements OnInit {
       this.showingSubcomments = false;
       if (formSubcommentResponseForm) formSubcommentResponseForm.style.display = 'none';
       this.showingSubcommentForm = false;
-      this.createResponseForm(index, 0);
+      this.commentFormResponse = this._formBuilder.group({
+        id: [null],
+        user: [this.user],
+        bodyComment: ['', []],
+        // bodyComment: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
+        isEdited: [0],
+        comment_date: [null],
+        id_publication: [parseInt(this.id_publication)],
+        id_comment_reference: [this.comments[index].id],
+        user_reference: [this.comments[index].user]
+      });
     } else {
       formResponseContainer.style.display = 'none';
       this.showingForm = false;
@@ -120,8 +110,11 @@ export class CommentComponent implements OnInit {
     if (index != this.subcommentIndexAux) {
       this.showingSubcomments = false;
     }
+    this.responseFormIndexAux = -1;
     this.subCommentFormAuxIndex = -1;
     this.subcommentIndexAux = index;
+    let formResponseContainer = document.getElementById(index + 'formResponseContainer');
+    let subcommentContainer = document.getElementById(index + 'subcommentContainer');
     this._commentService.getCommentSubcomments(this.user.id, this.comments[index].id_publication, this.comments[index].id).subscribe(
       (result) => {
         if (result != null) {
@@ -129,63 +122,53 @@ export class CommentComponent implements OnInit {
             subcomment.comment_date = this.adaptDateOfComment(subcomment.comment_date);
           });
           this.subcomments = result;
-        }
-        let formResponseContainer = document.getElementById(index + 'formResponseContainer');
-        let subcommentContainer = document.getElementById(index + 'subcommentContainer');
-        if (!this.showingSubcomments) {
-          if (this.subcomments.length == 0) {
-            if (subcommentContainer) {
-              subcommentContainer.innerHTML = 'Este comentario actualmente no tiene respuestas.';
-            }
-          }
-          if (subcommentContainer) subcommentContainer.style.display = 'block';
-          this.showingSubcomments = true;
-          if (formResponseContainer) formResponseContainer.style.display = 'none';
-          this.showingForm = false;
         } else {
-          if (subcommentContainer) subcommentContainer.style.display = 'none';
-          this.showingSubcomments = false;
+          this.subcomments = null;
         }
       }, (error) => {
         console.log(error);
     });
+    if (!this.showingSubcomments) {
+      if (subcommentContainer) subcommentContainer.style.display = 'block';
+      this.showingSubcomments = true;
+      if (formResponseContainer) formResponseContainer.style.display = 'none';
+      this.showingForm = false;
+    } else {
+      if (subcommentContainer) subcommentContainer.style.display = 'none';
+      this.showingSubcomments = false;
+    }
   }
 
   subCommentFormAuxIndex = -1;
   showingSubcommentForm: boolean = false;
-  toggleSubcommentResponseForm(index: number): void {
-    if (index != this.subCommentFormAuxIndex) {
+  toggleSubcommentResponseForm(indexSubcomments: number, indexComments: number): void {
+    if (indexSubcomments != this.subCommentFormAuxIndex) {
       this.showingSubcommentForm = false;
     }
-    this.subCommentFormAuxIndex = index;
+    this.subCommentFormAuxIndex = indexSubcomments;
     this.responseFormIndexAux = -1;
-    let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
-    let formResponseContainer = document.getElementById(index + 'formResponseContainer');
+    let formSubcommentResponseForm = document.getElementById(indexSubcomments + 'formSubcommentResponseForm');
+    let formResponseContainer = document.getElementById(indexSubcomments + 'formResponseContainer');
     if (!this.showingSubcommentForm) {
       if (formSubcommentResponseForm) formSubcommentResponseForm.style.display = 'block';
       this.showingSubcommentForm = true;
       if (formResponseContainer) formResponseContainer.style.display = 'none';
       this.showingForm = false;
-      this.createResponseForm(index, 1);
+      this.commentFormResponse = this._formBuilder.group({
+        id: [null],
+        user: [this.user],
+        bodyComment: ['', []],
+        // bodyComment: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
+        isEdited: [0],
+        comment_date: [null],
+        id_publication: [parseInt(this.id_publication)],
+        id_comment_reference: [this.comments[indexComments].id],
+        user_reference: [this.subcomments[indexSubcomments].user]
+      });
     } else {
       if (formSubcommentResponseForm) formSubcommentResponseForm.style.display = 'none';
       this.showingSubcommentForm = false;
     }
-  }
-
-    // TODO: fix that the id comment reference is the good one
-  createResponseForm(index: number, typeForm: number) {
-    this.commentFormResponse = this._formBuilder.group({
-      id: [null],
-      user: [this.user],
-      bodyComment: ['', []],
-      // bodyComment: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
-      isEdited: [0],
-      comment_date: [null],
-      id_publication: [parseInt(this.id_publication)],
-      id_comment_reference: [typeForm == 1 ? this.subcomments[index].id : this.comments[index].id], //todo here
-      user_reference: [typeForm == 1 ? this.subcomments[index].user : this.comments[index].user]
-    });
   }
 
   isValidFormSubmitted = null;
@@ -197,6 +180,9 @@ export class CommentComponent implements OnInit {
 
   newComment: Comment;
   postComment() {
+    this.subcommentIndexAux = -1;
+    this.responseFormIndexAux = -1;
+    this.subCommentFormAuxIndex = -1;
     this.isValidFormSubmitted = false;
     if (this.commentForm.invalid) {
       return;
@@ -204,9 +190,10 @@ export class CommentComponent implements OnInit {
     this.isValidFormSubmitted = true;
     let comment: Comment = this.commentForm.value;
     this._commentService.postComment(comment).subscribe(
-      async (result) => {
+      (result) => {
+        result.comment_date = this.adaptDateOfComment(result.comment_date);
         this.newComment = result;
-        await this.comments.unshift(this.newComment);
+        this.comments.unshift(this.newComment);
         this.commentForm.reset();
         this.commentForm.controls['user'].setValue(this.user);
         this.commentForm.controls['id_publication'].setValue(parseInt(this.id_publication));
@@ -220,6 +207,7 @@ export class CommentComponent implements OnInit {
 
   newSubcomment: Comment;
   postResponse(indexComments: number, indexSubcomments: number, type: number) {
+    this.subcomments = [];
     this.isValidFormSubmitted = false;
     if (this.commentFormResponse.invalid) {
       return;
