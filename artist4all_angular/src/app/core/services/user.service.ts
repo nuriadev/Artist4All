@@ -19,10 +19,7 @@ export class UserService {
     newForm.append('username', newUser.username);
     newForm.append('password', newUser.password);
     newForm.append('isArtist', '' + newUser.isArtist);
-    newForm.append(
-      'imgAvatar',
-      'http://localhost:81/assets/img/defaultAvatarImg.png'
-    );
+    newForm.append('imgAvatar', 'http://localhost:81/assets/img/defaultAvatarImg.png');
     newForm.append('aboutMe', 'Bienvenido a mi perfil!!!');
     newForm.append('isPrivate', '' + newUser.isPrivate);
 

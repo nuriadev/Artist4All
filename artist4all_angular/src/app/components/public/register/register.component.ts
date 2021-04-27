@@ -28,12 +28,7 @@ export class RegisterComponent implements OnInit {
   ) {}
 
   registerForm: FormGroup;
-  namePattern =
-    "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,48}";
-  surname1Pattern =
-    "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,64}";
-  surname2Pattern =
-    "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,64}";
+  nameSurnamePattern = "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}";
   usernamePattern = '^[a-z0-9_ ]{5,20}$'; // letras _ num min length 5 max 20
   emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$';
   passwordPattern = '[A-Za-z0-9 ]+';
@@ -45,9 +40,9 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     this.registerForm = this._formBuilder.group(
       {
-        name: ['', [Validators.required, Validators.pattern(this.namePattern)]],
-        surname1: ['', [Validators.required, Validators.pattern(this.surname1Pattern)]],
-        surname2: [ '', [Validators.required, Validators.pattern(this.surname2Pattern)]],
+        name: ['', [Validators.required, Validators.pattern(this.nameSurnamePattern)]],
+        surname1: ['', [Validators.required, Validators.pattern(this.nameSurnamePattern)]],
+        surname2: [ '', [Validators.required, Validators.pattern(this.nameSurnamePattern)]],
         email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
         username: ['', [Validators.required, Validators.pattern(this.usernamePattern)]],
         password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
