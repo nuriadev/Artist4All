@@ -253,8 +253,8 @@ export class CommentComponent implements OnInit {
       isEdited: [1],
       comment_date: [null],
       id_publication: [parseInt(this.id_publication)],
-      id_comment_reference: [this.comments[index].id],
-      user_reference: [this.comments[index].user]
+      id_comment_reference: [commentsArray[index].id],
+      user_reference: [commentsArray[index].user]
     });
     if (!this.showingEditForm) {
       this.showingEditForm = true;
@@ -288,6 +288,17 @@ export class CommentComponent implements OnInit {
           console.log(error);
       });
     }
+  }
+
+  deleteComment(index: number, commentsArray:Array<Comment>) {
+    this.subcommentIndexAux = -1;
+    this._commentService.delete(this.user.id, parseInt(this.id_publication), commentsArray[index]).subscribe(
+      (result) => {
+        commentsArray.splice(index, 1);
+        if (this.subcomments.length == 0) this.subcomments = null;
+      }, (error) => {
+        console.log(error);
+    });
   }
 
   adaptDateOfComment(upload_date: string) {

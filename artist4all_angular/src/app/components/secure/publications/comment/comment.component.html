@@ -77,8 +77,8 @@
       <div class="d-flex flex-column comment-section" id="myGroup">
         <div *ngFor="let comment of comments; index as i;">
           <div *ngIf="comment.user.id == id">
-            <button (click)="toggleEditForm(i, comments)"> Editar </button>
-            <button> Eliminar </button>
+            <button class="focus:outline-none" (click)="toggleEditForm(i, comments)">Editar</button>
+            <button class="focus:outline-none" (click)="deleteComment(i, comments)">Eliminar</button>
           </div>
           <div class="bg-white p-2">
             <div class="d-flex flex-row user-info">
@@ -92,8 +92,8 @@
             <div class="mt-2">
               <form *ngIf="editCommentIndexAux===i && showingEditForm" [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
                 <textarea formControlName="bodyComment" class="w-full">{{ comment.bodyComment }}</textarea> <br>
-                <button (click)="toggleEditForm(i, comments)">Cancelar</button>
-                <button type="submit">Editar</button>
+                <button class="focus:outline-none" (click)="toggleEditForm(i, comments)">Cancelar</button>
+                <button class="focus:outline-none" type="submit">Editar</button>
               </form>
               <p *ngIf="!showingEditForm" class="comment-text">{{ comment.bodyComment }}</p>
             </div>
@@ -128,16 +128,26 @@
               <div *ngIf="subcomments == null">Este comentario actualmente no tiene respuestas.</div>
               <div *ngIf="subcomments != null">
                 <div *ngFor="let subcomment of subcomments; index as ind;">
+                  <div *ngIf="subcomment.user.id == id">
+                    <button class="focus:outline-none" (click)="toggleEditForm(ind, subcomments)">Editar</button>
+                    <button class="focus:outline-none" (click)="deleteComment(ind, subcomments)">Eliminar</button>
+                  </div>
                   <div class="d-flex flex-row user-info">
                     <img class="rounded-circle" src="http://localhost:81/assets/img/{{ subcomment.user.imgAvatar }}"
                       width="50">
                     <div class="d-flex flex-column justify-content-start ml-2">
                       <span class="d-block font-weight-bold name">{{ subcomment.user.username }}</span>
-                      <span class="date text-black-50">{{ subcomment.comment_date }}</span>
+                      <span *ngIf="subcomment.isEdited == 0" class="date text-black-50">{{ subcomment.comment_date }}</span>
+                      <span *ngIf="subcomment.isEdited == 1" class="date text-black-50">{{ subcomment.comment_date }} (editado)</span>
                     </div>
                   </div>
                   <div class="mt-2">
-                    <p class="comment-text">
+                    <form *ngIf="editCommentIndexAux===ind && showingEditForm" [formGroup]="editCommentForm" (ngSubmit)="editComment(ind, subcomments, 1)">
+                      <textarea formControlName="bodyComment" class="w-full">{{ subcomment.bodyComment }}</textarea> <br>
+                      <button class="focus:outline-none" (click)="toggleEditForm(ind, subcomments)">Cancelar</button>
+                      <button class="focus:outline-none" type="submit">Editar</button>
+                    </form>
+                    <p *ngIf="!showingEditForm" class="comment-text">
                       <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
                         @{{ subcomment.user_reference.username }}
                       </a>{{ subcomment.bodyComment }}

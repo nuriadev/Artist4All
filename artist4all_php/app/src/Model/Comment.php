@@ -195,4 +195,12 @@ class Comment implements \JsonSerializable{
     $result = $statement->execute(['id' => $id]);
     return $result;
   }
+
+  public static function deleteSubcomments(int $id): bool {
+    $sql = "DELETE FROM publication_comments WHERE id_comment_reference=:id";
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute(['id' => $id]);
+    return $result;
+  }
 }

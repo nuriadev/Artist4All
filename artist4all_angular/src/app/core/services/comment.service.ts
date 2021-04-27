@@ -40,8 +40,8 @@ export class CommentService {
     return this.http.post(this.url + comment.user.id + '/publication/' + comment.id_publication + '/comment/' + comment.id, newForm);
   }
 
-  delete(id_user: number, id_publication: number, id_comment: number): Observable<any> {
-    return this.http.delete(this.url + id_user + '/publication/' + id_publication + '/comment/' + id_comment);
+  delete(id_user: number, id_publication: number, comment: Comment): Observable<any> {
+    return this.http.delete(this.url + id_user + '/publication/' + id_publication + '/comment/' + comment.id);
   }
 
 }
