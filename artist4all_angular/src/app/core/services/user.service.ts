@@ -44,8 +44,7 @@ export class UserService {
     newForm.append('email', email);
     newForm.append('username', username);
     newForm.append('aboutMe', aboutMe);
-    if (!files) newForm.append('newImgAvatar', null);
-    else newForm.append('newImgAvatar', files[0], files[0].name);
+    if (files !== null) newForm.append('imgAvatar', files[0], files[0].name);
     //    TODO Cambiar a patch
     return this.http.post(this.url + '/user/' + id + '/profile', newForm);
   }

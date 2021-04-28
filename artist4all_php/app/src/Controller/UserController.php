@@ -28,7 +28,7 @@ class UserController {
 
   public function register(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
-    $user = $this->validatePersist($data, null, $response);
+    $user = $this->validatePersist($request, $data, null, $response);
     if (is_null($user)) {
       $response = $response->withStatus(500, 'Error on the register');
       return $response;
@@ -43,14 +43,14 @@ class UserController {
 
   public function editProfile(Request $request, Response $response, array $args) {
     $id = $args['id'];
-    $data = $request->getParsedBody();
+    $data = $request->getParsedBody();    
     $user = static::getUserByIdSummary($id, $response);
     if (!isset($data['password'])) $data['password'] = $user->getPassword();
     if (!isset($data['isArtist'])) $data['isArtist'] = $user->isArtist();
-    if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();
+    if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();   
     if (!isset($data['isPrivate'])) $data['isPrivate'] = $user->isPrivate();
     if (!isset($data['token'])) $data['token'] = $user->getToken();
-    $user = $this->validatePersist($data, $id, $response);
+    $user = $this->validatePersist($request, $data, $id, $response);
     if (is_null($user)) {
       $response = $response->withStatus(500, 'Error at editing');
       return $response;
@@ -238,58 +238,65 @@ class UserController {
     return $response;
   }
 
-  private function validatePersist($data, $id, $response) { 
-    $name = $data['name'];
-    $surname1 = $data['surname1'];
-    $surname2 = $data['surname2'];
-    $email = $data['email'];
-    $username = $data['username'];
-    $password = $data['password'];
-    $isArtist = $data['isArtist'];
-    $aboutMe = $data['aboutMe'];
-    $isPrivate = $data['isPrivate'];
-
+  private function validatePersist($request, $data, $id, $response) { 
     foreach(['name', 'surname1', 'surname2', 'email', 'username', 'password', 'isArtist', 'aboutMe', 'isPrivate'] as $key) {
       if (!isset($data[$key])) {
         $response = $response->withStatus(400, 'Missing requiered fields');
         return $response;
       }
-      $data[$key] = trim($data[$key]);
-      if (empty($data[$key])) {
-        $response = $response->withStatus(400, 'Field ' . $key . ' is empty');
-        return $response;
-      }
     }
 
     // Validate name and surnames
-    $nameSurnamePattern = "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}";
-    if(preg_match($nameSurnamePattern, $name)) {
-      $response = $response->withStatus(400, 'Wrong name format');
-      return $response;
-    } 
-    if(preg_match($nameSurnamePattern, $surname1) || preg_match($nameSurnamePattern, $surname2)) {
-      $response = $response->withStatus(400, 'Wrong surname format');
-      return $response;
-    } 
+    $name = trim($data['name']);
+    // $nameSurnamePattern = "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}^";
+    // if(preg_match($nameSurnamePattern, $name)) {
+    //   $response = $response->withStatus(400, 'Wrong name format');
+    //   return $response;
+    // } 
+    // if (empty($name)) {
+    //   $response = $response->withStatus(400, 'Field name is empty');
+    //   return $response;
+    // }
+
+    $surname1 = trim($data['surname1']);
+    $surname2 = trim($data['surname2']);
+    // if (preg_match($nameSurnamePattern, $surname1) || preg_match($nameSurnamePattern, $surname2)) {
+    //   $response = $response->withStatus(400, 'Wrong surname format');
+    //   return $response;
+    // } 
+    // if (empty($surname1) || empty($surname2)) {
+    //   $response = $response->withStatus(400, 'Field surname is empty');
+    //   return $response;
+    // }
 
     // Validate email
+    $email = trim($data['email']);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $response = $response->withStatus(400, 'Wrong email format');
       return $response;
     } 
+    // if (empty($email)) {
+    //   $response = $response->withStatus(400, 'Field email is empty');
+    //   return $response;
+    // }
     // Validate not existing email
-    $user = \Artist4all\Model\User::getUserByEmail($email, 0);
-    if (!is_null($user) && $id != $user->getId()) {
-      $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
-      return $response;
-    }
+    // $user = \Artist4all\Model\User::getUserByEmail($email, 0);
+    // if (!is_null($user) && $id != $user->getId()) {
+    //   $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
+    //   return $response;
+    // }
 
     // Validate username
-    $usernamePattern = '^[a-z0-9_ ]{5,20}$'; 
-    if(preg_match($usernamePattern, $username)) {
-      $response = $response->withStatus(400, 'Wrong username format');
-      return $response;
-    } 
+    $username = trim($data['username']);
+    // $usernamePattern = '^[a-z0-9_ ]{5,20}$'; 
+    // if(preg_match($usernamePattern, $username)) {
+    //   $response = $response->withStatus(400, 'Wrong username format');
+    //   return $response;
+    // } 
+    // if (empty($username)) {
+    //   $response = $response->withStatus(400, 'Field username is empty');
+    //   return $response;
+    // }
     // Validate not existing username
     $user = \Artist4all\Model\User::getUserByUsername($username);
     if (!is_null($user) && $id != $user->getId()) {
@@ -298,30 +305,41 @@ class UserController {
     }
 
     // Validate password
+    $password = trim($data['password']);
     // TODO: CAMBIAR AL FINAL DEL PROYECTO
-    $passwordPattern = '[A-Za-z0-9 ]+';
-    if(preg_match($passwordPattern, $password)) {
-      $response = $response->withStatus(400, 'Wrong password format');
-      return $response;
-    } 
+    // $passwordPattern = '[A-Za-z0-9 ]+';
+    // if(preg_match($passwordPattern, $password)) {
+    //   $response = $response->withStatus(400, 'Wrong password format');
+    //   return $response;
+    // } 
+    // if (empty($password)) {
+    //   $response = $response->withStatus(400, 'Field password is empty');
+    //   return $response;
+    // }
     
-    // Validate isArtist
-    if ($isArtist != 0 || $isArtist != 1) {
-      $response = $response->withStatus(400, 'Wrong isArtist value');
-      return $response;
-    }
+    $aboutMe = trim($data['aboutMe']);
 
-    // Validate aboutMe
-    if ($aboutMe != 'Bienvenido a mi perfil!!!') {
-      $response = $response->withStatus(400, 'Wrong aboutMe value');
-      return $response;
-    }
+    // Validate isArtist
+    $isArtist = trim($data['isArtist']);
+    // if ($isArtist != 0 && $isArtist != 1) {
+    //   $response = $response->withStatus(400, 'Wrong isArtist value');
+    //   return $response;
+    // }
+    // if (empty($isArtist)) {
+    //   $response = $response->withStatus(400, 'Field isArtist is empty');
+    //   return $response;
+    // }
 
     // Validate isPrivate
-    if ($isPrivate != 0) {
-      $response = $response->withStatus(400, 'Wrong isPrivate value');
-      return $response;
-    }
+    $isPrivate = trim($data['isPrivate']);
+    // if ($isPrivate != 0 && $isPrivate != 1) {
+    //   $response = $response->withStatus(400, 'Wrong isPrivate value');
+    //   return $response;
+    // }
+    // if (empty($isPrivate)) {
+    //   $response = $response->withStatus(400, 'Field isPrivate is empty');
+    //   return $response;
+    // }
 
 
     // todo: si está dado de baja para volver a activar su acc según el email if / else
@@ -330,17 +348,15 @@ class UserController {
     if (is_null($id)) {
       $data['token'] = '';
     } else {
-      $token = trim($data['token']);
-      $folderUrl = "assets/img" . DIRECTORY_SEPARATOR;
-      //TODO:Mover la img pasada a una carpeta interna 'assets', limitar el tamaño y el formato de la img
-      foreach ($_FILES as $file) {
-        $nombreImg = $file["tmp_name"];
-        $urlImg = $folderUrl . $file["name"];
-        move_uploaded_file($nombreImg, $urlImg);
+      $filePath = '/var/www/html/assets/img/';
+      if (!empty($_FILES) || $_FILES != null) {
+        foreach($_FILES as $file) {
+          $imgName = $file["tmp_name"]; 
+          $pathImg = $filePath.$file["name"];
+          if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);  
+          $data['imgAvatar'] = $file["name"];
+        }         
       }
-      $currentImgAvatar = $data['imgAvatar'];
-      if (isset($urlImg)) $data['imgAvatar'] = 'http://localhost:81/' . $urlImg;
-      else $data['imgAvatar'] = $currentImgAvatar;
     }
     $data['id'] = $id;
     $user = \Artist4all\Model\User::fromAssoc($data);

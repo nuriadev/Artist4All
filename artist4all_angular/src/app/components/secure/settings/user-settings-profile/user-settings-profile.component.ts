@@ -75,6 +75,5 @@ export class UserSettingsProfileComponent implements OnInit {
     } else {
       alert.classList.add("hidden");
     }
-
   }
 }

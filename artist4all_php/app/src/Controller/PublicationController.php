@@ -125,10 +125,7 @@ class PublicationController {
   }
 
   private function validatePersist($request, $data, $id, $response) {
-
     $data['id'] = $id;
-    $uploadedFiles = $request->getUploadedFiles();
-    $data['imgsPublication'] = $uploadedFiles;
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
     $publication = \Artist4all\Model\Publication::persistPublication($publication);
 
@@ -136,7 +133,7 @@ class PublicationController {
     if (!empty($_FILES) || $_FILES != null) {
         foreach ($_FILES as $file) {
         //todo validar tamaño, max, formato, etc. 
-          $imgName= $file["tmp_name"]; 
+          $imgName = $file["tmp_name"]; 
           $pathImg = $filePath.$file["name"];
           if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);   
           else continue;          
