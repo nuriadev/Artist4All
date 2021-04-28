@@ -281,7 +281,7 @@
                       <span class="sr-only">replies</span>
                     </span>
                     <span class=" mt-2" style="margin-left:63%;">
-                      <button class="inline-block py-1 px-3 justify-center text-sm font-medium text-gray-700
+                      <button *ngIf="isMyProfile" class="inline-block py-1 px-3 justify-center text-sm font-medium text-gray-700
                            hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500
                             mr-2" routerLink="/user/{{ id }}/publication/{{ publication.id }}">
                         <i class="fas fa-edit fa-lg text-blue-500 hover:text-blue-600"></i> Editar

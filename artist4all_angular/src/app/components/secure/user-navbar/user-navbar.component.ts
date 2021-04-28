@@ -112,6 +112,21 @@ export class UserNavbarComponent implements OnInit {
     });
   }
 
+  isDisplayMobile = false;
+  toggleMobileMenu() {
+    if (!this.isDisplayMobile) {
+      document.getElementById('mobile-menu2').style.display = "block";
+      document.getElementById('buttonMenu').style.display = "none";
+      document.getElementById('cross').style.display = "block";
+      this.isDisplayMobile = true;
+    } else {
+      document.getElementById('mobile-menu2').style.display = "none";
+      document.getElementById('buttonMenu').style.display = "block";
+      document.getElementById('cross').style.display = "none";
+      this.isDisplayMobile = false;
+    }
+  }
+
   isDisplayedNotifications = false;
   toggleNotifications() {
     if (!this.isDisplayedNotifications) {
