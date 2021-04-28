@@ -71,10 +71,16 @@ class CommentController {
   }
 
   public function deleteComment(Request $request, Response $response, array $args) {
-    $id_user = $args['id_user'];
     $id_comment = $args['id_comment'];
-    $result = \Artist4all\Model\Comment::deleteCommentById($id_comment->getId());
-    if (!$result) $response = $response->withStatus(500, 'Error at deleting comment');
+    $comment = \Artist4all\Model\Comment::getCommentById($id_comment);
+    if (is_null($comment)) {
+      $response = $response->withStatus(404, 'Comment not found');
+      return $response;
+    }
+    $subComments = \Artist4all\Model\Comment::getCommentSubcomments($id_comment);
+    if (!is_null($subComments)) \Artist4all\Model\Comment::deleteSubcomments($comment->getId());
+    $resultComment = \Artist4all\Model\Comment::deleteCommentById($comment->getId());
+    if (!$resultComment) $response = $response->withStatus(500, 'Error at deleting comment');
     else $response = $response->withStatus(200, 'Comment deleted');
     return $response;
   }
