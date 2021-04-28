@@ -164,13 +164,13 @@ class User implements \JsonSerializable
     return $user;
   }
 
-  public static function getUserByEmail(string $email): ?\Artist4all\Model\User {
+  public static function getUserByEmail(string $email, int $deactivated): ?\Artist4all\Model\User {
     $sql = 'SELECT * FROM users WHERE email=:email AND deactivated=:deactivated';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':email' => $email,
-      ':deactivated' => 0
+      ':deactivated' => $deactivated
     ]);
     $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
     if (!$userAssoc) return null;
@@ -395,5 +395,19 @@ class User implements \JsonSerializable
       ':id' => $id
     ]);
     return $result;
+  }
+
+  public static function reactivateAccount(string $email): ?\Artist4all\Model\User {
+    $sql = 'UPDATE users SET deactivated=:deactivated WHERE email=:email';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':email' => $email,
+      ':deactivated' => 0
+    ]);
+    $userAssoc = $statement->fetch(\PDO::FETCH_ASSOC);
+    if (!$userAssoc) return null;
+    $user = \Artist4all\Model\User::fromAssoc($userAssoc);
+    return $user;
   }
 }

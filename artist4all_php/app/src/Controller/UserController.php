@@ -219,7 +219,7 @@ class UserController {
     // todo validacion email y password
     $email = trim($data["email"]);
     $password = trim($data["password"]);
-    $user = \Artist4all\Model\User::getUserByEmail($email);
+    $user = \Artist4all\Model\User::getUserByEmail($email, 0);
     if (is_null($user)) {
       $response = $response->withStatus(400, 'Unvalid user');
       return $response;
@@ -238,12 +238,7 @@ class UserController {
     return $response;
   }
 
-  private function validatePersist($data, $id, $response) {
-
-    // todo: si está dado de baja para volver a activar su acc según el email if / else
-    // todo: crear función para reactivarCuenta 
-
-    // todo validación completa de un usuario menos del img avatar 
+  private function validatePersist($data, $id, $response) { 
     $name = $data['name'];
     $surname1 = $data['surname1'];
     $surname2 = $data['surname2'];
@@ -253,7 +248,84 @@ class UserController {
     $isArtist = $data['isArtist'];
     $aboutMe = $data['aboutMe'];
     $isPrivate = $data['isPrivate'];
-    // todo comprueba si existe un usuario según el email y el username 
+
+    foreach(['name', 'surname1', 'surname2', 'email', 'username', 'password', 'isArtist', 'aboutMe', 'isPrivate'] as $key) {
+      if (!isset($data[$key])) {
+        $response = $response->withStatus(400, 'Missing requiered fields');
+        return $response;
+      }
+      $data[$key] = trim($data[$key]);
+      if (empty($data[$key])) {
+        $response = $response->withStatus(400, 'Field ' . $key . ' is empty');
+        return $response;
+      }
+    }
+
+    // Validate name and surnames
+    $nameSurnamePattern = "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}";
+    if(preg_match($nameSurnamePattern, $name)) {
+      $response = $response->withStatus(400, 'Wrong name format');
+      return $response;
+    } 
+    if(preg_match($nameSurnamePattern, $surname1) || preg_match($nameSurnamePattern, $surname2)) {
+      $response = $response->withStatus(400, 'Wrong surname format');
+      return $response;
+    } 
+
+    // Validate email
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $response = $response->withStatus(400, 'Wrong email format');
+      return $response;
+    } 
+    // Validate not existing email
+    $user = \Artist4all\Model\User::getUserByEmail($email, 0);
+    if (!is_null($user) && $id != $user->getId()) {
+      $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
+      return $response;
+    }
+
+    // Validate username
+    $usernamePattern = '^[a-z0-9_ ]{5,20}$'; 
+    if(preg_match($usernamePattern, $username)) {
+      $response = $response->withStatus(400, 'Wrong username format');
+      return $response;
+    } 
+    // Validate not existing username
+    $user = \Artist4all\Model\User::getUserByUsername($username);
+    if (!is_null($user) && $id != $user->getId()) {
+      $response = $response->withJson('El nombre de usuario introducido ya está cogido.')->withStatus(400, 'This username is already taken');
+      return $response;
+    }
+
+    // Validate password
+    // TODO: CAMBIAR AL FINAL DEL PROYECTO
+    $passwordPattern = '[A-Za-z0-9 ]+';
+    if(preg_match($passwordPattern, $password)) {
+      $response = $response->withStatus(400, 'Wrong password format');
+      return $response;
+    } 
+    
+    // Validate isArtist
+    if ($isArtist != 0 || $isArtist != 1) {
+      $response = $response->withStatus(400, 'Wrong isArtist value');
+      return $response;
+    }
+
+    // Validate aboutMe
+    if ($aboutMe != 'Bienvenido a mi perfil!!!') {
+      $response = $response->withStatus(400, 'Wrong aboutMe value');
+      return $response;
+    }
+
+    // Validate isPrivate
+    if ($isPrivate != 0) {
+      $response = $response->withStatus(400, 'Wrong isPrivate value');
+      return $response;
+    }
+
+
+    // todo: si está dado de baja para volver a activar su acc según el email if / else
+    // todo: crear función para reactivarCuenta 
 
     if (is_null($id)) {
       $data['token'] = '';
@@ -275,4 +347,13 @@ class UserController {
     $user = \Artist4all\Model\User::persistUser($user);
     return $user;
   }
+
+  private function reactivateAccount(string $email) {
+    $user = \Artist4all\Model\User::getUserByEmail($email, 1);
+    if (!is_null($user)) {
+      $user = \Artist4all\Model\User::reactivateAccount($email);
+      return $user;
+    } 
+  }
+  
 }
