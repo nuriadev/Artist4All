@@ -278,18 +278,6 @@ class User implements \JsonSerializable
     return $result;
   }
 
-  //TODO pasar usuario y contraseña
-  public static function changePassword(string $password, int $id): bool {
-    $sql = 'UPDATE users SET password=:password WHERE id=:id';
-    $conn = Database::getInstance()->getConnection();
-    $statement = $conn->prepare($sql);
-    $result = $statement->execute([
-      ':password' => $password,
-      ':id' => $id
-    ]);
-    return $result;
-  }
-
   public static function isFollowingThatUser(\Artist4all\Model\User $user_follower, \Artist4all\Model\User $user_followed): ?array {
     $sql = 'SELECT * FROM users_followed WHERE 
     id_follower=:id_follower AND 
