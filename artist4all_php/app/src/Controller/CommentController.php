@@ -86,9 +86,12 @@ class CommentController {
   }
 
   private function validatePersist($request, $data, $id, $response) {
-      //todo: Validar los campos
     $data['id'] = $id;
-    
+    $bodyComment = $data['bodyComment'];
+    if (strlen($bodyComment) > 255) {
+      $response = $response->withStatus(400, 'Maximum character length surpassed');
+      return $response;
+    }
     $comment = \Artist4all\Model\Comment::fromAssoc($data);
     $comment = \Artist4all\Model\Comment::persistComment($comment);
     $comment = static::getCommentById($comment->getId(), $response);

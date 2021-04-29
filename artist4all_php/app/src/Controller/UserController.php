@@ -202,6 +202,8 @@ class UserController {
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
     $isPrivate = $data['isPrivate'];
+    $booleanPattern = '^[0-1]$';
+    $this->validateVariable($isPrivate, $booleanPattern, 'Wrong isPrivate format', 1, $response);
     $result = \Artist4all\Model\User::privateAccountSwitcher($isPrivate, $user->getId());
     if (!$result) {
       $response = $response->withStatus(400, 'Error at switching');
@@ -300,8 +302,9 @@ class UserController {
     $booleanPattern = '^[0-1]$';
     $this->validateVariable($isArtist, $booleanPattern, 'Wrong isArtist format', 1, $response);
     $this->validateVariable($isPrivate, $booleanPattern, 'Wrong isPrivate format', 1, $response);
-   
-    $user = $this->reactivateAccount($email);
+      
+    // todo: si está dado de baja para volver a activar su acc según el email if / else
+    // todo: crear función para reactivarCuenta 
     
     $user = \Artist4all\Model\User::getUserByUsername($username);
     if (!is_null($user) && $id != $user->getId()) {
@@ -314,10 +317,6 @@ class UserController {
       $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
       return $response;
     }
-
-
-    // todo: si está dado de baja para volver a activar su acc según el email if / else
-    // todo: crear función para reactivarCuenta 
 
     if (is_null($id)) {
       $data['token'] = '';
@@ -354,14 +353,6 @@ class UserController {
         $response = $response->withStatus(400, $message);
         return $response;
       } 
-    } 
-  }
-
-  private function reactivateAccount(string $email) {
-    $user = \Artist4all\Model\User::getUserByEmail($email, 1);
-    if (!is_null($user)) {
-      $user = \Artist4all\Model\User::reactivateAccount($email);
-      return $user;
     } 
   }
 

@@ -50,12 +50,11 @@ class PublicationController {
     return $response;
   }
 
-  // todo: view, edit, delete, comentarios, likes
   public function createPublication(Request $request, Response $response, array $args) {
     $id_user = $args['id_user'];
     $data = $request->getParsedBody();  
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
-    $data['user'] = $user;
+    $data['user'] = $user; 
     $publication = $this->validatePersist($request, $data, null, $response);
     if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');
     else $response = $response->withJson($publication)->withStatus(201, 'Publication created');
@@ -126,13 +125,19 @@ class PublicationController {
 
   private function validatePersist($request, $data, $id, $response) {
     $data['id'] = $id;
+    // $bodyPublication = $data['bodyPublication'];
+    // if (strlen($bodyPublication) > 255) {
+    //   $response = $response->withStatus(400, 'Maximum character length surpassed');
+    //   return $response;
+    // }
+    $uploadedFiles = $request->getUploadedFiles();
+    $data['imgsPublication'] = $uploadedFiles;
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
     $publication = \Artist4all\Model\Publication::persistPublication($publication);
 
     $filePath = '/var/www/html/assets/img/';
     if (!empty($_FILES) || $_FILES != null) {
         foreach ($_FILES as $file) {
-        //todo validar tamaño, max, formato, etc. 
           $imgName = $file["tmp_name"]; 
           $pathImg = $filePath.$file["name"];
           if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);   
