@@ -232,10 +232,8 @@ class UserController {
     $password = trim($data['password']);
     // TODO: CAMBIAR AL FINAL DEL PROYECTO
     $passwordPattern = '^[A-Za-z0-9 ]+^';
-    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
-      $response = $response->withStatus(400, 'Unvalid user');
-      return $response;
-    } 
+    $this->validateByRegExp($password, $passwordPattern, 'Unvalid user', $response);
+
     $user = \Artist4all\Model\User::getUserByEmail($email, 0);
     if (is_null($user)) {
       $response = $response->withStatus(400, 'Unvalid user');
@@ -269,19 +267,13 @@ class UserController {
     // Validate name
     $name = trim($data['name']);
     $nameSurnamePattern = "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}^";
-    if(!filter_var($name, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern)))) {
-      $response = $response->withStatus(400, 'Wrong name format');
-      return $response;
-    } 
+    $this->validateByRegExp($name, $nameSurnamePattern, 'Wrong name format', $response);
 
     // Validate surnames
     $surname1 = trim($data['surname1']);
     $surname2 = trim($data['surname2']);
-    if (!filter_var($surname1, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern))) || 
-        !filter_var($surname2, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern)))) {
-      $response = $response->withStatus(400, 'Wrong surname format');
-      return $response;
-    } 
+    $this->validateByRegExp($surname1, $nameSurnamePattern, 'Wrong surname format', $response);
+    $this->validateByRegExp($surname2, $nameSurnamePattern, 'Wrong surname format', $response);
 
     // Validate email
     $email = trim($data['email']);
@@ -299,10 +291,7 @@ class UserController {
     // Validate username
     $username = trim($data['username']);
     $usernamePattern = '^[a-z0-9_ ]{5,20}^'; 
-    if(!filter_var($username, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $usernamePattern)))) {
-      $response = $response->withStatus(400, 'Wrong username format');
-      return $response;
-    } 
+    $this->validateByRegExp($username, $usernamePattern, 'Wrong username format', $response);
     // Validate not existing username
     $user = \Artist4all\Model\User::getUserByUsername($username);
     if (!is_null($user) && $id != $user->getId()) {
@@ -314,10 +303,7 @@ class UserController {
     $password = trim($data['password']);
     // TODO: CAMBIAR AL FINAL DEL PROYECTO
     $passwordPattern = '^[A-Za-z0-9 ]+^';
-    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
-      $response = $response->withStatus(400, 'Wrong password format');
-      return $response;
-    } 
+    $this->validateByRegExp($password, $passwordPattern, 'Wrong password format', $response);
     
     $aboutMe = trim($data['aboutMe']);
 
@@ -343,6 +329,7 @@ class UserController {
     } else {
       $filePath = '/var/www/html/assets/img/';
       if (!empty($_FILES) || $_FILES != null) {
+        // todo: validar imgs
         foreach($_FILES as $file) {
           $imgName = $file["tmp_name"]; 
           $pathImg = $filePath.$file["name"];
@@ -360,6 +347,13 @@ class UserController {
       return $response;
     }
     return $user;
+  }
+  
+  private function validateByRegExp($variable, $regexp, $message, $response) {
+    if(!filter_var($variable, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $regexp)))) {
+      $response = $response->withStatus(400, $message);
+      return $response;
+    }
   }
 
   private function reactivateAccount(string $email) {
