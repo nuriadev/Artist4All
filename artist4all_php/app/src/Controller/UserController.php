@@ -41,6 +41,17 @@ class UserController {
     $id = $args['id'];
     $data = $request->getParsedBody();    
     $user = static::getUserByIdSummary($id, $response);
+    if (!empty($_FILES) || $_FILES != null) {
+      $allowed = array('image/gif', 'image/png', 'image/jpg', 'image/jpeg');
+      foreach($_FILES as $file) {
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        if (!in_array(finfo_file($finfo, $file['tmp_name']), $allowed)) {
+          $response = $response->withStatus(400, 'Unvalid image extension');
+          return $response;
+        }     
+        finfo_close($finfo);
+      }         
+    }
     if (!isset($data['password'])) $data['password'] = $user->getPassword();
     if (!isset($data['isArtist'])) $data['isArtist'] = $user->isArtist();
     if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();   
@@ -225,14 +236,12 @@ class UserController {
     }
     
     $email = trim($data["email"]);
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $response = $response->withStatus(400, 'Unvalid user');
-      return $response;
-    }
+    $this->validateVariable($email, null, 'Wrong email format', 0, $response);
+
     $password = trim($data['password']);
     // TODO: CAMBIAR AL FINAL DEL PROYECTO
     $passwordPattern = '^[A-Za-z0-9 ]+^';
-    $this->validateByRegExp($password, $passwordPattern, 'Unvalid user', $response);
+    $this->validateVariable($password, $passwordPattern, 'Unvalid user', 1, $response);
 
     $user = \Artist4all\Model\User::getUserByEmail($email, 0);
     if (is_null($user)) {
@@ -253,6 +262,16 @@ class UserController {
   }
 
   private function validatePersist($request, $data, $id, $response) { 
+    $name = trim($data['name']);
+    $surname1 = trim($data['surname1']);
+    $surname2 = trim($data['surname2']);
+    $email = trim($data['email']);
+    $username = trim($data['username']);
+    $password = trim($data['password']);
+    $aboutMe = trim($data['aboutMe']);
+    $isArtist = trim($data['isArtist']);
+    $isPrivate = trim($data['isPrivate']);
+
     foreach(['name', 'surname1', 'surname2', 'email', 'username', 'password', 'isArtist', 'aboutMe', 'isPrivate'] as $key) {
       if (!isset($data[$key])) {
         $response = $response->withStatus(400, 'Missing requiered fields');
@@ -264,62 +283,38 @@ class UserController {
       }
     }
 
-    // Validate name
-    $name = trim($data['name']);
     $nameSurnamePattern = "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}^";
-    $this->validateByRegExp($name, $nameSurnamePattern, 'Wrong name format', $response);
+    $this->validateVariable($name, $nameSurnamePattern, 'Wrong name format', 1, $response);
+    $this->validateVariable($surname1, $nameSurnamePattern, 'Wrong surname format', 1, $response);
+    $this->validateVariable($surname2, $nameSurnamePattern, 'Wrong surname format', 1, $response);
 
-    // Validate surnames
-    $surname1 = trim($data['surname1']);
-    $surname2 = trim($data['surname2']);
-    $this->validateByRegExp($surname1, $nameSurnamePattern, 'Wrong surname format', $response);
-    $this->validateByRegExp($surname2, $nameSurnamePattern, 'Wrong surname format', $response);
+    $this->validateVariable($email, null, 'Wrong email format', 0, $response);
 
-    // Validate email
-    $email = trim($data['email']);
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $response = $response->withStatus(400, 'Wrong email format');
-      return $response;
-    } 
-    // Validate not existing email
-    $user = \Artist4all\Model\User::getUserByEmail($email, 0);
-    if (!is_null($user) && $id != $user->getId()) {
-      $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
-      return $response;
-    }
-
-    // Validate username
-    $username = trim($data['username']);
     $usernamePattern = '^[a-z0-9_ ]{5,20}^'; 
-    $this->validateByRegExp($username, $usernamePattern, 'Wrong username format', $response);
-    // Validate not existing username
+    $this->validateVariable($username, $usernamePattern, 'Wrong username format', 1, $response);
+
+    // TODO: CAMBIAR AL FINAL DEL PROYECTO
+    $passwordPattern = '^[A-Za-z0-9 ]+^';
+    $this->validateVariable($password, $passwordPattern, 'Wrong password format', 1, $response);
+
+    $booleanPattern = '^[0-1]$';
+    $this->validateVariable($isArtist, $booleanPattern, 'Wrong isArtist format', 1, $response);
+    $this->validateVariable($isPrivate, $booleanPattern, 'Wrong isPrivate format', 1, $response);
+   
+    $user = $this->reactivateAccount($email);
+    
     $user = \Artist4all\Model\User::getUserByUsername($username);
     if (!is_null($user) && $id != $user->getId()) {
       $response = $response->withJson('El nombre de usuario introducido ya está cogido.')->withStatus(400, 'This username is already taken');
       return $response;
     }
 
-    // Validate password
-    $password = trim($data['password']);
-    // TODO: CAMBIAR AL FINAL DEL PROYECTO
-    $passwordPattern = '^[A-Za-z0-9 ]+^';
-    $this->validateByRegExp($password, $passwordPattern, 'Wrong password format', $response);
-    
-    $aboutMe = trim($data['aboutMe']);
-
-    // Validate isArtist
-    $isArtist = trim($data['isArtist']);
-    if ($isArtist != 0 && $isArtist != 1) {
-      $response = $response->withStatus(400, 'Wrong isArtist value');
+    $user = \Artist4all\Model\User::getUserByEmail($email, 0);
+    if (!is_null($user) && $id != $user->getId()) {
+      $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
       return $response;
     }
 
-    // Validate isPrivate
-    $isPrivate = trim($data['isPrivate']);
-    if ($isPrivate != 0 && $isPrivate != 1) {
-      $response = $response->withStatus(400, 'Wrong isPrivate value');
-      return $response;
-    }
 
     // todo: si está dado de baja para volver a activar su acc según el email if / else
     // todo: crear función para reactivarCuenta 
@@ -329,7 +324,6 @@ class UserController {
     } else {
       $filePath = '/var/www/html/assets/img/';
       if (!empty($_FILES) || $_FILES != null) {
-        // todo: validar imgs
         foreach($_FILES as $file) {
           $imgName = $file["tmp_name"]; 
           $pathImg = $filePath.$file["name"];
@@ -349,11 +343,18 @@ class UserController {
     return $user;
   }
   
-  private function validateByRegExp($variable, $regexp, $message, $response) {
-    if(!filter_var($variable, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $regexp)))) {
-      $response = $response->withStatus(400, $message);
-      return $response;
-    }
+  private function validateVariable($variable, $regexp, $message, $type, $response) {
+    if ($type == 1) {
+      if(!filter_var($variable, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $regexp)))) {
+        $response = $response->withStatus(400, $message);
+        return $response;
+      }
+    } else if ($type == 0) {
+      if (!filter_var($variable, FILTER_VALIDATE_EMAIL)) {
+        $response = $response->withStatus(400, $message);
+        return $response;
+      } 
+    } 
   }
 
   private function reactivateAccount(string $email) {
@@ -363,5 +364,5 @@ class UserController {
       return $user;
     } 
   }
-  
+
 }
