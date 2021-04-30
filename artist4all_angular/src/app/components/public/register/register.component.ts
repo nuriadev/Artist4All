@@ -33,7 +33,7 @@ export class RegisterComponent implements OnInit {
   emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$';
   passwordPattern = '[A-Za-z0-9 ]+';
   // TODO: Cambiar una vez finalizado proyecto
-  //passwordPattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}'; password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter
+  //passwordPattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8, 20}'; password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter
   isValidFormSubmitted = null;
 
   // TODO: devolver mensaje de error en caso de que el username o el gmail ya está cogido
@@ -69,6 +69,37 @@ export class RegisterComponent implements OnInit {
       showIcon.style.display = 'none';
       inputPassword.type = 'text';
     }
+  }
+
+  showingNameHint: boolean = false;
+  showNameHint() {
+    if (!this.showingNameHint) this.showingNameHint = true;
+    else this.showingNameHint = false;
+  }
+
+  showingSurname1Hint: boolean = false;
+  showSurname1Hint() {
+    if (!this.showingSurname1Hint) this.showingSurname1Hint = true;
+    else this.showingSurname1Hint = false;
+  }
+
+  showingSurname2Hint: boolean = false;
+  showSurname2Hint() {
+    if (!this.showingSurname2Hint) this.showingSurname2Hint = true;
+    else this.showingSurname2Hint = false;
+  }
+
+
+  showingUsernameHint: boolean = false;
+  showUsernameHint() {
+    if (!this.showingUsernameHint) this.showingUsernameHint = true;
+    else this.showingUsernameHint = false;
+  }
+
+  showingPasswordHint: boolean = false;
+  showPasswordHint() {
+    if (!this.showingPasswordHint) this.showingPasswordHint = true;
+    else this.showingPasswordHint = false;
   }
 
   get name() { return this.registerForm.get('name'); }

@@ -54,6 +54,11 @@ class PublicationController {
     $id_user = $args['id_user'];
     $data = $request->getParsedBody();  
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
+    $bodyPublication = $data['bodyPublication'];
+    if (strlen($bodyPublication) > 255) {
+      $response = $response->withStatus(400, 'Maximum character length surpassed');
+      return $response;
+    }
     $data['user'] = $user; 
     $publication = $this->validatePersist($request, $data, null, $response);
     if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');
@@ -67,6 +72,11 @@ class PublicationController {
     $data = $request->getParsedBody();
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
     $publication = static::getPublicationByUser($request, $id_publication, $response);
+    $bodyPublication = $data['bodyPublication'];
+    if (strlen($bodyPublication) > 255) {
+      $response = $response->withStatus(400, 'Maximum character length surpassed');
+      return $response;
+    }
     $data['user'] = $user;
     $data['isLiking'] = 0;
     if (!isset($data['isEdited'])) $data['isEdited'] = $publication->isEdited();
@@ -125,11 +135,6 @@ class PublicationController {
 
   private function validatePersist($request, $data, $id, $response) {
     $data['id'] = $id;
-    // $bodyPublication = $data['bodyPublication'];
-    // if (strlen($bodyPublication) > 255) {
-    //   $response = $response->withStatus(400, 'Maximum character length surpassed');
-    //   return $response;
-    // }
     $uploadedFiles = $request->getUploadedFiles();
     $data['imgsPublication'] = $uploadedFiles;
     $publication = \Artist4all\Model\Publication::fromAssoc($data);

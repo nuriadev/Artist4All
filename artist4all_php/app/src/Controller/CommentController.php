@@ -42,6 +42,11 @@ class CommentController {
       $data['user_reference'] = null;
     }
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
+    $bodyComment = $data['bodyComment'];
+    if (strlen($bodyComment) > 255) {
+      $response = $response->withStatus(400, 'Maximum character length surpassed');
+      return $response;
+    }
     $data['user'] = $user;
     $data['id_publication'] = $args['id_publication'];
     if ($data['id_comment_reference'] == null) $data['id_comment_reference'] = null;
@@ -58,6 +63,11 @@ class CommentController {
     $data = $request->getParsedBody();
     $comment = \Artist4all\Model\Comment::getCommentById($id_comment);
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
+    $bodyComment = $data['bodyComment'];
+    if (strlen($bodyComment) > 255) {
+      $response = $response->withStatus(400, 'Maximum character length surpassed');
+      return $response;
+    }
     $data['user'] = $user;
     $data['id'] = $id_comment;
     if (!isset($data['comment_date'])) $data['comment_date'] = $comment->getCommentDate();
@@ -87,11 +97,6 @@ class CommentController {
 
   private function validatePersist($request, $data, $id, $response) {
     $data['id'] = $id;
-    $bodyComment = $data['bodyComment'];
-    if (strlen($bodyComment) > 255) {
-      $response = $response->withStatus(400, 'Maximum character length surpassed');
-      return $response;
-    }
     $comment = \Artist4all\Model\Comment::fromAssoc($data);
     $comment = \Artist4all\Model\Comment::persistComment($comment);
     $comment = static::getCommentById($comment->getId(), $response);
