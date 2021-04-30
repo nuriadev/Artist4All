@@ -171,7 +171,8 @@
           </div>
           <div *ngIf="username.errors && username.errors.pattern"
             class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
-            <p class="inline-block"><i class="fas fa-times-circle mr-1"></i>Nombre de usuario no válido.</p>
+            <i class="fas fa-times-circle"></i>
+            Nombre de usuario no válido.
             <p class="inline-block ml-2 hover:text-red-500" (mouseenter)="showUsernameHint()" (mouseleave)="showUsernameHint()">Más informacion<i class="fas fa-exclamation-circle ml-1"></i></p>
             <div *ngIf="showingUsernameHint" id="usernameHint">
               Requisitos: <br>
