@@ -83,8 +83,6 @@
     <div>
 
       <section class="rounded-b-lg  mt-4 ">
-
-
         <form [formGroup]="commentForm" (ngSubmit)="postComment();" accept-charset="UTF-8"><input type="hidden">
           <textarea formControlName="bodyComment" class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
             placeholder="Añade tu comentario..." cols="7" rows="3" spellcheck="false"></textarea>
@@ -98,29 +96,40 @@
           class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
             <div *ngIf="comment.user.id == id"
              class="flex flex-row justify-center mr-2">
-              <img alt="avatar" width="50" height="50" class="rounded-full mr-4 shadow-lg mb-4"
-                src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}">
-              <h3 class="mt-3 text-indigo-600 font-semibold text-base text-center md:text-left">{{ comment.user.username }}</h3>
+              <img alt="avatar" class="rounded-full mr-3 shadow-lg mt-1 mb-4"
+                src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}" style="width: 40px; height: 40px;">
+                <div class="">
+                  <h3 class="mt-3 text-indigo-600 font-semibold text-base text-center md:text-left">{{ comment.user.username }}</h3> 
+                </div>
             </div>
+            <div class="mt-2">
+              <form *ngIf="editCommentIndexAux===i && showingEditForm" [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
+                <textarea formControlName="bodyComment" class="w-full">{{ comment.bodyComment }}</textarea> <br>
+                <button class="focus:outline-none" (click)="toggleEditForm(i, comments)">Cancelar</button>
+                <button class="focus:outline-none" type="submit">Editar</button>
+              </form>
 
             <p *ngIf="!showingEditForm" class="text-gray-600 text-base text-center mb-2 md:text-left">{{ comment.bodyComment }}</p>
+            </div>
             <p class="text-gray-400 text-sm">{{ comment.comment_date }}</p>
             <div class="bg-white p-2" style="padding-left: 0px !important;">
-              <div class="d-flex flex-row fs-12">
+              <div class="inline-flex items-center">
                 <div class="p-2 cursor" (click)="toggleResponseForm(i)" style="padding-left: 0px !important; margin-left: 0px !important;">
                   <i class="fas fa-comment-dots text-gray-600"></i>
-                  <span class="ml-1">Comentar</span>
+                  <span class="ml-2">Comentar</span>
                 </div>
                 <div class="p-2 cursor" (click)="toggleSubcomments(i)">
                   <i class="fas fa-comments text-gray-600"></i>
-                  <span class="ml-1">Ver respuestas</span>
+                  <span class="ml-2">Ver respuestas</span>
                 </div>
               </div>
+              <button style="margin-left:10%;" class="focus:outline-none" (click)="toggleEditForm(i, comments)"> <i class="fas fa-edit fa-lg text-blue-500 hover:text-blue-600"></i> Editar</button>
+              <button class="focus:outline-none" (click)="deleteComment(i, comments)"><i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button> 
             </div>
-            <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="p-2">
+            <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="p-2 w-full">
               <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, null, 0);">
                 <div class="d-flex flex-row align-items-start">
-                  <textarea formControlName="bodyComment"
+                  <textarea formControlName="bodyComment" placeholder="Añade una respuesta..."
                     class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"></textarea>
                 </div>
                 <div class="mt-2 text-right">
@@ -142,15 +151,9 @@
                       (click)="deleteComment(ind, subcomments)">Eliminar</button>
                   </div>
                   <div class="d-flex flex-row user-info">
-                    <img width="50" height="50" class="rounded-full mr-4 shadow-lg mb-4"
-                      src="http://localhost:81/assets/img/{{ subcomment.user.imgAvatar }}" width="50">
-
-                      <h3 class="mt-3 text-indigo-600 font-semibold text-base md:text-left">{{ subcomment.user.username }}</h3>
-                    
-                    <span *ngIf="subcomment.isEdited == 0" class="text-gray-400 text-sm">{{
-                      subcomment.comment_date }}</span>
-                    <span *ngIf="subcomment.isEdited == 1" class="text-gray-400 text-sm">{{
-                      subcomment.comment_date }} (editado)</span>
+                    <img class="rounded-full mr-4 shadow-lg mb-4" style="width: 40px; height: 40px;"
+                      src="http://localhost:81/assets/img/{{ subcomment.user.imgAvatar }}">
+                    <h3 class="mt-3 text-indigo-600 font-semibold text-base md:text-left">{{ subcomment.user.username }}</h3>
                   </div>
                   <div class="mt-2">
                     <form *ngIf="editCommentIndexAux===ind && showingEditForm" [formGroup]="editCommentForm"
@@ -166,6 +169,10 @@
                         @{{ subcomment.user_reference.username }}
                       </a>{{ subcomment.bodyComment }}
                     </p>
+                    <span *ngIf="subcomment.isEdited == 0" class="text-gray-400 text-sm">{{
+                      subcomment.comment_date }}</span>
+                    <span *ngIf="subcomment.isEdited == 1" class="text-gray-400 text-sm">{{
+                      subcomment.comment_date }} (editado)</span>
                   </div>
                   <div class="bg-white p-2">
                     <div class="d-flex flex-row fs-12">
