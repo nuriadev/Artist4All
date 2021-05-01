@@ -28,9 +28,9 @@ class UserController {
 
   public function register(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
-    $user = $this->validatePersist($request, $data, null, $response);
-    return $this->loginProcess($data, $response);
+    return $this->validatePersist($data, null, $response, 'register');
   }
+
 
   public function login(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
@@ -57,31 +57,23 @@ class UserController {
     if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();   
     if (!isset($data['token'])) $data['token'] = $user->getToken();
     if (!isset($data['isPrivate'])) $data['isPrivate'] = $user->isPrivate();
-    $user = $this->validatePersist($request, $data, $id, $response);
-    $session = new \Artist4all\Model\Session($user->getToken(), $user);
-    $response = $response->withJson($session)->withStatus(200, 'User edited');
-    return $response;
+    return $this->validatePersist($data, $id, $response, 'edit');
   }
+
 
   public function changePassword(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
-    $password = trim($data["password"]); 
-    $data["password"] = password_hash($password, PASSWORD_DEFAULT);
-    if (!isset($data['name'])) $data['name'] = $user->getName();
-    if (!isset($data['surname1'])) $data['surname1'] = $user->getSurname1();    
-    if (!isset($data['surname2'])) $data['surname2'] = $user->getSurname2();
-    if (!isset($data['email'])) $data['email'] = $user->getEmail();    
-    if (!isset($data['username'])) $data['username'] = $user->getUsername();
-    if (!isset($data['isArtist'])) $data['isArtist'] = $user->isArtist();
-    if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();  
-    if (!isset($data['aboutMe'])) $data['aboutMe'] = $user->getAboutMe(); 
-    if (!isset($data['token'])) $data['token'] = $user->getToken();   
-    if (!isset($data['isPrivate'])) $data['isPrivate'] = $user->isPrivate();
-    $user = $this->validatePersist($request, $data, $id, $response);
-    $session = new \Artist4all\Model\Session($user->getToken(), $user);
-    $response = $response->withJson($session)->withStatus(200, 'Password changed');
+    $password = trim($data["password"]);
+    $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+    $result = \Artist4all\Model\User::changePassword($password_hashed, $id);
+    if (!$result) {
+      $response = $response->withStatus(500, 'Error on the password modification');
+    } else {
+      $session = new \Artist4all\Model\Session($user->getToken(), $user);
+      $response = $response->withJson($session)->withStatus(200, 'Password changed');
+    }
     return $response;
   }
 
@@ -202,8 +194,6 @@ class UserController {
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
     $isPrivate = $data['isPrivate'];
-    $booleanPattern = '^[0-1]$';
-    $this->validateVariable($isPrivate, $booleanPattern, 'Wrong isPrivate format', 1, $response);
     $result = \Artist4all\Model\User::privateAccountSwitcher($isPrivate, $user->getId());
     if (!$result) {
       $response = $response->withStatus(400, 'Error at switching');
@@ -237,13 +227,19 @@ class UserController {
       }
     }
     
-    $email = trim($data["email"]);
-    $this->validateVariable($email, null, 'Wrong email format', 0, $response);
+    $email = trim($data['email']);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $response = $response->withStatus(400, 'Wrong email format');
+      return $response;
+    } 
 
     $password = trim($data['password']);
     // TODO: CAMBIAR AL FINAL DEL PROYECTO
     $passwordPattern = '^[A-Za-z0-9 ]+^';
-    $this->validateVariable($password, $passwordPattern, 'Unvalid user', 1, $response);
+    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
+      $response = $response->withStatus(400, 'Wrong password format');
+      return $response;
+    }
 
     $user = \Artist4all\Model\User::getUserByEmail($email, 0);
     if (is_null($user)) {
@@ -263,18 +259,8 @@ class UserController {
     return $response;
   }
 
-  private function validatePersist($request, $data, $id, $response) { 
-    $name = trim($data['name']);
-    $surname1 = trim($data['surname1']);
-    $surname2 = trim($data['surname2']);
-    $email = trim($data['email']);
-    $username = trim($data['username']);
-    $password = trim($data['password']);
-    $aboutMe = trim($data['aboutMe']);
-    $isArtist = trim($data['isArtist']);
-    $isPrivate = trim($data['isPrivate']);
-
-    foreach(['name', 'surname1', 'surname2', 'email', 'username', 'password', 'isArtist', 'aboutMe', 'isPrivate'] as $key) {
+  private function validatePersist($data, $id, $response, $type) { 
+    foreach(['name', 'surname1', 'surname2', 'email', 'username', 'password', 'aboutMe'] as $key) {
       if (!isset($data[$key])) {
         $response = $response->withStatus(400, 'Missing requiered fields');
         return $response;
@@ -285,38 +271,69 @@ class UserController {
       }
     }
 
+    $name = trim($data['name']);
     $nameSurnamePattern = "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}^";
-    $this->validateVariable($name, $nameSurnamePattern, 'Wrong name format', 1, $response);
-    $this->validateVariable($surname1, $nameSurnamePattern, 'Wrong surname format', 1, $response);
-    $this->validateVariable($surname2, $nameSurnamePattern, 'Wrong surname format', 1, $response);
+    if(!filter_var($name, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern)))) {
+      $response = $response->withStatus(400, 'Wrong name format');
+      return $response;
+    }
 
-    $this->validateVariable($email, null, 'Wrong email format', 0, $response);
+    $surname1 = trim($data['surname1']);
+    $surname2 = trim($data['surname2']);
+    if(!filter_var($surname1, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern))) || 
+       !filter_var($surname2, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern))) ) {
+      $response = $response->withStatus(400, 'Wrong surname format');
+      return $response;
+    }
 
+    $email = trim($data['email']);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $response = $response->withStatus(400, 'Wrong email format');
+      return $response;
+    } 
+
+    $username = trim($data['username']);
     $usernamePattern = '^[a-z0-9_ ]{5,20}^'; 
-    $this->validateVariable($username, $usernamePattern, 'Wrong username format', 1, $response);
+    if(!filter_var($username, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $usernamePattern)))) {
+      $response = $response->withStatus(400, 'Wrong username format');
+      return $response;
+    }
 
+    $password = trim($data['password']);
     // TODO: CAMBIAR AL FINAL DEL PROYECTO
     $passwordPattern = '^[A-Za-z0-9 ]+^';
-    $this->validateVariable($password, $passwordPattern, 'Wrong password format', 1, $response);
+    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
+      $response = $response->withStatus(400, 'Wrong password format');
+      return $response;
+    }
 
-    $booleanPattern = '^[0-1]$';
-    $this->validateVariable($isArtist, $booleanPattern, 'Wrong isArtist format', 1, $response);
-    $this->validateVariable($isPrivate, $booleanPattern, 'Wrong isPrivate format', 1, $response);
+    $aboutMe = trim($data['aboutMe']);
+
+    $isArtist = trim(intval($data['isArtist']));
+    if($isArtist != 0 && $isArtist != 1) {
+      $response = $response->withStatus(400, 'Wrong isArtist format');
+      return $response;
+    }
+
+    $isPrivate = trim(intval($data['isPrivate']));
+    if($isPrivate != 0 && $isPrivate != 1) {
+      $response = $response->withStatus(400, 'Wrong isPrivate format');
+      return $response;
+    }
       
     // todo: si está dado de baja para volver a activar su acc según el email if / else
     // todo: crear función para reactivarCuenta 
-    
     $user = \Artist4all\Model\User::getUserByUsername($username);
     if (!is_null($user) && $id != $user->getId()) {
       $response = $response->withJson('El nombre de usuario introducido ya está cogido.')->withStatus(400, 'This username is already taken');
       return $response;
-    }
+    } 
 
     $user = \Artist4all\Model\User::getUserByEmail($email, 0);
     if (!is_null($user) && $id != $user->getId()) {
       $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
       return $response;
-    }
+    } 
 
     if (is_null($id)) {
       $data['token'] = '';
@@ -335,25 +352,18 @@ class UserController {
     $user = \Artist4all\Model\User::fromAssoc($data);
     $user = \Artist4all\Model\User::persistUser($user);
     if (is_null($user)) {
-      if (is_null($id)) $response = $response->withStatus(500, 'Error on the register');
+      if (is_null($id)) $response = $response->withStatus(500, 'Error on the register');            
       else $response = $response->withStatus(500, 'Error at editing');
       return $response;
     }
-    return $user;
-  }
-  
-  private function validateVariable($variable, $regexp, $message, $type, $response) {
-    if ($type == 1) {
-      if(!filter_var($variable, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $regexp)))) {
-        $response = $response->withStatus(400, $message);
-        return $response;
-      }
-    } else if ($type == 0) {
-      if (!filter_var($variable, FILTER_VALIDATE_EMAIL)) {
-        $response = $response->withStatus(400, $message);
-        return $response;
-      } 
-    } 
+    if ($type == 'register') {
+      return $this->loginProcess($data, $response);
+    } else if ($type == 'edit') {
+      $session = new \Artist4all\Model\Session($user->getToken(), $user);
+      $response = $response->withJson($session)->withStatus(200, 'User edited');
+      return $response;
+    }
   }
 
 }
+ 

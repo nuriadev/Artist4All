@@ -12,6 +12,8 @@ import {
 } from '@angular/forms';
 import { matchingPasswords } from 'src/app/core/validators/password.validator';
 import Swal from 'sweetalert2';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
+import { LoginUser } from 'src/app/core/models/loginUser';
 
 @Component({
   selector: 'app-register',
@@ -23,6 +25,7 @@ export class RegisterComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private _sessionService: SessionService,
+    private _authenticationService: AuthenticationService,
     private _router: Router,
     private _formBuilder: FormBuilder
   ) {}
@@ -109,10 +112,13 @@ export class RegisterComponent implements OnInit {
   get username() { return this.registerForm.get('username'); }
   get password() { return this.registerForm.get('password'); }
   get passwordConfirm() { return this.registerForm.get('passwordConfirm'); }
+  get isArtist() { return this.registerForm.get('isArtist'); }
+  get isPrivate() { return this.registerForm.get('isPrivate'); }
 
   user: User;
   registerError: boolean = false;
   timer;
+  message: string = "";
   register() {
     clearInterval(this.timer);
     this.isValidFormSubmitted = false;
@@ -123,15 +129,18 @@ export class RegisterComponent implements OnInit {
     let userRegistered: User = this.registerForm.value;
     this._userService.register(userRegistered).subscribe(
       (result) => {
-        if (result['token'] != null) {
+        if (result.token != null) {
           this.user = result.user;
           this.loggingAnimation();
           let userSession = new Session(result.token, this.user);
           this._sessionService.setCurrentSession(userSession);
         }
       }, (error) => {
-        this.registerError = true;
-        this.timer = setInterval(() => (this.registerError = false), 2000);
+        if (error != null) {
+            this.registerError = true;
+            this.message = error.error;
+            this.timer = setInterval(() => (this.registerError = false), 2000);
+        }
     });
   }
 
