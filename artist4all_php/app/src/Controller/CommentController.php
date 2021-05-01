@@ -42,19 +42,11 @@ class CommentController {
       $data['user_reference'] = null;
     }
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
-    $bodyComment = $data['bodyComment'];
-    if (strlen($bodyComment) > 255) {
-      $response = $response->withStatus(400, 'Maximum character length surpassed');
-      return $response;
-    }
     $data['user'] = $user;
     $data['id_publication'] = $args['id_publication'];
     if ($data['id_comment_reference'] == null) $data['id_comment_reference'] = null;
     else $data['id_comment_reference'] = intval($data['id_comment_reference']); 
-    $comment = $this->validatePersist($request, $data, null, $response);
-    if (is_null($comment)) $response = $response->withStatus(500, 'Error at commenting');
-    else $response = $response->withJson($comment)->withStatus(201, 'Comment uploaded');
-    return $response; 
+    return $this->validatePersist($request, $data, null, $response, 'comment');
   }
 
   public function editComment(Request $request, Response $response, array $args) {
@@ -63,21 +55,13 @@ class CommentController {
     $data = $request->getParsedBody();
     $comment = \Artist4all\Model\Comment::getCommentById($id_comment);
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
-    $bodyComment = $data['bodyComment'];
-    if (strlen($bodyComment) > 255) {
-      $response = $response->withStatus(400, 'Maximum character length surpassed');
-      return $response;
-    }
     $data['user'] = $user;
     $data['id'] = $id_comment;
     if (!isset($data['comment_date'])) $data['comment_date'] = $comment->getCommentDate();
     if (!isset($data['id_comment_reference'])) $data['id_comment_reference'] = $comment->getIdCommentReference();
     if (!isset($data['id_publication'])) $data['id_publication'] = $comment->getIdPublication();
     if (!isset($data['user_reference'])) $data['user_reference'] = $comment->getUserReference();
-    $comment = $this->validatePersist($request, $data, $id_comment, $response);
-    if (is_null($comment)) $response = $response->withStatus(500, 'Error at editing comment');
-    else $response = $response->withJson($comment)->withStatus(200, 'Comment edited');
-    return $response;
+    return $this->validatePersist($request, $data, $id_comment, $response, 'edit');
   }
 
   public function deleteComment(Request $request, Response $response, array $args) {
@@ -95,12 +79,24 @@ class CommentController {
     return $response;
   }
 
-  private function validatePersist($request, $data, $id, $response) {
+  private function validatePersist($request, $data, $id, $response, $type) {
     $data['id'] = $id;
+    $bodyComment = $data['bodyComment'];
+    if (strlen($bodyComment) > 255) {
+      $response = $response->withStatus(400, 'Maximum character length surpassed');
+      return $response;
+    }
     $comment = \Artist4all\Model\Comment::fromAssoc($data);
     $comment = \Artist4all\Model\Comment::persistComment($comment);
     $comment = static::getCommentById($comment->getId(), $response);
-    return $comment; 
+    if (is_null($comment)) {
+      if (is_null($id))  $response = $response->withStatus(500, 'Error at commenting');       
+      else $response = $response->withStatus(500, 'Error at editing comment');
+      return $response;
+    }
+    if ($type == 'comment') $response = $response->withJson($comment)->withStatus(201, 'Comment uploaded');
+    else if ($type == 'edit') $response = $response->withJson($comment)->withStatus(200, 'Comment edited'); 
+    return $response;
   }
 
   public static function getCommentById(int $id_comment, Response $response) {

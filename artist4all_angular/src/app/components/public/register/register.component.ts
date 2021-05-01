@@ -154,7 +154,7 @@ export class RegisterComponent implements OnInit {
       timer: 1000,
     }).then((result) => {
       if (result.dismiss === Swal.DismissReason.timer) {
-        const Toast = Swal.mixin({ toast: true,  position: 'top-end', showConfirmButton: false,  timer: 1000, timerProgressBar: true,
+        const Toast = Swal.mixin({ toast: true,  position: 'top-left', showConfirmButton: false,  timer: 1000, timerProgressBar: true,
           didOpen: (toast) => {
             Swal.showLoading(),
             toast.addEventListener('mouseenter', Swal.stopTimer);
@@ -164,7 +164,7 @@ export class RegisterComponent implements OnInit {
         Toast.fire({ title: '<h3>Iniciando sesión...<h3>' }).then((result) => {
           if (result.dismiss === Swal.DismissReason.timer) {
             this._router.navigate(['/home']);
-            const Toast = Swal.mixin({ toast: true, position: 'top-end', showConfirmButton: false, timer: 1000,
+            const Toast = Swal.mixin({ toast: true, position: 'top-left', showConfirmButton: false, timer: 1000,
               didOpen: (toast) => {
                 toast.addEventListener('mouseenter', Swal.stopTimer);
                 toast.addEventListener('mouseleave', Swal.resumeTimer);

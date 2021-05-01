@@ -41,17 +41,6 @@ class UserController {
     $id = $args['id'];
     $data = $request->getParsedBody();    
     $user = static::getUserByIdSummary($id, $response);
-    if (!empty($_FILES) || $_FILES != null) {
-      $allowed = array('image/gif', 'image/png', 'image/jpg', 'image/jpeg');
-      foreach($_FILES as $file) {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        if (!in_array(finfo_file($finfo, $file['tmp_name']), $allowed)) {
-          $response = $response->withStatus(400, 'Unvalid image extension');
-          return $response;
-        }     
-        finfo_close($finfo);
-      }         
-    }
     if (!isset($data['password'])) $data['password'] = $user->getPassword();
     if (!isset($data['isArtist'])) $data['isArtist'] = $user->isArtist();
     if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();   
@@ -65,7 +54,13 @@ class UserController {
     $id = $args['id'];
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
-    $password = trim($data["password"]);
+    $password = trim($data['password']);
+    // TODO: CAMBIAR AL FINAL DEL PROYECTO
+    $passwordPattern = '^[A-Za-z0-9 ]+^';
+    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
+      $response = $response->withStatus(400, 'Wrong password format');
+      return $response;
+    }
     $password_hashed = password_hash($password, PASSWORD_DEFAULT);
     $result = \Artist4all\Model\User::changePassword($password_hashed, $id);
     if (!$result) {
@@ -154,11 +149,16 @@ class UserController {
     $id_followed = $args['id_followed'];
     $follower = static::getUserByIdSummary($id_follower, $response);
     $followed = static::getUserByIdSummary($id_followed, $response);
+    $status_follow = trim(intval($data['status_follow']));
+    if($status_follow != 1 && $status_follow != 2 && $status_follow !=3) {
+      $response = $response->withStatus(400, 'Wrong status_follow');
+      return $response;
+    }
     $logFollow = [
       'id' => $id,
       'id_follower' => $follower->getId(),
       'id_followed' => $followed->getId(),
-      'status_follow' => (int) $data['status_follow']
+      'status_follow' => $status_follow
     ];
     $logFollow = \Artist4all\Model\User::persistFollow($logFollow);
     if (is_null($logFollow)) {
@@ -193,7 +193,11 @@ class UserController {
     $id = $args['id'];
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
-    $isPrivate = $data['isPrivate'];
+    $isPrivate = trim(intval($data['isPrivate']));
+    if($isPrivate != 0 && $isPrivate != 1) {
+      $response = $response->withStatus(400, 'Wrong isPrivate format');
+      return $response;
+    }
     $result = \Artist4all\Model\User::privateAccountSwitcher($isPrivate, $user->getId());
     if (!$result) {
       $response = $response->withStatus(400, 'Error at switching');
@@ -340,7 +344,14 @@ class UserController {
     } else {
       $filePath = '/var/www/html/assets/img/';
       if (!empty($_FILES) || $_FILES != null) {
+        $allowed = array('image/gif', 'image/png', 'image/jpg', 'image/jpeg');
         foreach($_FILES as $file) {
+          $finfo = finfo_open(FILEINFO_MIME_TYPE);
+          if (!in_array(finfo_file($finfo, $file['tmp_name']), $allowed)) {
+            $response = $response->withStatus(400, 'File is not an image');
+            return $response;
+          }     
+          finfo_close($finfo);
           $imgName = $file["tmp_name"]; 
           $pathImg = $filePath.$file["name"];
           if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);  
