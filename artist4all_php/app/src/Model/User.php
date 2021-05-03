@@ -393,6 +393,17 @@ class User implements \JsonSerializable
     return $result;
   }
 
+  public static function deactivateAccount(int $id): bool {
+    $sql = 'UPDATE users SET deactivated=:deactivated WHERE id=:id';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':id' => $id,
+      ':deactivated' => 1
+    ]);
+    return $result;
+  }
+
   public static function reactivateAccount(string $email): ?\Artist4all\Model\User {
     $sql = 'UPDATE users SET deactivated=:deactivated WHERE email=:email';
     $conn = Database::getInstance()->getConnection();

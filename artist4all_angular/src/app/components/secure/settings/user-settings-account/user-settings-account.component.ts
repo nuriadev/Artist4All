@@ -10,6 +10,8 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
+import { AuthenticationService } from 'src/app/core/services/authentication.service';
 @Component({
   selector: 'app-user-settings-account',
   templateUrl: './user-settings-account.component.html',
@@ -19,7 +21,8 @@ export class UserSettingsAccountComponent implements OnInit {
   constructor(
     private _sessionService: SessionService,
     private _userService: UserService,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private _router: Router
   ) {}
 
   user = this._sessionService.getCurrentUser();
@@ -56,7 +59,6 @@ export class UserSettingsAccountComponent implements OnInit {
         toggleButtonPrivate.style.backgroundColor = '#2196F3';
         this.user.isPrivate = 1;
         this.message = 'Modo privado activado.';
-
         this.isPrivate = true;
       } else {
         sliderSwitchPrivate.style.transform = 'translateX(0px)';
@@ -91,6 +93,60 @@ export class UserSettingsAccountComponent implements OnInit {
     });
   }
 
+  deactivateAccountAnimation() {
+    Swal.fire({
+      title: 'Estás seguro de que quieres darte de baja?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deactivateAccount();
+        Swal.fire({ title: 'Dando de baja...', showConfirmButton: false, timerProgressBar: true, timer: 1000,
+          didOpen: () => { Swal.showLoading(); },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            Swal.fire({
+              title: 'Dado de baja correctamente',
+              text: 'Esperamos tu regreso',
+              position: 'center',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000,
+            }).then((result) => {
+              const Toast = Swal.mixin({ toast: true, position: 'top-left', showConfirmButton: false, timer: 1000, timerProgressBar: true,
+              didOpen: (toast) => {
+                Swal.showLoading(),
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+              },
+              });
+              Toast.fire({ title: 'Cerrando sessión...' }).then((result) => {
+                if (result.dismiss === Swal.DismissReason.timer) {
+                  const Toast = Swal.mixin({ toast: true, position: 'top-left', showConfirmButton: false, timer: 1000,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                  });
+                  Toast.fire({ title: 'Sessión cerrada', icon: 'success' });
+                }
+                this._sessionService.logout();
+                this._router.navigate(['']);
+              });
+            });
+          }
+        });
+      }
+    });
+  }
+
+  deactivateAccount() {
+    this._userService.deactivateAccount(this.user).subscribe();
+  }
 
   message: string;
   horizontalPosition: MatSnackBarHorizontalPosition = 'right';

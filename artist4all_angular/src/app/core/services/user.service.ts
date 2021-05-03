@@ -116,4 +116,11 @@ export class UserService {
     // TODO: pasar a patch
     return this.http.post(this.url + '/user/' + user.id + '/settings/account/privacy',  newForm);
   }
+
+  deactivateAccount(user: User): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('id', '' + user.id);
+    // TODO: pasar a patch
+    return this.http.post(this.url + '/user/' + user.id + '/settings/account', newForm);
+  }
 }

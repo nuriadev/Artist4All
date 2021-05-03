@@ -114,13 +114,13 @@
         </aside>
 
         <div id="formAccount" class="divide-y divide-gray-200 lg:col-span-9">
-          <!-- !darte de baja y estas cosas, cambiar email tal vez, perfil visible publicamente, notificaciones, fondo oscuro... -->
+          <!-- notificaciones, fondo oscuro... -->
           <!-- Privacy section -->
           <div class="pt-6 divide-y divide-gray-200">
             <div class="px-4 sm:px-6">
               <div>
                 <h2 class="text-lg leading-6 font-medium text-gray-900">Privacidad</h2>
-                
+
               </div>
               <ul class="mt-2 divide-y divide-gray-200">
                 <li class="py-4 flex items-center justify-between">
@@ -143,6 +143,18 @@
                   </button>
                 </li>
               </ul>
+            </div>
+          </div>
+          <div class="pt-6 divide-y divide-gray-200">
+            <div class="mt-4 py-4 px-4 flex justify-end sm:px-6">
+              <button routerLink="/home"
+                class="bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
+                Volver a la home
+              </button>
+              <button (click)="deactivateAccountAnimation()"
+                class="ml-5 bg-blue-500 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
+                Darme de baja
+              </button>
             </div>
           </div>
         </div>

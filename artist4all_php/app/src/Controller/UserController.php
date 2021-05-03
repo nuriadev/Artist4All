@@ -24,6 +24,7 @@ class UserController {
     $app->get('/user/{id:[0-9 ]+}/followed', '\Artist4all\Controller\UserController:getFollowed');
     // TODO: cambiar a patch 
     $app->post('/user/{id:[0-9 ]+}/settings/account/privacy', '\Artist4all\Controller\UserController:privateAccountSwitcher');
+    $app->post('/user/{id:[0-9 ]+}/settings/account', '\Artist4all\Controller\UserController:deactivateAccount');
   }
 
   public function register(Request $request, Response $response, array $args) {
@@ -209,6 +210,17 @@ class UserController {
     return $response;
   }
 
+  public function deactivateAccount(Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $user = static::getUserByIdSummary($id, $response);
+    $result = \Artist4all\Model\User::deactivateAccount($id);
+    if (!$result) {
+      $response = $response->withStatus(404, 'Error at deactivating');
+      return $response;
+    } 
+    return $this->logout($request, $response, $args);   
+  }
+
   private function getFollowersOrFollowed(array $args, string $followedOrFollowing, Response $response) {
     $id = $args['id'];
     $user = static::getUserByIdSummary($id, $response);
@@ -235,6 +247,11 @@ class UserController {
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $response = $response->withStatus(400, 'Wrong email format');
       return $response;
+    } 
+
+    $user = \Artist4all\Model\User::getUserByEmail($email, 1);
+    if (!is_null($user)) {
+      \Artist4all\Model\User::reactivateAccount($email);
     } 
 
     $password = trim($data['password']);

@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
 import { Session } from 'src/app/core/models/session';
 import { User } from 'src/app/core/models/user';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-settings-profile',
@@ -13,8 +13,7 @@ import { UserService } from 'src/app/core/services/user.service';
 export class UserSettingsProfileComponent implements OnInit {
   constructor(
     private _sessionService: SessionService,
-    private _userService: UserService,
-    private _router: Router
+    private _userService: UserService
   ) { }
 
   user = this._sessionService.getCurrentUser();
@@ -31,7 +30,6 @@ export class UserSettingsProfileComponent implements OnInit {
   isArtist: number;
   imgAvatar: FileList;
   aboutMe: string;
-  isHidden: boolean;
 
   ngOnInit(): void {
     this.id = this.user.id;
@@ -46,7 +44,6 @@ export class UserSettingsProfileComponent implements OnInit {
     this.isArtist = this.user.isArtist;
     this.imgAvatar = this.user.imgAvatar;
     this.aboutMe = this.user.aboutMe;
-    this.isHidden = true;
   }
 
   imgToUpload: FileList = null;
@@ -64,16 +61,39 @@ export class UserSettingsProfileComponent implements OnInit {
         location.reload();
       }, (error) => {
         console.log(error);
-      });
+    });
   }
 
-  showAlert() {
-    let alert = (<HTMLInputElement>document.getElementById("alert"));
-    if (this.isHidden) {
-      alert.classList.remove("hidden");
-      this.isHidden = false;
-    } else {
-      alert.classList.add("hidden");
-    }
+  timer;
+  editingAnimation() {
+    clearInterval(this.timer);
+    Swal.fire({
+      title: 'Estás seguro de que quieres guardar los cambios?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#28a745',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Aceptar',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire({ title: 'Modificando perfil...', showConfirmButton: false, timerProgressBar: true, timer: 1000,
+          didOpen: () => { Swal.showLoading(); },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            Swal.fire({
+              title: 'Perfil modificado',
+              position: 'center',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 1000,
+            }).then((result) => {
+              this.edit();
+            });
+          }
+        });
+      }
+    });
   }
+
 }
