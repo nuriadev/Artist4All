@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Publication } from 'src/app/core/models/publication';
 import { PublicationService } from 'src/app/core/services/publication.service';
@@ -9,12 +9,16 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { ViewChild } from '@angular/core';
 @Component({
   selector: 'app-edit-publication',
   templateUrl: './edit-publication.component.html',
   styleUrls: ['./edit-publication.component.css'],
 })
 export class EditPublicationComponent implements OnInit {
+  @ViewChild('imgPublication')
+  inputImgs: ElementRef;
+
   constructor(
     private _publicationService: PublicationService,
     private _sessionService: SessionService,
@@ -46,6 +50,13 @@ export class EditPublicationComponent implements OnInit {
     }
   }
 
+  removeSelectedImgs() {
+    this.images = [];
+    this.imgsReceived = [];
+    this.imgToUpload = null;
+    this.inputImgs.nativeElement.value = null;
+  }
+
   bodyPublication: string = '';
   n_likes: number;
   n_comments: number;
@@ -67,9 +78,11 @@ export class EditPublicationComponent implements OnInit {
             this.n_likes = this.miPublication.n_likes;
             this.n_comments = this.miPublication.n_comments;
             this.isEdited = this.miPublication.isEdited;
-            for (let i = 0; i < result.imgsPublication.length; i++) {
-              let file = result.imgsPublication[i];
-              this.imgsReceived.push(file.imgPublication);
+            if (result.imgsPublication != null) {
+              for (let i = 0; i < result.imgsPublication.length; i++) {
+                let file = result.imgsPublication[i];
+                this.imgsReceived.push(file.imgPublication);
+              }
             }
           },
           (error) => {
@@ -84,10 +97,10 @@ export class EditPublicationComponent implements OnInit {
 
   editPublication() {
     this.message = "Publicación editada.";
-    this.openSnackBar(this.message);
     this._publicationService.edit(
       new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0, 1)).subscribe(
         (result) => {
+          this.openSnackBar(this.message);
           this.redirectBack();
         }, (error) => {
           console.log(error);

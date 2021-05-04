@@ -202,8 +202,6 @@ class User implements \JsonSerializable
     )';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
-    $password = $user->getPassword();
-    $password_hashed = password_hash($password, PASSWORD_DEFAULT);
     $result = $statement->execute([
       ':id' => $user->getId(),
       ':name' => $user->getName(),
@@ -211,7 +209,7 @@ class User implements \JsonSerializable
       ':surname2' => $user->getSurname2(),
       ':email' => $user->getEmail(),
       ':username' => $user->getUsername(),
-      ':password' => $password_hashed,
+      ':password' => password_hash($user->getPassword(), PASSWORD_DEFAULT),
       ':isArtist' => $user->isArtist(),
       ':imgAvatar' => $user->getImgAvatar(),
       ':aboutMe' => $user->getAboutMe(),
@@ -266,7 +264,6 @@ class User implements \JsonSerializable
     return $result;
   }
 
-  // todo pasar usuario
   public static function logout(int $id): bool {
     $sql = 'UPDATE users SET token=:token WHERE id=:id';
     $conn = Database::getInstance()->getConnection();
@@ -381,6 +378,28 @@ class User implements \JsonSerializable
     $result = $statement->execute([
       ':isPrivate' => $isPrivate,
       ':id' => $id
+    ]);
+    return $result;
+  }
+
+  public static function changePassword(string $password, int $id): bool {
+    $sql = 'UPDATE users SET password=:password WHERE id=:id';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':password' => $password,
+      ':id' => $id
+    ]);
+    return $result;
+  }
+
+  public static function deactivateAccount(int $id): bool {
+    $sql = 'UPDATE users SET deactivated=:deactivated WHERE id=:id';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':id' => $id,
+      ':deactivated' => 1
     ]);
     return $result;
   }

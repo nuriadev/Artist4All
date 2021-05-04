@@ -50,16 +50,12 @@ class PublicationController {
     return $response;
   }
 
-  // todo: view, edit, delete, comentarios, likes
   public function createPublication(Request $request, Response $response, array $args) {
     $id_user = $args['id_user'];
     $data = $request->getParsedBody();  
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
-    $data['user'] = $user;
-    $publication = $this->validatePersist($request, $data, null, $response);
-    if (is_null($publication)) $response = $response->withStatus(500, 'Error at publishing');
-    else $response = $response->withJson($publication)->withStatus(201, 'Publication created');
-    return $response; 
+    $data['user'] = $user; 
+    return $this->validatePersist($request, $data, null, $response, 'publish');
   }
 
   public function editPublication(Request $request, Response $response, array $args) {
@@ -75,10 +71,7 @@ class PublicationController {
     if (!isset($data['n_comments'])) $data['n_comments'] = $publication->getComments();
     if (!isset($data['upload_date'])) $data['upload_date'] = $publication->getUploadDatePublication();
     else $deleteImgs = \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
-    $publication = $this->validatePersist($request, $data, $id_publication, $response);
-    if (is_null($publication)) $response = $response->withStatus(500, 'Error at editing publication');
-    else $response = $response->withJson($publication)->withStatus(200, 'Publication edited');
-    return $response;
+    return $this->validatePersist($request, $data, $id_publication, $response, 'edit');
   }
 
   public function deletePublication(Request $request, Response $response, array $args) {
@@ -124,31 +117,43 @@ class PublicationController {
     return $response;
   }
 
-  private function validatePersist($request, $data, $id, $response) {
+  private function validatePersist($request, $data, $id, $response, $type) {
     $data['id'] = $id;
+    $bodyPublication = $data['bodyPublication'];
+    if (strlen($bodyPublication) > 255) {
+      $response = $response->withStatus(400, 'Maximum character length surpassed');
+      return $response;
+    }
+    $uploadedFiles = $request->getUploadedFiles();
+    $data['imgsPublication'] = $uploadedFiles;
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
     $publication = \Artist4all\Model\Publication::persistPublication($publication);
-
+    \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
     $filePath = '/var/www/html/assets/img/';
     if (!empty($_FILES) || $_FILES != null) {
         foreach ($_FILES as $file) {
-        //todo validar tamaño, max, formato, etc. 
           $imgName = $file["tmp_name"]; 
           $pathImg = $filePath.$file["name"];
           if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);   
           else continue;          
         }
-        \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
         foreach ($_FILES as $file) {        
           $resultImg = \Artist4all\Model\Publication::insertPublicationImgs($publication->getId(), $file['name']);
           if (!$resultImg) {
-            $response = $response->withStatus(500, 'Error at publishing');
+            $response = $response->withStatus(500, 'Error at setting images');
             return $response;
           }  
         } 
     }
     $publication = static::getPublicationByUser($request, $publication->getId(), $response);
-    return $publication; 
+    if (is_null($publication)) {
+      if (is_null($id)) $response = $response->withStatus(500, 'Error at publishing');         
+      else $response = $response->withStatus(500, 'Error at editing publication');
+      return $response;
+    }
+    if ($type == 'publish') $response = $response->withJson($publication)->withStatus(201, 'Publication created');
+    else if ($type == 'edit') $response = $response->withJson($publication)->withStatus(200, 'Publication edited');  
+    return $response;
   }
 
 }

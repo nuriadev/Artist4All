@@ -24,13 +24,14 @@ class UserController {
     $app->get('/user/{id:[0-9 ]+}/followed', '\Artist4all\Controller\UserController:getFollowed');
     // TODO: cambiar a patch 
     $app->post('/user/{id:[0-9 ]+}/settings/account/privacy', '\Artist4all\Controller\UserController:privateAccountSwitcher');
+    $app->post('/user/{id:[0-9 ]+}/settings/account', '\Artist4all\Controller\UserController:deactivateAccount');
   }
 
   public function register(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
-    $user = $this->validatePersist($request, $data, null, $response);
-    return $this->loginProcess($data, $response);
+    return $this->validatePersist($data, null, $response, 'register');
   }
+
 
   public function login(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
@@ -46,31 +47,29 @@ class UserController {
     if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();   
     if (!isset($data['token'])) $data['token'] = $user->getToken();
     if (!isset($data['isPrivate'])) $data['isPrivate'] = $user->isPrivate();
-    $user = $this->validatePersist($request, $data, $id, $response);
-    $session = new \Artist4all\Model\Session($user->getToken(), $user);
-    $response = $response->withJson($session)->withStatus(200, 'User edited');
-    return $response;
+    return $this->validatePersist($data, $id, $response, 'edit');
   }
+
 
   public function changePassword(Request $request, Response $response, array $args) {
     $id = $args['id'];
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
-    $password = trim($data["password"]); 
-    $data["password"] = password_hash($password, PASSWORD_DEFAULT);
-    if (!isset($data['name'])) $data['name'] = $user->getName();
-    if (!isset($data['surname1'])) $data['surname1'] = $user->getSurname1();    
-    if (!isset($data['surname2'])) $data['surname2'] = $user->getSurname2();
-    if (!isset($data['email'])) $data['email'] = $user->getEmail();    
-    if (!isset($data['username'])) $data['username'] = $user->getUsername();
-    if (!isset($data['isArtist'])) $data['isArtist'] = $user->isArtist();
-    if (!isset($data['imgAvatar'])) $data['imgAvatar'] = $user->getImgAvatar();  
-    if (!isset($data['aboutMe'])) $data['aboutMe'] = $user->getAboutMe(); 
-    if (!isset($data['token'])) $data['token'] = $user->getToken();   
-    if (!isset($data['isPrivate'])) $data['isPrivate'] = $user->isPrivate();
-    $user = $this->validatePersist($request, $data, $id, $response);
-    $session = new \Artist4all\Model\Session($user->getToken(), $user);
-    $response = $response->withJson($session)->withStatus(200, 'Password changed');
+    $password = trim($data['password']);
+    // TODO: CAMBIAR AL FINAL DEL PROYECTO
+    $passwordPattern = '^[A-Za-z0-9 ]+^';
+    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
+      $response = $response->withStatus(400, 'Wrong password format');
+      return $response;
+    }
+    $password_hashed = password_hash($password, PASSWORD_DEFAULT);
+    $result = \Artist4all\Model\User::changePassword($password_hashed, $id);
+    if (!$result) {
+      $response = $response->withStatus(500, 'Error on the password modification');
+    } else {
+      $session = new \Artist4all\Model\Session($user->getToken(), $user);
+      $response = $response->withJson($session)->withStatus(200, 'Password changed');
+    }
     return $response;
   }
 
@@ -151,11 +150,16 @@ class UserController {
     $id_followed = $args['id_followed'];
     $follower = static::getUserByIdSummary($id_follower, $response);
     $followed = static::getUserByIdSummary($id_followed, $response);
+    $status_follow = trim(intval($data['status_follow']));
+    if($status_follow != 1 && $status_follow != 2 && $status_follow !=3) {
+      $response = $response->withStatus(400, 'Wrong status_follow');
+      return $response;
+    }
     $logFollow = [
       'id' => $id,
       'id_follower' => $follower->getId(),
       'id_followed' => $followed->getId(),
-      'status_follow' => (int) $data['status_follow']
+      'status_follow' => $status_follow
     ];
     $logFollow = \Artist4all\Model\User::persistFollow($logFollow);
     if (is_null($logFollow)) {
@@ -190,7 +194,11 @@ class UserController {
     $id = $args['id'];
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
-    $isPrivate = $data['isPrivate'];
+    $isPrivate = trim(intval($data['isPrivate']));
+    if($isPrivate != 0 && $isPrivate != 1) {
+      $response = $response->withStatus(400, 'Wrong isPrivate format');
+      return $response;
+    }
     $result = \Artist4all\Model\User::privateAccountSwitcher($isPrivate, $user->getId());
     if (!$result) {
       $response = $response->withStatus(400, 'Error at switching');
@@ -200,6 +208,17 @@ class UserController {
       $response = $response->withJson($session)->withStatus(200, 'Switched');
     }
     return $response;
+  }
+
+  public function deactivateAccount(Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $user = static::getUserByIdSummary($id, $response);
+    $result = \Artist4all\Model\User::deactivateAccount($id);
+    if (!$result) {
+      $response = $response->withStatus(404, 'Error at deactivating');
+      return $response;
+    } 
+    return $this->logout($request, $response, $args);   
   }
 
   private function getFollowersOrFollowed(array $args, string $followedOrFollowing, Response $response) {
@@ -224,15 +243,24 @@ class UserController {
       }
     }
     
-    $email = trim($data["email"]);
+    $email = trim($data['email']);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      $response = $response->withStatus(400, 'Unvalid user');
+      $response = $response->withStatus(400, 'Wrong email format');
       return $response;
-    }
+    } 
+
+    $user = \Artist4all\Model\User::getUserByEmail($email, 1);
+    if (!is_null($user)) {
+      \Artist4all\Model\User::reactivateAccount($email);
+    } 
+
     $password = trim($data['password']);
     // TODO: CAMBIAR AL FINAL DEL PROYECTO
     $passwordPattern = '^[A-Za-z0-9 ]+^';
-    $this->validateByRegExp($password, $passwordPattern, 'Unvalid user', $response);
+    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
+      $response = $response->withStatus(400, 'Wrong password format');
+      return $response;
+    }
 
     $user = \Artist4all\Model\User::getUserByEmail($email, 0);
     if (is_null($user)) {
@@ -252,8 +280,8 @@ class UserController {
     return $response;
   }
 
-  private function validatePersist($request, $data, $id, $response) { 
-    foreach(['name', 'surname1', 'surname2', 'email', 'username', 'password', 'isArtist', 'aboutMe', 'isPrivate'] as $key) {
+  private function validatePersist($data, $id, $response, $type) { 
+    foreach(['name', 'surname1', 'surname2', 'email', 'username', 'password', 'aboutMe'] as $key) {
       if (!isset($data[$key])) {
         $response = $response->withStatus(400, 'Missing requiered fields');
         return $response;
@@ -264,73 +292,83 @@ class UserController {
       }
     }
 
-    // Validate name
     $name = trim($data['name']);
     $nameSurnamePattern = "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}^";
-    $this->validateByRegExp($name, $nameSurnamePattern, 'Wrong name format', $response);
+    if(!filter_var($name, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern)))) {
+      $response = $response->withStatus(400, 'Wrong name format');
+      return $response;
+    }
 
-    // Validate surnames
     $surname1 = trim($data['surname1']);
     $surname2 = trim($data['surname2']);
-    $this->validateByRegExp($surname1, $nameSurnamePattern, 'Wrong surname format', $response);
-    $this->validateByRegExp($surname2, $nameSurnamePattern, 'Wrong surname format', $response);
+    if(!filter_var($surname1, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern))) || 
+       !filter_var($surname2, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern))) ) {
+      $response = $response->withStatus(400, 'Wrong surname format');
+      return $response;
+    }
 
-    // Validate email
     $email = trim($data['email']);
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $response = $response->withStatus(400, 'Wrong email format');
       return $response;
     } 
-    // Validate not existing email
-    $user = \Artist4all\Model\User::getUserByEmail($email, 0);
-    if (!is_null($user) && $id != $user->getId()) {
-      $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
+
+    $username = trim($data['username']);
+    $usernamePattern = '^[a-z0-9_ ]{5,20}^'; 
+    if(!filter_var($username, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $usernamePattern)))) {
+      $response = $response->withStatus(400, 'Wrong username format');
       return $response;
     }
 
-    // Validate username
-    $username = trim($data['username']);
-    $usernamePattern = '^[a-z0-9_ ]{5,20}^'; 
-    $this->validateByRegExp($username, $usernamePattern, 'Wrong username format', $response);
-    // Validate not existing username
+    $password = trim($data['password']);
+    // TODO: CAMBIAR AL FINAL DEL PROYECTO
+    $passwordPattern = '^[A-Za-z0-9 ]+^';
+    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
+      $response = $response->withStatus(400, 'Wrong password format');
+      return $response;
+    }
+
+    $aboutMe = trim($data['aboutMe']);
+
+    $isArtist = trim(intval($data['isArtist']));
+    if($isArtist != 0 && $isArtist != 1) {
+      $response = $response->withStatus(400, 'Wrong isArtist format');
+      return $response;
+    }
+
+    $isPrivate = trim(intval($data['isPrivate']));
+    if($isPrivate != 0 && $isPrivate != 1) {
+      $response = $response->withStatus(400, 'Wrong isPrivate format');
+      return $response;
+    }
+      
+    // todo: si está dado de baja para volver a activar su acc según el email if / else
+    // todo: crear función para reactivarCuenta 
     $user = \Artist4all\Model\User::getUserByUsername($username);
     if (!is_null($user) && $id != $user->getId()) {
       $response = $response->withJson('El nombre de usuario introducido ya está cogido.')->withStatus(400, 'This username is already taken');
       return $response;
-    }
+    } 
 
-    // Validate password
-    $password = trim($data['password']);
-    // TODO: CAMBIAR AL FINAL DEL PROYECTO
-    $passwordPattern = '^[A-Za-z0-9 ]+^';
-    $this->validateByRegExp($password, $passwordPattern, 'Wrong password format', $response);
-    
-    $aboutMe = trim($data['aboutMe']);
-
-    // Validate isArtist
-    $isArtist = trim($data['isArtist']);
-    if ($isArtist != 0 && $isArtist != 1) {
-      $response = $response->withStatus(400, 'Wrong isArtist value');
+    $user = \Artist4all\Model\User::getUserByEmail($email, 0);
+    if (!is_null($user) && $id != $user->getId()) {
+      $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
       return $response;
-    }
-
-    // Validate isPrivate
-    $isPrivate = trim($data['isPrivate']);
-    if ($isPrivate != 0 && $isPrivate != 1) {
-      $response = $response->withStatus(400, 'Wrong isPrivate value');
-      return $response;
-    }
-
-    // todo: si está dado de baja para volver a activar su acc según el email if / else
-    // todo: crear función para reactivarCuenta 
+    } 
 
     if (is_null($id)) {
       $data['token'] = '';
     } else {
       $filePath = '/var/www/html/assets/img/';
       if (!empty($_FILES) || $_FILES != null) {
-        // todo: validar imgs
+        $allowed = array('image/gif', 'image/png', 'image/jpg', 'image/jpeg');
         foreach($_FILES as $file) {
+          $finfo = finfo_open(FILEINFO_MIME_TYPE);
+          if (!in_array(finfo_file($finfo, $file['tmp_name']), $allowed)) {
+            $response = $response->withStatus(400, 'File is not an image');
+            return $response;
+          }     
+          finfo_close($finfo);
           $imgName = $file["tmp_name"]; 
           $pathImg = $filePath.$file["name"];
           if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);  
@@ -342,26 +380,18 @@ class UserController {
     $user = \Artist4all\Model\User::fromAssoc($data);
     $user = \Artist4all\Model\User::persistUser($user);
     if (is_null($user)) {
-      if (is_null($id)) $response = $response->withStatus(500, 'Error on the register');
+      if (is_null($id)) $response = $response->withStatus(500, 'Error on the register');            
       else $response = $response->withStatus(500, 'Error at editing');
       return $response;
     }
-    return $user;
-  }
-  
-  private function validateByRegExp($variable, $regexp, $message, $response) {
-    if(!filter_var($variable, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $regexp)))) {
-      $response = $response->withStatus(400, $message);
+    if ($type == 'register') {
+      return $this->loginProcess($data, $response);
+    } else if ($type == 'edit') {
+      $session = new \Artist4all\Model\Session($user->getToken(), $user);
+      $response = $response->withJson($session)->withStatus(200, 'User edited');
       return $response;
     }
   }
 
-  private function reactivateAccount(string $email) {
-    $user = \Artist4all\Model\User::getUserByEmail($email, 1);
-    if (!is_null($user)) {
-      $user = \Artist4all\Model\User::reactivateAccount($email);
-      return $user;
-    } 
-  }
-  
 }
+ 

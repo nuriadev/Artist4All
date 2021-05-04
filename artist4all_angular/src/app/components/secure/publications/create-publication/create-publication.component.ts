@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Publication } from 'src/app/core/models/publication';
 import { PublicationService } from 'src/app/core/services/publication.service';
@@ -8,6 +8,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
 
 @Component({
@@ -16,6 +17,9 @@ import { FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
   styleUrls: ['./create-publication.component.css'],
 })
 export class CreatePublicationComponent implements OnInit {
+  @ViewChild('imgPublication')
+  inputImgs: ElementRef;
+
   constructor(
     private _sessionService: SessionService,
     private _publicationService: PublicationService,
@@ -46,14 +50,19 @@ export class CreatePublicationComponent implements OnInit {
     }
   }
 
+  removeSelectedImgs() {
+    this.images = [];
+    this.imgToUpload = null;
+    this.inputImgs.nativeElement.value = null;
+  }
 
   bodyPublication: string = '';
   createPublication() {
     this.message = 'Publicación creada.';
-    this.openSnackBar(this.message);
     this._publicationService.create(
       new Publication(null, this.user, this.imgToUpload, this.bodyPublication, null, 0, 0, 0, 0)).subscribe(
         (result) => {
+          this.openSnackBar(this.message);
           this._router.navigate(['/home']);
         },
         (error) => {

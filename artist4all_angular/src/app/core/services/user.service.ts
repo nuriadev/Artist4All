@@ -19,7 +19,7 @@ export class UserService {
     newForm.append('username', newUser.username);
     newForm.append('password', newUser.password);
     newForm.append('isArtist', '' + newUser.isArtist);
-    newForm.append('imgAvatar', 'http://localhost:81/assets/img/defaultAvatarImg.png');
+    newForm.append('imgAvatar', 'defaultAvatarImg.png');
     newForm.append('aboutMe', 'Bienvenido a mi perfil!!!');
     newForm.append('isPrivate', '' + newUser.isPrivate);
 
@@ -115,5 +115,12 @@ export class UserService {
     newForm.append('isPrivate', '' + user.isPrivate);
     // TODO: pasar a patch
     return this.http.post(this.url + '/user/' + user.id + '/settings/account/privacy',  newForm);
+  }
+
+  deactivateAccount(user: User): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('id', '' + user.id);
+    // TODO: pasar a patch
+    return this.http.post(this.url + '/user/' + user.id + '/settings/account', newForm);
   }
 }
