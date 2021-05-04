@@ -45,6 +45,7 @@ import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/
 import { CommentComponent } from './components/secure/publications/comment/comment.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { NotificationsPageComponent } from './components/secure/notifications-page/notifications-page.component';
+import { PrivacyComponent } from './components/public/privacy/privacy.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +71,8 @@ import { NotificationsPageComponent } from './components/secure/notifications-pa
     UserSettingsPasswordComponent,
     ListOfFollowersOrFollowedComponent,
     CommentComponent,
-    NotificationsPageComponent
+    NotificationsPageComponent,
+    PrivacyComponent
   ],
   imports: [
     BrowserModule,
