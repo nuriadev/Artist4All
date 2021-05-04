@@ -20,6 +20,7 @@ import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/
 import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
 import { NoAuthGuard } from './core/guards/no-auth.guard';
 import { CommentComponent } from './components/secure/publications/comment/comment.component';
+import { NotificationsPageComponent } from './components/secure/notifications-page/notifications-page.component';
 
 const routes: Routes = [
   {path:'', component:LandingComponent},
@@ -39,6 +40,8 @@ const routes: Routes = [
   {path:'user/list', component:ProvisionalAddUserComponent, canActivate:[AuthGuard]},
   {path:'404', component:PageNotFoundComponent},
   {path:'user/:id_user/:typeList', component:ListOfFollowersOrFollowedComponent, canActivate:[AuthGuard]},
+  // TODO: modifcar ruta de notificaciones
+  {path:'notifications', component:NotificationsPageComponent, canActivate:[AuthGuard]},
   {path:'**', redirectTo: '/404'},
 ];
 

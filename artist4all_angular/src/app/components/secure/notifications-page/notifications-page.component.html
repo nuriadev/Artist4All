@@ -1,0 +1,108 @@
+<app-user-navbar></app-user-navbar>
+<div class="lg:grid lg:grid-cols-12 lg:gap-8 bg-gray-100">
+    <div class="hidden lg:block lg:col-span-3 xl:col-span-2 bg-gray-800" style="height: 1000px;">
+        <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
+          <div class="pb-8 space-y-1">
+            <!-- Current: "bg-gray-200 style="padding:25px;"text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
+            <a routerLink="/home"
+              class="bg-gray-900 text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
+              aria-current="page">
+              <!-- Heroicon name: outline/home -->
+              <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
+                viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+              </svg>
+              <span class="truncate">
+                <a routerLink="/home" class="hover:text-gray-200">Home</a>
+              </span>
+            </a>
+    
+            <a routerLink="/store"
+              class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+              <!-- Heroicon name: outline/fire -->
+              <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
+                </path>
+              </svg>
+              <span class="truncate">
+                <a routerLink="/store" class="hover:text-gray-200">Tienda</a>
+              </span>
+            </a>
+    
+            <a routerLink="/user/{{ id }}/messages"
+              class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+              <!-- Heroicon name: outline/user-group -->
+              <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
+                viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                </path>
+              </svg>
+              <span class="truncate">
+                <a routerLink="/user/{{ id }}/messages" class="hover:text-gray-200">Mensajería</a>
+              </span>
+            </a>
+    
+            <a routerLink="/user/list"
+              class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
+              <!-- Heroicon name: outline/trending-up -->
+              <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6"
+                xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"
+                aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              <span class="truncate">
+                <a routerLink="/user/list" class="hover:text-gray-200">Usuarios</a>
+              </span>
+            </a>
+          </div>
+        </nav>
+      </div>
+    
+    <ul class="lg:col-span-9 divide-y divide-gray-200">
+    <h3 class="text-center md:text-left mb-3 lg:mt-6 lg:mb-3 lg:block text-3xl font-bold" style="padding-top:10px;">Tus notificaciones</h3>
+      <li class="ml-4 mr-4 md:ml-0 md:mr-0 py-4">
+        <div class="flex space-x-3">
+          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixqx=NyaX3ZCB6U&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" alt="">
+          <div class="flex-1 space-y-1">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium">Lindsay Walton</h3>
+              <p class="text-sm text-gray-500">1h</p>
+            </div>
+            <p class="text-sm text-gray-500">Deployed Workcation (2d89f0c8 in master) to production</p>
+          </div>
+        </div>
+      </li>
+
+      <li class="ml-4 mr-4 md:ml-0 md:mr-0 py-4">
+        <div class="flex space-x-3">
+          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixqx=NyaX3ZCB6U&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" alt="">
+          <div class="flex-1 space-y-1">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium">Lindsay Walton</h3>
+              <p class="text-sm text-gray-500">1h</p>
+            </div>
+            <p class="text-sm text-gray-500">Deployed Workcation (2d89f0c8 in master) to production</p>
+          </div>
+        </div>
+      </li>
+
+      <li class="ml-4 mr-4 md:ml-0 md:mr-0 py-4">
+        <div class="flex space-x-3">
+          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixqx=NyaX3ZCB6U&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" alt="">
+          <div class="flex-1 space-y-1">
+            <div class="flex items-center justify-between">
+              <h3 class="text-sm font-medium">Lindsay Walton</h3>
+              <p class="text-sm text-gray-500">1h</p>
+            </div>
+            <p class="text-sm text-gray-500">Deployed Workcation (2d89f0c8 in master) to production</p>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+<app-footer></app-footer>

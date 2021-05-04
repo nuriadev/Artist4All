@@ -79,12 +79,12 @@ export class UserNavbarComponent implements OnInit {
 
   logoutAlert() {
     Swal.fire({
-      title: 'Estás seguro de que quieres cerrar la sessión?',
+      title: '¿Estás seguro de que quieres cerrar la sesión?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Cerrar sessión',
+      confirmButtonText: 'Cerrar sesión',
       cancelButtonText: 'Cancelar',
     }).then((result) => {
       if (result.isConfirmed) {
@@ -103,7 +103,7 @@ export class UserNavbarComponent implements OnInit {
                   toast.addEventListener('mouseleave', Swal.resumeTimer);
               }
             });
-            Toast.fire({ title: 'Sessión cerrada', icon: 'success' });
+            Toast.fire({ title: 'Sesión cerrada', icon: 'success' });
           }
           this.logout();
           this._router.navigate(['']);
