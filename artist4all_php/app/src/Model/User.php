@@ -142,6 +142,24 @@ class User implements \JsonSerializable
     return $user;
   }
 
+  public static function getUsersByPattern(string $searchedPattern): ?array {
+    $search = "{$searchedPattern}%";
+    $sql = 'SELECT * FROM users WHERE username LIKE :usernamePattern OR name LIKE :namePattern';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':usernamePattern' => $search,
+      ':namePattern' => $search
+    ]);
+    $usersAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+    if (!$usersAssoc) return null;
+    $users = [];
+    foreach ($usersAssoc as $userAssoc) {
+      $users[] = \Artist4all\Model\User::fromAssoc($userAssoc);
+    }
+    return $users;
+  }
+
   public static function getUserById(int $id): ?\Artist4all\Model\User {
     $sql = 'SELECT * FROM users WHERE id=:id';
     $conn = Database::getInstance()->getConnection();

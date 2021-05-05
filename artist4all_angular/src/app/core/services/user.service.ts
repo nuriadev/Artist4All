@@ -123,4 +123,10 @@ export class UserService {
     // TODO: pasar a patch
     return this.http.post(this.url + '/user/' + user.id + '/settings/account', newForm);
   }
+
+  searchUser(searchedPattern: string): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('searchedPattern', searchedPattern);
+    return this.http.post(this.url + '/user/search', newForm);
+  }
 }

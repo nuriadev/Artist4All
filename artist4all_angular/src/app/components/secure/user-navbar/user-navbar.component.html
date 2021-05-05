@@ -51,7 +51,7 @@
                     clip-rule="evenodd" />
                 </svg>
               </div>
-              <input id="search" name="search" class="hidden md:block w-full bg-white border border-gray-300 rounded-md py-2 pl-10 pr-3 text-sm
+              <input (keypress)="searchUser($event)" id="search" name="search" class="hidden md:block w-full bg-white border border-gray-300 rounded-md py-2 pl-10 pr-3 text-sm
               placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
               focus:ring-rose-500 focus:border-rose-500 sm:text-sm" placeholder="Buscar usuarios" type="search">
             </div>
@@ -185,7 +185,7 @@
   <!-- Mobile menu, show/hide based on menu state. -->
   <!--<nav class="lg:hidden" aria-label="Global">
     <div class="bg-white max-w-3xl mx-auto px-2 pt-2 pb-3 space-y-1 sm:px-4">
-      <!-- Current: "bg-gray-100 text-gray-900", Default: "hover:bg-gray-50" 
+      <!-- Current: "bg-gray-100 text-gray-900", Default: "hover:bg-gray-50"
       <a routerLink="/home" aria-current="page"
         class="bg-gray-100 text-gray-900 block rounded-md py-2 px-3 text-base font-medium">Home</a>
 
