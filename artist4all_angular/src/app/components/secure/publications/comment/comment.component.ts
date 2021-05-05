@@ -74,7 +74,7 @@ export class CommentComponent implements OnInit {
       this.showingForm = false;
     }
     this.responseFormIndexAux = index;
-    this.subCommentFormAuxIndex = -1;
+    this.subcommentFormAuxIndex = -1;
     this.subcommentIndexAux = -1;
     let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
@@ -113,7 +113,7 @@ export class CommentComponent implements OnInit {
       this.showingSubcomments = false;
     }
     this.responseFormIndexAux = -1;
-    this.subCommentFormAuxIndex = -1;
+    this.subcommentFormAuxIndex = -1;
     this.subcommentIndexAux = index;
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     let subcommentContainer = document.getElementById(index + 'subcommentContainer');
@@ -142,13 +142,13 @@ export class CommentComponent implements OnInit {
     }
   }
 
-  subCommentFormAuxIndex = -1;
+  subcommentFormAuxIndex = -1;
   showingSubcommentForm: boolean = false;
   toggleSubcommentResponseForm(indexSubcomments: number, indexComments: number): void {
-    if (indexSubcomments != this.subCommentFormAuxIndex) {
+    if (indexSubcomments != this.subcommentFormAuxIndex) {
       this.showingSubcommentForm = false;
     }
-    this.subCommentFormAuxIndex = indexSubcomments;
+    this.subcommentFormAuxIndex = indexSubcomments;
     this.responseFormIndexAux = -1;
     let formSubcommentResponseForm = document.getElementById(indexSubcomments + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(indexSubcomments + 'formResponseContainer');
@@ -185,7 +185,9 @@ export class CommentComponent implements OnInit {
   postComment() {
     this.subcommentIndexAux = -1;
     this.responseFormIndexAux = -1;
-    this.subCommentFormAuxIndex = -1;
+    this.subcommentFormAuxIndex = -1;
+    this.showingEditForm = false;
+    this.editCommentIndexAux = -1;
     this.isValidFormSubmitted = false;
     if (this.commentForm.invalid) {
       return;
@@ -229,7 +231,7 @@ export class CommentComponent implements OnInit {
         this.commentFormResponse.controls['id_comment_reference'].setValue(this.comments[indexComments].id);
         if (type == 1) {
           this.commentFormResponse.controls['user_reference'].setValue(this.subcomments[indexSubcomments].user);
-          this.subCommentFormAuxIndex = -1;
+          this.subcommentFormAuxIndex = -1;
         } else {
           this.commentFormResponse.controls['id_comment_reference'].setValue(this.comments[indexComments].user);
           this.responseFormIndexAux = -1;
@@ -239,11 +241,20 @@ export class CommentComponent implements OnInit {
     });
   }
 
+  inComments: boolean = true;
+  inSubcomments: boolean = false;
   editCommentIndexAux = -1;
   showingEditForm = false;
-  toggleEditForm(index: number, commentsArray: Array<Comment>) {
+  toggleEditForm(index: number, commentsArray: Array<Comment>, type: number) {
     if (index != this.editCommentIndexAux) {
       this.showingEditForm = false;
+    }
+    if (type == 0) {
+      this.inComments = true;
+      this.inSubcomments = false;
+    } else if (type == 1) {
+      this.inComments = false;
+      this.inSubcomments = true;
     }
     this.editCommentIndexAux = index;
     this.editCommentForm = this._formBuilder.group({
@@ -282,7 +293,7 @@ export class CommentComponent implements OnInit {
           this.showingEditForm = false;
           this.editCommentForm.reset();
           this.editCommentForm.controls['isEdited'].setValue(1);
-          if (type == 1) this.subCommentFormAuxIndex = -1;
+          if (type == 1) this.subcommentFormAuxIndex = -1;
           else this.responseFormIndexAux = -1;
         }, (error) => {
           console.log(error);
