@@ -57,26 +57,47 @@
   </div>
   <div class="lg:col-span-2"></div>
   <div class="container mt-5 mb-5 lg:col-span-6">
+  -->
 
 
-    <mat-card style="max-width: 980px;">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Shiba Inu</mat-card-title>
-        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-      <mat-card-content>
-        <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-      </mat-card-actions>
+    <mat-card *ngIf="publication != null" style="max-width: 980px;">
+      <mat-card class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="max-width: 980px; margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 20px;">
+        <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ publication.user.imgAvatar }}" width="50">
+        <mat-card-title>{{ publication.user.username }}</mat-card-title>
+        <mat-card-subtitle *ngIf="publication.isEdited == 0">{{ publication.upload_date }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="publication.isEdited == 1">{{ publication.upload_date }} (editada)</mat-card-subtitle>
+        <mat-card-content>
+          <p>
+            {{ publication.bodyPublication }}
+          </p>
+        </mat-card-content>
+        <div id="carousel{{publication.id}}" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item" *ngFor="let img of publication.imgsPublication; index as i;"
+              [ngClass]="{'active': i == 0 }">￼
+              <div *ngIf="publication.imgsPublication != null">
+                <img src="http://localhost:81/assets/img/{{ img.imgPublication }}"
+                  class="h-96 w-full mb-3 object-contain">
+              </div>
+              <div *ngIf="publication.imgsPublication.length > 1">
+                <a class="carousel-control-prev" href="#carousel{{publication.id}}" role="button"
+                  data-slide="prev">
+                  <i class="fas fa-chevron-left" style="color: black; font-size:25px;"></i>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carousel{{publication.id}}" role="button"
+                  data-slide="next">
+                  <i class="fas fa-chevron-right" style="color: black; font-size:25px;"></i>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
     </mat-card>
     <div>
+      <!--
       <section class="rounded-b-lg  mt-4 ">
         <form [formGroup]="commentForm" (ngSubmit)="postComment();" accept-charset="UTF-8"><input type="hidden">
           <textarea formControlName="bodyComment" class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"

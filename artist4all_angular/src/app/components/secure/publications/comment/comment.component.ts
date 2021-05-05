@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Publication } from 'src/app/core/models/publication';
 import { User } from 'src/app/core/models/user';
 import { CommentService } from 'src/app/core/services/comment.service';
 import { PublicationService } from 'src/app/core/services/publication.service';
@@ -17,6 +18,7 @@ export class CommentComponent implements OnInit {
   constructor(
     private _sessionService: SessionService,
     private _commentService: CommentService,
+    private _publicationService: PublicationService,
     private _formBuilder: FormBuilder,
     private _activeRoute: ActivatedRoute,
     ) { }
@@ -25,6 +27,7 @@ export class CommentComponent implements OnInit {
   imgAvatar: FileList;
   user: User;
   token = this._sessionService.getCurrentToken();
+  publication: Publication;
 
   comments: Array<Comment> = [];
   subcomments: Array<Comment> = [];
@@ -38,6 +41,12 @@ export class CommentComponent implements OnInit {
     this.imgAvatar = this.user.imgAvatar;
     this._activeRoute.paramMap.subscribe((params) => {
     this.id_publication = params.get('id_publication');
+    this._publicationService.getPublicationById(this.user.id, parseInt(this.id_publication)).subscribe(
+      (result) => {
+        this.publication = result;
+      }, (error) => {
+        console.log(error);
+    })
       this.getPublicationComments();
     });
     this.commentForm = this._formBuilder.group({
