@@ -39,6 +39,12 @@ export class UserSettingsPasswordComponent implements OnInit {
     return (this.passwordForm.hasError('notMatching') && this.passwordForm.get('password').dirty && this.passwordForm.get('passwordConfirm').dirty);
   }
 
+  showingPasswordHint: boolean = false;
+  showPasswordHint() {
+    if (!this.showingPasswordHint) this.showingPasswordHint = true;
+    else this.showingPasswordHint = false;
+  }
+
   showOrHidePassword() {
     let showIcon = document.getElementById('showIcon');
     let hideIcon = document.getElementById('hideIcon');

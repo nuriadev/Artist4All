@@ -157,8 +157,8 @@ export class CommentComponent implements OnInit {
     if (indexSubcomments != this.subcommentFormAuxIndex) {
       this.showingSubcommentForm = false;
     }
-    this.subcommentFormAuxIndex = indexSubcomments;
     this.responseFormIndexAux = -1;
+    this.subcommentFormAuxIndex = indexSubcomments;
     let formSubcommentResponseForm = document.getElementById(indexSubcomments + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(indexSubcomments + 'formResponseContainer');
     if (!this.showingSubcommentForm) {
