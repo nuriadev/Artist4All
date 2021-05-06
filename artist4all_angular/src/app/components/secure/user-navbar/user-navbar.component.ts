@@ -12,6 +12,7 @@ import {
   MatSnackBarHorizontalPosition,
   MatSnackBarVerticalPosition,
 } from '@angular/material/snack-bar';
+import { User } from 'src/app/core/models/user';
 
 @Component({
   selector: 'app-user-navbar',
@@ -66,6 +67,18 @@ export class UserNavbarComponent implements OnInit {
       (error) => {
         console.log(error);
       });
+  }
+
+  usersReceived: Array<User>;
+  searchUser(event) {
+    let searchedPattern = event.target.value;
+    this._userService.searchUser(searchedPattern).subscribe(
+      (result) => {
+        this.usersReceived = result;
+        console.log(this.usersReceived);
+      }, (error) => {
+        console.log(error);
+    });
   }
 
   logout() {

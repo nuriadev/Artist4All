@@ -1,13 +1,11 @@
 <app-user-navbar></app-user-navbar>
-<div class="lg: max-w-full grid lg:grid-cols-12 lg:gap-8 sm:grid-cols-2 bg-gray-100" style="padding-left: 0; min-height: 1000px;">
+<!-- <div class="lg: max-w-full grid lg:grid-cols-12 lg:gap-8 sm:grid-cols-2 bg-gray-100" style="padding-left: 0; min-height: 1000px;">
   <div class="hidden lg:block lg:col-span-2 bg-gray-800 min-h-screen">
     <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
       <div class="pb-8 space-y-1">
-        <!-- Current: "bg-gray-200 style="padding:25px;"text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
         <a routerLink="/home"
           class="bg-gray-900 text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
           aria-current="page">
-          <!-- Heroicon name: outline/home -->
           <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
             viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -20,7 +18,6 @@
 
         <a routerLink="/store"
           class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/fire -->
           <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -34,7 +31,6 @@
 
         <a routerLink="/user/{{ id }}/messages"
           class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/user-group -->
           <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
             viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -48,7 +44,6 @@
 
         <a routerLink="/user/list"
           class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/trending-up -->
           <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
             viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
@@ -62,25 +57,47 @@
   </div>
   <div class="lg:col-span-2"></div>
   <div class="container mt-5 mb-5 lg:col-span-6">
-    <!-- PUBLICATION -->
-    <mat-card style="max-width: 980px;">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Shiba Inu</mat-card-title>
-        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-      <mat-card-content>
-        <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-      </mat-card-actions>
+  -->
+
+
+    <mat-card *ngIf="publication != null" style="max-width: 980px;">
+      <mat-card class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="max-width: 980px; margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 20px;">
+        <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ publication.user.imgAvatar }}" width="50">
+        <mat-card-title>{{ publication.user.username }}</mat-card-title>
+        <mat-card-subtitle *ngIf="publication.isEdited == 0">{{ publication.upload_date }}</mat-card-subtitle>
+        <mat-card-subtitle *ngIf="publication.isEdited == 1">{{ publication.upload_date }} (editada)</mat-card-subtitle>
+        <mat-card-content>
+          <p>
+            {{ publication.bodyPublication }}
+          </p>
+        </mat-card-content>
+        <div id="carousel{{publication.id}}" class="carousel slide" data-ride="carousel">
+          <div class="carousel-inner">
+            <div class="carousel-item" *ngFor="let img of publication.imgsPublication; index as i;"
+              [ngClass]="{'active': i == 0 }">￼
+              <div *ngIf="publication.imgsPublication != null">
+                <img src="http://localhost:81/assets/img/{{ img.imgPublication }}"
+                  class="h-96 w-full mb-3 object-contain">
+              </div>
+              <div *ngIf="publication.imgsPublication.length > 1">
+                <a class="carousel-control-prev" href="#carousel{{publication.id}}" role="button"
+                  data-slide="prev">
+                  <i class="fas fa-chevron-left" style="color: black; font-size:25px;"></i>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carousel{{publication.id}}" role="button"
+                  data-slide="next">
+                  <i class="fas fa-chevron-right" style="color: black; font-size:25px;"></i>
+                  <span class="sr-only">Next</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-card>
     </mat-card>
     <div>
+      <!--
       <section class="rounded-b-lg  mt-4 ">
         <form [formGroup]="commentForm" (ngSubmit)="postComment();" accept-charset="UTF-8"><input type="hidden">
           <textarea formControlName="bodyComment" class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
@@ -91,14 +108,14 @@
         </form>
 
         <div id="myGroup" class="pt-4">
-          <div *ngFor="let comment of comments; index as i;" 
+          <div *ngFor="let comment of comments; index as i;"
           class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
             <div *ngIf="comment.user.id == id"
              class="flex flex-row justify-center mr-2">
               <img alt="avatar" class="rounded-full mr-3 shadow-lg mt-1 mb-3"
                 src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}" style="width: 40px; height: 40px;">
                 <div class="">
-                  <h3 class="mt-3 text-indigo-600 font-semibold text-base text-center md:text-left">{{ comment.user.username }}</h3> 
+                  <h3 class="mt-3 text-indigo-600 font-semibold text-base text-center md:text-left">{{ comment.user.username }}</h3>
                 </div>
             </div>
             <div class="mt-2 w-full">
@@ -122,7 +139,7 @@
                 </div>
               </div>
               <button style="margin-left:48%;" class="focus:outline-none" (click)="toggleEditForm(i, comments)"> <i class="fas fa-edit fa-md text-blue-500 hover:text-blue-600"></i> Editar</button>
-              <button class="focus:outline-none" style="margin-left:3%;" (click)="deleteComment(i, comments)"><i class="fas fa-trash-alt fa-md text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button> 
+              <button class="focus:outline-none" style="margin-left:3%;" (click)="deleteComment(i, comments)"><i class="fas fa-trash-alt fa-md text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button>
             </div>
             <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="p-2 w-full">
               <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, null, 0);">
@@ -175,10 +192,10 @@
                         <span class="ml-2 inline-block">Responder</span>
                       </div>
                       <button style="margin-left:60%;" class="focus:outline-none" (click)="toggleEditForm(ind, subcomments)"> <i class="fas fa-edit fa-md text-blue-500 hover:text-blue-600"></i> Editar</button>
-                      <button class="focus:outline-none" style="margin-left:3%;" (click)="deleteComment(ind, subcomments)"><i class="fas fa-trash-alt fa-md text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button> 
+                      <button class="focus:outline-none" style="margin-left:3%;" (click)="deleteComment(ind, subcomments)"><i class="fas fa-trash-alt fa-md text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button>
                     </div>
-                    <div> <!-- *ngIf="subcomment.user.id == id -->
-                      
+                    <div>
+
                     </div>
                   </div>
                   <div class="bg-white p-2 rounded-md">
@@ -206,70 +223,7 @@
       </section>
     </div>
   </div>
-</div>
-
-<div class="lg: max-w-full grid lg:grid-cols-12 lg:gap-8 sm:grid-cols-2" style="padding-left: 0;">
-  <div class="hidden lg:block lg:col-span-2 bg-gray-800 min-h-screen">
-    <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
-      <div class="pb-8 space-y-1">
-        <!-- Current: "bg-gray-200 style="padding:25px;"text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
-        <a routerLink="/home"
-          class="bg-gray-900 text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
-          aria-current="page">
-          <!-- Heroicon name: outline/home -->
-          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-          <span class="truncate">
-            <a routerLink="/home" class="hover:text-gray-200">Home</a>
-          </span>
-        </a>
-
-        <a routerLink="/store"
-          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/fire -->
-          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
-            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z">
-            </path>
-          </svg>
-          <span class="truncate">
-            <a routerLink="/store" class="hover:text-gray-200">Tienda</a>
-          </span>
-        </a>
-
-        <a routerLink="/user/{{ id }}/messages"
-          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/user-group -->
-          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
-            viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
-            </path>
-          </svg>
-          <span class="truncate">
-            <a routerLink="/user/{{ id }}/messages" class="hover:text-gray-200">Mensajería</a>
-          </span>
-        </a>
-
-        <a routerLink="/user/list"
-          class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-          <!-- Heroicon name: outline/trending-up -->
-          <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
-            viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
-          </svg>
-          <span class="truncate">
-            <a routerLink="/user/list" class="hover:text-gray-200">Usuarios</a>
-          </span>
-        </a>
-      </div>
-    </nav>
-  </div>
-</div>
+</div> -->
 
 <div class="container mt-5">
       <div class="coment-bottom bg-white p-2 px-4">
@@ -286,7 +240,7 @@
       <div class="d-flex flex-column comment-section" id="myGroup">
         <div *ngFor="let comment of comments; index as i;">
           <div *ngIf="comment.user.id == id">
-            <button class="focus:outline-none" (click)="toggleEditForm(i, comments)">Editar</button>
+            <button class="focus:outline-none" (click)="toggleEditForm(i, comments, 0)">Editar</button>
             <button class="focus:outline-none" (click)="deleteComment(i, comments)">Eliminar</button>
           </div>
           <div class="bg-white p-2">
@@ -299,12 +253,14 @@
               </div>
             </div>
             <div class="mt-2">
-              <form *ngIf="editCommentIndexAux===i && showingEditForm" [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
+              <form *ngIf="inComments && editCommentIndexAux===i && showingEditForm; else commentNoEdit" [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
                 <textarea formControlName="bodyComment" class="w-full">{{ comment.bodyComment }}</textarea> <br>
-                <button class="focus:outline-none" (click)="toggleEditForm(i, comments)">Cancelar</button>
+                <button class="focus:outline-none" (click)="toggleEditForm(i, comments, 0)">Cancelar</button>
                 <button class="focus:outline-none" type="submit">Editar</button>
               </form>
-              <p *ngIf="!showingEditForm" class="comment-text">{{ comment.bodyComment }}</p>
+              <ng-template #commentNoEdit>
+                <p class="comment-text">{{ comment.bodyComment }}</p>
+              </ng-template>
             </div>
             <div class="bg-white p-2">
               <div class="d-flex flex-row fs-12">
@@ -338,7 +294,7 @@
               <div *ngIf="subcomments != null">
                 <div *ngFor="let subcomment of subcomments; index as ind;">
                   <div *ngIf="subcomment.user.id == id">
-                    <button class="focus:outline-none" (click)="toggleEditForm(ind, subcomments)">Editar</button>
+                    <button class="focus:outline-none" (click)="toggleEditForm(ind, subcomments, 1)">Editar</button>
                     <button class="focus:outline-none" (click)="deleteComment(ind, subcomments)">Eliminar</button>
                   </div>
                   <div class="d-flex flex-row user-info">
@@ -351,16 +307,18 @@
                     </div>
                   </div>
                   <div class="mt-2">
-                    <form *ngIf="editCommentIndexAux===ind && showingEditForm" [formGroup]="editCommentForm" (ngSubmit)="editComment(ind, subcomments, 1)">
+                    <form *ngIf="inSubcomments && editCommentIndexAux===ind && showingEditForm; else subcommentNoEdit" [formGroup]="editCommentForm" (ngSubmit)="editComment(ind, subcomments, 1)">
                       <textarea formControlName="bodyComment" class="w-full">{{ subcomment.bodyComment }}</textarea> <br>
-                      <button class="focus:outline-none" (click)="toggleEditForm(ind, subcomments)">Cancelar</button>
+                      <button class="focus:outline-none" (click)="toggleEditForm(ind, subcomments, 1)">Cancelar</button>
                       <button class="focus:outline-none" type="submit">Editar</button>
                     </form>
-                    <p *ngIf="!showingEditForm" class="comment-text">
-                      <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
-                        @{{ subcomment.user_reference.username }}
-                      </a>{{ subcomment.bodyComment }}
-                    </p>
+                    <ng-template #subcommentNoEdit>
+                      <p class="comment-text">
+                        <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
+                          @{{ subcomment.user_reference.username }}
+                        </a>{{ subcomment.bodyComment }}
+                      </p>
+                    </ng-template>
                   </div>
                   <div class="bg-white p-2">
                     <div class="d-flex flex-row fs-12">
@@ -397,94 +355,3 @@
   </div>
 
 
- <!--  <div class="lg:col-span-2"></div>
-  <div class="container mt-5 mb-5 lg:col-span-6">
-
-    <mat-card style="max-width: 980px;">
-      <mat-card-header>
-        <div mat-card-avatar class="example-header-image"></div>
-        <mat-card-title>Shiba Inu</mat-card-title>
-        <mat-card-subtitle>Dog Breed</mat-card-subtitle>
-      </mat-card-header>
-      <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu">
-      <mat-card-content>
-        <p>
-          The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-          A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-          bred for hunting.
-        </p>
-      </mat-card-content>
-      <mat-card-actions>
-      </mat-card-actions>
-    </mat-card>
-    <div>
-
-      <section class="rounded-b-lg  mt-4 ">
-
-
-        <form action="/" accept-charset="UTF-8" method="post"><input type="hidden">
-          <textarea class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
-            placeholder="Añade tu comentario..." cols="7" rows="3" id="comment_content" spellcheck="false"></textarea>
-          <button
-            class="font-bold py-2 px-4 w-full bg-indigo-500 hover:bg-indigo-700 text-base text-white shadow-md rounded-lg ">Publicar
-          </button>
-        </form>
-
-        <div id="task-comments" class="pt-4">
-          <div class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
-            <div class="flex flex-row justify-center mr-2">
-              <img alt="avatar" width="48" height="48" class="rounded-full w-10 h-10 mr-4 shadow-lg mb-4"
-                src="https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png">
-              <h3 class="text-indigo-600 font-semibold text-base text-center md:text-left ">@Shanel</h3>
-            </div>
-
-
-            <p style="width: 90%" class="text-gray-600 text-base text-center md:text-left ">Hi good morning will it be the
-              entire house. </p>
-
-          </div>
-
-          <div class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
-            <div class="flex flex-row justify-center mr-2">
-              <img alt="avatar" width="48" height="48" class="rounded-full w-10 h-10 mr-4 shadow-lg mb-4"
-                src="https://cdn1.iconfinder.com/data/icons/technology-devices-2/100/Profile-512.png">
-              <h3 class="text-indigo-600 font-semibold text-lg text-center md:text-left ">@Tim Motti</h3>
-            </div>
-
-
-            <p style="width: 90%" class="text-gray-600 text-lg text-center md:text-left "><span
-                class="text-indigo-600 font-semibold">@Shanel</span> Hello. Yes, the entire exterior, including the
-              walls. </p>
-
-          </div>
-
-        </div>
-      </section>
-
-    </div>
-  </div>-->
-  <!-- <div class="lg:col-span-2"></div>
-  <div class="container mt-5">
-    <div class="d-flex justify-content-center row" style="margin-bottom: 20%;">
-      <div class="col-md-8">
-        <div class="The Shiba Inu is the smallest of the six original and distinct spitz breeds of dog from Japan.
-      A small, agile dog that copes very well with mountainous terrain, the Shiba Inu was originally
-      bred for hunting.d-flex flex-column comment-section" id="myGroup">
-          <div *ngFor="let comment of comments; index as i;">
-            <div *ngIf="comment.user.id == id">
-              <button> Editar </button>
-              <button> Eliminar </button>
-            </div>
-            <div class="bg-white p-2">
-              <div class="d-flex flex-row user-info">
-                <img class="rounded-circle" src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}"
-                  width="50">
-                <div class="d-flex flex-column justify-content-start ml-2">
-                  <span class="d-block font-weight-bold name">{{ comment.user.username }}</span>
-                  <span class="date text-black-50">{{ comment.comment_date }}</span>
-                </div>
-              </div>
-              <div class="mt-2">
-                <p class="comment-text">{{ comment.bodyComment }}</p>
-              </div>
-            </div> -->

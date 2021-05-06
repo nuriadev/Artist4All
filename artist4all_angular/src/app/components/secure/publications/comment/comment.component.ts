@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
+import { Publication } from 'src/app/core/models/publication';
 import { User } from 'src/app/core/models/user';
 import { CommentService } from 'src/app/core/services/comment.service';
 import { PublicationService } from 'src/app/core/services/publication.service';
@@ -17,6 +18,7 @@ export class CommentComponent implements OnInit {
   constructor(
     private _sessionService: SessionService,
     private _commentService: CommentService,
+    private _publicationService: PublicationService,
     private _formBuilder: FormBuilder,
     private _activeRoute: ActivatedRoute,
     ) { }
@@ -25,6 +27,7 @@ export class CommentComponent implements OnInit {
   imgAvatar: FileList;
   user: User;
   token = this._sessionService.getCurrentToken();
+  publication: Publication;
 
   comments: Array<Comment> = [];
   subcomments: Array<Comment> = [];
@@ -38,6 +41,12 @@ export class CommentComponent implements OnInit {
     this.imgAvatar = this.user.imgAvatar;
     this._activeRoute.paramMap.subscribe((params) => {
     this.id_publication = params.get('id_publication');
+    this._publicationService.getPublicationById(this.user.id, parseInt(this.id_publication)).subscribe(
+      (result) => {
+        this.publication = result;
+      }, (error) => {
+        console.log(error);
+    })
       this.getPublicationComments();
     });
     this.commentForm = this._formBuilder.group({
@@ -74,7 +83,7 @@ export class CommentComponent implements OnInit {
       this.showingForm = false;
     }
     this.responseFormIndexAux = index;
-    this.subCommentFormAuxIndex = -1;
+    this.subcommentFormAuxIndex = -1;
     this.subcommentIndexAux = -1;
     let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
@@ -113,7 +122,7 @@ export class CommentComponent implements OnInit {
       this.showingSubcomments = false;
     }
     this.responseFormIndexAux = -1;
-    this.subCommentFormAuxIndex = -1;
+    this.subcommentFormAuxIndex = -1;
     this.subcommentIndexAux = index;
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     let subcommentContainer = document.getElementById(index + 'subcommentContainer');
@@ -142,13 +151,13 @@ export class CommentComponent implements OnInit {
     }
   }
 
-  subCommentFormAuxIndex = -1;
+  subcommentFormAuxIndex = -1;
   showingSubcommentForm: boolean = false;
   toggleSubcommentResponseForm(indexSubcomments: number, indexComments: number): void {
-    if (indexSubcomments != this.subCommentFormAuxIndex) {
+    if (indexSubcomments != this.subcommentFormAuxIndex) {
       this.showingSubcommentForm = false;
     }
-    this.subCommentFormAuxIndex = indexSubcomments;
+    this.subcommentFormAuxIndex = indexSubcomments;
     this.responseFormIndexAux = -1;
     let formSubcommentResponseForm = document.getElementById(indexSubcomments + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(indexSubcomments + 'formResponseContainer');
@@ -185,7 +194,9 @@ export class CommentComponent implements OnInit {
   postComment() {
     this.subcommentIndexAux = -1;
     this.responseFormIndexAux = -1;
-    this.subCommentFormAuxIndex = -1;
+    this.subcommentFormAuxIndex = -1;
+    this.showingEditForm = false;
+    this.editCommentIndexAux = -1;
     this.isValidFormSubmitted = false;
     if (this.commentForm.invalid) {
       return;
@@ -229,7 +240,7 @@ export class CommentComponent implements OnInit {
         this.commentFormResponse.controls['id_comment_reference'].setValue(this.comments[indexComments].id);
         if (type == 1) {
           this.commentFormResponse.controls['user_reference'].setValue(this.subcomments[indexSubcomments].user);
-          this.subCommentFormAuxIndex = -1;
+          this.subcommentFormAuxIndex = -1;
         } else {
           this.commentFormResponse.controls['id_comment_reference'].setValue(this.comments[indexComments].user);
           this.responseFormIndexAux = -1;
@@ -239,11 +250,20 @@ export class CommentComponent implements OnInit {
     });
   }
 
+  inComments: boolean = true;
+  inSubcomments: boolean = false;
   editCommentIndexAux = -1;
   showingEditForm = false;
-  toggleEditForm(index: number, commentsArray: Array<Comment>) {
+  toggleEditForm(index: number, commentsArray: Array<Comment>, type: number) {
     if (index != this.editCommentIndexAux) {
       this.showingEditForm = false;
+    }
+    if (type == 0) {
+      this.inComments = true;
+      this.inSubcomments = false;
+    } else if (type == 1) {
+      this.inComments = false;
+      this.inSubcomments = true;
     }
     this.editCommentIndexAux = index;
     this.editCommentForm = this._formBuilder.group({
@@ -282,7 +302,7 @@ export class CommentComponent implements OnInit {
           this.showingEditForm = false;
           this.editCommentForm.reset();
           this.editCommentForm.controls['isEdited'].setValue(1);
-          if (type == 1) this.subCommentFormAuxIndex = -1;
+          if (type == 1) this.subcommentFormAuxIndex = -1;
           else this.responseFormIndexAux = -1;
         }, (error) => {
           console.log(error);

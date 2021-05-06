@@ -8,6 +8,8 @@ class UserController {
     $app->post('/register', '\Artist4all\Controller\UserController:register');
     $app->post('/login', '\Artist4all\Controller\UserController:login');
     $app->post('/logout', '\Artist4all\Controller\UserController:logout');
+    $app->post('/user/search', '\Artist4all\Controller\UserController:searchUsers');
+
     // TODO: cambiar a patch los 2 edits
     $app->post('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
     $app->post('/user/{id:[0-9 ]+}/password', '\Artist4all\Controller\UserController:changePassword');
@@ -36,6 +38,15 @@ class UserController {
   public function login(Request $request, Response $response, array $args) {
     $data = $request->getParsedBody();
     return $this->loginProcess($data, $response);
+  }
+
+  public function searchUsers(Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody();  
+    $searchedPattern = $data['searchedPattern'];
+    $users = \Artist4all\Model\User::getUsersByPattern($searchedPattern);
+    if (is_null($users)) $response = $response->withStatus(204, 'No users found');
+    else $response = $response->withJson($users);
+    return $response;
   }
 
   public function editProfile(Request $request, Response $response, array $args) {
