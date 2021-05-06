@@ -44,8 +44,8 @@ class Session implements \JsonSerializable
 
   public static function randomTokenPart(int $length = 10) {
     $bytes = openssl_random_pseudo_bytes(40);
-    $randomParttoken = bin2hex($bytes);
-    return $randomParttoken;
+    $randomPartToken = bin2hex($bytes);
+    return $randomPartToken;
   }
 
   public static function verifyToken($token) {
