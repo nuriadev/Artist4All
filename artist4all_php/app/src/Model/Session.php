@@ -43,16 +43,9 @@ class Session implements \JsonSerializable
   }
 
   public static function randomTokenPart(int $length = 10) {
-    $chars1 = "abcdefghijklmnopqrstuvwxyz";
-    $chars2 = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    $chars3 = "0123456789";
-    $chars4 = "!$%&/+-_.:*";
-    $randomTokenPart = substr(str_shuffle($chars1), 0, $length / 2 - 1);
-    $randomTokenPart .= substr(str_shuffle($chars2), 0, $length / 2 - 1);
-    $randomTokenPart .= substr(str_shuffle($chars3), 0, 1);
-    $randomTokenPart .= substr(str_shuffle($chars4), 0, 1);
-    $randomTokenPart = str_shuffle($randomTokenPart);
-    return $randomTokenPart;
+    $bytes = openssl_random_pseudo_bytes(40);
+    $randomParttoken = bin2hex($bytes);
+    return $randomParttoken;
   }
 
   public static function verifyToken($token) {
