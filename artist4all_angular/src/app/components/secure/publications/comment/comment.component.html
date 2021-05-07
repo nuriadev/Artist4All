@@ -1,5 +1,5 @@
 <app-user-navbar></app-user-navbar>
-<!-- <div class="lg: max-w-full grid lg:grid-cols-12 lg:gap-8 sm:grid-cols-2 bg-gray-100" style="padding-left: 0; min-height: 1000px;">
+ <div class="lg: max-w-full grid lg:grid-cols-12 lg:gap-8 sm:grid-cols-2 bg-gray-100" style="padding-left: 0; min-height: 1000px;">
   <div class="hidden lg:block lg:col-span-2 bg-gray-800 min-h-screen">
     <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
       <div class="pb-8 space-y-1">
@@ -57,15 +57,14 @@
   </div>
   <div class="lg:col-span-2"></div>
   <div class="container mt-5 mb-5 lg:col-span-6">
-  -->
-
+    <!-- PUBLICATION -->
 
     <mat-card *ngIf="publication != null" style="max-width: 980px;">
-      <mat-card class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="max-width: 980px; margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 20px;">
-        <img class="rounded-circle mr-2" src="http://localhost:81/assets/img/{{ publication.user.imgAvatar }}" width="50">
+      <mat-card-header>
         <mat-card-title>{{ publication.user.username }}</mat-card-title>
         <mat-card-subtitle *ngIf="publication.isEdited == 0">{{ publication.upload_date }}</mat-card-subtitle>
         <mat-card-subtitle *ngIf="publication.isEdited == 1">{{ publication.upload_date }} (editada)</mat-card-subtitle>
+      </mat-card-header>
         <mat-card-content>
           <p>
             {{ publication.bodyPublication }}
@@ -94,10 +93,8 @@
             </div>
           </div>
         </div>
-      </mat-card>
     </mat-card>
     <div>
-      <!--
       <section class="rounded-b-lg  mt-4 ">
         <form [formGroup]="commentForm" (ngSubmit)="postComment();" accept-charset="UTF-8"><input type="hidden">
           <textarea formControlName="bodyComment" class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
@@ -119,13 +116,16 @@
                 </div>
             </div>
             <div class="mt-2 w-full">
-              <form *ngIf="editCommentIndexAux===i && showingEditForm" [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
+              <form *ngIf="inComments && editCommentIndexAux===i && showingEditForm; else commentNoEdit" [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
                 <textarea formControlName="bodyComment" class="w-full shadow-md p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base">{{ comment.bodyComment }}</textarea> <br>
-                <button class="py-2 px-4 w-2/12 mr-2 mb-4 hover:bg-red-500 text-base text-black shadow-md hover:text-white rounded-lg" (click)="toggleEditForm(i, comments)">Cancelar</button>
+                <button class="py-2 px-4 w-2/12 mr-2 mb-4 hover:bg-red-500 text-base text-black shadow-md hover:text-white rounded-lg" (click)="toggleEditForm(i, comments, 0)">Cancelar</button>
                 <button class="font-bold py-2 px-4 w-2/12 bg-indigo-500 hover:bg-indigo-700 text-base text-white shadow-md rounded-lg" type="submit">Editar</button>
               </form>
+              <ng-template #commentNoEdit>
+                <p class="comment-text">{{ comment.bodyComment }}</p>
+              </ng-template>
             </div>
-            <p *ngIf="!showingEditForm" class="text-gray-600 text-base text-center mb-2 md:text-left">{{ comment.bodyComment }}</p>
+            <!--<p *ngIf="!showingEditForm" class="text-gray-600 text-base text-center mb-2 md:text-left">{{ comment.bodyComment }}</p>-->
             <p class="text-gray-400 text-sm">{{ comment.comment_date }}</p>
             <div class="bg-white p-2" style="padding-left: 0px !important; width:100%;">
               <div class="inline-flex items-center">
@@ -138,7 +138,7 @@
                   <span class="ml-2">Ver respuestas</span>
                 </div>
               </div>
-              <button style="margin-left:48%;" class="focus:outline-none" (click)="toggleEditForm(i, comments)"> <i class="fas fa-edit fa-md text-blue-500 hover:text-blue-600"></i> Editar</button>
+              <button style="margin-left:48%;" class="focus:outline-none" (click)="toggleEditForm(i, comments, 0)"> <i class="fas fa-edit fa-md text-blue-500 hover:text-blue-600"></i> Editar</button>
               <button class="focus:outline-none" style="margin-left:3%;" (click)="deleteComment(i, comments)"><i class="fas fa-trash-alt fa-md text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button>
             </div>
             <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="p-2 w-full">
@@ -168,18 +168,20 @@
                       </div>
                   </div>
                   <div class="mt-2">
-                    <form *ngIf="editCommentIndexAux===ind && showingEditForm" [formGroup]="editCommentForm"
+                    <form *ngIf="inSubComments && editCommentIndexAux===ind && showingEditForm; else subcommentNoEdit" [formGroup]="editCommentForm"
                       (ngSubmit)="editComment(ind, subcomments, 1)">
                       <textarea formControlName="bodyComment" class="w-full">{{ subcomment.bodyComment }}</textarea> <br>
                       <button class="focus:outline-none"
-                        (click)="toggleEditForm(ind, subcomments)">Cancelar</button>
+                        (click)="toggleEditForm(ind, subcomments, 1)">Cancelar</button>
                       <button class="focus:outline-none" type="submit">Editar</button>
                     </form>
-                    <p *ngIf="!showingEditForm" class="comment-text mb-2">
-                      <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
-                        @{{ subcomment.user_reference.username }}
-                      </a>{{ subcomment.bodyComment }}
-                    </p>
+                    <ng-template #subcommentNoEdit>
+                      <p class="comment-text">
+                        <a routerLink="/user/{{ subcomment.user_reference.id }}/profile" class="text-blue-500">
+                          @{{ subcomment.user_reference.username }}
+                        </a>{{ subcomment.bodyComment }}
+                      </p>
+                    </ng-template>
                     <span *ngIf="subcomment.isEdited == 0" class="text-gray-400 text-sm">{{
                       subcomment.comment_date }}</span>
                     <span *ngIf="subcomment.isEdited == 1" class="text-gray-400 text-sm">{{
@@ -191,7 +193,7 @@
                         <i class="fas fa-comment-dots"></i>
                         <span class="ml-2 inline-block">Responder</span>
                       </div>
-                      <button style="margin-left:60%;" class="focus:outline-none" (click)="toggleEditForm(ind, subcomments)"> <i class="fas fa-edit fa-md text-blue-500 hover:text-blue-600"></i> Editar</button>
+                      <button style="margin-left:60%;" class="focus:outline-none" (click)="toggleEditForm(ind, subcomments, 1)"> <i class="fas fa-edit fa-md text-blue-500 hover:text-blue-600"></i> Editar</button>
                       <button class="focus:outline-none" style="margin-left:3%;" (click)="deleteComment(ind, subcomments)"><i class="fas fa-trash-alt fa-md text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button>
                     </div>
                     <div>
