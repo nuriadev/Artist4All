@@ -64,6 +64,12 @@ export class UserSettingsProfileComponent implements OnInit {
     });
   }
 
+  showingUsernameHint: boolean = false;
+  showUsernameHint() {
+    if (!this.showingUsernameHint) this.showingUsernameHint = true;
+    else this.showingUsernameHint = false;
+  }
+
   timer;
   editingAnimation() {
     clearInterval(this.timer);

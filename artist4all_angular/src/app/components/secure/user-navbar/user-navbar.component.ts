@@ -40,7 +40,6 @@ export class UserNavbarComponent implements OnInit {
   username: string;
   password: string;
   imgAvatar: FileList;
-  panelOpenState: boolean = false;
 
   notifications: Array<Notification>;
   ngOnInit(): void {
