@@ -11,7 +11,6 @@ import { MessagesComponent } from './components/secure/messages/messages.compone
 import { ContactComponent } from './components/public/contact/contact.component';
 import { AuthGuard } from './core/guards/auth.guard';
 import { PageNotFoundComponent } from './components/public/page-not-found/page-not-found.component';
-import { CreatePublicationComponent } from './components/secure/publications/create-publication/create-publication.component';
 import { ProvisionalAddUserComponent } from './components/secure/provisional-add-user/provisional-add-user.component';
 import { UserSettingsAccountComponent } from './components/secure/settings/user-settings-account/user-settings-account.component';
 import { UserSettingsProfileComponent } from './components/secure/settings/user-settings-profile/user-settings-profile.component';
@@ -35,7 +34,6 @@ const routes: Routes = [
   {path:'user/:id_user/settings/password',component:UserSettingsPasswordComponent, canActivate:[AuthGuard]},
   {path:'user/:id_user/messages',component:MessagesComponent, canActivate:[AuthGuard]},
   {path:'contact', component:ContactComponent},
-  {path:'user/:id_user/publications',component:CreatePublicationComponent, canActivate:[AuthGuard]},
   {path:'user/:id_user/publication/:id_publication',component:EditPublicationComponent, canActivate:[AuthGuard]},
   {path:'user/:id_user/publication/:id_publication/comments',component:CommentComponent, canActivate:[AuthGuard]},
   {path:'user/list', component:ProvisionalAddUserComponent, canActivate:[AuthGuard]},
