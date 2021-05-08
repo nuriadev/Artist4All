@@ -32,7 +32,7 @@ export class RegisterComponent implements OnInit {
 
   registerForm: FormGroup;
   nameSurnamePattern = "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}";
-  usernamePattern = '^[a-z0-9_ ]{5,20}$'; // letras _ num min length 5 max 20
+  usernamePattern = '^[a-zA-Z0-9_ ]{5,20}$'; // letras _ num min length 5 max 20
   emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$';
   passwordPattern = '[A-Za-z0-9 ]+';
   // TODO: Cambiar una vez finalizado proyecto

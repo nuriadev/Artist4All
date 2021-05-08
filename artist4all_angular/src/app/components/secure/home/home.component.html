@@ -78,7 +78,6 @@
           </label>
           <input class="hidden" type="file" #imgPublication (change)="addImgPublication($event.target.files)" id="imgPublication" name="imgPublication[]" ng-model="files" multiple="multiple"/>
           <!--<button class="inline-block w-6/12" type="button" (click)="removeSelectedImgs()">Eliminar las imágenes</button>-->
-
         <img *ngFor='let url of images'  class="inline-block" [src]="url" height="150" width="200px" style="margin: 5px;"> <br/>
           <div class="w-full flex justify-end" style="margin-bottom: -35px">
             <button type="submit" style="top: -95px; right: 10px; max-width: 100px;"

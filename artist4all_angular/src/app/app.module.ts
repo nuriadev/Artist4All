@@ -46,6 +46,7 @@ import { CommentComponent } from './components/secure/publications/comment/comme
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { NotificationsPageComponent } from './components/secure/notifications-page/notifications-page.component';
 import { PrivacyComponent } from './components/public/privacy/privacy.component';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   declarations: [

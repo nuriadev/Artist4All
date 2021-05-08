@@ -21,6 +21,7 @@
     "@angular/platform-browser": "~11.2.4",
     "@angular/platform-browser-dynamic": "~11.2.4",
     "@angular/router": "~11.2.4",
+    "@ctrl/ngx-emoji-mart": "^5.1.1",
     "material-design-icons-iconfont": "^6.1.0",
     "moment": "^2.29.1",
     "ngx-build-plus": "^11.0.0",

@@ -67,7 +67,9 @@ export class HomeComponent implements OnInit {
       new Publication(null, this.user, this.imgToUpload, this.bodyPublication, null, 0, 0, 0, 0)).subscribe(
         (result) => {
           this.openSnackBar(this.message);
-          this._router.navigate(['/home']);
+          this.images = [];
+          this.imgToUpload = null;
+          this.inputImgs.nativeElement.value = null;
         },
         (error) => {
           console.log(error);

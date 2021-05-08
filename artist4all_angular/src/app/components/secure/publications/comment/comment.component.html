@@ -59,9 +59,10 @@
   <div class="lg:col-span-2"></div>
   <div class="container mt-5 mb-5 lg:col-span-6">
     <!-- PUBLICATION -->
-
+    
     <mat-card *ngIf="publication != null" style="max-width: 980px;">
       <mat-card-header>
+        <img mat-card-avatar class="example-header-image mt-2" src="http://localhost:81/assets/img/{{ publication.user.imgAvatar }}" />
         <mat-card-title>{{ publication.user.username }}</mat-card-title>
         <mat-card-subtitle *ngIf="publication.isEdited == 0">{{ publication.upload_date }}</mat-card-subtitle>
         <mat-card-subtitle *ngIf="publication.isEdited == 1">{{ publication.upload_date }} (editada)</mat-card-subtitle>
@@ -108,11 +109,12 @@
           <div *ngFor="let comment of comments; index as i;"
             class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
             <div class="flex flex-row justify-center mr-2">
-              <img alt="avatar" class="rounded-full mr-3 shadow-lg mt-1 mb-3"
+              <img alt="avatar" routerLink="/user/{{ comment.user.id }}/profile" class="rounded-full mr-3 shadow-lg mt-1 mb-3 focus:outline-none cursor-pointer"
                 src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}" style="width: 40px; height: 40px;">
               <div class="">
-                <h3 class="mt-3 text-indigo-600 font-semibold text-base text-center md:text-left">{{
-                  comment.user.username }}</h3>
+                <h3 routerLink="/user/{{ comment.user.id }}/profile" class="mt-3 text-indigo-700 font-semibold text-base text-center md:text-left cursor-pointer focus:outline-none hover:text-indigo-400">
+                  {{ comment.user.username }}
+                </h3>
               </div>
             </div>
             <div class="mt-2 w-full">
