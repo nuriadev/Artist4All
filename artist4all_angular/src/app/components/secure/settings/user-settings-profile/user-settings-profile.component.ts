@@ -44,6 +44,7 @@ export class UserSettingsProfileComponent implements OnInit {
     this.isArtist = this.user.isArtist;
     this.imgAvatar = this.user.imgAvatar;
     this.aboutMe = this.user.aboutMe;
+    console.log(document.getElementById('username'))
   }
 
   imgToUpload: FileList = null;
