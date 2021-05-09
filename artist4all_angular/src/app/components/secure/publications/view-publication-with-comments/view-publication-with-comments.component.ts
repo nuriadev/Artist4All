@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Publication } from 'src/app/core/models/publication';
 import { User } from 'src/app/core/models/user';
@@ -9,11 +9,11 @@ import { SessionService } from 'src/app/core/services/session.service';
 import { Comment } from '../../../../core/models/comment';
 
 @Component({
-  selector: 'app-comment',
-  templateUrl: './comment.component.html',
-  styleUrls: ['./comment.component.css']
+  selector: 'app-view-publication-with-comments',
+  templateUrl: './view-publication-with-comments.component.html',
+  styleUrls: ['./view-publication-with-comments.component.css']
 })
-export class CommentComponent implements OnInit {
+export class ViewPublicationWithCommentsComponent implements OnInit {
 
   constructor(
     private _sessionService: SessionService,

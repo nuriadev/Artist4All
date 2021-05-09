@@ -35,18 +35,16 @@ import { AuthenticationService } from './core/services/authentication.service';
 import { FooterComponent } from './components/public/footer/footer.component';
 import { PageNotFoundComponent } from './components/public/page-not-found/page-not-found.component';
 import { CreatePublicationComponent } from './components/secure/publications/create-publication/create-publication.component';
-import { ViewPublicationComponent } from './components/secure/publications/view-publication/view-publication.component';
 import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
-import { ProvisionalAddUserComponent } from './components/secure/provisional-add-user/provisional-add-user.component';
 import { UserSettingsProfileComponent } from './components/secure/settings/user-settings-profile/user-settings-profile.component';
 import { UserSettingsAccountComponent } from './components/secure/settings/user-settings-account/user-settings-account.component';
 import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
 import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
-import { CommentComponent } from './components/secure/publications/comment/comment.component';
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { NotificationsPageComponent } from './components/secure/notifications-page/notifications-page.component';
 import { PrivacyComponent } from './components/public/privacy/privacy.component';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { ViewPublicationWithCommentsComponent } from './components/secure/publications/view-publication-with-comments/view-publication-with-comments.component';
 
 @NgModule({
   declarations: [
@@ -64,16 +62,14 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     FooterComponent,
     PageNotFoundComponent,
     CreatePublicationComponent,
-    ViewPublicationComponent,
     EditPublicationComponent,
-    ProvisionalAddUserComponent,
     UserSettingsProfileComponent,
     UserSettingsAccountComponent,
     UserSettingsPasswordComponent,
     ListOfFollowersOrFollowedComponent,
-    CommentComponent,
     NotificationsPageComponent,
-    PrivacyComponent
+    PrivacyComponent,
+    ViewPublicationWithCommentsComponent
   ],
   imports: [
     BrowserModule,

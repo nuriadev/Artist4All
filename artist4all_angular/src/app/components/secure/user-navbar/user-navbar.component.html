@@ -116,10 +116,9 @@
                 <img routerLink="/user/{{ notification.user_responsible.id }}/profile"
                   class="hidden md:block h-8 w-8 rounded-full object-cover mx-1"
                   src="http://localhost:81/assets/img/{{ notification.user_responsible.imgAvatar }}" alt="avatar">
-                <p *ngIf="notification.typeNotification != 2" (mouseover)="notificationRead(notification.id, i)"
+                <p *ngIf="notification.typeNotification != 2" (click)="notificationRead(notification.id, i)"
                   class="text-gray-600 text-sm mx-2">
-                  <a routerLink="/user/{{ notification.user_responsible.id }}/profile" class="font-bold"> {{
-                    notification.user_responsible.username }} </a>
+                  <a routerLink="/user/{{ notification.user_responsible.id }}/profile" class="font-bold"> {{ notification.user_responsible.username }} </a>
                   {{ notification.bodyNotification }}
                   <span class="font-bold"></span> . {{ notification.notification_date }}
                 </p>
@@ -137,36 +136,9 @@
                   <i class="fas fa-trash-alt text-red-700 hover:text-red-500"></i>Borrar</button>
               </div>
             </div>
-            <a href="#" class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
-              <img class="h-8 w-8 rounded-full object-cover mx-1"
-                src="https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80"
-                alt="avatar">
-              <p class="text-gray-600 text-sm mx-2">
-                <span class="font-bold" href="#">Slick Net</span> start following you . 45m
-              </p>
-            </a>
-            <a href="#" class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
-              <img class="h-8 w-8 rounded-full object-cover mx-1"
-                src="https://images.unsplash.com/photo-1450297350677-623de575f31c?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
-                alt="avatar">
-              <p class="text-gray-600 text-sm mx-2">
-                <span class="font-bold" href="#">Jane Doe</span> Like Your reply on <span
-                  class="font-bold text-blue-500" href="#">Test with TDD</span> artical . 1h
-              </p>
-            </a>
-            <a href="#" class="flex items-center px-4 py-3 hover:bg-gray-100 -mx-2">
-              <img class="h-8 w-8 rounded-full object-cover mx-1"
-                src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=398&q=80"
-                alt="avatar">
-              <p class="text-gray-600 text-sm mx-2">
-                <span class="font-bold" href="#">Abigail Bennett</span> start following you . 3h
-              </p>
-            </a>
-            <!-- TODO: MODIFICAR RUTA -->
-            <a routerLink="/notifications" id="subMenu"
+
+            <a routerLink="/user/{{ id }}/notifications" id="subMenu"
               class="block bg-gray-800 text-white text-center font-bold py-2">Ver todas mis notificaciones</a>
-            <!--TODO: Botones para cambiar a leido / Recoger los que leido == 0 -->
-            <!--    TODO: En caso de que sea una solicitud de amistad,  aceptar o declinar (ambas pasan estado leido), si acepta (status_follow: 3 / else : 1) -->
             <!-- TODO:  Hacer que solo los seguidores puedan ver tus publicaciones -->
           </div>
         </div>
@@ -214,8 +186,6 @@
       <a routerLink="/message"
         class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Mensajería</a>
 
-      <a routerLink="/user/list"
-        class="text-gray-800 hover:bg-indigo-600hover:text-white block px-3 py-2 rounded-md text-base font-medium">Usuarios</a>
     </div>
   </div>
   <!-- Mobile menu, show/hide based on menu state. -->
@@ -230,9 +200,6 @@
 
       <a routerLink="/user/{{ id }}/messages"
         class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium text-gray-900">Mensajes</a>
-
-      <a routerLink="/user/list"
-        class="hover:bg-gray-50 block rounded-md py-2 px-3 text-base font-medium text-gray-900">Usuarios</a>
     </div>
     <div class="border-t border-gray-200 pt-4 pb-3">
       <div class="max-w-3xl mx-auto px-4 flex items-center sm:px-6">

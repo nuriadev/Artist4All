@@ -5,13 +5,8 @@ import { AuthenticationService } from 'src/app/core/services/authentication.serv
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { UserService } from 'src/app/core/services/user.service';
-import Swal from
-'sweetalert2';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { User } from 'src/app/core/models/user';
 
 @Component({
@@ -240,3 +235,5 @@ export class UserNavbarComponent implements OnInit {
     this._snackBar.open(message, 'OK', { duration: 2000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition });
   }
 }
+
+
