@@ -63,11 +63,11 @@
               <div *ngIf="usersReceived != null">
                 <div *ngFor="let user of usersReceived; index as i;">
                   <!-- TODO: add hover and imporve display of divs beyond the navbar-->
-                  <div class="md:block w-full bg-white border border-gray-300 rounded-md py-3 pl-10 pr-3 text-sm
+                  <div style="position:absolute; width: 57%; z-index: 40;"class="bg-white border border-gray-300 rounded-md py-2 pl-10 pr-2 text-sm
                   placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
                   focus:ring-rose-500 focus:border-rose-500 sm:text-sm" routerLink="/user/{{ user.id }}/profile">
-                    <img class="rounded-full inline-block" src="http://localhost:81/assets/img/{{ user.imgAvatar }}"
-                      alt="imgAvatar" style="width: 37px; height: 37px; margin-top:5px;">
+                    <img class="object-cover rounded-full inline-block" src="http://localhost:81/assets/img/{{ user.imgAvatar }}"
+                      alt="imgAvatar" style="width: 37px; height: 37px; margin-right: 10px; margin-top:5px;">
                     <p class="inline-block">{{ user.username }}</p>
                   </div>
                 </div>
@@ -75,7 +75,7 @@
               </div>
 
               <div *ngIf="usersReceived == null && researchEnded">
-                <div class="md:block w-full bg-white border border-gray-300 rounded-md py-3 pl-10 pr-3 text-sm
+                <div style="position: absolute; width: 57%; z-index: 40;" class="bg-white border border-gray-300 rounded-md py-3 pl-10 pr-3 text-sm
                   placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
                   focus:ring-rose-500 focus:border-rose-500 sm:text-sm relative">
                   <p class="inline-block">No se ha encontrado ningún usuario con nombre '{{ searchedPattern }}'</p>
