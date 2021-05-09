@@ -1,6 +1,10 @@
+// Modules
+import { AppRoutingModule } from './app-routing.module';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,38 +17,40 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
 
-import { AppRoutingModule } from './app-routing.module';
+// Interceptors
+import { AuthInterceptor } from './core/interceptors/auth.interceptor';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+
+// Guards
+import { AuthGuard } from './core/guards/auth.guard';
+
+// Services
+import { UserService } from './core/services/user.service';
+import { SessionService } from './core/services/session.service';
+import { AuthenticationService } from './core/services/authentication.service';
+
+// Components
 import { AppComponent } from './app.component';
 import { RegisterComponent } from './components/public/register/register.component';
 import { LoginComponent } from './components/public/login/login.component';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
 import { HomeComponent } from './components/secure/home/home.component';
 import { LandingComponent } from './components/public/landing/landing.component';
 import { ProfileComponent } from './components/secure/profile/index-profile/index-profile.component';
 import { StoreComponent } from './components/secure/store/store.component';
 import { UserNavbarComponent } from './components/secure/user-navbar/user-navbar.component';
 import { MessagesComponent } from './components/secure/messages/messages.component';
-import { ContactComponent } from './components/public/contact/contact.component';
-import { AuthGuard } from './core/guards/auth.guard';
-import { UserService } from './core/services/user.service';
-import { UserSidebarComponent } from './components/secure/user-sidebar/user-sidebar.component';
-import { SessionService } from './core/services/session.service';
-import { AuthenticationService } from './core/services/authentication.service';
-import { FooterComponent } from './components/public/footer/footer.component';
-import { PageNotFoundComponent } from './components/public/page-not-found/page-not-found.component';
 import { CreatePublicationComponent } from './components/secure/publications/create-publication/create-publication.component';
 import { EditPublicationComponent } from './components/secure/publications/edit-publication/edit-publication.component';
+import { ViewPublicationWithCommentsComponent } from './components/secure/publications/view-publication-with-comments/view-publication-with-comments.component';
 import { UserSettingsProfileComponent } from './components/secure/settings/user-settings-profile/user-settings-profile.component';
 import { UserSettingsAccountComponent } from './components/secure/settings/user-settings-account/user-settings-account.component';
 import { UserSettingsPasswordComponent } from './components/secure/settings/user-settings-password/user-settings-password.component';
 import { ListOfFollowersOrFollowedComponent } from './components/secure/profile/list-of-followers-or-followed/list-of-followers-or-followed.component';
-import { AuthInterceptor } from './core/interceptors/auth.interceptor';
 import { NotificationsPageComponent } from './components/secure/notifications-page/notifications-page.component';
 import { PrivacyComponent } from './components/public/privacy/privacy.component';
-import { PickerModule } from '@ctrl/ngx-emoji-mart';
-import { ViewPublicationWithCommentsComponent } from './components/secure/publications/view-publication-with-comments/view-publication-with-comments.component';
+import { ContactComponent } from './components/public/contact/contact.component';
+import { FooterComponent } from './components/public/footer/footer.component';
+import { PageNotFoundComponent } from './components/public/page-not-found/page-not-found.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +64,6 @@ import { ViewPublicationWithCommentsComponent } from './components/secure/public
     UserNavbarComponent,
     MessagesComponent,
     ContactComponent,
-    UserSidebarComponent,
     FooterComponent,
     PageNotFoundComponent,
     CreatePublicationComponent,
