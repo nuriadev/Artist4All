@@ -4,16 +4,10 @@ import { Session } from 'src/app/core/models/session';
 import { SessionService } from 'src/app/core/services/session.service';
 import { User } from '../../../core/models/user';
 import { UserService } from '../../../core/services/user.service';
-import {
-  FormControl,
-  FormBuilder,
-  Validators,
-  FormGroup,
-} from '@angular/forms';
+import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { matchingPasswords } from 'src/app/core/validators/password.validator';
 import Swal from 'sweetalert2';
 import { AuthenticationService } from 'src/app/core/services/authentication.service';
-import { LoginUser } from 'src/app/core/models/loginUser';
 
 @Component({
   selector: 'app-register',
@@ -25,7 +19,6 @@ export class RegisterComponent implements OnInit {
   constructor(
     private _userService: UserService,
     private _sessionService: SessionService,
-    private _authenticationService: AuthenticationService,
     private _router: Router,
     private _formBuilder: FormBuilder
   ) {}
