@@ -1,10 +1,10 @@
-
 <header class="bg-white  shadow-sm lg:static lg:overflow-y-visible">
   <div class="max-w-full mx-auto px-4 sm:px-6 lg:px-8">
     <div class="relative flex justify-between xl:grid xl:grid-cols-12 lg:gap-8">
       <div class="absolute inset-y-0 left-0 flex items-center sm:hidden">
         <!-- Mobile menu button-->
-        <button type="button" (click)="toggleMobileMenu();" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
+        <button type="button" (click)="toggleMobileMenu();"
+          class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
           <span class="sr-only">Open main menu</span>
           <!--
             Icon when menu is closed.
@@ -13,7 +13,8 @@
 
             Menu open: "hidden", Menu closed: "block"
           -->
-          <svg id="buttonMenu" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg id="buttonMenu" class="block h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
           <span class="sr-only">Open main menu</span>
@@ -24,7 +25,8 @@
 
             Menu open: "block", Menu closed: "hidden"
           -->
-          <svg id="cross" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg id="cross" class="hidden h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+            stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
@@ -44,41 +46,54 @@
             <div class="relative">
               <div class="pointer-events-none absolute inset-y-0 left-0 pl-3 flex items-center">
                 <!-- Heroicon name: solid/search -->
-                <svg class="hidden md:block h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                  fill="currentColor" aria-hidden="true">
+                <svg class="hidden md:block h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                   <path fill-rule="evenodd"
                     d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
                     clip-rule="evenodd" />
                 </svg>
               </div>
-              <input (keypress)="searchUser($event)" id="search" name="search" class="hidden md:block w-full bg-white border border-gray-300 rounded-md py-2 pl-10 pr-3 text-sm
+              <input (keyup)="searchUser($event)" id="search" name="search" class="hidden md:block w-full bg-white border border-gray-300 rounded-md py-2 pl-10 pr-3 text-sm
               placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
               focus:ring-rose-500 focus:border-rose-500 sm:text-sm" placeholder="Buscar usuarios" type="search">
-              
+
             </div>
             <!-- search box -->
-            <div class="hidden md:block w-full bg-white border border-gray-300 rounded-md py-3 pl-10 pr-3 text-sm
-              placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
-              focus:ring-rose-500 focus:border-rose-500 sm:text-sm">
-              <img class="rounded-full inline-block" src="assets/img/avatar2.jpg" alt="imgAvatar" style="width: 37px; height: 37px; margin-top:5px;">
-              <p class="inline-block">Nombre de artista</p>
-          </div>
-              
+            <div *ngIf="searching">
+              <div *ngIf="usersReceived != null">
+                <div class="md:block w-full bg-white border border-gray-300 rounded-md py-3 pl-10 pr-3 text-sm
+                  placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
+                  focus:ring-rose-500 focus:border-rose-500 sm:text-sm relative" *ngFor="let user of usersReceived; index as i;">
+                  <img class="rounded-full inline-block" src="http://localhost:81/assets/img/{{ user.imgAvatar }}"
+                    alt="imgAvatar" style="width: 37px; height: 37px; margin-top:5px;">
+                  <p class="inline-block">{{ user.username }}</p>
+                </div>
+              </div>
+
+              <div *ngIf="usersReceived == null && researchEnded">
+                <div class="md:block w-full bg-white border border-gray-300 rounded-md py-3 pl-10 pr-3 text-sm
+                  placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
+                  focus:ring-rose-500 focus:border-rose-500 sm:text-sm relative">
+                  <p class="inline-block">No se ha encontrado ningún usuario con nombre '{{ searchedPattern }}'</p>
+                </div>
+              </div>
+            </div>
+
           </div>
         </div>
       </div>
       <div class="flex items-center justify-end xl:col-span-3">
         <div (click)="toggleNotifications();" class="focus:outline-none">
-          <button mat-icon-button
-          class="bg-white p-1 text-gray-500 hover:text-gray-700 focus:outline-none">
+          <button mat-icon-button class="bg-white p-1 text-gray-500 hover:text-gray-700 focus:outline-none">
             <span class="sr-only">Ver notificaciones</span>
             <!-- Heroicon name: outline/bell -->
             <!--           <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg> -->
             <p class="mt-1 ">
-              <mat-icon  *ngIf="notifications == null || notifications.length == 0">notifications</mat-icon>
-              <mat-icon *ngIf="notifications != null && notifications.length > 0" matBadge="{{ notifications.length }}">notifications</mat-icon>
+              <mat-icon *ngIf="notifications == null || notifications.length == 0">notifications</mat-icon>
+              <mat-icon *ngIf="notifications != null && notifications.length > 0" matBadge="{{ notifications.length }}">
+                notifications</mat-icon>
             </p>
           </button>
           <div id="menu-notifications"
@@ -95,25 +110,26 @@
             <div *ngFor="let notification of notifications; index as i;">
               <div class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
                 <img routerLink="/user/{{ notification.user_responsible.id }}/profile"
-                  class="hidden md:block h-8 w-8 rounded-full object-cover mx-1" src="http://localhost:81/assets/img/{{ notification.user_responsible.imgAvatar }}"
-                  alt="avatar">
-                <p *ngIf="notification.typeNotification != 2" (mouseover)="notificationRead(notification.id, i)" class="text-gray-600 text-sm mx-2">
+                  class="hidden md:block h-8 w-8 rounded-full object-cover mx-1"
+                  src="http://localhost:81/assets/img/{{ notification.user_responsible.imgAvatar }}" alt="avatar">
+                <p *ngIf="notification.typeNotification != 2" (mouseover)="notificationRead(notification.id, i)"
+                  class="text-gray-600 text-sm mx-2">
                   <a routerLink="/user/{{ notification.user_responsible.id }}/profile" class="font-bold"> {{
                     notification.user_responsible.username }} </a>
                   {{ notification.bodyNotification }}
                   <span class="font-bold"></span> . {{ notification.notification_date }}
                 </p>
                 <button *ngIf="notification.typeNotification == 2" class="focus:outline-none"
-                (click)="acceptOrDeclineRequest(notification.id, notification.user_responsible.id, i, 3)">
+                  (click)="acceptOrDeclineRequest(notification.id, notification.user_responsible.id, i, 3)">
                   <i class="fas fa-check-circle text-green-600 hover:text-green-400"></i>Aceptar</button>
                 <button *ngIf="notification.typeNotification == 2" class="focus:outline-none"
-                (click)="acceptOrDeclineRequest(notification.id, notification.user_responsible.id, i, 1)">
+                  (click)="acceptOrDeclineRequest(notification.id, notification.user_responsible.id, i, 1)">
                   <i class="fas fa-times-circle text-red-700 hover:text-red-500"></i>Rechazar</button>
                 <!--<button *ngIf="notification.typeNotification != 2" class="focus:outline-none"
                 (click)="notificationRead(notification.id, i)">
                   <i class="fas fa-check-double hover:text-gray-500"></i>Leído</button>-->
                 <button *ngIf="notification.typeNotification != 2" class="focus:outline-none"
-                (click)="removeNotification(notification.id, i)">
+                  (click)="removeNotification(notification.id, i)">
                   <i class="fas fa-trash-alt text-red-700 hover:text-red-500"></i>Borrar</button>
               </div>
             </div>
@@ -156,41 +172,48 @@
           </div>
           <div class="ml-3 relative">
             <div>
-              <button mat-icon-button class="bg-gray-800 flex text-sm rounded-full focus:outline-none" id="user-menu" aria-haspopup="true">
+              <button mat-icon-button class="bg-gray-800 flex text-sm rounded-full focus:outline-none" id="user-menu"
+                aria-haspopup="true">
                 <span class="sr-only">Open user menu</span>
-                <img class="rounded-full" src="http://localhost:81/assets/img/{{ user.imgAvatar }}" alt="imgAvatar" style="width: 37px; height: 37px; margin-top:5px;">
+                <img class="rounded-full" src="http://localhost:81/assets/img/{{ user.imgAvatar }}" alt="imgAvatar"
+                  style="width: 37px; height: 37px; margin-top:5px;">
               </button>
             </div>
             <div class="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1
             bg-white ring-1 ring-black ring-opacity-5 hidden z-40" id="menu-toggle" role="menu"
               aria-orientation="vertical" aria-labelledby="user-menu">
               <a routerLink="/user/{{ id }}/profile" (click)="toggleMenuProfile()" class="px-4 py-2 text-sm relative flex flex-row items-center h-11 focus:outline-none
-              border-l-4 border-transparent hover:border-blue-500 pr-6 text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-user mr-3"></i>Mi perfil</a>
-              <a routerLink="/user/{{ id }}/settings/profile" (click)="toggleMenuProfile()"
-              class="px-4 py-2 text-sm relative flex flex-row items-center h-11 focus:outline-none border-l-4 border-transparent
-              hover:border-blue-500 text-gray-700 hover:bg-gray-100" role="menuitem"><i class="fas fa-cog mr-3"></i>Configuración</a>
+              border-l-4 border-transparent hover:border-blue-500 pr-6 text-gray-700 hover:bg-gray-100"
+                role="menuitem"><i class="fas fa-user mr-3"></i>Mi perfil</a>
+              <a routerLink="/user/{{ id }}/settings/profile" (click)="toggleMenuProfile()" class="px-4 py-2 text-sm relative flex flex-row items-center h-11 focus:outline-none border-l-4 border-transparent
+              hover:border-blue-500 text-gray-700 hover:bg-gray-100" role="menuitem"><i
+                  class="fas fa-cog mr-3"></i>Configuración</a>
               <a class="px-4 py-2 text-sm relative flex flex-row items-center h-11 focus:outline-none border-l-4 border-transparent
                hover:border-red-500 pr-6 text-gray-700 hover:bg-gray-100" role="menuitem" (click)="logoutAlert()">
-              <i class="fas fa-sign-out-alt mr-3 text-red-500"></i>Cerrar sesión</a>
+                <i class="fas fa-sign-out-alt mr-3 text-red-500"></i>Cerrar sesión</a>
             </div>
           </div>
         </ul>
       </div>
     </div>
   </div>
-<!-- Mobile menu, show/hide based on menu state. -->
-<div class="hidden" id="mobile-menu2">
-  <div class="px-2 pt-2 pb-3 space-y-1">
-    <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-    <a routerLink="/home" class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
+  <!-- Mobile menu, show/hide based on menu state. -->
+  <div class="hidden" id="mobile-menu2">
+    <div class="px-2 pt-2 pb-3 space-y-1">
+      <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
+      <a routerLink="/home"
+        class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
 
-    <a routerLink="/store" class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tienda</a>
+      <a routerLink="/store"
+        class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tienda</a>
 
-    <a routerLink="/message" class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Mensajería</a>
+      <a routerLink="/message"
+        class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Mensajería</a>
 
-    <a routerLink="/user/list" class="text-gray-800 hover:bg-indigo-600hover:text-white block px-3 py-2 rounded-md text-base font-medium">Usuarios</a>
+      <a routerLink="/user/list"
+        class="text-gray-800 hover:bg-indigo-600hover:text-white block px-3 py-2 rounded-md text-base font-medium">Usuarios</a>
+    </div>
   </div>
-</div>
   <!-- Mobile menu, show/hide based on menu state. -->
   <!--<nav class="lg:hidden" aria-label="Global">
     <div class="bg-white max-w-3xl mx-auto px-2 pt-2 pb-3 space-y-1 sm:px-4">
