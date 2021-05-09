@@ -90,7 +90,8 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     MatTableModule,
     MatExpansionModule,
     MatDividerModule,
-    MatCardModule
+    MatCardModule,
+    PickerModule
   ],
   providers: [
     UserService,

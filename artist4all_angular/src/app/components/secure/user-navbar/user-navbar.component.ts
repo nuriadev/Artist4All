@@ -69,12 +69,18 @@ export class UserNavbarComponent implements OnInit {
   }
 
   usersReceived: Array<User>;
+  searchedPattern: string;
+  searching: boolean;
+  researchEnded: boolean;
   searchUser(event) {
-    let searchedPattern = event.target.value;
-    this._userService.searchUser(searchedPattern).subscribe(
+    this.researchEnded = false;
+    this.searchedPattern = event.target.value;
+    if (!this.searchedPattern.length) this.searching = false;
+    else this.searching = true;
+    this._userService.searchUser(this.searchedPattern).subscribe(
       (result) => {
         this.usersReceived = result;
-        console.log(this.usersReceived);
+        this.researchEnded = true;
       }, (error) => {
         console.log(error);
     });

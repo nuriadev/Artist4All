@@ -143,14 +143,11 @@ class User implements \JsonSerializable
   }
 
   public static function getUsersByPattern(string $searchedPattern): ?array {
-    $search = "{$searchedPattern}%";
-    $sql = 'SELECT * FROM users WHERE username LIKE :usernamePattern OR name LIKE :namePattern';
+    $search = "%{$searchedPattern}%";
+    $sql = 'SELECT * FROM users WHERE username LIKE :usernamePattern';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
-    $result = $statement->execute([
-      ':usernamePattern' => $search,
-      ':namePattern' => $search
-    ]);
+    $result = $statement->execute([':usernamePattern' => $search]);
     $usersAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
     if (!$usersAssoc) return null;
     $users = [];
