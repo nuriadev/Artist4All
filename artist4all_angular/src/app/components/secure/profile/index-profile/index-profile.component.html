@@ -283,25 +283,6 @@
                   </div>
                 </mat-card-actions>
               </mat-card>
-
-              <form #formPublication="ngForm" enctype="multipart/form-data" method="post" (ngSubmit)="editPublication(); formPublication.reset()">
-                <label for="body">Cuerpo:</label> <br>
-                <textarea #textAreaBody="ngModel" [(ngModel)]="bodyPublication" id="bodyPublication" name="bodyPublication" cols="100"
-                  rows="8"></textarea> <br>
-                <label for="imgOptional">Imagen(opcional): </label>
-                <input type="file" #imgPublication (change)="addImgPublication($event.target.files)" id="imgPublication" name="imgPublication[]" multiple="multiple"/>
-                <button type="button" (click)="removeSelectedImgs()">Desseleccionar las imagenes</button>
-                <br>
-              
-                <img *ngFor='let url of images' class="inline-block" [src]="url" height="150" width="200px" style="margin: 5px;"> <br/>
-                <div *ngIf="imgToUpload == null">
-                    <img *ngFor='let img of imgsReceived' src="http://localhost:81/assets/img/{{ img }}" class="inline-block" height="150" width="200px" style="margin: 5px;">
-                </div>
-              
-                <button type="button" (click)="redirectBack()"> Cancelar </button>
-                <button type="submit"> Guardar los cambios </button>
-              </form>
-              
             </div>
           </div>
         </article>
