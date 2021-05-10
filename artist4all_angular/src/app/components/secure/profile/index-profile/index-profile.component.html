@@ -48,6 +48,7 @@
       </div>
     </nav>
   </div>
+
   <div class="flex flex-col min-w-0 flex-1 overflow-hidden bg-gray-100">
     <div class="flex-1 relative z-0 flex overflow-hidden">
       <main class="flex-1 relative z-0 focus:outline-none xl:order-last" tabindex="0">
@@ -194,95 +195,106 @@
               </div>
             </div>
           </div>
+
+          <div *ngIf="isPrivate == 1 && status_follow != 3 && isMyProfile == false">
+            Esta cuenta es privada, empieza a seguirla para poder ver sus publicaciones
+          </div>
+
+          <div *ngIf="isPrivate == 0 || (isPrivate == 1 && status_follow == 3)">
           <!--  TODO: Añadir estilos -->
-          <div *ngIf="publications == null">
+          <div *ngIf="publications.length == 0 && isMyProfile == false">
             <p>Todavía no ha realizado ninguna publicación</p>
           </div>
 
-          <div *ngIf="publications != null">
-            <div *ngFor="let publication of publications; index as i;">
-              <mat-card class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="max-width: 980px; margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 20px;">
-                <mat-card-subtitle *ngIf="publication.isEdited == 0">{{ publication.upload_date }}</mat-card-subtitle>
-                <mat-card-subtitle *ngIf="publication.isEdited == 1">{{ publication.upload_date }} (editada)</mat-card-subtitle>
-                <mat-card-content>
-                  <p>
-                    {{ publication.bodyPublication }}
-                  </p>
-                </mat-card-content>
-                <div id="carousel{{publication.id}}" class="carousel slide" data-ride="carousel">
-                  <div class="carousel-inner">
-                    <div class="carousel-item" *ngFor="let img of publication.imgsPublication; index as i;"
-                      [ngClass]="{'active': i == 0 }">￼
-                      <div *ngIf="publication.imgsPublication != null">
-                        <img src="http://localhost:81/assets/img/{{ img.imgPublication }}"
-                          class="h-96 w-full mb-3 object-contain">
-                      </div>
-                      <div *ngIf="publication.imgsPublication.length > 1">
-                        <a class="carousel-control-prev" href="#carousel{{publication.id}}" role="button"
-                          data-slide="prev">
-                          <i class="fas fa-chevron-left" style="color: black; font-size:25px;"></i>
-                          <span class="sr-only">Previous</span>
-                        </a>
-                        <a class="carousel-control-next" href="#carousel{{publication.id}}" role="button"
-                          data-slide="next">
-                          <i class="fas fa-chevron-right" style="color: black; font-size:25px;"></i>
-                          <span class="sr-only">Next</span>
-                        </a>
+          <div *ngIf="publications.length == 0 && isMyProfile == true">
+            <p>Todavía no has realizado ninguna publicación</p>
+          </div>
+
+            <div *ngIf="publications != null">
+              <div *ngFor="let publication of publications; index as i;">
+                <mat-card class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" style="max-width: 980px; margin-left: auto; margin-right: auto; margin-top: 10px; margin-bottom: 20px;">
+                  <mat-card-subtitle *ngIf="publication.isEdited == 0">{{ publication.upload_date }}</mat-card-subtitle>
+                  <mat-card-subtitle *ngIf="publication.isEdited == 1">{{ publication.upload_date }} (editada)</mat-card-subtitle>
+                  <mat-card-content>
+                    <p>
+                      {{ publication.bodyPublication }}
+                    </p>
+                  </mat-card-content>
+                  <div id="carousel{{publication.id}}" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item" *ngFor="let img of publication.imgsPublication; index as i;"
+                        [ngClass]="{'active': i == 0 }">￼
+                        <div *ngIf="publication.imgsPublication != null">
+                          <img src="http://localhost:81/assets/img/{{ img.imgPublication }}"
+                            class="h-96 w-full mb-3 object-contain">
+                        </div>
+                        <div *ngIf="publication.imgsPublication.length > 1">
+                          <a class="carousel-control-prev" href="#carousel{{publication.id}}" role="button"
+                            data-slide="prev">
+                            <i class="fas fa-chevron-left" style="color: black; font-size:25px;"></i>
+                            <span class="sr-only">Previous</span>
+                          </a>
+                          <a class="carousel-control-next" href="#carousel{{publication.id}}" role="button"
+                            data-slide="next">
+                            <i class="fas fa-chevron-right" style="color: black; font-size:25px;"></i>
+                            <span class="sr-only">Next</span>
+                          </a>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <mat-card-actions>
-                  <div class="flex justify-start space-x-8">
-                    <span class="inline-flex items-center text-sm">
-                      <!--TODO: Button de like del perfil propio, para ver los que le han dado like, falta implementarlo-->
-                      <div *ngIf="isMyProfile">
-                        <button mat-icon-button id="{{i + 'likeIcon'}}"
-                          class="inline-block text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
-                          <mat-icon class="text-gray-400 hover:text-gray-500">favorite</mat-icon>
-                        </button>
-                        <span class="font-medium text-gray-900 ml-2">{{ publication.n_likes }}</span>
-                        <span class="sr-only">likes</span>
-                      </div>
+                  <mat-card-actions>
+                    <div class="flex justify-start space-x-8">
+                      <span class="inline-flex items-center text-sm">
+                        <!--TODO: Button de like del perfil propio, para ver los que le han dado like, falta implementarlo-->
+                        <div *ngIf="isMyProfile">
+                          <button mat-icon-button id="{{i + 'likeIcon'}}"
+                            class="inline-block text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
+                            <mat-icon class="text-gray-400 hover:text-gray-500">favorite</mat-icon>
+                          </button>
+                          <span class="font-medium text-gray-900 ml-2">{{ publication.n_likes }}</span>
+                          <span class="sr-only">likes</span>
+                        </div>
 
-                      <div *ngIf="!isMyProfile">
-                        <button mat-icon-button (click)="updateLikeStatus(i)" id="{{i + 'likeIcon'}}"
-                          class="text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
-                          <mat-icon>favorite</mat-icon>
+                        <div *ngIf="!isMyProfile">
+                          <button mat-icon-button (click)="updateLikeStatus(i)" id="{{i + 'likeIcon'}}"
+                            class="text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
+                            <mat-icon>favorite</mat-icon>
+                          </button>
+                          <span class="font-medium text-gray-900 ml-2">{{ publication.n_likes }}</span>
+                          <span class="sr-only">likes</span>
+                        </div>
+                      </span>
+                      <span class="inline-flex items-center text-sm">
+                        <button routerLink="/user/{{ publication.user.id }}/publication/{{ publication.id }}/comments"
+                          class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 focus:outline-none">
+                          <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                            aria-hidden="true">
+                            <path fill-rule="evenodd"
+                              d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
+                              clip-rule="evenodd" />
+                          </svg>
                         </button>
-                        <span class="font-medium text-gray-900 ml-2">{{ publication.n_likes }}</span>
-                        <span class="sr-only">likes</span>
-                      </div>
-                    </span>
-                    <span class="inline-flex items-center text-sm">
-                      <button routerLink="/user/{{ publication.user.id }}/publication/{{ publication.id }}/comments"
-                        class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 focus:outline-none">
-                        <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                          aria-hidden="true">
-                          <path fill-rule="evenodd"
-                            d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                            clip-rule="evenodd" />
-                        </svg>
-                      </button>
-                      <span class="font-medium text-gray-900 ml-2">{{ publication.n_comments }}</span>
-                      <span class="sr-only">replies</span>
-                    </span>
-                    <span class=" mt-2" style="margin-left:63%;">
-                      <button *ngIf="isMyProfile" class="inline-block py-1 px-3 justify-center text-sm font-medium text-gray-700
-                           hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500
-                            mr-2" routerLink="/user/{{ id }}/publication/{{ publication.id }}">
-                        <i class="fas fa-edit fa-lg text-blue-500 hover:text-blue-600"></i> Editar
-                      </button>
-                      <button
-                        class="inline-block py-1 px-3 justify-center text-sm font-medium text-gray-700
-                           focus:outline-none hover:text-red-500 focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500"
-                        *ngIf="isMyProfile" (click)="deletingAnimation(i);">
-                        <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 mr-1"></i> Eliminar
-                      </button>
-                    </span>
-                  </div>
-                </mat-card-actions>
-              </mat-card>
+                        <span class="font-medium text-gray-900 ml-2">{{ publication.n_comments }}</span>
+                        <span class="sr-only">replies</span>
+                      </span>
+                      <span class=" mt-2" style="margin-left:63%;">
+                        <button *ngIf="isMyProfile" class="inline-block py-1 px-3 justify-center text-sm font-medium text-gray-700
+                             hover:text-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500
+                              mr-2" routerLink="/user/{{ id }}/publication/{{ publication.id }}">
+                          <i class="fas fa-edit fa-lg text-blue-500 hover:text-blue-600"></i> Editar
+                        </button>
+                        <button
+                          class="inline-block py-1 px-3 justify-center text-sm font-medium text-gray-700
+                             focus:outline-none hover:text-red-500 focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500"
+                          *ngIf="isMyProfile" (click)="deletingAnimation(i);">
+                          <i class="fas fa-trash-alt fa-lg text-red-700 hover:text-red-500 mr-1"></i> Eliminar
+                        </button>
+                      </span>
+                    </div>
+                  </mat-card-actions>
+                </mat-card>
+              </div>
             </div>
           </div>
         </article>

@@ -8,11 +8,9 @@
       <div class="hidden lg:block lg:col-span-3 xl:col-span-2 bg-gray-800">
         <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
           <div class="pb-8 space-y-1">
-            <!-- Current: "bg-gray-200 style="padding:25px;"text-gray-900", Default: "text-gray-600 hover:bg-gray-50" -->
             <a routerLink="/home"
               class="bg-gray-900 text-gray-100 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md"
               aria-current="page">
-              <!-- Heroicon name: outline/home -->
               <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none"
                 viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -25,7 +23,6 @@
 
             <a routerLink="/store"
               class="text-gray-200 hover:bg-gray-700 hover:text-gray-200 group flex items-center px-3 py-2 text-sm font-medium rounded-md">
-              <!-- Heroicon name: outline/fire -->
               <svg class="text-gray-200 flex-shrink-0 -ml-1 mr-3 h-6 w-6" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -62,9 +59,9 @@
           <label for="imgPublication" >
             <svg class="w-7 h-7 relative cursor-pointer text-gray-800" style="margin-top:-6%; margin-left:3%;" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
           </label>
-          <!-- TODO: button desselect images -->
+          <!-- TODO: button desselect images, fix display of images and error message according to input submit (block input submit if not valid) -->
           <input class="hidden" type="file" #imgPublication (change)="addImgPublication($event.target.files)" id="imgPublication" name="imgPublication[]" ng-model="files" multiple="multiple"/>
-          <!--<button class="inline-block w-6/12" type="button" (click)="removeSelectedImgs()">Eliminar las imágenes</button>-->
+          <!-- <button class="inline-block" type="button" (click)="removeSelectedImgs()">Eliminar las imágenes</button> -->
         <img *ngFor='let url of images'  class="inline-block" [src]="url" height="150" width="200px" style="margin: 5px;"> <br/>
           <div class="w-full flex justify-end" style="margin-bottom: -35px">
             <button type="submit" style="top: -95px; right: 10px; max-width: 100px;"
@@ -73,8 +70,12 @@
             </button>
           </div>
         </form>
+        <div *ngIf="showingImgHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md -mt-8 mb-2 text-sm">
+          <i class="fas fa-times-circle"></i>
+          Formato no válido (Permitidos: png, jpeg, jpg, gif).
+        </div>
+
         <div class="px-4 sm:px-0"></div>
-        <div class="">
           <h1 class="sr-only">Recent questions</h1>
           <ul class="space-y-4">
             <li class="bg-white px-4 py-6 shadow sm:p-6 sm:rounded-lg">
@@ -114,7 +115,6 @@
                   <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/thumb-up -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path
@@ -126,7 +126,6 @@
                     </span>
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/chat-alt -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path fill-rule="evenodd"
@@ -180,7 +179,6 @@
                   <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/thumb-up -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path
@@ -192,7 +190,6 @@
                     </span>
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/chat-alt -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path fill-rule="evenodd"
@@ -245,7 +242,6 @@
                   <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/thumb-up -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path
@@ -257,7 +253,6 @@
                     </span>
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/chat-alt -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path fill-rule="evenodd"
@@ -311,7 +306,6 @@
                   <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/thumb-up -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path
@@ -323,7 +317,6 @@
                     </span>
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/chat-alt -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path fill-rule="evenodd"
@@ -378,7 +371,6 @@
                   <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/thumb-up -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path
@@ -390,7 +382,6 @@
                     </span>
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/chat-alt -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path fill-rule="evenodd"
@@ -443,7 +434,6 @@
                   <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/thumb-up -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path
@@ -455,7 +445,6 @@
                     </span>
                     <span class="inline-flex items-center text-sm">
                       <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <!-- Heroicon name: solid/chat-alt -->
                         <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path fill-rule="evenodd"
@@ -471,7 +460,6 @@
               </article>
             </li>
           </ul>
-        </div>
       </main>
       <aside class="hidden lg:pt-10 lg:pb-10 xl:block xl:col-span-3">
         <div class="sticky top-4 space-y-4">
@@ -500,7 +488,6 @@
                       <div class="flex-shrink-0">
                         <button type="button"
                           class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
-                          <!-- Heroicon name: solid/plus -->
                           <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
@@ -531,7 +518,6 @@
                       <div class="flex-shrink-0">
                         <button type="button"
                           class="inline-flex items-center px-3 py-0.5 rounded-full bg-rose-50 text-sm font-medium text-rose-700 hover:bg-rose-100">
-                          <!-- Heroicon name: solid/plus -->
                           <svg class="-ml-1 mr-0.5 h-5 w-5 text-rose-400" xmlns="http://www.w3.org/2000/svg"
                             viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path fill-rule="evenodd"
@@ -606,7 +592,6 @@
                         <div class="mt-2 flex">
                           <span class="inline-flex items-center text-sm">
                             <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                              <!-- Heroicon name: solid/chat-alt -->
                               <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd"
@@ -632,7 +617,6 @@
                         <div class="mt-2 flex">
                           <span class="inline-flex items-center text-sm">
                             <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                              <!-- Heroicon name: solid/chat-alt -->
                               <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd"
@@ -658,7 +642,6 @@
                         <div class="mt-2 flex">
                           <span class="inline-flex items-center text-sm">
                             <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                              <!-- Heroicon name: solid/chat-alt -->
                               <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
                                 fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd"

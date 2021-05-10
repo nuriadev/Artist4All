@@ -44,12 +44,17 @@ export class UserSettingsProfileComponent implements OnInit {
     this.isArtist = this.user.isArtist;
     this.imgAvatar = this.user.imgAvatar;
     this.aboutMe = this.user.aboutMe;
-    console.log(document.getElementById('username'))
   }
 
   imgToUpload: FileList = null;
+  showingImgHint: boolean = false;
   changeImgAvatar(newImgAvatar: FileList) {
-    this.imgToUpload = newImgAvatar;
+    if (newImgAvatar != null) {
+      let allowed = ['image/png', 'image/jpg', 'image/jpeg'];
+      if (!allowed.includes(newImgAvatar.item(0).type)) this.showingImgHint = true;
+      else this.showingImgHint = false;
+      this.imgToUpload = newImgAvatar;
+    }
   }
 
   userEdited: User;
@@ -69,6 +74,24 @@ export class UserSettingsProfileComponent implements OnInit {
   showUsernameHint() {
     if (!this.showingUsernameHint) this.showingUsernameHint = true;
     else this.showingUsernameHint = false;
+  }
+
+  showingNameHint: boolean = false;
+  showNameHint() {
+    if (!this.showingNameHint) this.showingNameHint = true;
+    else this.showingNameHint = false;
+  }
+
+  showingSurname1Hint: boolean = false;
+  showSurname1Hint() {
+    if (!this.showingSurname1Hint) this.showingSurname1Hint = true;
+    else this.showingSurname1Hint = false;
+  }
+
+  showingSurname2Hint: boolean = false;
+  showSurname2Hint() {
+    if (!this.showingSurname2Hint) this.showingSurname2Hint = true;
+    else this.showingSurname2Hint = false;
   }
 
   timer;
