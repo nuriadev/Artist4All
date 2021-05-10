@@ -131,7 +131,15 @@ class PublicationController {
     \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
     $filePath = '/var/www/html/assets/img/';
     if (!empty($_FILES) || $_FILES != null) {
+        $allowed = array('image/gif', 'image/png', 'image/jpg', 'image/jpeg');
         foreach ($_FILES as $file) {
+          $finfo = finfo_open(FILEINFO_MIME_TYPE);
+          if (!in_array(finfo_file($finfo, $file['tmp_name']), $allowed)) {
+            $response = $response->withStatus(400, 'File is not an image');
+            return $response;
+          }     
+          finfo_close($finfo);
+
           $imgName = $file["tmp_name"]; 
           $pathImg = $filePath.$file["name"];
           if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);   

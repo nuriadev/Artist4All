@@ -44,17 +44,28 @@ export class HomeComponent implements OnInit {
 
   images = [];
   imgToUpload: FileList = null;
+  showingImgHint: boolean = false;
   addImgPublication(imgPublication: FileList) {
     this.images = [];
-    this.imgToUpload = imgPublication;
-    if (imgPublication && imgPublication[0]) {
-      var filesAmount = imgPublication.length;
-      for (let i = 0; i < filesAmount; i++) {
-        var reader = new FileReader();
-        reader.onload = (event:any) => {
-          this.images.push(event.target.result);
+    if (imgPublication !== null) {
+      for (var i = 0; i < imgPublication.length; i++) {
+        let file = imgPublication.item(i);
+        let allowed = ['image/gif', 'image/png', 'image/jpg', 'image/jpeg'];
+        if (!allowed.includes(file.type)) this.showingImgHint = true;
+        else this.showingImgHint = false;
+      }
+      if (!this.showingImgHint) {
+        this.imgToUpload = imgPublication;
+        if (imgPublication && imgPublication[0]) {
+          var filesAmount = imgPublication.length;
+          for (let i = 0; i < filesAmount; i++) {
+            var reader = new FileReader();
+            reader.onload = (event:any) => {
+              this.images.push(event.target.result);
+            }
+            reader.readAsDataURL(imgPublication[i]);
+          }
         }
-        reader.readAsDataURL(imgPublication[i]);
       }
     }
   }

@@ -62,3 +62,8 @@
   <button type="button" (click)="redirectBack()"> Cancelar </button>
   <button type="submit"> Guardar los cambios </button>
 </form>
+
+<div *ngIf="showingImgHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md -mt-8 mb-2 text-sm">
+  <i class="fas fa-times-circle"></i>
+  Formato no válido (Permitidos: png, jpeg, jpg, gif).
+</div>
