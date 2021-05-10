@@ -99,17 +99,6 @@
                           <span>Dejar de seguir</span>
                         </button>
                       </a>
-                      <!--  TODO hacer que te lleve a un apartado de message/{username} y poner routerLink -->
-                      <a class="ml-2 mt-8">
-                        <button type="button" *ngIf="!isMyProfile"
-                          class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
-                          <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <i class="fas fa-envelope fa-lg"></i>
-                          </span>
-                          <span>Enviar mensaje</span>
-                        </button>
-                      </a>
                     </h1>
                   </div>
                   <div class="mt-6 flex flex-col justify-stretch space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
@@ -155,17 +144,6 @@
                         <i class="fas fa-user-minus"></i>
                       </span>
                       <span>Dejar de seguir</span>
-                    </button>
-                  </a>
-                  <a class="ml-2 mt-8">
-                    <!-- hacer que te lleve a un apartado de message/{username} y poner routerLink -->
-                    <button type="button" *ngIf="!isMyProfile"
-                      class="inline-flex justify-center px-4 py-2 border border-gray-300 shadow-sm text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-500">
-                      <span class="-ml-1 mr-2 h-5 w-5 text-gray-400" xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                        <i class="fas fa-envelope fa-lg"></i>
-                      </span>
-                      <span>Enviar mensaje</span>
                     </button>
                   </a>
                 </h1>
@@ -233,7 +211,7 @@
                   </div>
                 </div>
                 <mat-card-actions>
-                  <div class="flex justify-start space-x-8">
+                  <div class="flex justify-start space-x-6">
                     <span class="inline-flex items-center text-sm">
                       <!--TODO: Button de like del perfil propio, para ver los que le han dado like, falta implementarlo-->
                       <div *ngIf="isMyProfile">
