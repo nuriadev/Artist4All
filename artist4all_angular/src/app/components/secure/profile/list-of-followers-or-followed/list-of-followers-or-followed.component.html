@@ -48,27 +48,25 @@
       </div>
     </nav>
   </div>
-  <div class="col-span-3"></div>
-  <div *ngIf="userlist == null && typeList  == 'followers'" class="col-span-6">
-    <i class="fas fa-users-slash inline-block mr-6" style="font-size: 25px;"></i><p class=" text-2xl content-center mt-16 inline-block">Todavía no tienes ningún seguidor</p>
+  <div *ngIf="userlist == null && typeList  == 'followers'" class="col-span-6 ml-auto">
+      <i class="fas fa-users-slash inline-block mr-6" style="font-size: 25px;"></i><p class="text-2xl content-center mt-16 inline-block">Todavía no tienes ningún seguidor</p>
   </div>
-  <div *ngIf="userlist == null && typeList == 'followed'" class="col-span-6"> 
-    <i class="fas fa-users-slash inline-block mr-6" style="font-size: 25px;"></i><p class=" text-2xl content-center mt-16 inline-block">Todavía no sigues a ningún usuario </p>
+  <div *ngIf="userlist == null && typeList == 'followed'" class="col-span-6 ml-auto">
+      <i class="fas fa-users-slash inline-block mr-6" style="font-size: 25px;"></i><p class=" text-2xl content-center mt-16 inline-block">Todavía no sigues a ningún usuario </p>
   </div>
-  <div class="col-span-2"></div>
   <div class="block lg:col-span-4 pt-8">
     <div *ngIf="userlist != null">
       <section *ngFor="let user of userlist; index as i;">
 
         <div
-          class="relative rounded-lg border border-gray-300 bg-white px-6 py-5 mb-3 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+          class="mx-auto w-11/12 md:ml-0 relative rounded-lg border border-gray-300 bg-white px-5 py-4 mb-3 shadow-sm flex items-center space-x-3 hover:border-gray-400 focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
           <div class="flex-shrink-0">
             <img class="h-10 w-10 rounded-full" src="http://localhost:81/assets/img/{{ user.imgAvatar }}" alt="">
           </div>
           <div class="flex-1 min-w-0">
             <a routerLink="/user/{{ user.id }}/profile" class="focus:outline-none">
               <span class="absolute inset-0" aria-hidden="true"></span>
-              <p class="text-sm font-medium text-gray-900">
+              <p class="text-sm font-medium text-gray-900 hover:text-purple-700">
                 {{ user.username }}
               </p>
             </a>
