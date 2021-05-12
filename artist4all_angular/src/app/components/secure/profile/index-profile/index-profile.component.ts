@@ -91,32 +91,9 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   }
 
   miPublication;
-  id_publication: string = '';
-
   ngOnInit(): void {
     this.loaded = false;
     this._activeRoute.paramMap.subscribe((params) => {
-      this.id_publication = params.get('id_publication');
-        this._publicationService.getPublicationById(this.user.id, parseInt(this.id_publication)).subscribe(
-          (result) => {
-            this.miPublication = result;
-            this.id = this.miPublication.id;
-            this.user = this.miPublication.user;
-            this.bodyPublication = this.miPublication.bodyPublication;
-            this.n_likes = this.miPublication.n_likes;
-            this.n_comments = this.miPublication.n_comments;
-            this.isEdited = this.miPublication.isEdited;
-            if (result.imgsPublication != null) {
-              for (let i = 0; i < result.imgsPublication.length; i++) {
-                let file = result.imgsPublication[i];
-                this.imgsReceived.push(file.imgPublication);
-              }
-            }
-          },
-          (error) => {
-            console.log(error);
-          }
-        );
       this.spinner.show();
       setTimeout(() => {
         this.spinner.hide();
@@ -368,7 +345,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
         console.log(error);
     });
   }
-  
+
   openSnackBar(message: string) {
     this._snackBar.open(message, 'OK', { duration: 1000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition });
   }

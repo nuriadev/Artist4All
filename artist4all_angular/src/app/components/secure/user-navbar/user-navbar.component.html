@@ -38,31 +38,30 @@
                     clip-rule="evenodd" />
                 </svg>
               </div>
-              <input autocomplete="off" (keyup)="searchUser($event)" id="search" name="search" class="hidden md:block w-full bg-white border border-gray-300 rounded-md py-2 pl-10 pr-3 text-sm
+              <input type="search" autocomplete="off" (keyup)="searchUser($event)" id="search" name="search" class="hidden md:block w-full bg-white border border-gray-300 rounded-md py-2 pl-10 pr-3 text-sm
               placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
-              focus:ring-rose-500 focus:border-rose-500 sm:text-sm" placeholder="Buscar usuarios" type="search">
+              focus:ring-rose-500 focus:border-rose-500 sm:text-sm" placeholder="Buscar usuarios">
 
             </div>
             <!-- search box -->
-            <div *ngIf="searching">
+            <div *ngIf="searching" style="width: 65.5%" class="absolute z-40">
               <div *ngIf="usersReceived != null">
                 <div *ngFor="let user of usersReceived; index as i;">
-                  <!-- TODO: add hover and imporve display of divs beyond the navbar-->
-                  <div style="position:absolute; width: 57%; z-index: 40;" class="hidden md:block bg-white border hover:bg-gray-300 border-gray-300 rounded-md py-2 pl-10 pr-2 text-sm
-                  placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
-                  focus:ring-rose-500 focus:border-rose-500 sm:text-sm" routerLink="/user/{{ user.id }}/profile">
-                    <img class="object-cover rounded-full inline-block"
-                      src="http://localhost:81/assets/img/{{ user.imgAvatar }}" alt="imgAvatar"
-                      style="width: 37px; height: 37px; margin-right: 10px; margin-top:5px;">
-                    <p class="inline-block cursor-pointer hover:text-purple-700">{{ user.username }}</p>
+                  <!-- TODO: add hover and improve display of divs beyond the navbar-->
+                    <div class="hidden md:block bg-white border hover:text-purple-700 border-gray-300 rounded-md py-2 pl-10 pr-2 text-sm
+                    focus:outline-none focus:text-gray-900 focus:ring-1 relative
+                    focus:ring-rose-500 focus:border-rose-500 sm:text-sm" (click)="searched()" routerLink="/user/{{ user.id }}/profile">
+                      <img class="object-cover rounded-full inline-block"
+                        src="http://localhost:81/assets/img/{{ user.imgAvatar }}" alt="imgAvatar"
+                        style="width: 37px; height: 37px; margin-right: 10px; margin-top:5px;">
+                      <p class="inline-block cursor-pointer">{{ user.username }}</p>
+                    </div>
                   </div>
-                </div>
-
               </div>
 
               <div *ngIf="usersReceived == null && researchEnded">
-                <div style="position: absolute; width: 57%; z-index: 40;" class="hidden md:block bg-white border rounded-md py-3 pl-10 pr-3 text-sm
-                  placeholder-gray-500 focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
+                <div class="hidden md:block bg-white border rounded-md py-3 pl-10 pr-3 text-sm
+                  focus:outline-none focus:text-gray-900 focus:placeholder-gray-400 focus:ring-1
                   focus:ring-rose-500 focus:border-rose-500 sm:text-sm relative">
                   <p class="inline-block">No se ha encontrado ningún usuario con nombre '{{ searchedPattern }}'</p>
                 </div>
@@ -91,8 +90,8 @@
                   src="http://localhost:81/assets/img/{{ notification.user_responsible.imgAvatar }}" alt="avatar">
                 <p *ngIf="notification.typeNotification != 2" (click)="notificationRead(notification.id, i)"
                   class="text-gray-600 text-sm mx-2">
-                  <a routerLink="/user/{{ notification.user_responsible.id }}/profile" class="font-bold"> {{
-                    notification.user_responsible.username }} </a>
+                  <a routerLink="/user/{{ notification.user_responsible.id }}/profile" class="font-bold">
+                  {{ notification.user_responsible.username }} </a>
                   {{ notification.bodyNotification }}
                   <span class="font-bold"></span> . {{ notification.notification_date }}
                 </p>
@@ -116,7 +115,6 @@
 
             <a routerLink="/user/{{ id }}/notifications" id="subMenu"
               class="block bg-gray-800 text-white text-center font-bold py-2">Ver todas mis notificaciones</a>
-            <!-- TODO:  Hacer que solo los seguidores puedan ver tus publicaciones -->
           </div>
         </div>
         <ul class="flex items-center " style="height: 86px;" (click)="toggleMenuProfile()">
