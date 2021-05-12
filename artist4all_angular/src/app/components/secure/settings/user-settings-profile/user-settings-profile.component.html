@@ -151,8 +151,10 @@
                 </p>
                 <div class="mt-1 lg:hidden">
                   <div class="flex items-center">
-                    <div class="flex-shrink-0 inline-block rounded-full overflow-hidden h-12 w-12" aria-hidden="true">
-                      <img class="object-cover h-full w-full" src="http://localhost:81/assets/img/{{ imgAvatar }}" alt="img_avatar">
+                    <div class="flex-shrink-0 inline-block rounded-full h-12 w-12" aria-hidden="true">
+                      <img class="object-cover rounded-full h-full w-full" src="http://localhost:81/assets/img/{{ imgAvatar }}" alt="img_avatar">
+                      <input type="file" (change)="changeImgAvatar($event.target.files)" id="imgAvatar" name="imgAvatar[]"
+                      class="absolute cursor-pointer border-gray-300 rounded-md opacity-0" style="top: 730px;">
                     </div>
                   </div>
                 </div>
