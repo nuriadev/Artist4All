@@ -98,7 +98,7 @@ export class UserSettingsProfileComponent implements OnInit {
   editingAnimation() {
     clearInterval(this.timer);
     Swal.fire({
-      title: 'Estás seguro de que quieres guardar los cambios?',
+      title: '¿Estás seguro de que quieres guardar los cambios?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#28a745',
