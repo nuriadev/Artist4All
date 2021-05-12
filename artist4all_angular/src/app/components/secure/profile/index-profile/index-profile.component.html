@@ -174,17 +174,17 @@
             </div>
           </div>
 
-          <div *ngIf="isPrivate == 1 && status_follow != 3 && isMyProfile == false">
+          <div *ngIf="isPrivate == 1 && status_follow != 3 && !isMyProfile">
             Esta cuenta es privada, empieza a seguirla para poder ver sus publicaciones
           </div>
 
-          <div *ngIf="isPrivate == 0 || (isPrivate == 1 && status_follow == 3)">
-          <!--  TODO: Añadir estilos -->
-          <div *ngIf="publications.length == 0 && isMyProfile == false">
+          <div *ngIf="publications == null && !isMyProfile">
             <p>Todavía no ha realizado ninguna publicación</p>
           </div>
 
-          <div *ngIf="publications.length == 0 && isMyProfile == true">
+          <div *ngIf="isMyProfile || ((!isMyProfile && isPrivate == 1 && status_follow == 3) || (!isMyProfile && isPrivate == 0))">
+          <!--  TODO: Añadir estilos -->
+          <div *ngIf="publications == null">
             <p>Todavía no has realizado ninguna publicación</p>
           </div>
 

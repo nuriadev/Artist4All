@@ -50,9 +50,9 @@ export class UserNavbarComponent implements OnInit {
       (result) => {
         if (result != null) {
           result.forEach((notification) => {
-            if(notification.typeNotification == 1) notification.bodyNotification = 'ha empezado a seguirte';
-            if(notification.typeNotification == 2) notification.bodyNotification = 'te ha enviado una solicitud de amistad';
-            if(notification.typeNotification == 3) notification.bodyNotification = 'ha aceptado tu solicitud. Ahora ya puedes ver sus publicaciones';
+            if (notification.typeNotification == 1) notification.bodyNotification = 'ha empezado a seguirte';
+            if (notification.typeNotification == 2) notification.bodyNotification = 'te ha enviado una solicitud de amistad';
+            if (notification.typeNotification == 3) notification.bodyNotification = 'ha aceptado tu solicitud. Ahora ya puedes ver sus publicaciones';
             notification.notification_date = this.adaptNotificationDate(notification.notification_date);
           });
           this.notifications = result;
@@ -79,6 +79,10 @@ export class UserNavbarComponent implements OnInit {
       }, (error) => {
         console.log(error);
     });
+  }
+
+  searched() {
+    this.searching = false;
   }
 
   logout() {
