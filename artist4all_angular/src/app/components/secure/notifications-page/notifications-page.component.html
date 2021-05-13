@@ -51,41 +51,15 @@
 
     <ul class="lg:col-span-9 divide-y divide-gray-200">
     <h3 class="text-center md:text-left mb-3 lg:mt-6 lg:mb-3 lg:block text-3xl font-bold" style="padding-top:10px;">Tus notificaciones</h3>
-      <li class="ml-4 mr-4 md:ml-0 md:mr-0 py-4">
+      <li class="ml-4 mr-4 md:ml-0 md:mr-0 py-4" *ngFor="let notification of notifications; index as i;">
         <div class="flex space-x-3">
-          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixqx=NyaX3ZCB6U&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" alt="">
+          <img class="h-10 w-10 rounded-full" src="http://localhost:81/assets/img/{{ notification.user_responsible.imgAvatar }}" alt="">
           <div class="flex-1 space-y-1">
             <div class="flex items-center justify-between">
-              <h3 class="text-sm font-medium">Lindsay Walton</h3>
-              <p class="text-sm text-gray-500">1h</p>
+              <h3 class="text-sm font-medium">{{ notification.user_responsible.username }}</h3>
+              <p class="text-sm text-gray-500">{{ notification.notification_date }}</p>
             </div>
-            <p class="text-sm text-gray-500">Deployed Workcation (2d89f0c8 in master) to production</p>
-          </div>
-        </div>
-      </li>
-
-      <li class="ml-4 mr-4 md:ml-0 md:mr-0 py-4">
-        <div class="flex space-x-3">
-          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixqx=NyaX3ZCB6U&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" alt="">
-          <div class="flex-1 space-y-1">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-medium">Lindsay Walton</h3>
-              <p class="text-sm text-gray-500">1h</p>
-            </div>
-            <p class="text-sm text-gray-500">Deployed Workcation (2d89f0c8 in master) to production</p>
-          </div>
-        </div>
-      </li>
-
-      <li class="ml-4 mr-4 md:ml-0 md:mr-0 py-4">
-        <div class="flex space-x-3">
-          <img class="h-10 w-10 rounded-full" src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixqx=NyaX3ZCB6U&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" alt="">
-          <div class="flex-1 space-y-1">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-medium">Lindsay Walton</h3>
-              <p class="text-sm text-gray-500">1h</p>
-            </div>
-            <p class="text-sm text-gray-500">Deployed Workcation (2d89f0c8 in master) to production</p>
+            <p class="text-sm text-gray-500">{{ notification.bodyNotification }}</p>
           </div>
         </div>
       </li>
