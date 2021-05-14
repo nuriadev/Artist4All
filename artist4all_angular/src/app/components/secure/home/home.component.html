@@ -82,18 +82,15 @@
                 <div>
                   <div class="flex space-x-3">
                     <div class="flex-shrink-0">
-                      <img class="h-10 w-10 rounded-full"
-                        src="http://localhost:81/assets/img/{{ publication.user.imgAvatar }}"
-                        alt="imgAvatar">
+                      <img class="h-10 w-10 rounded-full" routerLink="/user/{{ publication.user.id }}/profile"
+                      src="http://localhost:81/assets/img/{{ publication.user.imgAvatar }}" alt="avatar">
                     </div>
                     <div class="min-w-0 flex-1">
                       <p class="text-sm font-medium text-gray-900">
-                        <a href="/user/{{ publication.user.id }}/profile" class="hover:underline">{{ publication.user.username }}</a>
+                        <a routerLink="/user/{{ publication.user.id }}/profile" class="hover:underline">{{ publication.user.username }}</a>
                       </p>
-                      <!-- <p class="text-sm text-gray-500">
-                         <div class="hover:underline">{{ publication.upload_date }}</div>
-                        <div class="hover:underline">{{ publication.upload_date }} (editada)</div>
-                      </p> -->
+                      <div *ngIf="publication.isEdited == 0" class="text-sm text-gray-500 hover:underline">{{ publication.upload_date }}</div>
+                      <div *ngIf="publication.isEdited == 1" class="text-sm text-gray-500 hover:underline">{{ publication.upload_date }} (editada)</div>
                     </div>
                   </div>
                 </div>
@@ -102,30 +99,54 @@
                     {{ publication.bodyPublication }}
                   </p>
                 </div>
+                <div id="carousel{{publication.id}}" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item" *ngFor="let img of publication.imgsPublication; index as i;"
+                      [ngClass]="{'active': i == 0 }">￼
+                      <div *ngIf="publication.imgsPublication != null">
+                        <img src="http://localhost:81/assets/img/{{ img.imgPublication }}"
+                          class="h-96 w-full mb-3 object-contain">
+                      </div>
+                      <div *ngIf="publication.imgsPublication.length > 1">
+                        <a class="carousel-control-prev" href="#carousel{{publication.id}}" role="button"
+                          data-slide="prev">
+                          <i class="fas fa-chevron-left" style="color: black; font-size:25px;"></i>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carousel{{publication.id}}" role="button"
+                          data-slide="next">
+                          <i class="fas fa-chevron-right" style="color: black; font-size:25px;"></i>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <div class="mt-6 flex justify-between space-x-8">
                   <div class="flex space-x-6">
                     <span class="inline-flex items-center text-sm">
-                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                          aria-hidden="true">
-                          <path
-                            d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z" />
-                        </svg>
-                        <span class="font-medium text-gray-900">29</span>
+                      <div *ngIf="!isMyProfile">
+                        <button mat-icon-button (click)="updateLikeStatus(i)" id="{{i + 'likeIcon'}}"
+                          class="text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
+                          <mat-icon>favorite</mat-icon>
+                        </button>
+                        <span class="font-medium text-gray-900 ml-2">{{ publication.n_likes }}</span>
                         <span class="sr-only">likes</span>
-                      </button>
+                      </div>
                     </span>
                     <span class="inline-flex items-center text-sm">
-                      <button class="inline-flex space-x-2 text-gray-400 hover:text-gray-500">
-                        <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
+                      <button routerLink="/user/{{ publication.user.id }}/publication/{{ publication.id }}/comments"
+                      class="inline-flex space-x-2 text-gray-400 hover:text-gray-500 focus:outline-none">
+                        <svg class="h-7 w-7" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                           aria-hidden="true">
                           <path fill-rule="evenodd"
                             d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
                             clip-rule="evenodd" />
                         </svg>
-                        <span class="font-medium text-gray-900">11</span>
-                        <span class="sr-only">replies</span>
                       </button>
+                      <span class="font-medium text-gray-900 ml-2">{{ publication.n_comments }}</span>
+                      <span class="sr-only">replies</span>
                     </span>
                   </div>
                 </div>

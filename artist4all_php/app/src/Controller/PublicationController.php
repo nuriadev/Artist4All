@@ -36,8 +36,12 @@ class PublicationController {
     }
     $publications = [];
     foreach ($users as $user) {
-      $publications[] = \Artist4all\Model\Publication::getUserPublications($me->getId(), $user->getId());
+      $values = \Artist4all\Model\Publication::getUserPublications($me->getId(), $user->getId());
+      foreach ($values as $value) {
+        $publications[] = $value;
+      }
     }
+    array_values($publications);
     rsort($publications);
     if (empty($publications)) $response = $response->withStatus(204, 'No publications collected');
     else $response = $response->withJson($publications);
