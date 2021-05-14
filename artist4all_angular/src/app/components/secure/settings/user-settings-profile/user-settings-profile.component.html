@@ -109,7 +109,7 @@
                     Nombre de usuario
                   </label>
                   <div class="mt-1 rounded-md shadow-sm flex">
-                    <input #inputUsername="ngModel" [(ngModel)]="username" type="text" name="username" id="username"
+                    <input #inputUsername="ngModel" (keyup)="existUserByUsername()" [(ngModel)]="username" type="text" name="username" id="username"
                       autocomplete="username" pattern="^[a-zA-Z0-9_ ]{5,20}$"
                       class="py-2 focus:ring-light-blue-500 focus:border-light-blue-500 flex-grow block w-full min-w-0 rounded-none rounded-r-md sm:text-sm"
                       value="{{ username }}" required>
@@ -165,7 +165,7 @@
                     class="absolute inset-0 w-full h-full bg-black bg-opacity-75 flex items-center justify-center text-sm font-medium text-white opacity-0 hover:opacity-100 focus-within:opacity-100">
                     <span>Cambiar</span>
                     <span class="sr-only">Foto de usuario</span>
-                    <input type="file" (change)="changeImgAvatar($event.target.files)" id="imgAvatar" name="imgAvatar[]"
+                    <input type="file" (change)="changeImgAvatar($event.target.files)" id="imgAvatar2" name="imgAvatar[]"
                       class="absolute inset-0 w-full h-full opacity-0 cursor-pointer border-gray-300 rounded-md">
                   </label>
                 </div>
@@ -197,7 +197,7 @@
 
               <div class="col-span-12 sm:col-span-6">
                 <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
-                <input #inputEmail="ngModel" [(ngModel)]="email" type="text" name="email" value="{{ email }}" id="email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$"
+                <input #inputEmail="ngModel" (keyup)="existUserByEmail()" [(ngModel)]="email" type="text" name="email" value="{{ email }}" id="email" pattern="^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$"
                   autocomplete="family-name"
                   class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-light-blue-500 focus:border-light-blue-500 sm:text-sm">
                   <div *ngIf="email.length == 0; else invalidEmail" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm"><i class="fas fa-exclamation-circle ml-1"></i> Se requiere un email. </div>
@@ -264,12 +264,16 @@
               <i class="fas fa-times-circle"></i>
               Formato no válido (Permitidos: png, jpeg, jpg).
             </div>
+            <div *ngIf="existingUser" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+              <i class="fas fa-times-circle"></i>
+              {{ message }}
+            </div>
             <div class="md:mt-4 md:py-4 px-4 flex justify-end sm:px-6">
               <button routerLink="/home"
                 class="mb-6 md:mb-0 bg-white border border-gray-300 rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500">
                 Volver a la home</button>
              <!-- TODO: button styles when disable to distinguish when u can send form -->
-             <input type="submit" [disabled]="formProfile.invalid || username == '' || name == '' || surname1 == '' || surname2 == '' || email == ''"
+             <input type="submit" [disabled]="formProfile.invalid || username == '' || name == '' || surname1 == '' || surname2 == '' || email == '' || showingImgHint || existingUser"
              class="ml-5 bg-blue-500 border border-transparent rounded-md shadow-sm py-2 px-4 inline-flex justify-center text-sm font-medium text-white hover:bg-light-blue-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-light-blue-500"
              value="Guardar los cambios"/>
             </div>

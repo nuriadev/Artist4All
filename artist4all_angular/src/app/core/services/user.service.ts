@@ -49,6 +49,18 @@ export class UserService {
     return this.http.post(this.url + '/user/' + id + '/profile', newForm);
   }
 
+  existUserByEmail(id: number, email: string): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('email', email);
+    return this.http.post(this.url + '/user/' + id + '/existByEmail', newForm);
+  }
+
+  existUserByUsername(id: number, username: string): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('username', username);
+    return this.http.post(this.url + '/user/' + id + '/existByUsername', newForm);
+  }
+
   changePassword(id: number, formValues): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('id', '' + id);
@@ -88,18 +100,9 @@ export class UserService {
     status_follow: number
   ): Observable<any> {
     let newForm: FormData = new FormData();
-    /*       cancelRequestOrUnfollowFormData.append('id_follow',''+id_follow); */
     newForm.append('status_follow', '' + status_follow);
     //TODO cambiar a patch y usar la ruta de requestOrFollowUser
     return this.http.post(this.url + '/user/' + id_follower + '/follow/' + id_followed + '/' + id_follow, newForm);
-    /*     let options = {
-      headers: new HttpHeaders({ 'Content-Type': 'application/json', 'Authorization': token }),
-      body: { id_follow: id_follow }
-    };
-    return this.http.delete(
-      this.url + '/user/' + username_follower + '/follow/' + username_followed,
-      options
-    ); */
   }
 
   getFollowers(id: number): Observable<any> {

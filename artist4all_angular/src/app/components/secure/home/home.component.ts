@@ -35,11 +35,20 @@ export class HomeComponent implements OnInit {
   id = this.user.id;
   token = this._sessionService.getCurrentToken();
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.getFollowedPublications();
+  }
 
-
+  publications: Array<Publication>;
   getFollowedPublications() {
-
+    this._publicationService.getFollowedPublications(this.id).subscribe(
+      (result) => {
+        if (result != null) {
+          this.publications = result;
+        }
+      }, (error) => {
+        console.log(error);
+    });
   }
 
   images = [];
