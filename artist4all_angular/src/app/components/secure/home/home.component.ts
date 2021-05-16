@@ -1,17 +1,10 @@
 import { AfterViewChecked, Component, ElementRef, OnInit } from '@angular/core';
-import { User } from 'src/app/core/models/user';
 import { SessionService } from 'src/app/core/services/session.service';
 import { Publication } from 'src/app/core/models/publication';
 import { UserService } from 'src/app/core/services/user.service';
 import { Router } from '@angular/router';
 import { PublicationService } from 'src/app/core/services/publication.service';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
-import { FormGroup, FormControl, Validators, FormBuilder} from '@angular/forms';
-
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { ViewChild } from '@angular/core';
 @Component({
   selector: 'app-home',
@@ -130,12 +123,22 @@ export class HomeComponent implements OnInit, AfterViewChecked {
     this.inputImgs.nativeElement.value = null;
   }
 
+  contador: number = 255;
+  showingBodyHint: boolean = false;
+  countCharacters(event) {
+    this.contador = 255;
+    this.contador -= event.target.value.length;
+    if (event.target.value.length > 255) this.showingBodyHint = true;
+    else this.showingBodyHint = false;
+  }
+
   bodyPublication: string = '';
   createPublication() {
     this.message = 'Publicación creada.';
     this._publicationService.create(
       new Publication(null, this.user, this.imgToUpload, this.bodyPublication, null, 0, 0, 0, 0)).subscribe(
         (result) => {
+          this.contador = 255;
           this.openSnackBar(this.message);
           this.removeSelectedImgs();
         },

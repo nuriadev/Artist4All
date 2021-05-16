@@ -37,8 +37,10 @@ class PublicationController {
     $publications = [];
     foreach ($users as $user) {
       $values = \Artist4all\Model\Publication::getUserPublications($me->getId(), $user->getId());
-      foreach ($values as $value) {
-        $publications[] = $value;
+      if (!is_null($values)) {
+        foreach ($values as $value) {
+          $publications[] = $value;
+        }
       }
     }
     array_values($publications);
@@ -143,7 +145,7 @@ class PublicationController {
   private function validatePersist($request, $data, $id, $response, $type) {
     $data['id'] = $id;
     $bodyPublication = $data['bodyPublication'];
-    if (strlen($bodyPublication) > 255) {
+    if (strlen($bodyPublication) > 260) {
       $response = $response->withStatus(400, 'Maximum character length surpassed');
       return $response;
     }
