@@ -32,7 +32,6 @@ export class RegisterComponent implements OnInit {
   //passwordPattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8, 20}'; password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter
   isValidFormSubmitted = null;
 
-  // TODO: devolver mensaje de error en caso de que el username o el gmail ya está cogido
   ngOnInit(): void {
     this.registerForm = this._formBuilder.group(
       {

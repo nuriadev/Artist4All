@@ -1,4 +1,4 @@
-import { AfterViewChecked, Component, ElementRef, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Publication } from 'src/app/core/models/publication';
 import { PublicationService } from 'src/app/core/services/publication.service';
@@ -22,7 +22,6 @@ export class EditPublicationComponent implements OnInit {
   constructor(
     private _publicationService: PublicationService,
     private _sessionService: SessionService,
-    private _router: ActivatedRoute,
     private _activeRoute: ActivatedRoute,
     private _location: Location,
     private _snackBar: MatSnackBar
@@ -63,6 +62,7 @@ export class EditPublicationComponent implements OnInit {
 
   removeSelectedImgs() {
     this.images = [];
+    this.showingImgHint = false;
     this.imgsReceived = [];
     this.imgToUpload = null;
     this.inputImgs.nativeElement.value = null;
@@ -105,13 +105,21 @@ export class EditPublicationComponent implements OnInit {
     });
   }
 
+  contador: number = 255;
+  showingBodyHint: boolean = false;
+  countCharacters(event) {
+    this.contador = 255;
+    this.contador -= event.target.value.length;
+    if (event.target.value.length > 255) this.showingBodyHint = true;
+    else this.showingBodyHint = false;
+  }
 
   editPublication() {
     this.message = "Publicación editada.";
     this._publicationService.edit(
       new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0, 1)).subscribe(
         (result) => {
-          this.openSnackBar(this.message);
+          setTimeout(() => this.openSnackBar(this.message), 1200);
           this.redirectBack();
         }, (error) => {
           console.log(error);

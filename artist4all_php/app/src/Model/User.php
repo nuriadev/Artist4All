@@ -117,20 +117,6 @@ class User implements \JsonSerializable
   }
 
   // DAO METHODS
-  public static function getAllOtherUsers(string $username): ?array {
-    $sql = 'SELECT * FROM users WHERE username!=:username';
-    $conn = Database::getInstance()->getConnection();
-    $statement = $conn->prepare($sql);
-    $result = $statement->execute([':username' => $username]);
-    $usersAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
-    if (!$usersAssoc) return null;
-    $users = [];
-    foreach ($usersAssoc as $userAssoc) {
-      $users[] = \Artist4all\Model\User::fromAssoc($userAssoc);
-    }
-    return $users;
-  }
-
   public static function getUserByUsername(string $username): ?\Artist4all\Model\User {
     $sql = 'SELECT * FROM users WHERE username=:username';
     $conn = Database::getInstance()->getConnection();
@@ -293,12 +279,14 @@ class User implements \JsonSerializable
   public static function isFollowingThatUser(\Artist4all\Model\User $user_follower, \Artist4all\Model\User $user_followed): ?array {
     $sql = 'SELECT * FROM users_followed WHERE 
     id_follower=:id_follower AND 
-    id_followed=:id_followed';
+    id_followed=:id_followed AND
+    status_follow=:status_follow';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':id_follower' => $user_follower->getId(),
       ':id_followed' => $user_followed->getId(),
+      ':status_follow' => 3
     ]);
     $followed = $statement->fetch(\PDO::FETCH_ASSOC);
     if (!$followed) return null;
@@ -417,6 +405,44 @@ class User implements \JsonSerializable
       ':deactivated' => 1
     ]);
     return $result;
+  }
+
+  public static function sendContactForm(
+    ?int $id, 
+    string $name, 
+    string $surname1, 
+    string $email, 
+    string $phone, 
+    string $bodyMessage): ?array {
+    $sql = 'INSERT INTO contact VALUES(
+        :id, 
+        :name, 
+        :surname1,  
+        :email, 
+        :phone, 
+        :bodyMessage
+      )';
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':id' => $id,
+      ':name' => $name,
+      ':surname1' => $surname1, 
+      ':email' => $email,
+      ':phone' => $phone,
+      ':bodyMessage' => $bodyMessage
+    ]);
+    if (!$result) return null;
+    $id = $conn->lastInsertId();
+    $message = [
+      'id' => $id,
+      'name' => $name,
+      'surname1' => $surname1, 
+      'email' => $email,
+      'phone' => $phone,
+      'bodyMessage' => $bodyMessage
+    ];
+    return $message;
   }
 
   public static function reactivateAccount(string $email): ?\Artist4all\Model\User {

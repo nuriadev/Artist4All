@@ -13,7 +13,7 @@ export class AuthInterceptor implements HttpInterceptor {
   constructor(private _sessionService: SessionService) {}
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-      if (request.url.includes('/login') || request.url.includes('/register')) {
+      if (request.url.includes('/login') || request.url.includes('/register') || request.url.includes('/contact')) {
          return next.handle(request);
       }
       request = request.clone({

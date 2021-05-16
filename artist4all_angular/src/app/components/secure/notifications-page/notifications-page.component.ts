@@ -2,6 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import * as moment from 'moment';
 import { NotificationService } from 'src/app/core/services/notification.service';
 import { SessionService } from 'src/app/core/services/session.service';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import { UserService } from 'src/app/core/services/user.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-notifications-page',
@@ -12,7 +15,10 @@ export class NotificationsPageComponent implements OnInit {
 
   constructor(
     private _sessionService: SessionService,
-    private _notificationService: NotificationService
+    private _userService: UserService,
+    private _router: Router,
+    private _notificationService: NotificationService,
+    private _snackBar: MatSnackBar,
   ) { }
 
   user = this._sessionService.getCurrentUser();
@@ -20,6 +26,7 @@ export class NotificationsPageComponent implements OnInit {
   id: number;
 
   notifications: Array<Notification>;
+  loaded: boolean = false;
   ngOnInit(): void {
     this.id = this.user.id;
     this._notificationService.getNotifications(this.id).subscribe(
@@ -33,10 +40,56 @@ export class NotificationsPageComponent implements OnInit {
           });
           this.notifications = result;
         }
+        this.loaded = true;
       },
       (error) => {
         console.log(error);
+    });
+  }
+
+  id_follow: number;
+  acceptOrDeclineRequest(id_notification: number, id_follower: number, index: number, status_follow: number) {
+    this._userService.isFollowingThatUser(id_follower, this.user.id).subscribe(
+      (result) => {
+        if (result != null) {
+          this.id_follow = result.id;
+          this._userService.updateFollowRequest(this.id_follow, id_follower, this.user.id, status_follow).subscribe(
+            (result) => {
+              this.notificationRead(id_notification, index);
+              if (status_follow == 3) this.message = 'Solicitud aceptada.';
+              else this.message = 'Solicitud rechazada.';
+              this.openSnackBar(this.message);
+            }, (error) => {
+              console.log(error);
+          });
+        }
+      }, (error) => {
+        console.log(error);
       });
+  }
+
+
+  notificationRead(id_notification: number, index: number) {
+    this._notificationService.notificationRead(id_notification, this.user.id).subscribe();
+    this.notifications.splice(index, 1);
+    this.message = 'Notificación leída.';
+    this.openSnackBar(this.message);
+    setTimeout(() => location.reload(), 1000);
+  }
+
+  removeNotification(id_notification: number, index: number) {
+    this._notificationService.removeNotification(id_notification, this.user.id).subscribe();
+    this.notifications.splice(index, 1);
+    this.message = 'Notificación eliminada.';
+    this.openSnackBar(this.message);
+    setTimeout(() => location.reload(), 1000);
+  }
+
+  message: string;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'OK', { duration: 2000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition });
   }
 
   adaptNotificationDate(upload_date: string) {

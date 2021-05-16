@@ -46,8 +46,9 @@
 </div>
 
 <form #formPublication="ngForm" enctype="multipart/form-data" method="post" (ngSubmit)="editPublication(); formPublication.reset()">
-  <label for="body">Cuerpo:</label> <br>
-  <textarea #textAreaBody="ngModel" [(ngModel)]="bodyPublication" id="bodyPublication" name="bodyPublication" cols="100"
+  <div *ngIf="!showingBodyHint"><span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contador }}</span></div>
+  <div *ngIf="showingBodyHint"><span class="text-sm inline-block">Cantidad de carácteres permitidos:</span><span class="inline-block text-sm text-red-600">&nbsp; {{ contador }}</span></div>
+  <textarea #textAreaBody="ngModel" (keyup)="countCharacters($event)" [(ngModel)]="bodyPublication" id="bodyPublication" name="bodyPublication" cols="100"
     rows="8"></textarea> <br>
   <label for="imgOptional">Imagen(opcional): </label>
   <input type="file" #imgPublication (change)="addImgPublication($event.target.files)" id="imgPublication" name="imgPublication[]" multiple="multiple"/>
@@ -60,10 +61,14 @@
   </div>
 
   <button type="button" (click)="redirectBack()"> Cancelar </button>
-  <button type="submit"> Guardar los cambios </button>
+  <input type="submit" [disabled]="bodyPublication == '' || showingImgHint || showingBodyHint" value="Guardar los cambios"/>
 </form>
 
-<div *ngIf="showingImgHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md -mt-8 mb-2 text-sm">
+<div *ngIf="showingImgHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md text-sm">
   <i class="fas fa-times-circle"></i>
   Formato no válido (Permitidos: png, jpeg, jpg, gif).
+</div>
+<div *ngIf="showingBodyHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md text-sm">
+  <i class="fas fa-times-circle"></i>
+  La cantidad máxima de carácteres es de 255.
 </div>

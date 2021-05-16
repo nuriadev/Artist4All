@@ -69,8 +69,8 @@ export class UserService {
     return this.http.post(this.url + '/user/' + id + '/password', newForm);
   }
 
-  getAllOtherUsers(id: number): Observable<any> {
-    return this.http.get(this.url + '/user/' + id + '/list');
+  getFollowSuggestions(id: number): Observable<any> {
+    return this.http.get(this.url + '/user/' + id + '/followSuggestions');
   }
 
   getUserById(id: number): Observable<any> {
@@ -131,5 +131,15 @@ export class UserService {
     let newForm: FormData = new FormData();
     newForm.append('searchedPattern', searchedPattern);
     return this.http.post(this.url + '/user/search', newForm);
+  }
+
+  sendContactForm(formValues:any): Observable<any> {
+    let newForm: FormData = new FormData();
+    newForm.append('name', formValues.name);
+    newForm.append('surname1', formValues.surname1);
+    newForm.append('email', formValues.email);
+    newForm.append('phone', formValues.phone);
+    newForm.append('bodyMessage', formValues.bodyMessage);
+    return this.http.post(this.url + '/contact', newForm);
   }
 }
