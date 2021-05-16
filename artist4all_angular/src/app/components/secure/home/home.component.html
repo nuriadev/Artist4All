@@ -101,7 +101,7 @@
                     </div>
                   </div>
                 </div>
-                <div class="mt-2 text-sm text-gray-700 space-y-4">
+                <div class="mt-4 text-sm text-gray-700 space-y-4">
                   <p>
                     {{ publication.bodyPublication }}
                   </p>
@@ -159,6 +159,9 @@
                 </div>
               </article>
             </li>
+          </ul>
+          <ul class="space-y-4" *ngIf="publications == null">
+            <p>hola</p>
           </ul>
       </main>
       <aside class="hidden lg:pt-10 lg:pb-10 xl:block xl:col-span-3">
