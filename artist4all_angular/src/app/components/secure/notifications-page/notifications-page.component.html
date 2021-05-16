@@ -52,6 +52,9 @@
     <ul class="lg:col-span-9 divide-y divide-gray-200">
     <h3 class="text-center md:text-left mb-3 lg:mt-6 lg:mb-3 lg:block text-3xl font-bold" style="padding-top:10px;">Tus notificaciones</h3>
       <li class="ml-4 mr-4 md:ml-0 md:mr-0 py-4" *ngFor="let notification of notifications; index as i;">
+        <ul *ngIf="notification == null" class="text-center mt-8 text-base">
+          <p>No tienes ninguna notificación pendiente</p>
+        </ul>
         <div class="flex space-x-3">
           <img class="h-10 w-10 rounded-full" src="http://localhost:81/assets/img/{{ notification.user_responsible.imgAvatar }}" alt="">
           <div class="flex-1 space-y-1">
