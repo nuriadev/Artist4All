@@ -178,13 +178,12 @@
             Esta cuenta es privada, empieza a seguirla para poder ver sus publicaciones
           </div>
 
-          <div *ngIf="publications == null && !isMyProfile">
+          <div *ngIf="publications == null && !isMyProfile" class="text-center mt-8 text-base">
             <p>Todavía no ha realizado ninguna publicación</p>
           </div>
 
           <div *ngIf="isMyProfile || ((!isMyProfile && isPrivate == 1 && status_follow == 3) || (!isMyProfile && isPrivate == 0))">
-          <!--  TODO: Añadir estilos -->
-          <div *ngIf="publications == null">
+          <div *ngIf="publications == null" class="text-center mt-8 text-base">
             <p>Todavía no has realizado ninguna publicación</p>
           </div>
 
