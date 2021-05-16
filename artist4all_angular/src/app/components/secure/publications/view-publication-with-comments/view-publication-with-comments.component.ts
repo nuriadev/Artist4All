@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Publication } from 'src/app/core/models/publication';
 import { User } from 'src/app/core/models/user';
@@ -7,6 +7,8 @@ import { CommentService } from 'src/app/core/services/comment.service';
 import { PublicationService } from 'src/app/core/services/publication.service';
 import { SessionService } from 'src/app/core/services/session.service';
 import { Comment } from '../../../../core/models/comment';
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-publication-with-comments',
@@ -21,6 +23,7 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
     private _publicationService: PublicationService,
     private _formBuilder: FormBuilder,
     private _activeRoute: ActivatedRoute,
+    private _snackBar: MatSnackBar,
     ) { }
 
   id: number;
@@ -52,14 +55,64 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
     this.commentForm = this._formBuilder.group({
       id: [null],
       user: [this.user],
-      bodyComment: ['', []],
-      // bodyComment: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
+      bodyComment: ['', [Validators.required, Validators.maxLength(255)]],
       isEdited: [0],
       comment_date: [null],
       id_publication: [parseInt(this.id_publication)],
       id_comment_reference: [null],
       user_reference: [null]
     });
+  }
+
+  contador: number = 255;
+  showingBodyHint: boolean = false;
+  countCharacters(event) {
+    this.contador = 255;
+    this.contador -= event.target.value.length;
+    if (event.target.value.length > 255) this.showingBodyHint = true;
+    else this.showingBodyHint = false;
+  }
+
+  contadorSubcommentResponse: number = 255;
+  showingBodySubcommentResponse: boolean = false;
+  countCharactersSubcommentResponse(event) {
+    this.contadorSubcommentResponse = 255;
+    this.contadorSubcommentResponse -= event.target.value.length;
+    if (event.target.value.length > 255) this.showingBodySubcommentResponse = true;
+    else this.showingBodySubcommentResponse = false;
+  }
+
+  contadorResponse: number = 255;
+  showingBodyResponseHint: boolean = false;
+  countCharactersResponse(event) {
+    this.contadorResponse = 255;
+    this.contadorResponse -= event.target.value.length;
+    if (event.target.value.length > 255) this.showingBodyResponseHint = true;
+    else this.showingBodyResponseHint = false;
+  }
+
+  contadorEdit: number = 255;
+  showingBodyEditHint: boolean = false;
+  showingBodyEditRequired = false;
+  countCharactersEdit(event) {
+    this.contadorEdit = 255;
+    this.contadorEdit -= event.target.value.length;
+    if (event.target.value.length > 255) this.showingBodyEditHint = true;
+    else this.showingBodyEditHint = false;
+    if (event.target.value.length == 0) this.showingBodyEditRequired = true;
+    else this.showingBodyEditRequired = false;
+  }
+
+  contadorEditSubcomments: number = 255;
+  showingBodyEditSubcommentsHint: boolean = false;
+  showingBodyEditSubcommentsRequired = false;
+  countCharactersEditSubcomments(event) {
+    this.contadorEditSubcomments = 255;
+    this.contadorEditSubcomments -= event.target.value.length;
+    if (event.target.value.length > 255) this.showingBodyEditSubcommentsHint = true;
+    else this.showingBodyEditSubcommentsHint = false;
+    if (event.target.value.length == 0) this.showingBodyEditSubcommentsRequired = true;
+    else this.showingBodyEditSubcommentsRequired = false;
   }
 
   getPublicationComments() {
@@ -79,12 +132,14 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
   responseFormIndexAux = -1;
   showingForm: boolean = false;
   toggleResponseForm(index: number): void {
+    if (this.commentFormResponse) this.showingBodyResponseHint = false;
     if (index != this.responseFormIndexAux) {
       this.showingForm = false;
     }
     this.responseFormIndexAux = index;
     this.subcommentFormAuxIndex = -1;
     this.subcommentIndexAux = -1;
+    this.contadorResponse = 255;
     let formSubcommentResponseForm = document.getElementById(index + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(index + 'formResponseContainer');
     let subcommentContainer = document.getElementById(index + 'subcommentContainer');
@@ -98,8 +153,7 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
       this.commentFormResponse = this._formBuilder.group({
         id: [null],
         user: [this.user],
-        bodyComment: ['', []],
-        // bodyComment: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
+        bodyComment: ['', [Validators.required, Validators.maxLength(255)]],
         isEdited: [0],
         comment_date: [null],
         id_publication: [parseInt(this.id_publication)],
@@ -112,10 +166,8 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
     }
   }
 
-
   subcommentIndexAux = -1;
   showingSubcomments: boolean = false;
-  //TODO: poner un spinner de carga antes de mostrar o sacar algun div
   toggleSubcomments(index: number) {
     this.subcomments = [];
     if (index != this.subcommentIndexAux) {
@@ -154,10 +206,12 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
   subcommentFormAuxIndex = -1;
   showingSubcommentForm: boolean = false;
   toggleSubcommentResponseForm(indexSubcomments: number, indexComments: number): void {
+    if (this.commentFormResponse) this.showingBodySubcommentResponse = false;
     if (indexSubcomments != this.subcommentFormAuxIndex) {
       this.showingSubcommentForm = false;
     }
     this.responseFormIndexAux = -1;
+    this.contadorSubcommentResponse = 255;
     this.subcommentFormAuxIndex = indexSubcomments;
     let formSubcommentResponseForm = document.getElementById(indexSubcomments + 'formSubcommentResponseForm');
     let formResponseContainer = document.getElementById(indexSubcomments + 'formResponseContainer');
@@ -169,8 +223,7 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
       this.commentFormResponse = this._formBuilder.group({
         id: [null],
         user: [this.user],
-        bodyComment: ['', []],
-        // bodyComment: ['', [Validators.required, Validators.minLength(1), Validators.maxLength(255)]],
+        bodyComment: ['', [Validators.required, Validators.maxLength(255)]],
         isEdited: [0],
         comment_date: [null],
         id_publication: [parseInt(this.id_publication)],
@@ -183,9 +236,47 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
     }
   }
 
-  isValidFormSubmitted = null;
-  //TODO: Contador de carácteres
+  inComments: boolean = true;
+  inSubcomments: boolean = false;
+  editCommentIndexAux = -1;
+  showingEditForm = false;
+  toggleEditForm(index: number, commentsArray: Array<Comment>, type: number) {
+    if (this.editCommentForm) {
+      this.showingBodyEditHint = false;
+      this.showingBodyEditRequired = false;
+      this.showingBodyEditSubcommentsHint = false;
+      this.showingBodyEditSubcommentsRequired = false;
+    }
+    if (index != this.editCommentIndexAux) {
+      this.showingEditForm = false;
+    }
+    if (type == 0) {
+      this.inComments = true;
+      this.inSubcomments = false;
+    } else if (type == 1) {
+      this.inComments = false;
+      this.inSubcomments = true;
+    }
+    this.contadorEditSubcomments = 255;
+    this.contadorEditSubcomments -= commentsArray[index].bodyComment.length;
+    this.contadorEdit = 255;
+    this.contadorEdit -= commentsArray[index].bodyComment.length;
+    this.editCommentIndexAux = index;
+    this.editCommentForm = this._formBuilder.group({
+      id: [commentsArray[index].id],
+      user: [this.user],
+      bodyComment:[commentsArray[index].bodyComment, [Validators.required, Validators.maxLength(255)]],
+      isEdited: [1],
+      comment_date: [null],
+      id_publication: [parseInt(this.id_publication)],
+      id_comment_reference: [commentsArray[index].id],
+      user_reference: [commentsArray[index].user]
+    });
+    if (!this.showingEditForm) this.showingEditForm = true;
+    else this.showingEditForm = false;
+  }
 
+  isValidFormSubmitted = null;
 
   get bodyComment() { return this.commentForm.get('bodyComment'); }
   get bodyResponse() { return this.commentFormResponse.get('bodyComment'); }
@@ -202,9 +293,12 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
       return;
     }
     this.isValidFormSubmitted = true;
+    this.message = 'Comentario publicado.'
     let comment: Comment = this.commentForm.value;
     this._commentService.postComment(comment).subscribe(
       (result) => {
+        this.contador = 255;
+        this.openSnackBar(this.message);
         result.comment_date = this.adaptDateOfComment(result.comment_date);
         this.newComment = result;
         this.comments.unshift(this.newComment);
@@ -227,9 +321,12 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
       return;
     }
     this.isValidFormSubmitted = true;
+    this.message = 'Respuesta publicada.';
     let subcomment: Comment = this.commentFormResponse.value;
     this._commentService.postComment(subcomment).subscribe(
       (result) => {
+        this.contadorResponse = 255;
+        this.openSnackBar(this.message);
         result.comment_date = this.adaptDateOfComment(result.comment_date);
         this.newSubcomment = result;
         this.subcomments.unshift(this.newSubcomment);
@@ -250,39 +347,6 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
     });
   }
 
-  inComments: boolean = true;
-  inSubcomments: boolean = false;
-  editCommentIndexAux = -1;
-  showingEditForm = false;
-  toggleEditForm(index: number, commentsArray: Array<Comment>, type: number) {
-    if (index != this.editCommentIndexAux) {
-      this.showingEditForm = false;
-    }
-    if (type == 0) {
-      this.inComments = true;
-      this.inSubcomments = false;
-    } else if (type == 1) {
-      this.inComments = false;
-      this.inSubcomments = true;
-    }
-    this.editCommentIndexAux = index;
-    this.editCommentForm = this._formBuilder.group({
-      id: [commentsArray[index].id],
-      user: [this.user],
-      bodyComment:[commentsArray[index].bodyComment],
-      isEdited: [1],
-      comment_date: [null],
-      id_publication: [parseInt(this.id_publication)],
-      id_comment_reference: [commentsArray[index].id],
-      user_reference: [commentsArray[index].user]
-    });
-    if (!this.showingEditForm) {
-      this.showingEditForm = true;
-    } else {
-      this.showingEditForm = false;
-    }
-  }
-
   editedComment: Comment;
   editComment(index: number, commentArray: Array<Comment>, type: number) {
     if (this.showingEditForm) {
@@ -293,9 +357,11 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
       this.isValidFormSubmitted = true;
       commentArray[index].bodyComment = this.editCommentForm.get['bodyComment'];
       commentArray[index].isEdited = this.editCommentForm.get['isEdited'];
+      this.message = 'Comentario editado.';
       let comment: Comment = this.editCommentForm.value;
       this._commentService.editComment(comment).subscribe(
         (result) => {
+          this.openSnackBar(this.message);
           result.comment_date = this.adaptDateOfComment(result.comment_date);
           this.editedComment = result;
           commentArray[index] = this.editedComment;
@@ -311,14 +377,44 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
   }
 
   deleteComment(index: number, commentsArray:Array<Comment>) {
-    this.subcommentIndexAux = -1;
     this._commentService.delete(this.user.id, parseInt(this.id_publication), commentsArray[index]).subscribe(
       (result) => {
         commentsArray.splice(index, 1);
-        if (this.subcomments.length == 0) this.subcomments = null;
       }, (error) => {
         console.log(error);
     });
+  }
+
+  deleteAnimation(index: number, commentsArray:Array<Comment>) {
+    Swal.fire({
+      title: '¿Estás seguro de que quieres eliminar este comentario?',
+      text: 'Esta acción es irreversible.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Borrar comentario',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.editCommentIndexAux = -1;
+        this.deleteComment(index, commentsArray);
+        Swal.fire({ title: 'Borrando comentario...', showConfirmButton: false, timerProgressBar: true, timer: 1000,
+          didOpen: () => { Swal.showLoading(); },
+        }).then((result) => {
+          if (result.dismiss === Swal.DismissReason.timer) {
+            Swal.fire({ title: 'Comentario modificada', position: 'center', icon: 'success',  showConfirmButton: false, timer: 1000, });
+          }
+        });
+      }
+    });
+  }
+
+  message: string;
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'bottom';
+  openSnackBar(message: string) {
+    this._snackBar.open(message, 'OK', { duration: 2000, horizontalPosition: this.horizontalPosition, verticalPosition: this.verticalPosition });
   }
 
   adaptDateOfComment(upload_date: string) {

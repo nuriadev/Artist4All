@@ -82,7 +82,7 @@ class CommentController {
   private function validatePersist($request, $data, $id, $response, $type) {
     $data['id'] = $id;
     $bodyComment = $data['bodyComment'];
-    if (strlen($bodyComment) > 255) {
+    if (strlen($bodyComment) > 260) {
       $response = $response->withStatus(400, 'Maximum character length surpassed');
       return $response;
     }

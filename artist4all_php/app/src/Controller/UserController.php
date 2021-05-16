@@ -12,6 +12,8 @@ class UserController {
 
     // TODO: cambiar a patch los 2 edits
     $app->post('/user/{id:[0-9 ]+}/profile', '\Artist4all\Controller\UserController:editProfile');
+    $app->post('/user/{id:[0-9 ]+}/existByEmail', '\Artist4all\Controller\UserController:existUserByEmail');
+    $app->post('/user/{id:[0-9 ]+}/existByUsername', '\Artist4all\Controller\UserController:existUserByUsername');
     $app->post('/user/{id:[0-9 ]+}/password', '\Artist4all\Controller\UserController:changePassword');
 
     $app->get('/user/{id:[0-9 ]+}/list', '\Artist4all\Controller\UserController:getAllOtherUsers');
@@ -61,6 +63,25 @@ class UserController {
     return $this->validatePersist($data, $id, $response, 'edit');
   }
 
+  public function existUserByEmail(Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $data = $request->getParsedBody();    
+    $email = trim($data['email']);
+    $user = \Artist4all\Model\User::getUserByEmail($email, 0);
+    if (!is_null($user) && $id != $user->getId()) $response = $response->withJson('El correo electrónico introducido ya está cogido.')->withStatus(400, 'This email is already taken');
+    else $response = $response->withStatus(200);
+    return $response;
+  }
+
+  public function existUserByUsername(Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $data = $request->getParsedBody();    
+    $username = trim($data['username']);
+    $user = \Artist4all\Model\User::getUserByUsername($username);
+    if (!is_null($user) && $id != $user->getId()) $response = $response->withJson('El nombre de usuario introducido ya está cogido.')->withStatus(400, 'This username is already taken');
+    else $response = $response->withStatus(200);
+    return $response;
+  }
 
   public function changePassword(Request $request, Response $response, array $args) {
     $id = $args['id'];
@@ -149,7 +170,6 @@ class UserController {
     return $this->persistFollow($args, $data, $id, $response);
   }
 
-  // TODO: una vez cambiado a patch, adaptar la function
   public function updateFollowRequest(Request $request, Response $response, array $args) {
     $id = $args['id_follow'];
     $data = $request->getParsedBody();
@@ -353,8 +373,6 @@ class UserController {
       return $response;
     }
       
-    // todo: si está dado de baja para volver a activar su acc según el email if / else
-    // todo: crear función para reactivarCuenta 
     $user = \Artist4all\Model\User::getUserByUsername($username);
     if (!is_null($user) && $id != $user->getId()) {
       $response = $response->withJson('El nombre de usuario introducido ya está cogido.')->withStatus(400, 'This username is already taken');

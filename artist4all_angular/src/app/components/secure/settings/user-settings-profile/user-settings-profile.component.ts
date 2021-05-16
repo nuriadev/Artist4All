@@ -94,6 +94,34 @@ export class UserSettingsProfileComponent implements OnInit {
     else this.showingSurname2Hint = false;
   }
 
+  message:string = '';
+  existingUser: boolean = false;
+  existUserByEmail() {
+    this._userService.existUserByEmail(this.id, this.email).subscribe(
+      (result) => {
+        this.existingUser = false;
+      }, (error) => {
+        if (error != null) {
+          this.existingUser = true;
+          this.message = error.error;
+        }
+      }
+    )
+  }
+
+  existUserByUsername() {
+    this._userService.existUserByUsername(this.id, this.username).subscribe(
+      (result) => {
+        this.existingUser = false;
+      }, (error) => {
+        if (error != null) {
+          this.existingUser = true;
+          this.message = error.error;
+        }
+      }
+    )
+  }
+
   timer;
   editingAnimation() {
     clearInterval(this.timer);

@@ -51,7 +51,8 @@
 
     <mat-card *ngIf="publication != null" style="max-width: 980px;">
       <mat-card-header>
-        <img mat-card-avatar class="example-header-image mt-2" src="http://localhost:81/assets/img/{{ publication.user.imgAvatar }}" />
+        <img mat-card-avatar class="example-header-image mt-2"
+          src="http://localhost:81/assets/img/{{ publication.user.imgAvatar }}" />
         <mat-card-title>{{ publication.user.username }}</mat-card-title>
         <mat-card-subtitle *ngIf="publication.isEdited == 0">{{ publication.upload_date }}</mat-card-subtitle>
         <mat-card-subtitle *ngIf="publication.isEdited == 1">{{ publication.upload_date }} (editada)</mat-card-subtitle>
@@ -86,22 +87,31 @@
     <div>
       <section class="rounded-b-lg  mt-4 ">
         <form [formGroup]="commentForm" (ngSubmit)="postComment();" accept-charset="UTF-8"><input type="hidden">
-          <textarea formControlName="bodyComment"
+          <div *ngIf="!showingBodyHint"><span class="text-sm -mb-4 inline-block">Cantidad de carácteres permitidos: {{
+              contador }}</span></div>
+          <div *ngIf="showingBodyHint"><span class="text-sm -mb-4 inline-block">Cantidad de carácteres
+              permitidos:</span><span class="inline-block text-sm text-red-600">&nbsp; {{ contador }}</span></div>
+          <textarea formControlName="bodyComment" (keyup)="countCharacters($event)"
             class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
             placeholder="Añade tu comentario..." cols="7" rows="3" spellcheck="false"></textarea>
-          <button
-            class="font-bold py-2 px-4 w-full bg-indigo-500 hover:bg-indigo-700 text-base text-white shadow-md rounded-lg ">Publicar
-          </button>
+          <input type="submit" value="Publicar"
+            class="font-bold py-2 px-4 w-full bg-indigo-500 hover:bg-indigo-700 text-base text-white shadow-md rounded-lg" />
         </form>
+        <div *ngIf="showingBodyHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 -mb-5 text-sm">
+          <i class="fas fa-times-circle"></i>
+          La cantidad máxima de carácteres es de 255.
+        </div>
 
         <div id="myGroup" class="pt-4">
           <div *ngFor="let comment of comments; index as i;"
             class="bg-white rounded-lg p-3  flex flex-col justify-center items-center md:items-start shadow-lg mb-4">
             <div class="flex flex-row justify-center mr-2">
-              <img alt="avatar" routerLink="/user/{{ comment.user.id }}/profile" class="rounded-full mr-3 shadow-lg mt-1 mb-3 focus:outline-none cursor-pointer"
+              <img alt="avatar" routerLink="/user/{{ comment.user.id }}/profile"
+                class="rounded-full mr-3 shadow-lg mt-1 mb-3 focus:outline-none cursor-pointer"
                 src="http://localhost:81/assets/img/{{ comment.user.imgAvatar }}" style="width: 40px; height: 40px;">
               <div class="">
-                <h3 routerLink="/user/{{ comment.user.id }}/profile" class="mt-3 text-indigo-700 font-semibold text-base text-center md:text-left cursor-pointer focus:outline-none hover:text-indigo-400">
+                <h3 routerLink="/user/{{ comment.user.id }}/profile"
+                  class="mt-3 text-indigo-700 font-semibold text-base text-center md:text-left cursor-pointer focus:outline-none hover:text-indigo-400">
                   {{ comment.user.username }}
                 </h3>
               </div>
@@ -109,24 +119,45 @@
             <div class="mt-2 w-full">
               <form *ngIf="inComments && editCommentIndexAux===i && showingEditForm; else commentNoEdit"
                 [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
-                <textarea formControlName="bodyComment"
-                  class="w-full shadow-md p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base">{{ comment.bodyComment }}</textarea>
-                <br>
-
+                <div *ngIf="!showingBodyEditHint">
+                  <span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contadorEdit }}</span>
+                </div>
+                <div *ngIf="showingBodyEditHint">
+                  <span class="text-sm inline-block">Cantidad de carácteres permitidos:</span>
+                  <span class="inline-block text-sm text-red-600">&nbsp; {{ contadorEdit }}</span>
+                </div>
+                <textarea formControlName="bodyComment" (keyup)="countCharactersEdit($event)"
+                  class="w-full shadow-md p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base">
+                  {{ comment.bodyComment }}
+                </textarea> <br>
+                <div *ngIf="showingBodyEditRequired"
+                  class="font-normal bg-red-100 text-red-900 p-2 rounded-md -mt-4 mb-2 text-sm">
+                  <i class="fas fa-times-circle"></i>
+                  Se requiere algún carácter.
+                </div>
+                <div *ngIf="showingBodyEditHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md -mt-4 mb-2 text-sm">
+                  <i class="fas fa-times-circle"></i>
+                  La cantidad máxima de carácteres es de 255.
+                </div>
                 <button
                   class="py-2 px-4 w-2/12 mr-2 mb-4 hover:bg-red-500 text-base text-black shadow-md hover:text-white rounded-lg"
-                  (click)="toggleEditForm(i, comments, 0)">Cancelar</button>
+                  (click)="toggleEditForm(i, comments, 0)">
+                  Cancelar
+                </button>
                 <button
                   class="font-bold py-2 px-4 w-2/12 bg-indigo-500 hover:bg-indigo-700 text-base text-white shadow-md rounded-lg"
-                  type="submit">Editar</button>
-
+                  type="submit">
+                  Editar
+                </button>
               </form>
+
               <ng-template #commentNoEdit>
                 <p class="comment-text mb-2">{{ comment.bodyComment }}</p>
               </ng-template>
             </div>
 
-            <p class="text-gray-400 text-sm">{{ comment.comment_date }}</p>
+            <p class="text-gray-400 text-sm" *ngIf="comment.isEdited == 0">{{ comment.comment_date }}</p>
+            <p class="text-gray-400 text-sm" *ngIf="comment.isEdited == 1">{{ comment.comment_date }} (editado)</p>
             <div class="bg-white p-2" style="padding-left: 0px !important; width:100%;">
               <div class="inline-flex items-center">
                 <div class="p-2 cursor" (click)="toggleResponseForm(i)"
@@ -143,24 +174,33 @@
                 (click)="toggleEditForm(i, comments, 0)"> <i
                   class="fas fa-edit fa-md text-blue-500 hover:text-blue-600"></i> Editar</button>
               <button *ngIf="comment.user.id == id" class="focus:outline-none" style="margin-left:3%;"
-                (click)="deleteComment(i, comments)"><i
+                (click)="deleteAnimation(i, comments)"><i
                   class="fas fa-trash-alt fa-md text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button>
-
-
             </div>
+
             <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="p-2 w-full">
               <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, null, 0);">
+                <div *ngIf="!showingBodyResponseHint">
+                  <span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contadorResponse }}</span>
+                </div>
+                <div *ngIf="showingBodyResponseHint">
+                  <span class="text-sm inline-block">Cantidad de carácteres permitidos:</span>
+                  <span class="inline-block text-sm text-red-600">&nbsp; {{ contadorResponse }}</span>
+                </div>
                 <div class="d-flex flex-row align-items-start">
-                  <textarea formControlName="bodyComment" placeholder="Añade una respuesta..."
+                  <textarea formControlName="bodyComment" placeholder="Añade una respuesta..." (keyup)="countCharactersResponse($event)"
                     class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"></textarea>
+                </div>
+                <div *ngIf="showingBodyResponseHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md -mt-4 mb-2 text-sm">
+                  <i class="fas fa-times-circle"></i>
+                  La cantidad máxima de carácteres es de 255.
                 </div>
                 <div class="mt-2 text-right">
                   <button
                     class="py-2 px-4 btn btn-sm ml-1 shadow-md mr-1 hover:bg-red-600 hover:text-white hover:border-transparent"
                     type="button" (click)="toggleResponseForm(i)">Cancelar</button>
-                  <button
-                    class="py-2 px-4 btn btn-primary btn-sm shadow-none bg-indigo-500 hover:bg-indigo-600 hover:text-white"
-                    type="submit">Publicar respuesta</button>
+                  <input type="submit" value="Publicar respuesta"
+                    class="py-2 px-4 btn btn-primary btn-sm shadow-none bg-indigo-500 hover:bg-indigo-600 hover:text-white"/>
                 </div>
               </form>
             </div>
@@ -186,8 +226,25 @@
                   <div class="mt-2">
                     <form *ngIf="inSubcomments && editCommentIndexAux===ind && showingEditForm; else subcommentNoEdit"
                       [formGroup]="editCommentForm" (ngSubmit)="editComment(ind, subcomments, 1)">
-                      <textarea formControlName="bodyComment" class="w-full">{{ subcomment.bodyComment }}</textarea>
-                      <br>
+                      <div *ngIf="!showingBodyEditSubcommentsHint">
+                        <span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contadorEditSubcomments }}</span>
+                      </div>
+                      <div *ngIf="showingBodyEditSubcommentsHint">
+                        <span class="text-sm inline-block">Cantidad de carácteres permitidos:</span>
+                        <span class="inline-block text-sm text-red-600">&nbsp; {{ contadorEditSubcomments }}</span>
+                      </div>
+                      <textarea formControlName="bodyComment" (keyup)="countCharactersEditSubcomments($event)" class="w-full">
+                        {{ subcomment.bodyComment }}
+                      </textarea> <br>
+                      <div *ngIf="showingBodyEditSubcommentsRequired"
+                      class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 mb-2 text-sm">
+                      <i class="fas fa-times-circle"></i>
+                      Se requiere algún carácter.
+                    </div>
+                      <div *ngIf="showingBodyEditSubcommentsHint" class="font-normal bg-red-100 text-red-900 p-2 rounded-md mt-1 mb-2 text-sm">
+                        <i class="fas fa-times-circle"></i>
+                        La cantidad máxima de carácteres es de 255.
+                      </div>
                       <button
                         class="py-2 px-4 btn btn-sm ml-1 shadow-md mr-1 hover:bg-red-600 hover:text-white hover:border-transparent"
                         (click)="toggleEditForm(ind, subcomments, 1)">Cancelar</button>
@@ -218,7 +275,7 @@
                         (click)="toggleEditForm(ind, subcomments, 1)"> <i
                           class="fas fa-edit fa-md text-blue-500 hover:text-blue-600"></i> Editar</button>
                       <button *ngIf="subcomment.user.id == id" class="focus:outline-none" style="margin-left:3%;"
-                        (click)="deleteComment(ind, subcomments)"><i
+                        (click)="deleteAnimation(ind, subcomments)"><i
                           class="fas fa-trash-alt fa-md text-red-700 hover:text-red-500 mr-1"></i> Eliminar</button>
                     </div>
                     <div>
@@ -228,10 +285,21 @@
                   <div class="bg-white p-2 rounded-md">
                     <div id="{{ind +'formSubcommentResponseForm'}}" *ngIf="subcommentFormAuxIndex===ind" class="">
                       <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, ind, 1);">
+                        <div *ngIf="!showingBodySubcommentResponse">
+                          <span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contadorSubcommentResponse }}</span>
+                        </div>
+                        <div *ngIf="showingBodySubcommentResponse">
+                          <span class="text-sm inline-block">Cantidad de carácteres permitidos:</span>
+                          <span class="inline-block text-sm text-red-600">&nbsp; {{ contadorSubcommentResponse }}</span>
+                        </div>
                         <div class="d-flex flex-row align-items-start">
-                          <textarea formControlName="bodyComment"
+                          <textarea formControlName="bodyComment" (keyup)="countCharactersSubcommentResponse($event)"
                             class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
                             placeholder="Añade tu comentario..." cols="7" rows="3" spellcheck="false"></textarea>
+                        </div>
+                        <div *ngIf="showingBodySubcommentResponse" class="font-normal bg-red-100 text-red-900 p-2 rounded-md -mt-4 mb-2 text-sm">
+                          <i class="fas fa-times-circle"></i>
+                          La cantidad máxima de carácteres es de 255.
                         </div>
                         <div class="mt-2 text-right">
                           <button

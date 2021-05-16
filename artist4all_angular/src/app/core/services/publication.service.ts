@@ -29,6 +29,10 @@ export class PublicationService {
     return this.http.post(this.url + newPublication.user.id + '/publication', newForm);
   }
 
+  getFollowedPublications(id_user: number): Observable<any> {
+    return this.http.get(this.url + id_user + '/followedPublications');
+  }
+
   getUserPublications(id_user: number): Observable<any> {
     return this.http.get(this.url + id_user + '/publication');
   }

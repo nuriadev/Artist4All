@@ -10,6 +10,7 @@ class PublicationController {
     $app->post('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
     $app->delete('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:deletePublication');
     $app->get('/user/{id_user:[0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
+    $app->get('/user/{id_user:[0-9 ]+}/followedPublications', '\Artist4all\Controller\PublicationController:getFollowedPublications');  
     $app->get('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
 
     $app->post('/user/{my_id:[0-9 ]+}/like/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:likePublication');
@@ -22,6 +23,30 @@ class PublicationController {
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id_user, $response);
     $publication = static::getPublicationByUser($request, $id_publication, $response);
     $response = $response->withJson($publication);
+    return $response;
+  }
+
+  public function getFollowedPublications(Request $request, Response $response, array $args) {
+    $id = $args['id_user'];
+    $me = \Artist4all\Controller\UserController::getUserByIdSummary($id, $response);
+    $users = \Artist4all\Model\User::getFollowed($me->getId());
+    if (empty($users)) {
+      $response = $response->withStatus(204, 'No users collected');
+      return $response;
+    }
+    $publications = [];
+    foreach ($users as $user) {
+      $values = \Artist4all\Model\Publication::getUserPublications($me->getId(), $user->getId());
+      if (!is_null($values)) {
+        foreach ($values as $value) {
+          $publications[] = $value;
+        }
+      }
+    }
+    array_values($publications);
+    rsort($publications);
+    if (empty($publications)) $response = $response->withStatus(204, 'No publications collected');
+    else $response = $response->withJson($publications);
     return $response;
   }
 
@@ -120,7 +145,7 @@ class PublicationController {
   private function validatePersist($request, $data, $id, $response, $type) {
     $data['id'] = $id;
     $bodyPublication = $data['bodyPublication'];
-    if (strlen($bodyPublication) > 255) {
+    if (strlen($bodyPublication) > 260) {
       $response = $response->withStatus(400, 'Maximum character length surpassed');
       return $response;
     }
