@@ -96,7 +96,7 @@
 
         <div class="px-4 sm:px-0"></div>
         <h1 class="sr-only">Recent questions</h1>
-        <div *ngIf="publications == null">
+        <div *ngIf="publications == null" class="text-center mt-8 text-base">
           Esto está muy vacío, empieza a seguir a alguien para ver sus publicaciones.
         </div>
         <ul class="space-y-4" *ngIf="publications != null">
@@ -120,31 +120,31 @@
                       publication.upload_date }} (editada)</div>
                   </div>
                 </div>
-              </div>
-              <div class="mt-2 text-sm text-gray-700 space-y-4">
-                <p>
-                  {{ publication.bodyPublication }}
-                </p>
-              </div>
-              <div id="carousel{{publication.id}}" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner">
-                  <div class="carousel-item" *ngFor="let img of publication.imgsPublication; index as i;"
-                    [ngClass]="{'active': i == 0 }">￼
-                    <div *ngIf="publication.imgsPublication != null">
-                      <img src="http://localhost:81/assets/img/{{ img.imgPublication }}"
-                        class="h-96 w-full mb-3 object-contain">
-                    </div>
-                    <div *ngIf="publication.imgsPublication.length > 1">
-                      <a class="carousel-control-prev" href="#carousel{{publication.id}}" role="button"
-                        data-slide="prev">
-                        <i class="fas fa-chevron-left" style="color: black; font-size:25px;"></i>
-                        <span class="sr-only">Previous</span>
-                      </a>
-                      <a class="carousel-control-next" href="#carousel{{publication.id}}" role="button"
-                        data-slide="next">
-                        <i class="fas fa-chevron-right" style="color: black; font-size:25px;"></i>
-                        <span class="sr-only">Next</span>
-                      </a>
+                <div class="mt-4 text-sm text-gray-700 space-y-4">
+                  <p>
+                    {{ publication.bodyPublication }}
+                  </p>
+                </div>
+                <div id="carousel{{publication.id}}" class="carousel slide" data-ride="carousel">
+                  <div class="carousel-inner">
+                    <div class="carousel-item" *ngFor="let img of publication.imgsPublication; index as i;"
+                      [ngClass]="{'active': i == 0 }">￼
+                      <div *ngIf="publication.imgsPublication != null">
+                        <img src="http://localhost:81/assets/img/{{ img.imgPublication }}"
+                          class="h-96 w-full mb-3 object-contain">
+                      </div>
+                      <div *ngIf="publication.imgsPublication.length > 1">
+                        <a class="carousel-control-prev" href="#carousel{{publication.id}}" role="button"
+                          data-slide="prev">
+                          <i class="fas fa-chevron-left" style="color: black; font-size:25px;"></i>
+                          <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carousel{{publication.id}}" role="button"
+                          data-slide="next">
+                          <i class="fas fa-chevron-right" style="color: black; font-size:25px;"></i>
+                          <span class="sr-only">Next</span>
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>

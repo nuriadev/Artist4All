@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: artist4all_db:3306
--- Tiempo de generación: 26-04-2021 a las 15:49:32
+-- Tiempo de generación: 16-05-2021 a las 23:08:57
 -- Versión del servidor: 10.2.36-MariaDB-1:10.2.36+maria~bionic
--- Versión de PHP: 7.4.14
+-- Versión de PHP: 7.4.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -20,6 +20,30 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `artist4alldb`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `contact`
+--
+
+CREATE TABLE `contact` (
+  `id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `surname1` varchar(50) NOT NULL,
+  `email` varchar(60) NOT NULL,
+  `phone` char(9) DEFAULT NULL,
+  `bodyMessage` varchar(510) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Volcado de datos para la tabla `contact`
+--
+
+INSERT INTO `contact` (`id`, `name`, `surname1`, `email`, `phone`, `bodyMessage`) VALUES
+(1, 'qq', 'qq', 'alec@gmail.com', '', 'Don Quijote de la Mancha, cuyo tÃ­tulo original es El ingenioso hidalgo don Quijote de La Mancha, es una novela del subgÃ©nero literario burlesco. Fue escrita por el espaÃ±ol Miguel de Cervantes Saavedra (1547-1616) y publicada en dos entregas: El primer tomo en el aÃ±o 1605 y el segundo en 1615.\n\nSe considera Don Quijote de la Mancha la primera novela moderna y obra cumbre de la literatura espaÃ±ola. En ella, mediante la parodia de las novelas de caballerÃ­a,'),
+(2, 'qwe', 'qweq', 'usu3@gmail.com', '999999999', 'Don Quijote de la Mancha, cuyo tÃ­tulo original es El ingenioso hidalgo don Quijote de La Mancha, es una novela del subgÃ©nero literario burlesco. Fue escrita por el espaÃ±ol Miguel de Cervantes Saavedra (1547-1616) y publicada en dos entregas: El primer tomo en el aÃ±o 1605 y el segundo en 1615.\n\nSe considera Don Quijote de la Mancha la primera novela moderna y obra cumbre de la literatura espaÃ±ola. En ella, mediante la parodia de las novelas de caballerÃ­a,'),
+(3, 'us', 'us', 'alec@gmail.com', '', 'Don Quijote de la Mancha, cuyo tÃ­tulo original es El ingenioso hidalgo don Quijote de La Mancha, es una novela del subgÃ©nero literario burlesco. Fue escrita por el espaÃ±ol Miguel de Cervantes Saavedra (1547-1616) y publicada en dos entregas: El primer tomo en el aÃ±o 1605 y el segundo en 1615.\n\nSe considera Don Quijote de la Mancha la primera novela moderna y obra cumbre de la literatura espaÃ±ola. En ella, mediante la parodia de las novelas de caballerÃ­a,');
 
 -- --------------------------------------------------------
 
@@ -45,11 +69,17 @@ INSERT INTO `imgs_publications` (`id`, `imgPublication`, `id_publication`) VALUE
 (7, 'defaultAvatarImg.png', 74),
 (41, 'defaultAvatarImg.png', 109),
 (42, 'lolLogo.png', 109),
-(49, 'ashokaMandalore.jpg', 110),
-(50, 'defaultAvatarImg.png', 110),
-(51, 'lolLogo.png', 110),
 (56, 'lolLogo.png', 90),
-(57, 'wallpaperPrequels.jpg', 112);
+(63, 'ashokaMandalore.jpg', 113),
+(64, 'defaultAvatarImg.png', 113),
+(82, 'defaultAvatarImg.png', 119),
+(83, 'descarga.jpeg', 119),
+(84, 'ebcdfd67ddb0c76511f224f7ff340345.jpg', 119),
+(85, 'foto.jpeg', 119),
+(86, 'image.png', 119),
+(87, 'lolLogo.png', 119),
+(88, 'perfil.jpeg', 119),
+(89, 'wallpaperPrequels.jpg', 119);
 
 -- --------------------------------------------------------
 
@@ -73,7 +103,16 @@ CREATE TABLE `notifications` (
 INSERT INTO `notifications` (`id`, `id_responsible`, `id_receiver`, `isRead`, `typeNotification`, `notification_date`) VALUES
 (1, 44, 24, 0, 2, '2021-04-10 21:05:38'),
 (2, 24, 45, 0, 2, '2021-04-12 08:12:38'),
-(4, 45, 1, 0, 1, '2021-04-12 09:56:15');
+(11, 95, 1, 1, 2, '2021-05-01 15:54:14'),
+(12, 95, 1, 1, 1, '2021-05-01 15:54:49'),
+(13, 1, 95, 1, 3, '2021-05-01 15:54:49'),
+(15, 1, 95, 0, 3, '2021-05-16 14:49:30'),
+(17, 50, 1, 1, 1, '2021-05-01 15:54:14'),
+(22, 1, 44, 0, 1, '2021-05-16 17:52:30'),
+(23, 1, 92, 0, 1, '2021-05-16 17:55:56'),
+(24, 1, 45, 0, 2, '2021-05-16 18:02:26'),
+(25, 1, 27, 0, 1, '2021-05-16 18:50:26'),
+(26, 98, 36, 0, 1, '2021-05-16 21:30:29');
 
 -- --------------------------------------------------------
 
@@ -104,7 +143,7 @@ INSERT INTO `notifications_type` (`id`, `type`) VALUES
 CREATE TABLE `publications` (
   `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `bodyPublication` varchar(255) NOT NULL,
+  `bodyPublication` varchar(260) NOT NULL,
   `upload_date` datetime NOT NULL,
   `isEdited` tinyint(4) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -123,10 +162,13 @@ INSERT INTO `publications` (`id`, `id_user`, `bodyPublication`, `upload_date`, `
 (72, 1, 'mi nueva publi sin img', '2021-03-31 20:20:26', 0),
 (73, 1, 'mis img', '2021-03-31 20:20:40', 0),
 (74, 1, 'mis img 2', '2021-03-31 20:21:51', 0),
-(90, 1, 'stop (edited66) 4', '2021-04-19 16:28:43', 1),
+(90, 45, 'stop (edited66) 4', '2021-04-19 16:28:43', 1),
 (109, 45, 'prrrrrrr', '2021-04-12 15:04:38', 0),
-(110, 24, 'mi nueva publi (edited)', '2021-04-19 14:48:03', 1),
-(112, 1, 'mi nueva publi 2', '2021-04-20 13:31:52', 1);
+(113, 27, 'ppppppppppppppppppppppppppppppppppppp', '2021-05-01 16:03:57', 1),
+(115, 1, 'Abarca los primeros ocho capÃ­tulos del primer tomo del libro. AquÃ­ comienza la supuesta locura de don Quijote. El protagonista decide convertirse en un caballero andante llevando a su viejo caballo Rocinante a recorrer EspaÃ±a.\n', '2021-05-01 16:56:58', 1),
+(116, 45, 'Abarca los primeros ocho capÃ­tulos del primer tomo del libro. AquÃ­ comienza la supuesta locura de don Quijote. El protagonista decide convertirse en un caballero andante llevando a su viejo caballo Rocinante a recorrer EspaÃ±a.\n', '2021-05-01 16:58:51', 1),
+(118, 36, 'qwerqrewqweqreqweq', '2021-05-01 16:17:58', 0),
+(119, 1, 'Don Quijote de la Mancha, cuyo tÃ­tulo original es El ingenioso hidalgo don Quijote de La Mancha, es una novela del subgÃ©nero literario burlesco. Fue escrita por el espaÃ±ol Miguel de Cervantes Saavedra (1547-1616) y publicada en dos entregas: El primer tom', '2021-05-16 20:26:34', 1);
 
 -- --------------------------------------------------------
 
@@ -137,7 +179,7 @@ INSERT INTO `publications` (`id`, `id_user`, `bodyPublication`, `upload_date`, `
 CREATE TABLE `publication_comments` (
   `id` int(11) NOT NULL,
   `id_user` int(11) NOT NULL,
-  `bodyComment` varchar(255) NOT NULL,
+  `bodyComment` varchar(260) NOT NULL,
   `isEdited` int(11) NOT NULL,
   `comment_date` datetime NOT NULL,
   `id_publication` int(11) NOT NULL,
@@ -152,7 +194,7 @@ CREATE TABLE `publication_comments` (
 INSERT INTO `publication_comments` (`id`, `id_user`, `bodyComment`, `isEdited`, `comment_date`, `id_publication`, `id_comment_reference`, `id_user_reference`) VALUES
 (72, 1, '1st comment', 0, '2021-04-23 11:55:38', 112, 0, NULL),
 (74, 44, '2nd comment', 0, '2021-04-23 11:56:46', 112, 72, 1),
-(95, 1, '3rd comment', 0, '2021-04-26 11:47:54', 112, 72, 1),
+(95, 1, '3rd comment 2', 1, '2021-05-09 14:25:05', 112, 72, 1),
 (96, 1, '4th comment', 0, '2021-04-26 11:48:13', 112, 72, 44),
 (97, 1, '5th comment\n', 0, '2021-04-26 11:48:38', 112, 72, 44),
 (98, 1, '6th comment', 0, '2021-04-26 11:48:53', 112, 72, 1),
@@ -164,10 +206,10 @@ INSERT INTO `publication_comments` (`id`, `id_user`, `bodyComment`, `isEdited`, 
 (107, 1, '12th comment', 0, '2021-04-26 12:04:55', 112, 0, NULL),
 (108, 1, '13th comment', 0, '2021-04-26 12:05:17', 112, 107, 1),
 (109, 1, '14th comment', 0, '2021-04-26 12:06:59', 112, 0, NULL),
-(110, 1, '1800 comment', 1, '2021-04-26 15:48:04', 112, 0, NULL),
-(114, 1, 'hola', 0, '2021-04-26 15:02:59', 112, 110, 1),
-(117, 1, 'hola3', 0, '2021-04-26 15:06:25', 112, 102, 1),
-(118, 1, 'hola2', 0, '2021-04-26 15:06:49', 112, 110, 1);
+(110, 1, '15th comment', 0, '2021-04-26 12:07:11', 112, 0, NULL),
+(127, 1, 'Don Quijote de la Mancha, cuyo tÃ­tulo original es El ingenioso hidalgo don Quijote de La Mancha, es una novela del subgÃ©nero literario burlesco. Fue escrita por el espaÃ±ol Miguel de Cervantes Saavedra (1547-1616) y publicada en dos entregas: El primer toq', 1, '2021-05-16 12:50:28', 110, 0, NULL),
+(139, 1, 'Don Quijote de la Mancha, cuyo tÃ­tulo original es El ingenioso hidalgo don Quijote de La Mancha, es una novela del subgÃ©nero literario burlesco. Fue escrita por el espaÃ±ol Miguel de Cervantes Saavedra (1547-1616) y publicada en dos entregas: El primer to8', 1, '2021-05-16 14:22:11', 110, 0, NULL),
+(141, 1, 'Don Quijote de la Mancha, cuyo tÃ­tulo original es El ingenioso hidalgo don Quijote de La Mancha, es una novela del subgÃ©nero literario burlesco. Fue escrita por el espaÃ±ol Miguel de Cervantes Saavedra (1547-1616) y publicada en dos entregas: El primer tp3', 0, '2021-05-16 14:23:35', 110, 139, 1);
 
 -- --------------------------------------------------------
 
@@ -196,7 +238,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, `password`, `isArtist`, `imgAvatar`, `aboutMe`, `token`, `isPrivate`, `deactivated`) VALUES
-(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$GZoVNs66nfOCB57l/Okfke.FciSU58zjnkTuKJNQhOumHmf4KeM.W', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.YWxlY0BnbWFpbC5jb20uJDJ5JDEwJEdab1ZOczY2bmZPQ0I1N2wvT2tma2UuRmNpU1U1OHpqbmtUdUtKTlFoT3VtSG1mNEtlTS5XLm1mM0RJbitaWGc=.tCeJ5af6n+C26q5C7JBOwIU5sACG88MvU1QkRsBcKmE=', 1, 0),
+(1, 'Alec', 'Sung', 'Yang', 'alec@gmail.com', 'Ritter', '$2y$10$PevXAIXXbPdVBO/b5sD/HeWPxNt2fgxTOTDbecosExL7YkS3/VjH6', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 1, 0),
 (24, 'usu1', 'usu1', 'usu1', 'usu1@gmail.com', 'usu1', '$2y$10$iOb/TzHoIshx2HBjKSY1hecuScSHzKnZ.zwyBLUcGFo/a0t4vCus.', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!! ', '', 1, 0),
 (27, 'usu3', 'usu3', 'usu3', 'usu3@gmail.com', 'usu3', '$2y$10$YRenRAON2qbVUBRrPvJW6eyc2DYM8QgtsXjL37v7JaMVLtNWK331G', 0, 'lolLogo.png', 'Bienvenido a mi perfil!!! ', '', 0, 0),
 (34, 'Usu2', 'Usu2', 'Usu2', 'usu2@gmail.com', 'Usu2', '$2y$10$7A70dpWM17bjGzUp.GzSBu.cHpJV0l1JU1sZkKEy5DOokxCa54tDa', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
@@ -204,7 +246,10 @@ INSERT INTO `users` (`id`, `name`, `surname1`, `surname2`, `email`, `username`, 
 (44, 'q', 'q', 'q', 'q', 'q', '$2y$10$j9DMh1sMCNxA8RQzQtBX6eUKJ2cxpfSSOlLvIs8INoWW53Uei6SKi', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
 (45, 'aa', 'aa', 'aa', 'a@a.com', 'aaaaa', '$2y$10$x0FSNiLIsKTDvXxTu8ruluiUeE6v2XTlFIrBTGjRcGXdn7RmItnde', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 1, 0),
 (50, 'yy', 'yy', 'yy', 'y@y.com', 'yyyyy', '$2y$10$9CYw7LXPPHnCrRVx0wOxfeLVU2c4nx5OX4F6M8sFpiD7O2O3j6yRK', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
-(51, 'nn', 'nn', 'nn', 'n@n.com', 'nnnnn', '$2y$10$gCUboTlF.MzxP1.lHmAcjewPRbWWzfEYRSzflFWu24tBU22/oMj.K', 1, 'http://localhost:81/assets/img/defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0);
+(92, 'ii', 'ii', 'ii', 'i@i.com', 'iiiii', '$2y$10$ZKjR6N79LWkUkWZaNOdx0.g8p/yvBWzXAtZdXKSa.KHrXA92FCDMa', 0, 'lolLogo.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
+(95, 'qq', 'qq', 'qq', 'q@q.com', 'qqqqq', '$2y$10$kDonB50bVxdHEUsNG1AeyO6iMAuF63gGTDuC0Qmw5enikVJQFIPW.', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
+(97, 'mm', 'mm', 'mm', 'm@m.com', 'mmmmm', '$2y$10$PWlAn/Au13e9Km1Rwf4ASOWXqY3lhiUwpUV4l8iEPon6KVvBvNHt.', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', '', 0, 0),
+(98, 'rr', 'rr', 'rr', 'r@r.com', 'rrrrr', '$2y$10$GuR5.XyjXFv5DA5bMi3Gg./1XT1Sw6W0FS2YVM.hSpkZDiC6qCYiW', 1, 'defaultAvatarImg.png', 'Bienvenido a mi perfil!!!', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.ckByLmNvbS4kMnkkMTAkR3VSNS5YeWpYRnY1REE1Yk1pM0dnLi8xWFQxU3c2VzBGUzJZVk0uaFNwa1pEaUM2cUNZaVcuZmI5ZTI4YWJlOTE0ZDg3YWE1MDk1MDQ2MjhhYzQ4OTU1YTI5ZGZjY2U0NDIzZGRjNzU5YTA2M2NhNTY5OGQxY2U0OGIxMGMwM2ZkOGY5Zjc=.klQDUG7ZDm+gwqIk0xourNpDvnmzsO0ijgZptVNyqao=', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -231,7 +276,19 @@ INSERT INTO `users_followed` (`id`, `id_follower`, `id_followed`, `status_follow
 (80, 44, 24, 2),
 (85, 44, 27, 1),
 (86, 24, 45, 1),
-(89, 45, 1, 1);
+(89, 45, 1, 1),
+(102, 95, 1, 3),
+(103, 36, 50, 3),
+(104, 24, 44, 3),
+(105, 1, 45, 3),
+(106, 24, 45, 3),
+(107, 24, 92, 3),
+(108, 36, 44, 3),
+(109, 36, 27, 3),
+(114, 1, 92, 1),
+(118, 1, 44, 1),
+(121, 1, 27, 1),
+(122, 98, 36, 1);
 
 -- --------------------------------------------------------
 
@@ -277,11 +334,24 @@ INSERT INTO `users_likes_publications` (`id`, `my_id`, `id_publication`, `status
 (25, 1, 67, 0),
 (26, 1, 4, 1),
 (30, 1, 72, 1),
-(31, 1, 110, 1);
+(32, 36, 119, 1),
+(33, 92, 119, 1),
+(34, 97, 119, 1),
+(35, 92, 2, 1),
+(36, 97, 2, 1),
+(37, 97, 118, 1),
+(38, 1, 118, 1),
+(39, 1, 116, 1);
 
 --
 -- Índices para tablas volcadas
 --
+
+--
+-- Indices de la tabla `contact`
+--
+ALTER TABLE `contact`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `imgs_publications`
@@ -355,16 +425,22 @@ ALTER TABLE `users_likes_publications`
 --
 
 --
+-- AUTO_INCREMENT de la tabla `contact`
+--
+ALTER TABLE `contact`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT de la tabla `imgs_publications`
 --
 ALTER TABLE `imgs_publications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=58;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=90;
 
 --
 -- AUTO_INCREMENT de la tabla `notifications`
 --
 ALTER TABLE `notifications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT de la tabla `notifications_type`
@@ -376,25 +452,25 @@ ALTER TABLE `notifications_type`
 -- AUTO_INCREMENT de la tabla `publications`
 --
 ALTER TABLE `publications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=113;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT de la tabla `publication_comments`
 --
 ALTER TABLE `publication_comments`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=144;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT de la tabla `users_followed`
 --
 ALTER TABLE `users_followed`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=123;
 
 --
 -- AUTO_INCREMENT de la tabla `users_followed_status`
@@ -406,7 +482,7 @@ ALTER TABLE `users_followed_status`
 -- AUTO_INCREMENT de la tabla `users_likes_publications`
 --
 ALTER TABLE `users_likes_publications`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- Restricciones para tablas volcadas
