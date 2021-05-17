@@ -364,12 +364,6 @@ class UserController {
     } 
 
     $password = trim($data['password']);
-    $passwordPattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$#!%*?&])([A-Za-z\d$@#$!%*?&]|[^ ]){8,20}$/';
-    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
-      $response = $response->withStatus(400, 'Wrong password format');
-      return $response;
-    }
-
     $user = \Artist4all\Model\User::getUserByEmail($email, 0);
     if (is_null($user)) {
       $response = $response->withStatus(400, 'Unvalid user');
