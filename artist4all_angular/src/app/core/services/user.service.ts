@@ -101,7 +101,7 @@ export class UserService {
   ): Observable<any> {
     let newForm: FormData = new FormData();
     newForm.append('status_follow', '' + status_follow);
-    //TODO cambiar a patch y usar la ruta de requestOrFollowUser
+    //TODO cambiar a patch
     return this.http.post(this.url + '/user/' + id_follower + '/follow/' + id_followed + '/' + id_follow, newForm);
   }
 
