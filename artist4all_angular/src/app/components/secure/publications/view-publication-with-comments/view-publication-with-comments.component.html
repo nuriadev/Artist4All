@@ -87,10 +87,10 @@
     <div>
       <section class="rounded-b-lg  mt-4 ">
         <form [formGroup]="commentForm" (ngSubmit)="postComment();" accept-charset="UTF-8"><input type="hidden">
-          <div *ngIf="!showingBodyHint"><span class="text-sm -mb-4 inline-block">Cantidad de carácteres permitidos: {{
+          <div *ngIf="!showingBodyHint"><span class="text-sm inline-block mb-2">Carácteres disponibles: {{
               contador }}</span></div>
-          <div *ngIf="showingBodyHint"><span class="text-sm -mb-4 inline-block">Cantidad de carácteres
-              permitidos:</span><span class="inline-block text-sm text-red-600">&nbsp; {{ contador }}</span></div>
+          <div *ngIf="showingBodyHint"><span class="text-sm -mb-4 inline-block mb-2">Carácteres disponibles: 
+          </span><span class="inline-block text-sm text-red-600">&nbsp; {{ contador }}</span></div>
           <textarea formControlName="bodyComment" (keyup)="countCharacters($event)"
             class="w-full shadow-inner p-4 border-0 mb-4 rounded-lg focus:shadow-outline text-base"
             placeholder="Añade tu comentario..." cols="7" rows="3" spellcheck="false"></textarea>
@@ -120,10 +120,10 @@
               <form *ngIf="inComments && editCommentIndexAux===i && showingEditForm; else commentNoEdit"
                 [formGroup]="editCommentForm" (ngSubmit)="editComment(i, comments, 0)">
                 <div *ngIf="!showingBodyEditHint">
-                  <span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contadorEdit }}</span>
+                  <span class="text-sm inline-block mb-2">Carácteres disponibles: {{ contadorEdit }}</span>
                 </div>
                 <div *ngIf="showingBodyEditHint">
-                  <span class="text-sm inline-block">Cantidad de carácteres permitidos:</span>
+                  <span class="text-sm inline-block mb-2">Carácteres disponibles: </span>
                   <span class="inline-block text-sm text-red-600">&nbsp; {{ contadorEdit }}</span>
                 </div>
                 <textarea formControlName="bodyComment" (keyup)="countCharactersEdit($event)"
@@ -181,10 +181,10 @@
             <div id="{{i + 'formResponseContainer'}}" *ngIf="responseFormIndexAux===i" class="p-2 w-full">
               <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, null, 0);">
                 <div *ngIf="!showingBodyResponseHint">
-                  <span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contadorResponse }}</span>
+                  <span class="text-sm inline-block mb-2">Carácteres disponibles: {{ contadorResponse }}</span>
                 </div>
                 <div *ngIf="showingBodyResponseHint">
-                  <span class="text-sm inline-block">Cantidad de carácteres permitidos:</span>
+                  <span class="text-sm inline-block mb-2">Carácteres disponibles: </span>
                   <span class="inline-block text-sm text-red-600">&nbsp; {{ contadorResponse }}</span>
                 </div>
                 <div class="d-flex flex-row align-items-start">
@@ -227,10 +227,10 @@
                     <form *ngIf="inSubcomments && editCommentIndexAux===ind && showingEditForm; else subcommentNoEdit"
                       [formGroup]="editCommentForm" (ngSubmit)="editComment(ind, subcomments, 1)">
                       <div *ngIf="!showingBodyEditSubcommentsHint">
-                        <span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contadorEditSubcomments }}</span>
+                        <span class="text-sm inline-block mb-2">Carácteres disponibles: {{ contadorEditSubcomments }}</span>
                       </div>
                       <div *ngIf="showingBodyEditSubcommentsHint">
-                        <span class="text-sm inline-block">Cantidad de carácteres permitidos:</span>
+                        <span class="text-sm inline-block mb-2">Carácteres disponibles: </span>
                         <span class="inline-block text-sm text-red-600">&nbsp; {{ contadorEditSubcomments }}</span>
                       </div>
                       <textarea formControlName="bodyComment" (keyup)="countCharactersEditSubcomments($event)" class="w-full">
@@ -286,10 +286,10 @@
                     <div id="{{ind +'formSubcommentResponseForm'}}" *ngIf="subcommentFormAuxIndex===ind" class="">
                       <form [formGroup]="commentFormResponse" (ngSubmit)="postResponse(i, ind, 1);">
                         <div *ngIf="!showingBodySubcommentResponse">
-                          <span class="text-sm inline-block">Cantidad de carácteres permitidos: {{ contadorSubcommentResponse }}</span>
+                          <span class="text-sm inline-block mb-2">Carácteres disponibles: {{ contadorSubcommentResponse }}</span>
                         </div>
                         <div *ngIf="showingBodySubcommentResponse">
-                          <span class="text-sm inline-block">Cantidad de carácteres permitidos:</span>
+                          <span class="text-sm inline-block mb-2">Carácteres disponibles: </span>
                           <span class="inline-block text-sm text-red-600">&nbsp; {{ contadorSubcommentResponse }}</span>
                         </div>
                         <div class="d-flex flex-row align-items-start">
