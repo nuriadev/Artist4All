@@ -23,7 +23,7 @@ export class UserSettingsPasswordComponent implements OnInit {
   token = this._sessionService.getCurrentToken();
   id: number = this.user.id;
   passwordForm: FormGroup;
-  passwordPattern = '[A-Za-z0-9 ]+';
+  passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$#!%*?&])([A-Za-z\d$@#$!%*?&]|[^ ]){8,20}$/;
   isValidFormSubmitted = null;
 
   ngOnInit(): void {

@@ -25,9 +25,7 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {}
 
   emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$';
-  passwordPattern = '[A-Za-z0-9 ]+';
-  // TODO: Cambiar una vez finalizado proyecto
-  //passwordPattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}';
+  passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$#!%*?&])([A-Za-z\d$@#$!%*?&]|[^ ]){8,20}$/;
   isValidFormSubmitted = null;
 
   loginForm = this._formBuilder.group({

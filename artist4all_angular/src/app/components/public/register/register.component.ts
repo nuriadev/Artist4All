@@ -27,9 +27,7 @@ export class RegisterComponent implements OnInit {
   nameSurnamePattern = "[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}";
   usernamePattern = '^[a-zA-Z0-9_ ]{5,20}$'; // letras _ num min length 5 max 20
   emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$';
-  passwordPattern = '[A-Za-z0-9 ]+';
-  // TODO: Cambiar una vez finalizado proyecto
-  //passwordPattern='(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8, 20}'; password must contain 8 or more characters that are of at least one number, and one uppercase and lowercase letter
+  passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$#!%*?&])([A-Za-z\d$@#$!%*?&]|[^ ]){8,20}$/;
   isValidFormSubmitted = null;
 
   ngOnInit(): void {
