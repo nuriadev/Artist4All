@@ -121,7 +121,6 @@ class UserController {
     $data = $request->getParsedBody();
     $user = static::getUserByIdSummary($id, $response);
     $password = trim($data['password']);
-    // TODO: CAMBIAR AL FINAL DEL PROYECTO
     $passwordPattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$#!%*?&])([A-Za-z\d$@#$!%*?&]|[^ ]){8,20}$/';
     if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
       $response = $response->withStatus(400, 'Wrong password format');

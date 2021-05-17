@@ -5,7 +5,6 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 
 class NotificationController {
   public static function initRoutes($app) {
-    // TODO: GET all my notifications, delete notifications
     $app->get('/user/{id:[0-9 ]+}/notification', '\Artist4all\Controller\NotificationController:getNotifications');
     // todo pasar a patch
     $app->get('/user/{id_user:[0-9 ]+}/notification/{id_notification:[0-9 ]+}', '\Artist4all\Controller\NotificationController:notificationRead');

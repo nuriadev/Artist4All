@@ -15,7 +15,7 @@ export class NotificationService {
     return this.http.get(this.url + id + '/notification');
   }
 
-  // TODO: pasar a patch /eliminar headers
+  // TODO: pasar a patch
   notificationRead(id_notification: number, id_responsible: number): Observable<any> {
     return this.http.get(this.url + id_responsible + '/notification/' + id_notification);
   }
