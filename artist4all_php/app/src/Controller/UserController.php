@@ -8,6 +8,7 @@ class UserController {
     $app->post('/register', '\Artist4all\Controller\UserController:register');
     $app->post('/login', '\Artist4all\Controller\UserController:login');
     $app->post('/logout', '\Artist4all\Controller\UserController:logout');
+    $app->post('/contact', '\Artist4all\Controller\UserController:sendContactForm');
     $app->post('/user/search', '\Artist4all\Controller\UserController:searchUsers');
 
     // TODO: cambiar a patch los 2 edits
@@ -16,8 +17,8 @@ class UserController {
     $app->post('/user/{id:[0-9 ]+}/existByUsername', '\Artist4all\Controller\UserController:existUserByUsername');
     $app->post('/user/{id:[0-9 ]+}/password', '\Artist4all\Controller\UserController:changePassword');
 
-    $app->get('/user/{id:[0-9 ]+}/list', '\Artist4all\Controller\UserController:getAllOtherUsers');
     $app->get('/user/{id:[0-9 ]+}', '\Artist4all\Controller\UserController:getUserById');
+    $app->get('/user/{id:[0-9 ]+}/followSuggestions', '\Artist4all\Controller\UserController:getFollowSuggestions');
 
     $app->get('/user/{id_follower:[0-9 ]+}/follow/{id_followed:[0-9 ]+}', '\Artist4all\Controller\UserController:isFollowingThatUser');
     $app->post('/user/{id_follower:[0-9 ]+}/follow/{id_followed:[0-9 ]+}', '\Artist4all\Controller\UserController:requestOrFollowUser');
@@ -48,6 +49,38 @@ class UserController {
     $users = \Artist4all\Model\User::getUsersByPattern($searchedPattern);
     if (is_null($users)) $response = $response->withStatus(204, 'No users found');
     else $response = $response->withJson($users);
+    return $response;
+  }
+
+  public function getFollowSuggestions(Request $request, Response $response, array $args) {
+    $id = $args['id'];
+    $me = \Artist4all\Controller\UserController::getUserByIdSummary($id, $response);
+    $users = \Artist4all\Model\User::getFollowed($me->getId());
+    if (empty($users)) {
+      $response = $response->withStatus(204, 'No users followed');
+      return $response;
+    }
+    $usersAux = [];    
+    $followSuggestions = [];
+    foreach ($users as $user) {
+      $usersAux = \Artist4all\Model\User::getFollowed($user->getId());
+      if (!is_null($usersAux)) {
+        foreach ($usersAux as $userAux) {
+          if (!in_array($userAux, $followSuggestions)) {
+            if ($userAux != $me) {
+              if (is_null(\Artist4all\Model\User::isFollowingThatUser($me, $userAux))) {
+                $followSuggestions[] = $userAux;    
+              }
+            }         
+          } 
+        }
+      }
+    }
+    array_values($followSuggestions);
+    shuffle($followSuggestions);
+    if (count($followSuggestions) > 3) array_splice($followSuggestions, 3);
+    if (empty($followSuggestions)) $response = $response->withStatus(204, 'No follow suggestions');
+    else $response = $response->withJson($followSuggestions);
     return $response;
   }
 
@@ -111,14 +144,6 @@ class UserController {
     $result = \Artist4all\Model\User::logout($id);
     if (!$result) $response = $response->withStatus(500, 'Error at closing session');
     else $response = $response->withStatus(204, 'Session closed');
-    return $response;
-  }
-
-  public function getAllOtherUsers(Request $request, Response $response, array $args) {
-    $id = $args['id'];
-    $users = \Artist4all\Model\User::getAllOtherUsers($id);
-    if (is_null($users)) $response = $response->withStatus(204, 'Users not found');
-    else $response = $response->withJson($users);
     return $response;
   }
 
@@ -250,6 +275,59 @@ class UserController {
       return $response;
     } 
     return $this->logout($request, $response, $args);   
+  }
+
+  public function sendContactForm(Request $request, Response $response, array $args) {
+    $data = $request->getParsedBody(); 
+    foreach(['name', 'surname1', 'email', 'bodyMessage'] as $key) {
+      if (!isset($data[$key])) {
+        $response = $response->withStatus(400, 'Missing requiered fields');
+        return $response;
+      }
+      if (empty($data[$key])) {
+        $response = $response->withStatus(400, 'Field ' . $key . ' is empty');
+        return $response;
+      }
+    }
+
+    $name = trim($data['name']);
+    $nameSurnamePattern = "^[a-zA-ZàáâäãåąčćęèéêëėįìíîïłńòóôöõøùúûüųūÿýżźñçčšžÀÁÂÄÃÅĄĆČĖĘÈÉÊËÌÍÎÏĮŁŃÒÓÔÖÕØÙÚÛÜŲŪŸÝŻŹÑßÇŒÆČŠŽ∂ð ,.'-]{2,50}^";
+    if(!filter_var($name, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern)))) {
+      $response = $response->withStatus(400, 'Wrong name format');
+      return $response;
+    }
+
+    $surname1 = trim($data['surname1']);
+    if(!filter_var($surname1, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $nameSurnamePattern)))) {
+      $response = $response->withStatus(400, 'Wrong surname format');
+      return $response;
+    }
+
+    $email = trim($data['email']);
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $response = $response->withStatus(400, 'Wrong email format');
+      return $response;
+    } 
+
+    $phone = trim($data['phone']);
+    if (!empty($phone)) {
+      $phonePattern = '^(6|7|9)[ -]*([0-9][ -]*){8}$^';
+      if(!filter_var($phone, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $phonePattern)))) {
+        $response = $response->withStatus(400, 'Wrong phone format');
+        return $response;
+      }
+    }
+
+    $bodyMessage = trim($data['bodyMessage']);
+    if (strlen($bodyMessage) > 510) {
+      $response = $response->withStatus(400, 'Maximum character length surpassed');
+      return $response;
+    }
+
+    $message = \Artist4all\Model\User::sendContactForm(null, $name, $surname1, $email, $phone, $bodyMessage);
+    if (is_null($message)) $response = $response->withStatus(500, 'Error at storing the message');
+    else $response = $response->withJson($message);
+    return $response;
   }
 
   private function getFollowersOrFollowed(array $args, string $followedOrFollowing, Response $response) {

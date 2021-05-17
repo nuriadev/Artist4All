@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { PublicationService } from 'src/app/core/services/publication.service';
 import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import { ViewChild } from '@angular/core';
+import { User } from 'src/app/core/models/user';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -19,10 +20,9 @@ export class HomeComponent implements OnInit, AfterViewChecked {
   constructor(
     private _sessionService: SessionService,
     private _publicationService: PublicationService,
-    private _router: Router,
+    private _userService: UserService,
     private _snackBar: MatSnackBar,
-
-    ) {}
+  ) {}
 
   user = this._sessionService.getCurrentUser();
   id = this.user.id;
@@ -37,29 +37,57 @@ export class HomeComponent implements OnInit, AfterViewChecked {
             publication.upload_date = this.adaptDateOfPublication(publication.upload_date);
           });
           this.publications = result;
+        } else {
+          this.publications = null;
         }
       }, (error) => {
         console.log(error);
     });
+    this.getFollowSuggestions();
+    this.getTopPublications();
   }
 
   ngAfterViewChecked(): void {
     this.setLikeStyles(this.publications);
   }
 
+  userSuggestions: Array<User> = [];
+  getFollowSuggestions() {
+    this._userService.getFollowSuggestions(this.id).subscribe(
+      (result) => {
+        if (result != null) this.userSuggestions = result;
+        else this.userSuggestions = null;
+      }, (error) => {
+        console.log(error);
+    });
+  }
+
+  topPublications: Array<Publication> = [];
+  getTopPublications() {
+    this._publicationService.getTopPublications(this.id).subscribe(
+      (result) => {
+        if (result != null) this.topPublications = result;
+        else this.topPublications = null;
+      }, (error) => {
+        console.log(error);
+    });
+  }
+
   setLikeStyles(publications) {
-    publications.forEach((publication, index) => {
-      let likeIcon = document.getElementById(index + 'likeIcon');
-      if(publication.isLiking == 0 && likeIcon != null) {
-        likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
-        likeIcon.onmouseover = function () { likeIcon.style.color = '#039be5'; };
-        likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; };
-      } else if (publication.isLiking == 1 && likeIcon != null) {
-        likeIcon.style.color = '#F50303';
-        likeIcon.onmouseover = function () { likeIcon.style.color = 'rgba(29, 78, 216, var(--tw-text-opacity))'; };
-        likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; };
-      }
-    })
+    if (publications != null) {
+      publications.forEach((publication, index) => {
+        let likeIcon = document.getElementById(index + 'likeIcon');
+        if(publication.isLiking == 0 && likeIcon != null) {
+          likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
+          likeIcon.onmouseover = function () { likeIcon.style.color = '#039be5'; };
+          likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; };
+        } else if (publication.isLiking == 1 && likeIcon != null) {
+          likeIcon.style.color = '#F50303';
+          likeIcon.onmouseover = function () { likeIcon.style.color = 'rgba(29, 78, 216, var(--tw-text-opacity))'; };
+          likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; };
+        }
+      });
+    }
   }
 
   updateLikeStatus(index: number) {
@@ -82,11 +110,21 @@ export class HomeComponent implements OnInit, AfterViewChecked {
   }
 
   addLike(index: number) {
-    this._publicationService.likePublication(this.publications[index], this.user.id).subscribe();
+    this._publicationService.likePublication(this.publications[index], this.user.id).subscribe(
+      (result) => {
+        this.getTopPublications();
+      }, (error) => {
+        console.log(error);
+    });
   }
 
   updateStatusLike(index: number) {
-    this._publicationService.updateLikeStatus(this.publications[index], this.user.id).subscribe();
+    this._publicationService.updateLikeStatus(this.publications[index], this.user.id).subscribe(
+      (result) => {
+        this.getTopPublications();
+      }, (error) => {
+        console.log(error);
+    });
   }
 
   images = [];
@@ -119,6 +157,7 @@ export class HomeComponent implements OnInit, AfterViewChecked {
 
   removeSelectedImgs() {
     this.images = [];
+    this.showingImgHint = false;
     this.imgToUpload = null;
     this.inputImgs.nativeElement.value = null;
   }

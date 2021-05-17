@@ -175,15 +175,17 @@
           </div>
 
           <div *ngIf="isPrivate == 1 && status_follow != 3 && !isMyProfile" class="text-center mt-8 text-base">
+            <i class="fas fa-user-lock fa-3x mb-2"></i> <br>
             Esta cuenta es privada, empieza a seguirla para poder ver sus publicaciones
           </div>
 
-          <div *ngIf="publications == null && !isMyProfile" class="text-center mt-8 text-base">
-            <p>Todavía no ha realizado ninguna publicación</p>
+          <div *ngIf="!isMyProfile && publications == null" class="text-center mt-8 text-base">
+            <p>Este usuario todavía no ha realizado ninguna publicación</p>
           </div>
 
           <div *ngIf="isMyProfile || ((!isMyProfile && isPrivate == 1 && status_follow == 3) || (!isMyProfile && isPrivate == 0))">
-          <div *ngIf="publications == null" class="text-center mt-8 text-base">
+          <!--  TODO: Añadir estilos -->
+          <div *ngIf="isMyProfile && publications == null" class="text-center mt-8 text-base">
             <p>Todavía no has realizado ninguna publicación</p>
           </div>
 

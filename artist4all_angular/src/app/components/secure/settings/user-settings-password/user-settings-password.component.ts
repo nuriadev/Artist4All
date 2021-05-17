@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { matchingPasswords } from 'src/app/core/validators/password.validator';
 import { Session } from 'src/app/core/models/session';
 import { User } from 'src/app/core/models/user';
@@ -17,7 +16,6 @@ export class UserSettingsPasswordComponent implements OnInit {
   constructor(
     private _sessionService: SessionService,
     private _userService: UserService,
-    private _router: Router,
     private _formBuilder: FormBuilder,
   ) {}
 
@@ -103,17 +101,5 @@ export class UserSettingsPasswordComponent implements OnInit {
         });
       }
     });
-  }
-
-  isHidden = true;
-  showAlert() {
-    let alert = (<HTMLInputElement>document.getElementById("alert"));
-    if (this.isHidden) {
-      alert.classList.remove("hidden");
-      this.isHidden = false;
-    } else {
-      alert.classList.add("hidden");
-    }
-
   }
 }

@@ -83,6 +83,10 @@
           </button>
           <div id="menu-notifications"
             class="w-10/12 lg:w-3/12 absolute right-0 top-12 mt-2 bg-white rounded-md shadow-lg overflow-hidden z-20 hidden">
+            <div *ngIf="notifications == null || (notifications != null && notifications.length == 0)"
+            class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
+              Actualmente no tienes notificaciones.
+            </div>
             <div *ngFor="let notification of notifications; index as i;">
               <div class="flex items-center px-4 py-3 border-b hover:bg-gray-100 -mx-2">
                 <img routerLink="/user/{{ notification.user_responsible.id }}/profile"
@@ -194,16 +198,12 @@
           </div>
         </div>
       </div>
-
       <a routerLink="/home"
         class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Home</a>
-
       <a routerLink="/store"
         class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Tienda</a>
-
       <a routerLink="/message"
         class="text-gray-800 hover:bg-indigo-600 hover:text-white block px-3 py-2 rounded-md text-base font-medium">Mensajería</a>
-
     </div>
   </div>
 </header>

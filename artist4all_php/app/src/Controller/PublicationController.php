@@ -10,6 +10,7 @@ class PublicationController {
     $app->post('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:editPublication');
     $app->delete('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:deletePublication');
     $app->get('/user/{id_user:[0-9 ]+}/publication', '\Artist4all\Controller\PublicationController:getUserPublications');
+    $app->get('/user/{id_user:[0-9 ]+}/topPublications', '\Artist4all\Controller\PublicationController:getTop3Publications');
     $app->get('/user/{id_user:[0-9 ]+}/followedPublications', '\Artist4all\Controller\PublicationController:getFollowedPublications');  
     $app->get('/user/{id_user:[0-9 ]+}/publication/{id_publication:[0-9 ]+}', '\Artist4all\Controller\PublicationController:getPublicationById');
 
@@ -36,10 +37,10 @@ class PublicationController {
     }
     $publications = [];
     foreach ($users as $user) {
-      $values = \Artist4all\Model\Publication::getUserPublications($me->getId(), $user->getId());
-      if (!is_null($values)) {
-        foreach ($values as $value) {
-          $publications[] = $value;
+      $publicationsAux = \Artist4all\Model\Publication::getUserPublications($me->getId(), $user->getId());
+      if (!is_null($publicationsAux)) {
+        foreach ($publicationsAux as $publicationAux) {
+          $publications[] = $publicationAux;
         }
       }
     }
@@ -70,6 +71,15 @@ class PublicationController {
     $me = \Artist4all\Model\User::getUserByToken($token);
     $user = \Artist4all\Controller\UserController::getUserByIdSummary($id, $response);
     $publications = \Artist4all\Model\Publication::getUserPublications($me->getId(), $user->getId());
+    if (empty($publications)) $response = $response->withStatus(204, 'Without results');
+    else $response = $response->withJson($publications);
+    return $response;
+  }
+
+  public function getTop3Publications(Request $request, Response $response, array $args) {
+    $id = $args['id_user'];
+    $user = \Artist4all\Controller\UserController::getUserByIdSummary($id, $response);
+    $publications = \Artist4all\Model\Publication::getMonthTopPublications($user->getId());
     if (empty($publications)) $response = $response->withStatus(204, 'Without results');
     else $response = $response->withJson($publications);
     return $response;

@@ -37,6 +37,10 @@ export class PublicationService {
     return this.http.get(this.url + id_user + '/publication');
   }
 
+  getTopPublications(id_user: number): Observable<any> {
+    return this.http.get(this.url + id_user + '/topPublications');
+  }
+
   getPublicationById(id_user: number, id_publication: number): Observable<any> {
     return this.http.get(this.url + id_user + '/publication/' + id_publication);
   }

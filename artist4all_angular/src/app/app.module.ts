@@ -16,6 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCardModule } from '@angular/material/card';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 // Interceptors
 import { AuthInterceptor } from './core/interceptors/auth.interceptor';
@@ -92,6 +93,7 @@ import { PageNotFoundComponent } from './components/public/page-not-found/page-n
     MatExpansionModule,
     MatDividerModule,
     MatCardModule,
+    MatPaginatorModule,
     PickerModule
   ],
   providers: [

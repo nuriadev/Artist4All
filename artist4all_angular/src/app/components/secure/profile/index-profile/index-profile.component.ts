@@ -8,13 +8,9 @@ import { Publication } from 'src/app/core/models/publication';
 import { User } from 'src/app/core/models/user';
 import { ViewChild } from '@angular/core';
 import { Location } from '@angular/common';
-import {
-  MatSnackBar,
-  MatSnackBarHorizontalPosition,
-  MatSnackBarVerticalPosition,
-} from '@angular/material/snack-bar';
-
+import { MatSnackBar, MatSnackBarHorizontalPosition, MatSnackBarVerticalPosition } from '@angular/material/snack-bar';
 import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './index-profile.component.html',
@@ -177,18 +173,20 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   }
 
   setLikeStyles(publications) {
-    publications.forEach((publication, index) => {
-      let likeIcon = document.getElementById(index + 'likeIcon');
-      if(publication.isLiking == 0 && likeIcon != null) {
-        likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
-        likeIcon.onmouseover = function () { likeIcon.style.color = '#039be5'; };
-        likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; };
-      } else if (publication.isLiking == 1 && likeIcon != null) {
-        likeIcon.style.color = '#F50303';
-        likeIcon.onmouseover = function () { likeIcon.style.color = 'rgba(29, 78, 216, var(--tw-text-opacity))'; };
-        likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; };
-      }
-    })
+    if (publications != null) {
+      publications.forEach((publication, index) => {
+        let likeIcon = document.getElementById(index + 'likeIcon');
+        if(publication.isLiking == 0 && likeIcon != null) {
+          likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))';
+          likeIcon.onmouseover = function () { likeIcon.style.color = '#039be5'; };
+          likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(156, 163, 175, var(--tw-text-opacity))'; };
+        } else if (publication.isLiking == 1 && likeIcon != null) {
+          likeIcon.style.color = '#F50303';
+          likeIcon.onmouseover = function () { likeIcon.style.color = 'rgba(29, 78, 216, var(--tw-text-opacity))'; };
+          likeIcon.onmouseout = function () { likeIcon.style.color = 'rgba(59, 130, 246, var(--tw-text-opacity))'; };
+        }
+      })
+    }
   }
 
   deletePublication(index: number) {
@@ -286,25 +284,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     });
   }
 
-  isUserFollowed() {
-    let followContainer = document.getElementById('followContainer');
-    let pendingContainer = document.getElementById('pendingContainer');
-    let unfollowContainer = document.getElementById('unfollowContainer');
-    if (this.status_follow == 1) {
-      followContainer.style.display = 'block';
-      pendingContainer.style.display = 'none';
-      unfollowContainer.style.display = 'none';
-    } else if (this.status_follow == 2) {
-      followContainer.style.display = 'none';
-      pendingContainer.style.display = 'block';
-      unfollowContainer.style.display = 'none';
-    } else {
-      followContainer.style.display = 'none';
-      pendingContainer.style.display = 'none';
-      unfollowContainer.style.display = 'block';
-    }
-  }
-
   followersList: Array<User> = [];
   followedList: Array<User> = [];
   getFollowersAndFollowed(id_user: number) {
@@ -340,6 +319,8 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
             publication.upload_date = this.adaptDateOfPublication(publication.upload_date);
           });
           this.publications = result;
+        } else {
+          this.publications = null;
         }
       }, (error) => {
         console.log(error);

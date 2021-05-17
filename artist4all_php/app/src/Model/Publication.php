@@ -129,6 +129,40 @@ class Publication implements \JsonSerializable {
     return $publications;
   }
 
+  //SELECT *, count(users_likes_publications.status_like) as 'n_likes' FROM publications INNER JOIN users_likes_publications ON publications.id=users_likes_publications.id_publication WHERE users_likes_publications.status_like=1 GROUP BY publications.id
+  public static function getMonthTopPublications(int $my_id): ?array {
+    $sql = "SELECT *, count(users_likes_publications.status_like) AS 'n_likes', publications.id AS 'publication_id'
+    FROM publications 
+    INNER JOIN users_likes_publications 
+    ON publications.id=users_likes_publications.id_publication 
+    WHERE users_likes_publications.status_like=:status_like AND
+    MONTH(upload_date)=:current_month AND 
+    YEAR(upload_date)=:current_year
+    GROUP BY publications.id 
+    ORDER BY n_likes DESC 
+    LIMIT 3";
+    $conn = Database::getInstance()->getConnection();
+    $statement = $conn->prepare($sql);
+    $result = $statement->execute([
+      ':status_like' => 1,
+      ':current_month' => date('m'),
+      ':current_year' => date('Y')
+    ]);
+    $publicationsAssoc = $statement->fetchAll(\PDO::FETCH_ASSOC);
+    if (!$publicationsAssoc) return null;
+    $publications = [];
+    foreach ($publicationsAssoc as $publicationAssoc) {
+      $publicationAssoc['id'] = $publicationAssoc['publication_id'];
+      $publicationAssoc['user'] = \Artist4all\Model\User::getUserById($publicationAssoc['id_user']);
+      $publicationAssoc['n_likes'] = static::countLikes($publicationAssoc['id_publication']);    
+      $publicationAssoc['n_comments'] = static::countComments($publicationAssoc['id_publication']);
+      $publicationAssoc['isLiking'] = static::likingPublication($my_id, $publicationAssoc['id_publication']);
+      $publicationAssoc['imgsPublication'] = static::getPublicationImgs($publicationAssoc['id_publication']);
+      $publications[] = \Artist4all\Model\Publication::fromAssoc($publicationAssoc);
+    }
+    return $publications;
+  }
+
   public static function getPublicationImgs(int $id): ?array {
     $sql = 'SELECT imgPublication FROM imgs_publications WHERE id_publication=:id_publication';
     $conn = Database::getInstance()->getConnection();
