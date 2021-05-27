@@ -54,7 +54,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   id_follow: number;
   status_follow: number;
 
-  miPublication;
   ngOnInit(): void {
     this.loaded = false;
     this._activeRoute.paramMap.subscribe((params) => {
