@@ -421,11 +421,13 @@ class UserController {
       return $response;
     }
 
-    $password = trim($data['password']);
-    $passwordPattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$#!%*?&])([A-Za-z\d$@#$!%*?&]|[^ ]){8,20}$/';
-    if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
-      $response = $response->withStatus(400, 'Wrong password format');
-      return $response;
+    if (is_null($id)) {
+      $password = trim($data['password']);
+      $passwordPattern = '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$#!%*?&])([A-Za-z\d$@#$!%*?&]|[^ ]){8,20}$/';
+      if(!filter_var($password, FILTER_VALIDATE_REGEXP,  array("options" => array("regexp" => $passwordPattern)))) {
+        $response = $response->withStatus(400, 'Wrong password format');
+        return $response;
+      }
     }
 
     $aboutMe = trim($data['aboutMe']);
