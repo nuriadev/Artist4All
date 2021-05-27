@@ -27,8 +27,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
     private _publicationService: PublicationService,
     private _activeRoute: ActivatedRoute,
     private spinner: NgxSpinnerService,
-    private _snackBar: MatSnackBar,
-    private _location: Location,
+    private _snackBar: MatSnackBar
   ) {}
 
   publications: Array<Publication> = [];
@@ -54,37 +53,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
   loaded: boolean;
   id_follow: number;
   status_follow: number;
-
-  images = [];
-  imgToUpload: FileList = null;
-  bodyPublication: string = '';
-  n_likes: number;
-  n_comments: number;
-  isEdited: number;
-  imgsReceived = [];
-
-  addImgPublication(imgPublication: FileList) {
-    this.imgsReceived = [];
-    this.images = [];
-    this.imgToUpload = imgPublication;
-    if (imgPublication && imgPublication[0]) {
-      var filesAmount = imgPublication.length;
-      for (let i = 0; i < filesAmount; i++) {
-        var reader = new FileReader();
-        reader.onload = (event:any) => {
-          this.images.push(event.target.result);
-        }
-        reader.readAsDataURL(imgPublication[i]);
-      }
-    }
-  }
-
-  removeSelectedImgs() {
-    this.images = [];
-    this.imgsReceived = [];
-    this.imgToUpload = null;
-    this.inputImgs.nativeElement.value = null;
-  }
 
   miPublication;
   ngOnInit(): void {
@@ -144,22 +112,6 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
         });
       }
     });
-  }
-
-  editPublication() {
-    this.message = "Publicación editada.";
-    this._publicationService.edit(
-      new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0, 1)).subscribe(
-        (result) => {
-          this.openSnackBar(this.message);
-          this.redirectBack();
-        }, (error) => {
-          console.log(error);
-    });
-  }
-
-  redirectBack() {
-    this._location.back();
   }
 
   message: string;

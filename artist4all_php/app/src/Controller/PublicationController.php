@@ -105,7 +105,6 @@ class PublicationController {
     if (!isset($data['n_likes'])) $data['n_likes'] = $publication->getLikes();
     if (!isset($data['n_comments'])) $data['n_comments'] = $publication->getComments();
     if (!isset($data['upload_date'])) $data['upload_date'] = $publication->getUploadDatePublication();
-    else $deleteImgs = \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
     return $this->validatePersist($request, $data, $id_publication, $response, 'edit');
   }
 
@@ -163,11 +162,12 @@ class PublicationController {
     $data['imgsPublication'] = $uploadedFiles;
     $publication = \Artist4all\Model\Publication::fromAssoc($data);
     $publication = \Artist4all\Model\Publication::persistPublication($publication);
-    \Artist4all\Model\Publication::deletePublicationImgs($publication->getId());
     $filePath = '/var/www/html/assets/img/';
+    if ($type == 'edit' && $_FILES == null && $data['removedImgs'] == 1) \Artist4all\Model\Publication::deletePublicationImgs($publication->getId()); 
     if (!empty($_FILES) || $_FILES != null) {
+        \Artist4all\Model\Publication::deletePublicationImgs($publication->getId()); 
         $allowed = array('image/gif', 'image/png', 'image/jpg', 'image/jpeg');
-        foreach ($_FILES as $file) {
+        foreach ($_FILES as $file) {     
           $finfo = finfo_open(FILEINFO_MIME_TYPE);
           if (!in_array(finfo_file($finfo, $file['tmp_name']), $allowed)) {
             $response = $response->withStatus(400, 'File is not an image');
@@ -179,15 +179,15 @@ class PublicationController {
           $pathImg = $filePath.$file["name"];
           if (!file_exists($pathImg)) move_uploaded_file($imgName, $pathImg);   
           else continue;          
-        }
+        } 
         foreach ($_FILES as $file) {        
           $resultImg = \Artist4all\Model\Publication::insertPublicationImgs($publication->getId(), $file['name']);
           if (!$resultImg) {
             $response = $response->withStatus(500, 'Error at setting images');
             return $response;
-          }  
+          } 
         } 
-    }
+    } 
     $publication = static::getPublicationByUser($request, $publication->getId(), $response);
     if (is_null($publication)) {
       if (is_null($id)) $response = $response->withStatus(500, 'Error at publishing');         

@@ -45,7 +45,7 @@ export class PublicationService {
     return this.http.get(this.url + id_user + '/publication/' + id_publication);
   }
 
-  edit(publication: Publication): Observable<any> {
+  edit(publication: Publication, removedImgs: number): Observable<any> {
     let newForm: FormData = new FormData();
     if (publication.imgsPublication !== null) {
       for (var i = 0; i < publication.imgsPublication.length; i++) {
@@ -55,6 +55,7 @@ export class PublicationService {
     }
     newForm.append('isEdited', '' + publication.isEdited);
     newForm.append('bodyPublication', publication.bodyPublication);
+    newForm.append('removedImgs', '' + removedImgs);
     // TODO: pasar a patch
     return this.http.post(this.url + publication.user.id + '/publication/' + publication.id, newForm);
   }
@@ -62,7 +63,6 @@ export class PublicationService {
   delete(id_user: number, id_publication: number): Observable<any> {
     return this.http.delete(this.url + id_user + '/publication/' + id_publication);
   }
-
 
   likePublication(publication: Publication, my_id: number): Observable<any> {
     let newForm: FormData = new FormData();
