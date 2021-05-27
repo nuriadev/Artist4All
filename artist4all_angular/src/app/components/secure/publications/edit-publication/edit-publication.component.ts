@@ -60,12 +60,14 @@ export class EditPublicationComponent implements OnInit {
     }
   }
 
+  removedImgs: number = 0;
   removeSelectedImgs() {
     this.images = [];
     this.showingImgHint = false;
     this.imgsReceived = [];
     this.imgToUpload = null;
     this.inputImgs.nativeElement.value = null;
+    this.removedImgs = 1;
   }
 
   bodyPublication: string = '';
@@ -116,8 +118,7 @@ export class EditPublicationComponent implements OnInit {
 
   editPublication() {
     this.message = "Publicación editada.";
-    this._publicationService.edit(
-      new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0, 1)).subscribe(
+    this._publicationService.edit(new Publication(this.id, this.user, this.imgToUpload, this.bodyPublication, null, this.n_likes, this.n_comments, 0, 1), this.removedImgs).subscribe(
         (result) => {
           setTimeout(() => this.openSnackBar(this.message), 1200);
           this.redirectBack();
