@@ -151,7 +151,7 @@ export class ProfileComponent implements OnInit, AfterViewChecked {
 
   deletingAnimation(index: number) {
     Swal.fire({
-      title: 'Estás seguro de que quieres eliminar esta publicación?',
+      title: '¿Estás seguro de que quieres eliminar esta publicación?',
       text: 'Esta acción es irreversible.',
       icon: 'warning',
       showCancelButton: true,
