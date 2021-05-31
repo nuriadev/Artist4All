@@ -95,7 +95,7 @@ export class UserSettingsAccountComponent implements OnInit {
 
   deactivateAccountAnimation() {
     Swal.fire({
-      title: 'Estás seguro de que quieres darte de baja?',
+      title: '¿Estás seguro de que quieres darte de baja?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#28a745',

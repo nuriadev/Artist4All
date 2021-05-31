@@ -78,7 +78,7 @@ export class UserSettingsPasswordComponent implements OnInit {
     this.isValidFormSubmitted = false;
     if (this.passwordForm.invalid) { return; }
     Swal.fire({
-      title: 'Estás seguro de que quieres modificar la contraseña?',
+      title: '¿Estás seguro de que quieres modificar la contraseña?',
       text: 'Esta acción es irreversible.',
       icon: 'warning',
       showCancelButton: true,
