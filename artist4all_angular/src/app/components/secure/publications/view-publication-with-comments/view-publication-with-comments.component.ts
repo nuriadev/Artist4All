@@ -403,7 +403,7 @@ export class ViewPublicationWithCommentsComponent implements OnInit {
           didOpen: () => { Swal.showLoading(); },
         }).then((result) => {
           if (result.dismiss === Swal.DismissReason.timer) {
-            Swal.fire({ title: 'Comentario modificada', position: 'center', icon: 'success',  showConfirmButton: false, timer: 1000, });
+            Swal.fire({ title: 'Comentario eliminado', position: 'center', icon: 'success',  showConfirmButton: false, timer: 1000, });
           }
         });
       }

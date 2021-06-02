@@ -20,13 +20,13 @@
       </div>
     </nav>
   </div>
-  <div *ngIf="userlist == null && typeList  == 'followers'" class="col-span-6 ml-6 h-96 md:ml-auto">
+  <div *ngIf="userlist == null && typeList  == 'followers'" class="col-span-6 ml-6 h-96 md:ml-auto" style="min-height: 500px;">
       <i class="fas fa-users-slash inline-block mr-6 text-lg md:text-2xl"></i><p class="text-lg md:text-xl content-center mt-16 inline-block">Todavía no tienes ningún seguidor</p>
   </div>
-  <div *ngIf="userlist == null && typeList == 'followed'" class="col-span-6 ml-6 h-96 md:ml-auto">
+  <div *ngIf="userlist == null && typeList == 'followed'" class="col-span-6 ml-6 h-96 md:ml-auto" style="min-height: 500px;">
       <i class="fas fa-users-slash inline-block mr-6 text-lg md:text-2xl"></i><p class=" text-lg md:text-xl content-center mt-16 inline-block">Todavía no sigues a ningún usuario </p>
   </div>
-  <div class="block lg:col-span-4 pt-8">
+  <div class="block lg:col-span-4 pt-8" style="min-height: 500px;">
     <div *ngIf="userlist != null">
       <section *ngFor="let user of userlist; index as i;">
         <div

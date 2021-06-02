@@ -21,7 +21,7 @@
     </nav>
   </div>
 
-  <ul class="lg:col-span-9 divide-y divide-gray-200">
+  <ul class="lg:col-span-9 divide-y divide-gray-200" style="min-height: 500px;">
     <h3 class="text-center md:text-left mb-3 lg:mt-6 lg:mb-3 lg:block text-3xl font-bold" style="padding-top:10px;">Tus
       notificaciones</h3>
     <li *ngIf="loaded && (notifications == null || (notifications != null && notifications.length == 0))" class="text-center mt-8 text-base">
@@ -45,7 +45,7 @@
           <i class="fas fa-times-circle text-red-700 ml-1 hover:text-red-500"></i>Rechazar</button>
         <button *ngIf="notification.typeNotification != 2" class="focus:outline-none mr-3"
           (click)="notificationRead(notification.id, i)">
-          <i class="fas fa-check-double mr-1 hover:text-gray-500"></i>Leído</button>
+          <i class="fas fa-check-double mr-1 text-green-600 hover:text-gray-500"></i>Leído</button>
         <button *ngIf="notification.typeNotification != 2" class="focus:outline-none"
           (click)="removeNotification(notification.id, i)">
           <i class="fas fa-trash-alt text-red-700 ml-1 hover:text-red-500"></i>Borrar</button>

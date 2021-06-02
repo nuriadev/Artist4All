@@ -5,7 +5,7 @@
   <app-user-navbar></app-user-navbar>
   <div>
     <div class="max-w-3xl mx-auto sm:px-6 lg:max-w-full lg:px-8 lg:grid lg:grid-cols-12 lg:gap-8"
-      style="padding-left: 0;">
+      style="padding-left: 0; min-height: 500px;">
       <div class="hidden lg:block lg:col-span-3 xl:col-span-2 min-h-screen bg-gray-800">
         <nav aria-label="Sidebar" class="sticky top-4 divide-y divide-gray-300" style="padding:25px;">
           <div class="pb-8 space-y-1">
@@ -126,7 +126,7 @@
                 <div class="flex space-x-6">
                   <span class="inline-flex items-center text-sm">
                       <button mat-icon-button (click)="updateLikeStatus(i)" id="{{i + 'likeIcon'}}"
-                        class="text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
+                        class="inline-block text-gray-400 hover:text-gray-500 outline-none focus:outline-none">
                         <mat-icon>favorite</mat-icon>
                       </button>
                       <span class="font-medium text-gray-900 ml-2">{{ publication.n_likes }}</span>
@@ -139,7 +139,7 @@
                         aria-hidden="true">
                         <path fill-rule="evenodd"
                           d="M18 5v8a2 2 0 01-2 2h-5l-5 4v-4H4a2 2 0 01-2-2V5a2 2 0 012-2h12a2 2 0 012 2zM7 8H5v2h2V8zm2 0h2v2H9V8zm6 0h-2v2h2V8z"
-                          clip-rule="evenodd" />
+                          rule="evenodd" />
                       </svg>
                     </button>
                     <span class="font-medium text-gray-900 ml-2">{{ publication.n_comments }}</span>
