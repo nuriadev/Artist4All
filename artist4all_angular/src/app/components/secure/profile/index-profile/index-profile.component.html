@@ -153,7 +153,7 @@
             Esta cuenta es privada, empieza a seguirla para poder ver sus publicaciones
           </div>
 
-          <div *ngIf="!isMyProfile && publications == null" class="text-center mt-8 text-base">
+          <div *ngIf="!isMyProfile && publications == null && (isPrivate == 0 || status_follow == 3)" class="text-center mt-8 text-base">
             <p>Este usuario todavía no ha realizado ninguna publicación</p>
           </div>
 

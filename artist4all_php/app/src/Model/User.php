@@ -279,14 +279,12 @@ class User implements \JsonSerializable
   public static function isFollowingThatUser(\Artist4all\Model\User $user_follower, \Artist4all\Model\User $user_followed): ?array {
     $sql = 'SELECT * FROM users_followed WHERE 
     id_follower=:id_follower AND 
-    id_followed=:id_followed AND
-    status_follow=:status_follow';
+    id_followed=:id_followed';
     $conn = Database::getInstance()->getConnection();
     $statement = $conn->prepare($sql);
     $result = $statement->execute([
       ':id_follower' => $user_follower->getId(),
-      ':id_followed' => $user_followed->getId(),
-      ':status_follow' => 3
+      ':id_followed' => $user_followed->getId()
     ]);
     $followed = $statement->fetch(\PDO::FETCH_ASSOC);
     if (!$followed) return null;

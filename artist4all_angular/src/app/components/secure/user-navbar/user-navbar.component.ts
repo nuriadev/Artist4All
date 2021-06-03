@@ -209,6 +209,7 @@ export class UserNavbarComponent implements OnInit {
               if (status_follow == 3) this.message = 'Solicitud aceptada.';
               else this.message = 'Solicitud rechazada.';
               this.openSnackBar(this.message);
+              console.log('llega');
             }, (error) => {
               console.log(error);
           });
