@@ -6,10 +6,7 @@ This project is the final project I created on my higher vocational training as 
 
 ### Images
 
-![]https://imgur.com/6popQ8R
-![]https://imgur.com/Vyd4cYY
-![]https://imgur.com/PQ7yP0v
-![]https://imgur.com/q5OUMvX
+
 
 ### Installation
 
