@@ -20,7 +20,7 @@ Configuration page
 
 Comments page
 
-![Comments page](/readme_images/configuration.png)
+![Comments page](/readme_images/comments.png)
 
 ### Installation
 
